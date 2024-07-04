@@ -1,0 +1,126 @@
+.email-box .hover-on,
+.email-box:hover .hover-off {
+  display: none;
+}
+.email-box:hover .hover-on {
+  display: inline;
+}
+.email-box {
+  position: relative !important;
+  float: left !important;
+  background-color: #f3f3f3 !important;
+  width: 100% !important;
+  border: 1px solid #e0e0e0 !important;
+  padding: 10px 15px 10px 15px !important;
+  cursor: pointer !important;
+}
+.hover-on,
+.hover-off {
+  color: #145388 !important;
+}
+.email-box.opened.selected {
+  background-color: #2a6393 !important;
+}
+.notificacionClass {
+  position: static;
+  // top: 16px !important;
+  // left: 77pc !important;
+  cursor: pointer;
+}
+.notification.notify {
+  background: none !important;
+  box-shadow: none !important;
+  padding: 7px !important;
+}
+.notification::after {
+  top: -2px !important;
+  right: -12px !important;
+  padding: 6px 8px !important;
+  font-size: 8px !important;
+}
+
+.fade.show.popover.bs-popover-bottom {
+  top: 5px !important;
+  max-width: 336px !important;
+  width: 20pc !important;
+}
+.fade.popover.bs-popover-bottom {
+  top: 5px !important;
+  max-width: 336px !important;
+  width: 20pc !important;
+}
+.notification-info-panel .notification-message.unread {
+  background-color: #f1f8fe !important;
+  color: #000000 !important;
+}
+
+.nodata {
+  //position: relative !important;
+  position: absolute !important;
+  top: 47px !important;
+  left: 89px !important;
+}
+.popover-header {
+  background-color: #145388 !important;
+  color: #ffffff !important;
+}
+.notification-info-panel .notification-message.unread:hover {
+  background-color: #797a7a !important;
+}
+.notification-container {
+  margin-right: 0pc !important;
+  position: absolute !important;
+  top: 14px !important;
+  right: 328px !important;
+}
+.notification {
+  margin-right: 1pc;
+}
+
+// .btn.btn-link {
+//   position: relative !important;
+//   top: -37px !important;
+//   left: 168px !important;
+//   color: white !important;
+//   padding: 0 !important;
+//   margin: 0 !important;
+// }
+
+// .email-box {
+//   padding: 26px 15px 10px 15px !important;
+// }
+.bandejaDiv {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+@media only screen and (max-width: 1199px) {
+  .notification-container {
+    margin-right: 0pc !important;
+    position: absolute !important;
+    top: 7px !important;
+    right: 313px !important;
+    overflow-x: unset !important;
+    overflow-y: unset !important;
+  }
+}
+
+.notification-info-panel {
+  margin-bottom: 3rem !important;
+}
+.popover-header {
+  font-family: cursive;
+}
+.leidos {
+  font-family: cursive;
+  position: relative !important;
+  top: -33px !important;
+  left: 184px !important;
+  color: white !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.imgLeidos {
+  position: absolute;
+  left: -23px;
+}

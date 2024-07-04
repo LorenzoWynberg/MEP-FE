@@ -1,0 +1,73 @@
+{
+	"layouts": [
+		{
+			"i": "398f5e08-429f-9bee-3c80-dd15d2b5065d_col",
+			"x": 0,
+			"y": 17,
+			"w": 2,
+			"h": 14,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Contactos electrónicos",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false
+		}
+	],
+	"contents": [
+		{
+			"layoutId": "398f5e08-429f-9bee-3c80-dd15d2b5065d_col",
+			"fields": [
+				{
+					"type": "text",
+					"label": "Correo electrónico",
+					"langKey": "expediente_ce>informacion_general>informacion>contactos_correo",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": "",
+						"mask": ""
+					},
+					"id": "34bf936b-846b-fc16-2274-770832549f1f_398f5e08-429f-9bee-3c80-dd15d2b5065d_col"
+				},
+				{
+					"type": "text",
+					"label": "Dirección web",
+					"langKey": "expediente_ce>informacion_general>informacion>contactos_direccion",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": "",
+						"mask": ""
+					},
+					"id": "acb70d37-a1c6-e142-abdd-d1713d684f82_398f5e08-429f-9bee-3c80-dd15d2b5065d_col"
+				},
+				{
+					"type": "redes",
+					"label": "nuevo titulo",
+					"langKey": "expediente_ce>informacion_general>informacion>redes",
+					"config": {
+						"facebook": true,
+						"twitter": true,
+						"instagram": true,
+						"whatsapp": true
+					},
+					"id": "91a9dba4-07e2-3663-8e22-1ded7307dee9_398f5e08-429f-9bee-3c80-dd15d2b5065d_col"
+				}
+			],
+			"order": 2,
+			"config": {
+				"titulo": "Contactos electrónicos",
+				"relleno": true,
+				"tooltip": ""
+			}
+		}
+	],
+	"sources": []
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="18.816" height="18.816" viewBox="0 0 18.816 18.816">
+  <g id="MDI_alert" data-name="MDI / alert" transform="translate(-0.5 0.332)">
+    <g id="Boundary" transform="translate(0.5 -0.332)" fill="#ea9007" stroke="rgba(0,0,0,0)" stroke-width="1" opacity="0">
+      <rect width="18.816" height="18.816" stroke="none"/>
+      <rect x="0.5" y="0.5" width="17.816" height="17.816" fill="none"/>
+    </g>
+    <path id="Path_alert" data-name="Path / alert" d="M10.172,10.726H8.644V7.09h1.529m0,6.544H8.644V12.18h1.529M1,15.816H17.816L9.408,2Z" transform="translate(0.5 0.668)" fill="#ea9007"/>
+  </g>
+</svg>

@@ -1,0 +1,889 @@
+{
+	"titulo": "Crear formulario",
+	"layouts": [
+		{
+			"i": "0be716b7-4a24-0bee-ec1c-2dcd8a4760aa_col",
+			"x": 0,
+			"y": 0,
+			"w": 4,
+			"h": 15,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Detalles de la edificación",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false,
+			"content": [
+				{
+					"i": "3de69386-8f6e-c38b-f3eb-1ab857b46305_col",
+					"type": "container",
+					"w": 2,
+					"config": { "titulo": "", "relleno": false, "tooltip": "" }
+				},
+				{
+					"i": "cebe1bff-e933-7f04-3b6c-902a589cdfe2_col",
+					"type": "container",
+					"w": 2,
+					"config": { "titulo": "", "relleno": false, "tooltip": "" }
+				}
+			]
+		},
+		{
+			"i": "64c120a4-175f-43ab-cbbb-ab0a076d503c_col",
+			"x": 0,
+			"y": 28,
+			"w": 4,
+			"h": 6,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Otros componentes",
+				"relleno": true,
+				"tooltip": "Agregar observaciones o componentes que no se se encuentran en la lista."
+			},
+			"rowH": 22,
+			"moved": false,
+			"static": false
+		},
+		{
+			"i": "8aba9205-80b5-97c7-f5db-8edaea8348d6_col",
+			"x": 0,
+			"y": 34,
+			"w": 4,
+			"h": 32,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Sobre el estado general del edificio",
+				"relleno": true,
+				"tooltip": "En este apartado busca detallar información de los elementos principales que componen el edificio y se hará una referencia general al estado de conservación de cada elemento, desde la perspectiva del usuario"
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false,
+			"content": [
+				{
+					"i": "f955a116-e481-0765-f399-082684ac1341_col",
+					"type": "container",
+					"w": 2,
+					"config": {
+						"titulo": "Pisos",
+						"relleno": false,
+						"tooltip": ""
+					}
+				},
+				{
+					"i": "f0700933-7ab3-6709-eb29-912e54d6ca7e_col",
+					"type": "container",
+					"w": 2,
+					"config": {
+						"titulo": "Paredes",
+						"relleno": false,
+						"tooltip": ""
+					}
+				},
+				{
+					"i": "b9489e70-021d-bb0c-a256-9acc7b0cd01f_col",
+					"type": "container",
+					"w": 2,
+					"config": {
+						"titulo": "Cieloraso",
+						"relleno": false,
+						"tooltip": ""
+					}
+				},
+				{
+					"i": "c96415dd-eaba-ca2b-84aa-bcf6adbb4c29_col",
+					"type": "container",
+					"w": 2,
+					"config": {
+						"titulo": "Estructura de techos",
+						"relleno": false,
+						"tooltip": ""
+					}
+				},
+				{
+					"i": "74838a9a-f915-d70b-9d42-5138b8e09715_col",
+					"type": "container",
+					"w": 2,
+					"config": {
+						"titulo": "Techos (cubiertas)",
+						"relleno": false,
+						"tooltip": ""
+					}
+				},
+				{
+					"i": "ea4761c1-eea2-2b16-45fc-4fc5aa3c023f_col",
+					"type": "container",
+					"w": 2,
+					"config": {
+						"titulo": "Canoas y bajantes",
+						"relleno": false,
+						"tooltip": ""
+					}
+				},
+				{
+					"i": "e199ece2-6cfa-3eef-0b19-f3c5b6b4f365_col",
+					"type": "container",
+					"w": 2,
+					"config": {
+						"titulo": "Puertas y ventanas",
+						"relleno": false,
+						"tooltip": ""
+					}
+				},
+				{
+					"i": "c44c7edf-c1a0-3149-3739-f9e48cd0c2a0_col",
+					"type": "container",
+					"w": 2,
+					"config": {
+						"titulo": "Acabados",
+						"relleno": false,
+						"tooltipText": "Hacer referencia DE MODO GENERAL al estado de los acabados en el edificio (Pintura en superficies paredes, techos o cielos, estado de  los repellos, enchapes de piso y pared, entre otros)"
+					}
+				},
+				{
+					"i": "d3757d6f-d1df-0762-82e4-c4200c211d67_col",
+					"type": "container",
+					"w": 2,
+					"config": {
+						"titulo": "Sistema eléctrico ",
+						"relleno": false,
+						"tooltipText": "Hacer referencia DE MODO GENERAL a la situación del sistema eléctrico del edificio analizado."
+					}
+				}
+			]
+		},
+		{
+			"i": "7f949a5e-887c-49d8-fca6-eeaf01b9299e_col",
+			"x": 2,
+			"y": 15,
+			"w": 2,
+			"h": 15,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Componentes menores",
+				"relleno": true,
+				"tooltip": "En este apartado deberá indicar la cantidad existente  de cada uno de los elementos en el edificio específico."
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false
+		},
+		{
+			"i": "50f93b63-f019-2ea4-50a6-bf1c4a899302_col",
+			"x": 0,
+			"y": 15,
+			"w": 2,
+			"h": 15,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Componentes de la edificación",
+				"subtitle": "",
+				"relleno": true,
+				"tooltip": "En este apartado se contabilizarán los componentes del edificio. Si un espacio o área es compartida para varios usos en diferentes momentos, solo deberá contabilizarse una vez el uso principal. SE RECOMIENDA REVISAR LA LISTA COMPLETA ANTES DE COMENZAR CON EL LLENADO."
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false
+		}
+	],
+	"contents": [
+		{
+			"layoutId": "0be716b7-4a24-0bee-ec1c-2dcd8a4760aa_col",
+			"fields": [],
+			"order": 1,
+			"config": { "titulo": "", "relleno": false, "tooltip": "" }
+		},
+		{
+			"layoutId": "3de69386-8f6e-c38b-f3eb-1ab857b46305_col",
+			"fields": [
+				[
+					{
+						"type": "text",
+						"label": "Terreno asociado",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>terreno_asociado",
+						"options": [],
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"placeholder": ""
+						},
+						"id": "1_4d8801e7-4e64-b8bc-3fa2-5f029bade93d_3de69386-8f6e-c38b-f3eb-1ab857b46305_col",
+						"row": true
+					},
+					{
+						"type": "text",
+						"label": "Código de la edificación",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>codigo_edificacion",
+						"options": [],
+						"config": {
+							"required": false,
+							"tooltipText": "El sistema le otorga un código de edificación al guardar los datos",
+							"placeholder": ""
+						},
+						"id": "4927bd91-a550-895b-bc68-e3e8a07a6473_cf26b7c5-10fe-8d21-76de-6f95be7e83b8_col",
+						"row": true
+					}
+				],
+				[
+					{
+						"id": "48bb7cf0-ada4-bff6-936c-6fdb027d191e_3de69386-8f6e-c38b-f3eb-1ab857b46305_col",
+						"type": "unic",
+						"label": "Organización de las edificaciones",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>organizacion_edificacion",
+						"source": "",
+						"options": "organzacionEdifFromDB",
+						"config": {
+							"required": true,
+							"tooltipText": "Indicar opción la que mejor representa la forma en la que está configurado la Institución. Por ejemplo: un Pabellón de Aulas con Batería Sanitaria, sería una edificación categorizada como Pabellón). En caso de tener más de una edificación podrá ir agregandolas una a una.",
+							"h": 4
+						},
+						"row": true
+					},
+					{
+						"type": "radio",
+						"label": "Arraigo arquitectónico comunal",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>arraigo_arquitectonico",
+						"source": "",
+						"options": "sino",
+						"config": {
+							"required": false,
+							"tooltipText": "Indicar si la comunidad se considera la estética arquitectónica del edificio como valor para conservar",
+							"orientation": "row",
+							"h": 3.5
+						},
+						"id": "1_eb046595-4d3d-be62-cb16-74b71d508439_3de69386-8f6e-c38b-f3eb-1ab857b46305_col",
+						"row": true,
+						"col": true
+					}
+				],
+				{
+					"id": "b42a46c7-b2c6-1cbc-0c33-7dc05fd4ec15_3de69386-8f6e-c38b-f3eb-1ab857b46305_col",
+					"type": "textArea",
+					"label": "Descripción",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>descripcion",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "Breve descripción del uso principal que se le da a dicha edificación, por ejemplo: Pabellón de Aulas Académicas"
+					},
+					"row": false
+				},
+				{
+					"id": "fdeed2d9-592c-b8f4-8668-40f10553e2c2_3de69386-8f6e-c38b-f3eb-1ab857b46305_col",
+					"type": "unic",
+					"label": "Valoración patrimonial",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>valoracion_patrimonial",
+					"source": "",
+					"options": "valoracionPatrimonial",
+					"config": { "required": false, "tooltipText": "", "h": 4 },
+					"row": false
+				},
+				{
+					"type": "dateYear",
+					"label": "Año aproximado de construcción",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>anio_construccion",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "Colocar el año aproximado en que se construyó la edificación que se está detallando",
+						"placeholder": ""
+					},
+					"id": "1_06a582b2-1433-bdc7-7103-4a93cde83c28_3de69386-8f6e-c38b-f3eb-1ab857b46305_col",
+					"row": false
+				}
+			],
+			"order": 2
+		},
+		{
+			"layoutId": "cebe1bff-e933-7f04-3b6c-902a589cdfe2_col",
+			"fields": [
+				{
+					"id": "adca5132-cd04-bf38-2065-e4730696580a_cebe1bff-e933-7f04-3b6c-902a589cdfe2_col",
+					"type": "uploadFile",
+					"label": "Adjuntar croquis",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>croquis",
+					"config": {
+						"required": true,
+						"type": "archivo",
+						"icon": "archivo",
+						"h": 6,
+						"typesAccepted": ",.PDF,.JPG",
+						"maxFiles": "1",
+						"tooltipText": "Subir imagen del croquis general de edificaciones y resalte la que se está detallando."
+					},
+					"row": false
+				},
+				{
+					"id": "9fa4cf05-f0cf-9c62-da4b-e615bcdceae3_cebe1bff-e933-7f04-3b6c-902a589cdfe2_col",
+					"type": "uploadFile",
+					"label": "Adjuntar fotografía",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>fotografia",
+					"config": {
+						"required": true,
+						"h": 6,
+						"tooltipText": "Adjuntar fotografías que muestren la edificación que se está detallando.",
+						"type": "imagen",
+						"icon": "imagen",
+						"typesAccepted": ",.PDF,.JPG",
+						"maxFiles": "5"
+					},
+					"row": false
+				},
+				{
+					"id": "699e83a7-714b-a9dc-23a1-9c2b3d43427a_cebe1bff-e933-7f04-3b6c-902a589cdfe2_col",
+					"type": "unic",
+					"label": "Elevación de la edificación sobre el terreno",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>elevacion_edificacion",
+					"options": "elevacionFromDB",
+					"config": {
+						"required": true,
+						"tooltipText": "El piso del edificio tiene una separación considerable del nivel del terreno natural (pilotes, pedestales u otros similares).",
+						"placeholder": ""
+					},
+					"row": false
+				},
+				{
+					"id": "1809fd0c-562f-a6b0-0b05-08cb07f7d065_cebe1bff-e933-7f04-3b6c-902a589cdfe2_col",
+					"type": "multiple",
+					"label": "Pisos de la edificación",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>pisos_edificacion",
+					"source": "",
+					"options": "pisosEdificacion",
+					"config": {
+						"required": true,
+						"tooltipText": "Identificar la cantidad de pisos que posee la edificación que se está detallando",
+						"h": 5
+					},
+					"row": false
+				}
+			],
+			"order": 3
+		},
+		{
+			"layoutId": "b0698cd6-1077-db28-8795-af83f29e4efd_col",
+			"fields": [],
+			"order": 6
+		},
+		{
+			"layoutId": "64c120a4-175f-43ab-cbbb-ab0a076d503c_col",
+			"fields": [
+				{
+					"type": "textArea",
+					"label": "Otros componentes (solo si están considerados en la tabla anterior)",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>otros_componentes",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "",
+						"placeholder": ""
+					},
+					"id": "1_a8918923-207b-2f46-109d-6c7b24d59b76_64c120a4-175f-43ab-cbbb-ab0a076d503c_col",
+					"row": false
+				}
+			],
+			"order": 7,
+			"config": {
+				"titulo": "Otros componentes",
+				"relleno": true,
+				"tooltip": "Agregar observaciones o componentes que no se se encuentran en la lista."
+			}
+		},
+		{
+			"layoutId": "8aba9205-80b5-97c7-f5db-8edaea8348d6_col",
+			"fields": [],
+			"order": 8,
+			"config": {
+				"titulo": "Puertas y ventanas",
+				"relleno": false,
+				"tooltip": ""
+			}
+		},
+		{
+			"layoutId": "f955a116-e481-0765-f399-082684ac1341_col",
+			"fields": [
+				[
+					{
+						"type": "unic",
+						"label": "Material principal",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>material_principal",
+						"source": "",
+						"options": "pisosMaterialPrincipal",
+						"config": {
+							"required": true,
+							"tooltipText": "Indicar el material predominante en los PISOS del edificio analizado",
+							"h": 9
+						},
+						"id": "1_fa160d75-c942-3dc3-29e1-45f16483e2e8_f955a116-e481-0765-f399-082684ac1341_col",
+						"row": true,
+						"col": false
+					},
+					{
+						"type": "multiple",
+						"label": "Estado",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>estado",
+						"source": "",
+						"options": "estadosElementosMaterialPrincipal",
+						"config": {
+							"unicOption": true,
+							"required": true,
+							"tooltipText": "",
+							"h": 5.5
+						},
+						"id": "1_3240b956-506c-ec3a-157c-d3db38f050eb_f955a116-e481-0765-f399-082684ac1341_col",
+						"row": true
+					}
+				],
+				{
+					"id": "28b81dbf-1a24-b3a2-3a5c-cb3126d23323_f955a116-e481-0765-f399-082684ac1341_col",
+					"type": "textArea",
+					"label": "Observaciones (opcional)",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>observaciones",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "Describa cualquier situación particular referente al elemento PISOS"
+					},
+					"row": false
+				}
+			],
+			"order": 9
+		},
+		{
+			"layoutId": "f0700933-7ab3-6709-eb29-912e54d6ca7e_col",
+			"fields": [
+				[
+					{
+						"type": "unic",
+						"label": "Material principal",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>material_principal",
+						"source": "",
+						"options": "paredesMaterialPrincipal",
+						"config": {
+							"required": true,
+							"tooltipText": "Indicar el material predominante en las PAREDES del edificio analizado",
+							"h": 8.5
+						},
+						"id": "1_349909d0-cdf7-bfab-a19d-7143f8d6e008_f0700933-7ab3-6709-eb29-912e54d6ca7e_col",
+						"row": true
+					},
+					{
+						"type": "multiple",
+						"label": "Estado",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>estado",
+						"source": "",
+						"options": "estadosElementosMaterialPrincipal",
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"h": 5.5,
+							"unicOption": true
+						},
+						"id": "1_286a1114-7417-5e59-2e0d-b5108660192f_f0700933-7ab3-6709-eb29-912e54d6ca7e_col",
+						"row": true
+					}
+				],
+				{
+					"id": "e799217a-c2a9-e06e-680c-0f0abeb8c294_f0700933-7ab3-6709-eb29-912e54d6ca7e_col",
+					"type": "textArea",
+					"label": "Observaciones (opcional)",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>observaciones",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "Describa cualquier situación particular referente al elemento PAREDES"
+					},
+					"row": false
+				}
+			],
+			"order": 10
+		},
+		{
+			"layoutId": "b9489e70-021d-bb0c-a256-9acc7b0cd01f_col",
+			"fields": [
+				[
+					{
+						"id": "a1da5ff9-b158-2364-eb9c-7eccd04dcd65_b9489e70-021d-bb0c-a256-9acc7b0cd01f_col",
+						"type": "unic",
+						"label": "Material principal",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>material_principal",
+						"source": "",
+						"options": "cielorasosMaterialPrincipal",
+						"config": {
+							"required": true,
+							"tooltipText": "Indicar el material predominante en los CIELORASOS del edificio analizado",
+							"h": 7
+						},
+						"row": true
+					},
+					{
+						"type": "multiple",
+						"label": "Estado",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>estado",
+						"source": "",
+						"options": "estadosElementosMaterialPrincipal",
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"h": 5.5,
+							"unicOption": true
+						},
+						"id": "1_af7af1c0-fb39-2f5a-0029-6f73682c1e8a_b9489e70-021d-bb0c-a256-9acc7b0cd01f_col",
+						"row": true
+					}
+				],
+				{
+					"id": "da539719-1bda-c470-4bad-3875bb10501b_b9489e70-021d-bb0c-a256-9acc7b0cd01f_col",
+					"type": "textArea",
+					"label": "Observaciones (opcional)",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>observaciones",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "Describa cualquier situación particular referente al elemento CIELORASOS"
+					}
+				}
+			],
+			"order": 11
+		},
+		{
+			"layoutId": "c96415dd-eaba-ca2b-84aa-bcf6adbb4c29_col",
+			"fields": [
+				[
+					{
+						"id": "1eab8f64-136f-91cc-c36a-9fa6ed4960f2_c96415dd-eaba-ca2b-84aa-bcf6adbb4c29_col",
+						"type": "unic",
+						"label": "Material principal",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>material_principal",
+						"source": "",
+						"options": "estructurasTechosMaterialPrincipal",
+						"config": {
+							"required": true,
+							"tooltipText": "Indicar el material que predomina en la ESTRUCTURA DE TECHOS del edificio analizado",
+							"h": 5.5
+						},
+						"row": true
+					},
+					{
+						"type": "multiple",
+						"label": "Estado ",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>estado",
+						"source": "",
+						"options": "estadosElementosMaterialPrincipal",
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"h": 5.5,
+							"unicOption": true
+						},
+						"id": "1_ca4bf1f1-0e3f-034c-f094-bc7575b57dbd_c96415dd-eaba-ca2b-84aa-bcf6adbb4c29_col",
+						"row": true
+					}
+				],
+				{
+					"id": "6b65dfac-6036-4d0f-48ba-e75c0686ed4f_c96415dd-eaba-ca2b-84aa-bcf6adbb4c29_col",
+					"type": "textArea",
+					"label": "Observaciones (opcional)",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>observaciones",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "Describa cualquier situación particular referente al elemento ESTRUCTURA DE TECHOS"
+					}
+				}
+			],
+			"order": 12
+		},
+		{
+			"layoutId": "74838a9a-f915-d70b-9d42-5138b8e09715_col",
+			"fields": [
+				[
+					{
+						"id": "b3301162-4558-8ff0-8c58-958475748c92_74838a9a-f915-d70b-9d42-5138b8e09715_col",
+						"type": "unic",
+						"label": "Material principal",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>material_principal",
+						"source": "",
+						"options": "techoMaterialPrincipal",
+						"config": {
+							"required": true,
+							"tooltipText": "Indicar el material predominante de los TECHOS del edificio analizado",
+							"h": 9
+						},
+						"row": true
+					},
+					{
+						"type": "multiple",
+						"label": "Estado",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>estado",
+						"source": "",
+						"options": "estadosElementosMaterialPrincipal",
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"h": 5.5,
+							"unicOption": true
+						},
+						"id": "1_f9595364-aecf-7fca-b65e-1ba5caf420a6_74838a9a-f915-d70b-9d42-5138b8e09715_col",
+						"row": true
+					}
+				],
+				{
+					"id": "88c95885-35f8-9ca1-7d85-a1eb84d71f5c_74838a9a-f915-d70b-9d42-5138b8e09715_col",
+					"type": "textArea",
+					"label": "Observaciones (opcional)",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>observaciones",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "Describa cualquier situación particular referente al elemento TECHOS"
+					}
+				}
+			],
+			"order": 13
+		},
+		{
+			"layoutId": "ea4761c1-eea2-2b16-45fc-4fc5aa3c023f_col",
+			"fields": [
+				[
+					{
+						"id": "bd8a3011-2968-3c2f-e0ae-337f6ff63353_ea4761c1-eea2-2b16-45fc-4fc5aa3c023f_col",
+						"type": "unic",
+						"label": "Material principal",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>material_principal",
+						"source": "",
+						"options": "canoasBajantesMaterialPrincipal",
+						"config": {
+							"required": true,
+							"tooltipText": "Indicar el material predominante de las CANOAS Y BAJANTES del edificio analizado",
+							"h": 5
+						},
+						"row": true
+					},
+					{
+						"type": "multiple",
+						"label": "Estado",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>estado",
+						"source": "",
+						"options": "estadosElementosMaterialPrincipal",
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"h": 5.5,
+							"unicOption": true
+						},
+						"id": "1_77e4c8f4-46cb-a8b7-9c0e-a9cd2011b742_ea4761c1-eea2-2b16-45fc-4fc5aa3c023f_col",
+						"row": true
+					}
+				],
+				{
+					"id": "0fefc6df-37a5-6b7c-8d50-af605ca8e9c0_ea4761c1-eea2-2b16-45fc-4fc5aa3c023f_col",
+					"type": "textArea",
+					"label": "Observaciones (opcional)",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>observaciones",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "Describa cualquier situación particular referente al elemento CANOAS y BAJANTES"
+					}
+				}
+			],
+			"order": 14
+		},
+		{
+			"layoutId": "e199ece2-6cfa-3eef-0b19-f3c5b6b4f365_col",
+			"fields": [
+				[
+					{
+						"id": "0ba1b0ef-fe73-14a7-de4b-b4648a3c47af_e199ece2-6cfa-3eef-0b19-f3c5b6b4f365_col",
+						"type": "unic",
+						"label": "Material principal",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>material_principal",
+						"source": "",
+						"options": "puertasVentanasMaterialPrincipal",
+						"config": {
+							"required": true,
+							"tooltipText": "Indicar el material predominante de las PUERTAS Y VENTANAS del edificio analizado",
+							"h": 5
+						},
+						"row": true
+					},
+					{
+						"type": "multiple",
+						"label": "Estado",
+						"langKey": "expediente_ce>infraestructura>agregar_edificaciones>estado",
+						"source": "",
+						"options": "estadosElementosMaterialPrincipal",
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"h": 5.5,
+							"unicOption": true
+						},
+						"id": "1_ff6698ff-2035-817e-cc92-9e54effc49e8_e199ece2-6cfa-3eef-0b19-f3c5b6b4f365_col",
+						"row": true
+					}
+				],
+				{
+					"id": "6d70d57e-34bc-4264-0e89-cf2a335bdfff_e199ece2-6cfa-3eef-0b19-f3c5b6b4f365_col",
+					"type": "textArea",
+					"label": "Observaciones (opcional)",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>observaciones",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "Describa cualquier situación particular referente al elemento PUERTAS Y VENTANAS"
+					}
+				}
+			],
+			"order": 15
+		},
+		{
+			"layoutId": "c44c7edf-c1a0-3149-3739-f9e48cd0c2a0_col",
+			"fields": [
+				{
+					"type": "multiple",
+					"label": "Estado",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>estado",
+					"source": "",
+					"options": "estadosElementosMaterialPrincipal",
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"h": 5.5,
+						"unicOption": true
+					},
+					"id": "1_a5de2c5f-e8e6-11c3-9e93-e1e1dff936b4_c44c7edf-c1a0-3149-3739-f9e48cd0c2a0_col",
+					"row": false
+				},
+				{
+					"id": "d715fa09-b06c-e1de-3a42-1469ca01a004_c44c7edf-c1a0-3149-3739-f9e48cd0c2a0_col",
+					"type": "textArea",
+					"label": "Observaciones (opcional)",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>observaciones",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "Describa cualquier situación particular referente al elemento ACABADOS"
+					},
+					"row": false
+				}
+			],
+			"order": 16
+		},
+		{
+			"layoutId": "d3757d6f-d1df-0762-82e4-c4200c211d67_col",
+			"fields": [
+				{
+					"type": "multiple",
+					"label": "Estado",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>estado",
+					"source": "",
+					"options": "estadosElementosMaterialPrincipal",
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"h": 5.5,
+						"unicOption": true
+					},
+					"id": "1_a0ef9220-6c29-4e96-491f-7b879f1065a0_d3757d6f-d1df-0762-82e4-c4200c211d67_col",
+					"row": false
+				},
+				{
+					"id": "958dd350-2258-4bf7-6ca2-49f31844daa3_d3757d6f-d1df-0762-82e4-c4200c211d67_col",
+					"type": "textArea",
+					"label": "Observaciones (opcional)",
+					"langKey": "expediente_ce>infraestructura>agregar_edificaciones>observaciones",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "Describa cualquier situación particular referente al elemento SISTEMA ELECTRICO"
+					},
+					"row": false
+				}
+			],
+			"order": 17
+		},
+		{
+			"layoutId": "7f949a5e-887c-49d8-fca6-eeaf01b9299e_col",
+			"fields": [
+				{
+					"type": "crudTable",
+					"label": "",
+					"config": {
+						"columns": [
+							{
+								"titulo": "Cantidad",
+								"langKey": "expediente_ce>infraestructura>agregar_edificaciones>cantidad",
+								"id": "315c8171-78ae-2fc2-ece9-03d58bde7498"
+							},
+							{
+								"titulo": "Componente",
+								"langKey": "expediente_ce>infraestructura>agregar_edificaciones>componentes",
+								"id": "1e210f6c-64e1-c5d0-a5c8-5f5f6ff19669"
+							}
+						],
+						"tooltipText": "",
+						"multipleOptions": true
+					},
+					"id": "385434de-342c-1864-0792-6408bcdcfeb7_7f949a5e-887c-49d8-fca6-eeaf01b9299e_col",
+					"options": "elementosMenoresFromDB",
+					"modalTitle": "Componentes menores"
+				}
+			],
+			"order": 16,
+			"config": {
+				"titulo": "Componentes menores",
+				"relleno": true,
+				"tooltip": ""
+			}
+		},
+		{
+			"layoutId": "50f93b63-f019-2ea4-50a6-bf1c4a899302_col",
+			"fields": [
+				{
+					"type": "crudTable",
+					"label": "",
+					"config": {
+						"columns": [
+							{
+								"titulo": "Cantidad",
+								"langKey": "expediente_ce>infraestructura>agregar_edificaciones>cantidad",
+								"id": "315c8171-78ae-2fc2-ece9-03d58bde7498"
+							},
+							{
+								"titulo": "Componente",
+								"langKey": "expediente_ce>infraestructura>agregar_edificaciones>componentes",
+								"id": "1e210f6c-64e1-c5d0-a5c8-5f5f6ff19669"
+							}
+						],
+						"tooltipText": "",
+						"multipleOptions": true
+					},
+					"id": "b75be60f-e41d-ea64-3edc-0b78e3fe2158_50f93b63-f019-2ea4-50a6-bf1c4a899302_col",
+					"options": "componentesEdifFromDB",
+					"modalTitle": "Componentes de la edificación"
+				}
+			],
+			"order": 17,
+			"config": {
+				"titulo": "Componentes de la edificación",
+				"relleno": true,
+				"tooltip": ""
+			}
+		}
+	],
+	"sources": [
+		"elevacion",
+		"organzacionEdif",
+		"elementosMenores",
+		"componentesEdif"
+	]
+}

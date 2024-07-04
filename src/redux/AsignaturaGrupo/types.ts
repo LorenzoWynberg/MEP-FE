@@ -1,0 +1,21 @@
+enum types {
+  LOADING_SUBJECTS_GROUP = 'LOADING_SUBJECTS_GROUP',
+  ADD_SUBJECT_GROUP = 'ADD_SUBJECT_GROUP',
+  UPDATE_SUBJECT_GROUP = 'UPDATE_SUBJECT_GROUP',
+  REMOVE_SUBJECT_GROUP = 'REMOVE_SUBJECT_GROUP',
+  GET_SUBJECTS_GROUP = 'GET_SUBJECTS_GROUP',
+  GET_ALL_SUBJECTS_GROUP = 'GET_ALL_SUBJECTS_GROUP',
+  GET_ALL_BY_GROUP_ID = 'GET_ALL_BY_GROUP_ID',
+  GET_ALL_BY_MODEL_OFFER_ID = 'GET_ALL_BY_MODEL_OFFER_ID',
+  GET_ALL_ASIGNATURA_GRUPO_BY_NIVEL_OFERTA = 'GET_ALL_ASIGNATURA_GRUPO_BY_NIVEL_OFERTA',
+}
+
+export interface ISubjectGroup {
+  id?: number;
+  estado: boolean;
+  sb_mallaCurricularasignaturaInstitucionId: number;
+  sb_gruposId: number,
+  sb_profesoresinstitucionId: number;
+}
+
+export default types

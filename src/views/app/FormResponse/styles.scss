@@ -1,0 +1,103 @@
+$home-bg-color: #f1ece2;
+$home-text-color: #235dff;
+
+$padding-space: 144px;
+$border-color: rgba(229, 231, 235, 100);
+
+
+// h3 {
+//   font-size: 4em;
+//   text-align: center;
+//   color: gray;
+//   font-weight: 700;
+// }
+
+.page-wrapper {
+  overflow: hidden;
+  padding: 0;
+  width: 100%;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.typeform-input {
+  margin-bottom: 5% !important;
+  border: none !important;
+  border-radius: 0 !important;
+
+  font-size: x-large !important;
+  padding: 30px 0px !important;
+}
+
+.typeform-input:focus {
+  box-shadow: none !important;
+  border-bottom: 1px solid $home-text-color  !important;
+}
+
+.enter-btn {
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+#submit-btn {
+  background-color: blue;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.press-enter {
+  font-size: 12px;
+  color: black;
+}
+
+.bold {
+  font-weight: bolder;
+}
+
+.count {
+  font-size: 12px;
+}
+
+.title {
+  font-size: 24px;
+  margin-bottom: 5%;
+}
+
+.slideClass {
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+  background-position: center;
+}
+
+.slide-shadow {
+  box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.35) !important;
+  position: relative;
+}
+
+.button-pagination {
+  padding-top: 10px;
+  position: absolute;
+  bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  right: 10px;
+  display: flex;
+  text-align: center;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.question-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.question-container {
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}

@@ -1,0 +1,117 @@
+{
+	"layouts": [
+		{
+			"i": "39f969ae-9c9f-791a-2e64-c09a43a13db1_col",
+			"x": 0,
+			"y": 0,
+			"w": 2,
+			"h": 11,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": { "titulo": "", "relleno": true, "tooltip": "" },
+			"rowH": 5,
+			"moved": false,
+			"static": false,
+			"content": []
+		}
+	],
+	"contents": [
+		{
+			"layoutId": "39f969ae-9c9f-791a-2e64-c09a43a13db1_col",
+			"fields": [
+				{
+					"type": "text",
+					"label": "Nombre de grupo",
+					"langKey": "grupo_lectivo>nombre_de_grupo",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": "",
+						"mask": ""
+					},
+					"id": "aede7b0d-95dd-4aa1-082f-f08c55ecff2a_39f969ae-9c9f-791a-2e64-c09a43a13db1_col",
+					"row": false
+				},
+				[
+					{
+						"type": "text",
+						"label": "Proyección de matrícula",
+						"langKey": "grupo_lectivo_>proyeccion_de_matricula",
+						"options": [],
+						"config": {
+							"numbersOnly": true,
+							"required": true,
+							"tooltipText": "",
+							"placeholder": "",
+							"mask": ""
+						},
+						"id": "86f5bdd7-5fe7-6693-86ab-9ad796e3efbe_39f969ae-9c9f-791a-2e64-c09a43a13db1_col",
+						"row": true
+					},
+					{
+						"type": "text",
+						"label": "Campos reservados",
+						"langKey": "grupo_lectivo>campos_reservados",
+						"options": [],
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"placeholder": "",
+							"mask": ""
+						},
+						"id": "b0140c1e-bd3d-6e93-3964-81441be937ce_39f969ae-9c9f-791a-2e64-c09a43a13db1_col",
+						"row": true
+					}
+				],
+				[
+					{
+						"type": "text",
+						"label": "Matriculados",
+						"langKey": "grupo_lectivo>matriculados",
+						"options": [],
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"placeholder": "",
+							"mask": ""
+						},
+						"id": "ccf28b76-1ba9-adee-b900-799586c0ec5a_39f969ae-9c9f-791a-2e64-c09a43a13db1_col",
+						"row": true
+					},
+					{
+						"type": "unic",
+						"label": "Estado",
+						"langKey": "grupo_lectivo>estado",
+						"source": "",
+						"options": "estado",
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"h": 3.5
+						},
+						"id": "01ce27bd-3263-2c1a-c6c0-4e7f50ee31b8_39f969ae-9c9f-791a-2e64-c09a43a13db1_col",
+						"row": true
+					}
+				],
+				{
+					"type": "uploadFile",
+					"label": "Imagen",
+					"langKey": "grupo_lectivo>imagen",
+					"config": {
+						"required": false,
+						"type": "imagen",
+						"icon": "imagen",
+						"typesAccepted": "*",
+						"h": 6
+					},
+					"id": "ee83be8d-e56c-6076-e7ec-f23deee0773b_39f969ae-9c9f-791a-2e64-c09a43a13db1_col",
+					"row": false
+				}
+			],
+			"order": 1,
+			"config": { "titulo": "", "relleno": true, "tooltip": "" }
+		}
+	],
+	"sources": []
+}

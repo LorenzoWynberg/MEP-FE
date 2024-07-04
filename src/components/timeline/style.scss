@@ -1,0 +1,95 @@
+.timeline-container{
+    position: relative;
+    .menu-item-wrapper{
+        width: 200px;
+        min-width: 200px;
+        height: 195px;
+        .menu-item {     
+            width: 200px;
+            min-width: 200px;       
+            height: 100px;
+            padding-top: 15px;
+            user-select: none;
+            cursor: pointer;
+            border: none;
+            position: absolute;
+            *{
+                margin: 0;
+                padding: 0;
+            }
+            h6{
+                color:#145388;
+                font-weight: bold;
+                font-size: 12px;
+            }
+            p{
+                font-size: 10px;
+                line-height: 1.5;
+                color:#575757;
+            }
+            .timeline-circle{
+                position: absolute;
+                width: 25px;
+                height: 25px;
+                background-color: #ffffff;
+                border-radius: 100%;
+                border: 5px solid #145388;;            
+            }
+        
+            &.bottom{
+                margin-top: 95px;
+                border-top: 5px solid #145388;
+                .timeline-circle{
+                    top:-15px;
+                }
+            }
+        
+            &.top{
+                border-bottom: 5px solid #145388;
+                .timeline-circle{
+                    bottom:-15px;
+                }
+            }
+        
+            &.last{
+                border: none;
+                .timeline-circle{
+                    bottom:-10px;
+                    background-color: #145388;
+                }
+            }
+        }
+    }
+    
+    .timeline-arrow{
+                .arrow{
+                    cursor: pointer;
+                    width: 0; 
+                    height: 0; 
+                    position: absolute;
+                    top:34.5%;           
+                    border-top: 30px solid transparent;
+                    border-bottom: 30px solid transparent;
+                }
+                .arrow-left{   
+                    left: 0;             
+                    border-right: 30px solid #888888;
+                }
+                .arrow-right{
+                    border-left: 30px solid #888888;
+                    right: 0;
+                }
+        
+            }
+    .timeline-arrow-left{   
+        left: 0;             
+    }
+    .timeline-arrow-right{
+        right: 0;
+    }
+    
+    .scroll-menu-arrow {
+        padding: 20px;
+        cursor: pointer;
+    }
+}

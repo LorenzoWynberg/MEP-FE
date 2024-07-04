@@ -1,0 +1,551 @@
+{
+	"layouts": [
+		{
+			"i": "8356c258-7fb3-dd09-9ef3-cb5cd2af1961_col",
+			"x": 0,
+			"y": 0,
+			"w": 4,
+			"h": 15,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Arquitectónico y civil",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false,
+			"content": [
+				{
+					"i": "985abecc-b6d9-158c-77df-b152402463b5_col",
+					"type": "container",
+					"w": 2,
+					"config": { "titulo": "", "relleno": false, "tooltip": "" }
+				},
+				{
+					"i": "be0b9ed0-ca20-ca5f-3f53-0ee2aac308e0_col",
+					"type": "container",
+					"w": 2,
+					"config": { "titulo": "", "relleno": false, "tooltip": "" }
+				}
+			]
+		},
+		{
+			"i": "864b336e-76e2-cb8f-bb8b-dd78e5cc5aa2_col",
+			"x": 0,
+			"y": 15,
+			"w": 4,
+			"h": 10,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": { "titulo": "Sistemas ", "relleno": true, "tooltip": "" },
+			"rowH": 32.5,
+			"moved": false,
+			"static": false,
+			"content": []
+		}
+	],
+	"contents": [
+		{
+			"layoutId": "8356c258-7fb3-dd09-9ef3-cb5cd2af1961_col",
+			"fields": [],
+			"order": 1,
+			"config": {
+				"titulo": "Arquitectónico y civil",
+				"relleno": true,
+				"tooltip": ""
+			}
+		},
+		{
+			"layoutId": "985abecc-b6d9-158c-77df-b152402463b5_col",
+			"fields": [
+				{
+					"id": "3b83cb13-1c79-772a-91c5-4ee3d04f388a_985abecc-b6d9-158c-77df-b152402463b5_col",
+					"type": "multiple",
+					"label": "Cerramiento perimetral",
+					"langKey": "obras_complementarias>cerramiento_perimetral",
+					"source": "",
+					"options": "cerramientoPerimetral",
+					"config": {
+						"required": true,
+						"tooltipText": "Seleccionar el (o los) materiales predominantes en el cerramiento del terreno",
+						"h": 6.5
+					},
+					"row": false
+				},
+				[
+					{
+						"id": "f89a1857-f63e-af88-731c-488b729956ad_985abecc-b6d9-158c-77df-b152402463b5_col",
+						"type": "unic",
+						"label": "Estado general de cerramiento perimetral",
+						"langKey": "obras_complementarias>estado_general_de_cerramiento_perimetral",
+						"source": "",
+						"options": "estadoCerramientoPerimetral",
+						"config": {
+							"required": true,
+							"tooltipText": "Considerando LA TOTALIDAD de los cerramientos perimetrales, debe Indicar un estado de conservación GENERAL",
+							"h": 5.5
+						},
+						"row": true
+					},
+					{
+						"type": "radio",
+						"label": "Bicicletario",
+						"langKey": "obras_complementarias>bicicletario",
+						"source": "",
+						"options": "sino",
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"orientation": "row",
+							"h": 3.5
+						},
+						"id": "1_335cbfbc-4fc8-561e-9d01-08502798555f_985abecc-b6d9-158c-77df-b152402463b5_col",
+						"row": true
+					}
+				],
+				[
+					{
+						"type": "unic",
+						"label": "Estacionamientos",
+						"langKey": "obras_complementarias>estacionamientos",
+						"source": "",
+						"options": "estacinamientos",
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"h": 4.5
+						},
+						"id": "06a350c4-3e57-a8ab-b5fb-d30620bdcd6f_985abecc-b6d9-158c-77df-b152402463b5_col",
+						"row": true,
+						"col": true
+					},
+					{
+						"type": "text",
+						"label": "Cantidad de estacionamientos",
+						"langKey": "obras_complementarias>cantidad_de_estacionamientos",
+						"options": [],
+						"config": {
+							"numbersOnly": true,
+							"required": true,
+							"tooltipText": "",
+							"placeholder": ""
+						},
+						"id": "1_ac768aa3-c10f-da88-16e8-499342f6392a_985abecc-b6d9-158c-77df-b152402463b5_col",
+						"row": true
+					}
+				],
+				[
+					{
+						"type": "unic",
+						"label": "Caseta de vigilancia",
+						"langKey": "obras_complementarias>caseta_de_vigilancia",
+						"source": "",
+						"options": "casetaVigilancia",
+						"config": {
+							"required": true,
+							"tooltipText": "Indicar la cantidad de epacios especficos para vigilancia",
+							"h": 5.5
+						},
+						"id": "a13c2105-c45c-6ff1-cdb4-d8cef778a83c_985abecc-b6d9-158c-77df-b152402463b5_col",
+						"row": true
+					},
+					{
+						"type": "unic",
+						"label": "Estado de la(s) caseta(s)",
+						"langKey": "obras_complementarias>estado_de_las_casetas",
+						"source": "",
+						"options": "estado2",
+						"config": {
+							"required": true,
+							"tooltipText": "Considerando LA TOTALIDAD de casetas de seguridad, debe indicar un estado de conservación GENERAL",
+							"h": 5
+						},
+						"id": "1_3e025756-b477-3aff-ebd5-78727cf12d4b_985abecc-b6d9-158c-77df-b152402463b5_col",
+						"row": true,
+						"col": true
+					}
+				],
+				[
+					{
+						"type": "unic",
+						"label": "Pasos techados / cubiertos",
+						"langKey": "obras_complementarias>pasos_techados_cubiertos",
+						"source": "",
+						"options": "pasosTechados",
+						"config": {
+							"required": true,
+							"tooltipText": "Se refiere a pasillos externos a las edificaciones. Deberá indicar de manera GENERA la disponibilidad o nó de los mismos.",
+							"h": 5
+						},
+						"id": "f5b5bcbc-3cd7-97cf-1e39-02038a9ab3cd_985abecc-b6d9-158c-77df-b152402463b5_col",
+						"row": true
+					},
+					{
+						"type": "unic",
+						"label": "Estado actual de los pasos techados",
+						"langKey": "obras_complementarias>estado_actual_de_los_pasos_techados",
+						"source": "",
+						"options": "estadoPasosTechados",
+						"config": {
+							"required": true,
+							"tooltipText": "Considerando LA TOTALIDAD de los pasos techados. Deberá indicar un estado de conservación GENERAL",
+							"h": 5
+						},
+						"id": "661c566c-9649-110b-7fc3-d8a996fea9c2_985abecc-b6d9-158c-77df-b152402463b5_col",
+						"row": true
+					}
+				]
+			],
+			"order": 2
+		},
+		{
+			"layoutId": "be0b9ed0-ca20-ca5f-3f53-0ee2aac308e0_col",
+			"fields": [
+				[
+					{
+						"id": "921e5ef7-69fb-130a-e602-4ad5912b2c89_be0b9ed0-ca20-ca5f-3f53-0ee2aac308e0_col",
+						"type": "unic",
+						"label": "Estado de elevadores o plataformas",
+						"langKey": "obras_complementarias>estado_de_elevadores_o_plataformas",
+						"source": "",
+						"options": "estado2",
+						"config": {
+							"required": true,
+							"tooltipText": "Indicar de manera general su parecer sobre el estado de conservación o funcionamiento del elemento",
+							"h": 5
+						},
+						"row": true
+					},
+					{
+						"type": "unic",
+						"label": "Estado de rampas",
+						"langKey": "obras_complementarias>estado_de_rampas",
+						"source": "",
+						"options": "estadoRampas",
+						"config": {
+							"required": true,
+							"tooltipText": "Indicar de manera general su parecer sobre el estado de conservacion o funcionamiento del elemento",
+							"h": 4.5
+						},
+						"id": "1_3e652ad7-dec2-7e0b-6639-da910cd37b81_be0b9ed0-ca20-ca5f-3f53-0ee2aac308e0_col",
+						"row": true
+					}
+				],
+				[
+					{
+						"id": "9b3ca819-7778-ce3a-f19e-68a3621c23a4_be0b9ed0-ca20-ca5f-3f53-0ee2aac308e0_col",
+						"type": "radio",
+						"label": "Escaleras complementarias",
+						"langKey": "obras_complementarias>escaleras_complementarias",
+						"source": "",
+						"options": "sino",
+						"config": {
+							"required": true,
+							"tooltipText": "Se refiere esclusivamente a estructuras adosadas a los edificios para comunicar dos o más pisos. Son complementarias porque NO PERTENECEN al edificio (Emergencias, incendios u otros similares)",
+							"orientation": "row",
+							"h": 3.5
+						},
+						"row": true
+					},
+					{
+						"type": "unic",
+						"label": "Estado de escaleras complementarias",
+						"langKey": "obras_complementarias>estado_de_escaleras_complementarias",
+						"source": "",
+						"options": "estaoEscalerasComplementarias",
+						"config": {
+							"required": true,
+							"tooltipText": "Indicar de manera general su parecer sobre el estado de conservacion o funcionamiento del elemento",
+							"h": 4.5
+						},
+						"id": "1_e07bc00a-8fb4-10b1-4f9b-d9cd44c8d56e_be0b9ed0-ca20-ca5f-3f53-0ee2aac308e0_col",
+						"row": true
+					}
+				],
+				[
+					{
+						"type": "unic",
+						"label": "Tanque elevado",
+						"langKey": "obras_complementarias>tanque_elevado",
+						"source": "",
+						"options": "numeroDe1A5",
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"h": 5.5
+						},
+						"id": "a4e9e913-6ccc-33e4-bd26-da29ed9d9128_be0b9ed0-ca20-ca5f-3f53-0ee2aac308e0_col",
+						"row": true,
+						"col": true
+					},
+					{
+						"type": "unic",
+						"label": "Estado de tanque elevado",
+						"langKey": "obras_complementarias_>estado_de_tanque_elevado",
+						"source": "",
+						"options": "estado2",
+						"config": {
+							"required": true,
+							"tooltipText": "Indicar según su parecer el estado de conservación del elemento",
+							"h": 5
+						},
+						"id": "1_a57f6a36-564f-4f32-3a8e-df653830a14c_be0b9ed0-ca20-ca5f-3f53-0ee2aac308e0_col",
+						"row": true,
+						"col": true
+					}
+				],
+				[
+					[
+						{
+							"id": "bca755a8-b5ca-4683-c536-16033f049455_be0b9ed0-ca20-ca5f-3f53-0ee2aac308e0_col",
+							"type": "unic",
+							"label": "Muros de contención",
+							"langKey": "obras_complementarias>muros_de_contencion",
+							"source": "",
+							"options": "numeroDe1A5",
+							"config": {
+								"required": true,
+								"tooltipText": "Indicar si en la Institución existen muros de un metro de altura o más para detener masas de tierra",
+								"h": 5.5
+							},
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "unic",
+							"label": "Estado general de los muros",
+							"langKey": "obras_complementarias>estado_general_de_los_muros",
+							"source": "",
+							"options": "estadoGeneralMuros",
+							"config": {
+								"required": false,
+								"tooltipText": "Indicar de manera general su parecer sobre el estado de conservación o funcionamiento del elemento",
+								"h": 5
+							},
+							"id": "1_faea08b4-e77a-7061-1b33-d004253f6f26_be0b9ed0-ca20-ca5f-3f53-0ee2aac308e0_col",
+							"row": true,
+							"col": true
+						}
+					],
+					{
+						"type": "text",
+						"label": "Altura máxima del muro (metros)",
+						"langKey": "obras_complementarias>altura_maxima_del_muro_metros",
+						"options": [],
+						"config": {
+							"numbersOnly": true,
+							"required": false,
+							"tooltipText": " Indicar una altura aproximada del muro más alto en la institución",
+							"placeholder": "",
+							"mask": ""
+						},
+						"id": "980702ea-476a-2169-21ec-5bfb223a83e4_be0b9ed0-ca20-ca5f-3f53-0ee2aac308e0_col",
+						"row": true
+					}
+				]
+			],
+			"order": 3
+		},
+		{
+			"layoutId": "864b336e-76e2-cb8f-bb8b-dd78e5cc5aa2_col",
+			"fields": [
+				[
+					{
+						"type": "unic",
+						"label": "Estado del sistema de cámaras y circuito cerrado",
+						"langKey": "obras_complementarias>estado_del_sistema_de_camaras_y_circuito_cerrado",
+						"source": "",
+						"options": "estadoSistemaCamaraCircuito",
+						"config": {
+							"required": false,
+							"tooltipText": "Indicar de manera general su parecer sobre el estado de conservación o funcionamiento del elemento",
+							"h": 4
+						},
+						"id": "505ef0f3-57df-4d22-bd12-e379e7b72547_864b336e-76e2-cb8f-bb8b-dd78e5cc5aa2_col",
+						"row": true
+					},
+					{
+						"label": "Sistema de tratamiento de aguas residuales",
+						"langKey": "obras_complementarias>sistema_de_tratamiento_de_aguas_residuales",
+						"type": "multiple",
+						"options": "tratamientoDeAguasFromDB",
+						"config": {
+							"tooltipText": "Indicar el (o los) sistemas que se utilizan para tratamiento de las aguas residuales",
+							"required": true,
+							"row": true,
+							"col": true
+						},
+						"id": "5d56372c-1c18-cf2f-7295-cdfed36f0e27_864b336e-76e2-cb8f-bb8b-dd78e5cc5aa2_col",
+						"row": true
+					},
+					{
+						"id": "b3f20gvc5m1c3-96a4-73a5-7ec2-92a0cehyt8a3b66_864b336e-76e2-cb8f-bb8blmztg-fgdd78e5cc5aa2_col",
+						"label": "Estado del sistema de tratamiento de aguas residuales",
+						"langKey": "obras_complementarias>estado_del_sistema_de_tratamiento_de_aguas_residuales",
+						"type": "unic",
+						"options": "estadosTratamientoDeAguasFromDB",
+						"config": {
+							"tooltipText": "Indicar de manera general su parecer sobre el estado de funcionamiento del elemento",
+							"required": true,
+							"row": true,
+							"col": true
+						}
+					},
+					{
+						"type": "radio",
+						"label": "Sistema de supresión de incendios",
+						"langKey": "obras_complementarias>sistema_de_supresion_de_incendios",
+						"source": "",
+						"options": "sino",
+						"config": {
+							"required": false,
+							"tooltipText": "",
+							"orientation": "row",
+							"h": 3.5
+						},
+						"id": "8cf678cc-8b55-a63c-d7bd-5a0c016d5043_864b336e-76e2-cb8f-bb8b-dd78e5cc5aa2_col",
+						"row": true
+					}
+				],
+				[
+					[
+						{
+							"type": "unic",
+							"label": "Alarma contra incendio",
+							"langKey": "obras_complementarias>alarma_contra_incendio",
+							"source": "",
+							"options": "alarmaContraIncendio",
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"h": 4
+							},
+							"id": "25abd0f3-c6d3-4123-e323-cea7cc88e70a_864b336e-76e2-cb8f-bb8b-dd78e5cc5aa2_col",
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "radio",
+							"label": "Planta eléctrica de emergencia",
+							"langKey": "obras_complementarias>planta_electrica_de_emergencia",
+							"source": "",
+							"options": "sino",
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"orientation": "row",
+								"h": 3.5
+							},
+							"id": "1_5f143913-0c87-11ba-e1d7-9224c15e9cc2_864b336e-76e2-cb8f-bb8b-dd78e5cc5aa2_col",
+							"row": true,
+							"col": true
+						}
+					],
+					[
+						{
+							"type": "unic",
+							"label": "Iluminación de emergencia",
+							"langKey": "obras_complementarias>iluminacion_de_emergencia",
+							"source": "",
+							"options": "iluminacionEmergencia",
+							"config": {
+								"required": false,
+								"tooltipText": "",
+								"h": 4
+							},
+							"id": "55a60af8-ddb3-554e-1e7e-80a550d71281_864b336e-76e2-cb8f-bb8b-dd78e5cc5aa2_col",
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "unic",
+							"label": "Señalización de rutas de evacuación",
+							"langKey": "obras_complementarias>señalizacion_de_rutas_de_evacuacion",
+							"source": "",
+							"options": "rutasEvacuacion",
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"h": 4
+							},
+							"id": "1_3801907b-f50c-68b8-aa4b-b2f16671f439_864b336e-76e2-cb8f-bb8b-dd78e5cc5aa2_col",
+							"row": true,
+							"col": true
+						}
+					],
+					[
+						{
+							"type": "radio",
+							"label": "Sistema de bombeo de agua",
+							"langKey": "obras_complementarias>sistema_de_bombeo_de_agua",
+							"source": "",
+							"options": "sino",
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"orientation": "row",
+								"h": 3.5
+							},
+							"id": "e616d31e-df27-58c2-8f4f-6bad1fc1855a_864b336e-76e2-cb8f-bb8b-dd78e5cc5aa2_col",
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "radio",
+							"label": "Sistema fotovoltaico o panel solar",
+							"langKey": "obras_complementarias>sistema_fotovoltaico_o_panel_solar",
+							"source": "",
+							"options": "sino",
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"orientation": "row",
+								"h": 3.5
+							},
+							"id": "1_1abc3044-b2df-f3d3-ab5c-79be8917bcf8_864b336e-76e2-cb8f-bb8b-dd78e5cc5aa2_col",
+							"row": true,
+							"col": true
+						}
+					],
+					[
+						{
+							"type": "radio",
+							"label": "Iluminación exterior en áreas verdes",
+							"langKey": "obras_complementarias>iluminacion_exterior_en_areas_verdes",
+							"source": "",
+							"options": "sino",
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"orientation": "row",
+								"h": 3.5
+							},
+							"id": "b3f201c3-96a4-73a5-7ec2-92a0ce8a3b66_864b336e-76e2-cb8f-bb8b-dd78e5cc5aa2_col",
+							"row": true
+						},
+						{
+							"type": "radio",
+							"label": "Sistema de detección de gas en comedor",
+							"langKey": "obras_complementarias>sistema_de_deteccion_de_gas_en_comedor",
+							"source": "",
+							"options": "sino",
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"orientation": "row",
+								"h": 3.5
+							},
+							"id": "81e6b005-3785-084a-be97-ca0c5f35651b_864b336e-76e2-cb8f-bb8b-dd78e5cc5aa2_col",
+							"row": true
+						}
+					]
+				]
+			],
+			"order": 4,
+			"config": { "titulo": "", "relleno": false, "tooltipText": "" }
+		}
+	],
+	"sources": ["tratamientoDeAguas", "estadosTratamientoDeAguas"]
+}

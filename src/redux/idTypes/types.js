@@ -1,0 +1,3 @@
+export const ID_TYPES_LOAD = 'ID_TYPES_LOAD'
+export const ID_TYPES_ERROR = 'ID_TYPES_ERROR'
+export const ID_TYPES_LOADING = 'ID_TYPES_LOADING'

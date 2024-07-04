@@ -1,0 +1,5 @@
+export const LOAD_OFFERS = 'LOAD_OFFERS'
+export const CREATE_OFFERS = 'CREATE_OFFERS'
+export const DELETE_OFFERS = 'DELETE_OFFERS'
+export const EDIT_OFFER = 'EDIT_OFFER'
+export const UPDATE_OFFER = 'UPDATE_OFFER'

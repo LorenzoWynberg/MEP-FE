@@ -1,0 +1,175 @@
+{
+	"titulo": "Crear formulario",
+	"layouts": [
+		{
+			"i": "ab1cfb6e-e0d1-3036-d129-1d66a013d5d1_col",
+			"x": 0,
+			"y": 0,
+			"w": 2,
+			"h": 14,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Servicios públicos",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 7.5,
+			"moved": false,
+			"static": false
+		}
+	],
+	"contents": [
+		{
+			"layoutId": "ab1cfb6e-e0d1-3036-d129-1d66a013d5d1_col",
+			"fields": [
+				[
+					{
+						"id": "9a9c38f4-e3bb-8a69-bcf6-eef63dbed000_ab1cfb6e-e0d1-3036-d129-1d66a013d5d1_col",
+						"type": "text",
+						"label": "Número de servicio",
+						"langKey": "servicios_publicos>numero_de_servicio",
+						"options": [],
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"placeholder": ""
+						},
+						"row": true
+					},
+					{
+						"type": "unic",
+						"label": "Servicio",
+						"langKey": "servicios_publicos>servicio",
+						"source": "",
+						"options": "tipoServicioFromDB",
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"h": 2.5
+						},
+						"id": "1_77f86240-3787-3897-db65-f2c34c830317_ab1cfb6e-e0d1-3036-d129-1d66a013d5d1_col",
+						"row": true
+					}
+				],
+				{
+					"id": "b34bb93d-a0f0-94d0-6c31-a1df9015a9ed_ab1cfb6e-e0d1-3036-d129-1d66a013d5d1_col",
+					"type": "text",
+					"label": "Tipo de servicio",
+					"langKey": "servicios_publicos>tipo_de_servicio",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					},
+					"row": false
+				},
+				{
+					"id": "f2ce3c96-1a7c-86bc-326a-c6147d977b9d_ab1cfb6e-e0d1-3036-d129-1d66a013d5d1_col",
+					"type": "textArea",
+					"label": "Característica del servicio",
+					"langKey": "servicios_publicos>caracteristica_del_servicio",
+					"options": [],
+					"config": { "required": true, "tooltipText": "" },
+					"row": false
+				},
+				[
+					[
+						{
+							"id": "51913be1-68d0-9518-bc56-a31acc06e00a_ab1cfb6e-e0d1-3036-d129-1d66a013d5d1_col",
+							"type": "text",
+							"label": "Velocidad (Mbps)",
+							"langKey": "servicios_publicos>velocidad_mbps",
+							"options": [],
+							"config": {
+								"required": false,
+								"tooltipText": "",
+								"placeholder": "",
+								"numbersOnly": true
+							},
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "unic",
+							"label": "Estado",
+							"langKey": "servicios_publicos>estado",
+							"source": "",
+							"options": "estado",
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"h": 3.5
+							},
+							"id": "1_f8c33ec8-e793-bbf1-17c6-5cb0e2ada2b3_ab1cfb6e-e0d1-3036-d129-1d66a013d5d1_col",
+							"row": true,
+							"col": true
+						}
+					],
+					[
+						{
+							"type": "unic",
+							"label": "Proveedor del servicio",
+							"langKey": "servicios_publicos>proveedor_del_servicio",
+							"source": "",
+							"options": [
+								{
+									"id": "1_unic",
+									"value": "Estado",
+									"label": "Estado"
+								},
+								{
+									"id": "2_unic",
+									"value": "Privado",
+									"label": "Privado"
+								}
+							],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"h": 3.5
+							},
+							"id": "1_3bc116b3-f438-928e-f3eb-719c1ed2fe86_ab1cfb6e-e0d1-3036-d129-1d66a013d5d1_col",
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "unic",
+							"label": "Responsable de pago",
+							"langKey": "servicios_publicos>responsable_de_pago",
+							"source": "",
+							"options": [
+								{
+									"id": "1_unic",
+									"value": "Dueño",
+									"label": "Dueño"
+								},
+								{
+									"id": "2_unic",
+									"value": "otro",
+									"label": "otro"
+								}
+							],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"h": 3.5
+							},
+							"id": "1_5ba6f9ba-36ec-2542-df3c-85bbc069faa8_ab1cfb6e-e0d1-3036-d129-1d66a013d5d1_col",
+							"row": true,
+							"col": true
+						}
+					]
+				]
+			],
+			"order": 1,
+			"config": {
+				"titulo": "Servicios públicos",
+				"relleno": true,
+				"tooltip": ""
+			}
+		}
+	],
+	"sources": ["tipoServicio"]
+}

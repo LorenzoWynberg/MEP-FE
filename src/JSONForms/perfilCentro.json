@@ -1,0 +1,260 @@
+{
+	"titulo": "Crear formulario",
+	"layouts": [
+		{
+			"i": "3659521e-4836-64b1-6fe6-9dcbe094ceec_col",
+			"x": 0,
+			"y": 0,
+			"w": 2,
+			"h": 19,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Perfil de la Institución",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 7.5,
+			"moved": false,
+			"static": false
+		},
+		{
+			"i": "c4f172cf-8f80-999e-c5e7-a95cfbdc60b1_col",
+			"x": 2,
+			"y": 0,
+			"w": 2,
+			"h": 11,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Perfil de la institución",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false
+		},
+		{
+			"i": "96c5299f-ccfa-1b21-c16e-106d6a160dbf_col",
+			"x": 2,
+			"y": 11,
+			"w": 2,
+			"h": 16,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": { "titulo": "", "relleno": true, "tooltip": "" },
+			"rowH": 0,
+			"moved": false,
+			"static": false
+		}
+	],
+	"contents": [
+		{
+			"layoutId": "3659521e-4836-64b1-6fe6-9dcbe094ceec_col",
+			"fields": [
+				[
+					{
+						"type": "text",
+						"label": "Código SABER",
+						"langKey": "perfil_centro>codigo_saber",
+						"options": [],
+						"config": {
+							"required": false,
+							"tooltipText": "",
+							"placeholder": "",
+							"mask": "",
+							"size": "4"
+						},
+						"id": "8606bdfc-65ef-cae4-1ac2-245c53bf7830_3659521e-4836-64b1-6fe6-9dcbe094ceec_col",
+						"row": true
+					},
+					{
+						"type": "text",
+						"label": "Nombre oficial",
+						"langKey": "perfil_centro>nombre_oficial",
+						"options": [],
+						"config": {
+							"required": false,
+							"tooltipText": "",
+							"placeholder": "",
+							"mask": ""
+						},
+						"id": "efd0551c-9f30-7272-7197-af237e4a47f6_3659521e-4836-64b1-6fe6-9dcbe094ceec_col",
+						"row": true
+					}
+				],
+				[
+					{
+						"type": "text",
+						"label": "Conocido como",
+						"langKey": "perfil_centro>conocido_como",
+						"options": [],
+						"config": {
+							"required": false,
+							"tooltipText": "Puede ingresar otro nombre que se utilice para identificar la Institución",
+							"placeholder": "",
+							"mask": "",
+							"size": "7"
+						},
+						"id": "11e93d66-3ed8-6589-b6a2-5e83f74b9ba1_3659521e-4836-64b1-6fe6-9dcbe094ceec_col",
+						"row": true
+					},
+					{
+						"type": "date",
+						"label": "Fecha fundación",
+						"langKey": "perfil_centro>fecha_fundacion",
+						"options": [],
+						"config": {
+							"required": false,
+							"tooltipText": "",
+							"size": "5"
+						},
+						"id": "fec333b1-72d4-89a2-5970-41e879e18957_3659521e-4836-64b1-6fe6-9dcbe094ceec_col",
+						"row": true
+					}
+				],
+				{
+					"type": "textArea",
+					"label": "Historia de la institución",
+					"langKey": "perfil_centro>historia_de_la_institucion",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "Digite una breve descripción de la Institución"
+					},
+					"id": "59eb23f9-79f4-6f17-8cac-7118cd0b6e52_3659521e-4836-64b1-6fe6-9dcbe094ceec_col"
+				},
+				{
+					"type": "uploadFile",
+					"label": "Estandarte",
+					"langKey": "perfil_centro>estandarte",
+					"config": {
+						"required": false,
+						"type": "imagen",
+						"icon": "imagen",
+						"maxFiles": 5,
+						"typesAccepted": "*",
+						"h": 6,
+						"tooltipText": "JPG JPEG PNG GIF SVG ICO WEB"
+					},
+					"id": "cb2835f7-9818-93a6-92cb-c12e99ff7889_3659521e-4836-64b1-6fe6-9dcbe094ceec_col"
+				},
+				{
+					"type": "uploadFile",
+					"label": "Audio del himno",
+					"langKey": "perfil_centro>audio_del_himno",
+					"config": {
+						"required": false,
+						"type": "audio",
+						"icon": "audio",
+						"maxFiles": 5,
+						"typesAccepted": "*",
+						"h": 6,
+						"tooltipText": "MP3 WAV WMA MID"
+					},
+					"id": "b1fe70c6-dfb1-9dc8-9ee4-7927935f5cdf_3659521e-4836-64b1-6fe6-9dcbe094ceec_col"
+				},
+				{
+					"type": "iconTextarea",
+					"label": "Letra del himno",
+					"langKey": "perfil_centro>letra_del_himno",
+					"config": {
+						"required": false,
+						"type": "audio",
+						"icon": "audio1",
+						"dontResize": true,
+						"maxFiles": 5,
+						"typesAccepted": "*",
+						"h": 6
+					},
+					"id": "c6a36199-31fb-b73b-89f1-49b3911cddf0_3659521e-4836-64b1-6fe6-9dcbe094ceec_col"
+				},
+				{
+					"type": "multiple",
+					"label": "Categorías vinculadas al centro",
+					"langKey": "perfil_centro>categorias_vinculadas_al_centro",
+					"source": "",
+					"options": "categoriaCEFromDB",
+					"config": { "required": true, "tooltipText": "", "h": 4 },
+					"id": "b305f83a-1ee4-8978-78e4-0c951771568a_3659521e-4836-64b1-6fe6-9dcbe094ceec_col"
+				}
+			],
+			"order": 1,
+			"config": {
+				"titulo": "Perfil de la Institución",
+				"relleno": true,
+				"tooltip": ""
+			}
+		},
+		{
+			"layoutId": "c4f172cf-8f80-999e-c5e7-a95cfbdc60b1_col",
+			"fields": [
+				{
+					"type": "uploadFile",
+					"label": "Fotografías de la institución",
+					"langKey": "perfil_centro>fotografias_de_la_institucion",
+					"config": {
+						"required": false,
+						"type": "imagen",
+						"icon": "imagen1",
+						"maxFiles": 5,
+						"typesAccepted": "*",
+						"h": 6
+					},
+					"id": "d3b5c6f3-65f8-d7e4-9f1c-79614c45f686_c4f172cf-8f80-999e-c5e7-a95cfbdc60b1_col"
+				},
+				{
+					"type": "textArea",
+					"label": "Misión de la institución",
+					"langKey": "perfil_centro>mision_de_la_institucion",
+					"options": [],
+					"config": { "required": false, "tooltipText": "" },
+					"id": "5e4427ca-42ae-3369-64c3-e3cb10880a68_c4f172cf-8f80-999e-c5e7-a95cfbdc60b1_col"
+				},
+				{
+					"type": "textArea",
+					"label": "Visión de la institución",
+					"langKey": "perfil_centro>vision_de_la_institucion",
+					"options": [],
+					"config": { "required": false, "tooltipText": "" },
+					"id": "ad393433-9495-4827-8ce9-5ea86d33fd1f_c4f172cf-8f80-999e-c5e7-a95cfbdc60b1_col"
+				}
+			],
+			"order": 2,
+			"config": {
+				"titulo": "Perfil de la institución",
+				"relleno": true,
+				"tooltip": ""
+			}
+		},
+		{
+			"layoutId": "96c5299f-ccfa-1b21-c16e-106d6a160dbf_col",
+			"fields": [
+				{
+					"type": "crudTable",
+					"label": "Logros obtenidos",
+					"langKey": "perfil_centro>logros_obtenidos",
+					"config": {
+						"columns": [
+							{
+								"titulo": "Logro",
+								"id": "fc51bda7-47a2-cdd2-c182-2f447c87fe1d"
+							},
+							{
+								"type": "date",
+								"titulo": "Año",
+								"id": "64c2caad-504d-84b6-3f90-7512101f2d80"
+							}
+						],
+						"tooltipText": ""
+					},
+					"id": "b3fb33ee-2edb-08ab-7036-dedf39842580_96c5299f-ccfa-1b21-c16e-106d6a160dbf_col"
+				}
+			],
+			"order": 3,
+			"config": { "titulo": "", "relleno": true, "tooltip": "" }
+		}
+	],
+	"sources": ["categoriaCE"]
+}

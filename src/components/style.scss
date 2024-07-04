@@ -1,0 +1,157 @@
+.infoContacto,
+.rLegalContent {
+  font-size: 14px !important;
+  color: #000123 !important;
+
+  input,
+  textarea {
+    font-size: 14px !important;
+    color: #000123 !important;
+  }
+
+  input {
+    width: 100% !important;
+  }
+}
+
+.input-wrapper .input-styles input {
+  height: initial !important;
+  margin: initial !important;
+}
+
+.Mui-error {
+  border: 1px solid #c43d4b !important;
+  color: #c43d4b !important;
+}
+
+.form-control .is-invalid {
+  border-color: #c43d4b !important;
+}
+
+.form-group .is-invalid {
+  border-color: #c43d4b !important;
+}
+
+.override-w-100 {
+  .bg-white__radius {
+    width: 100% !important;
+    left: -10px;
+  }
+}
+
+.pt-1r {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+input[type='date'] {
+  padding-right: 12%;
+}
+
+.welcome-container {
+  padding: 1rem;
+  font-weight: bold;
+  font-size: 0.5rem;
+  color: #155081;
+}
+
+.page-helper {
+  border-radius: 15px;
+  margin-bottom: 1.5rem;
+  background-color: white;
+  box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.09);
+  padding: 1.5rem;
+
+  .inline-block {
+    display: inline-block;
+  }
+
+  .title {
+    padding: 1rem;
+    padding-bottom: 0.5rem;
+
+    h4 {
+      font-weight: 600;
+    }
+  }
+
+  .content {
+    padding-left: 1rem;
+
+    h6 {
+      font-size: 14px;
+      font-weight: 600;
+    }
+  }
+}
+
+.download-container {
+  font-size: 50px;
+  text-align: center;
+}
+
+.breadcrumb-label {
+  font-family: Nunito;
+  font-size: 0.9rem;
+  color: #575757;
+}
+
+.breadcrumb-active {
+  font-family: Nunito;
+  font-size: 0.9rem;
+  color: #145388;
+  font-weight: bold;
+  text-decoration-line: underline;
+  text-underline-position: under;
+}
+
+.edit-btn-cancelar {
+  margin-right: 10px !important;
+}
+
+.loader-container {
+  position: absolute;
+  top: 0;
+  background: rgba(0, 0, 200, 0.05);
+  height: 100%;
+  width: 100%;
+  left: 0;
+  border-radius: 12px;
+z-index: 9999;
+  .loading {
+    position: absolute;
+  }
+}
+
+.modal-container {
+  overflow: scroll;
+}
+
+.hoverableTheme {
+  position: relative;
+  cursor: pointer;
+
+  .themeoverlay {
+    opacity: 0;
+    top: 8px;
+    right: 8px;
+    background-color: #80808087;
+    color: white;
+    width: 5rem;
+    border-radius: 5px;
+    height: 5rem;
+    width: 5rem;
+    display: flex;
+    align-self: start;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    text-align: center;
+  }
+
+  &:hover {
+    .themeoverlay {
+      opacity: 1;
+    }
+  }
+}

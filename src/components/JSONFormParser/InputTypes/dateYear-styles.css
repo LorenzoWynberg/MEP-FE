@@ -1,0 +1,13 @@
+.rdtPicker {
+    display: none;
+    position: absolute;
+    min-width: 250px;
+    padding: 4px;
+    margin-top: 1px;
+    z-index: 99999 !important;
+    background: #fff;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
+    border: 1px solid #05baf1;
+    top: -194px;
+    right: -5px;
+}

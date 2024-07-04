@@ -1,0 +1,78 @@
+$break: 992px;
+
+img.list-thumbnail {
+    width: 120px !important;
+    border: 1px solid var(--theme-color-3) !important;
+    border-radius: 14px 0 0 14px !important;
+}
+
+.list-thumbnail.icon {
+    width: 120px !important;
+    background: #145388;
+    height: 70px;
+    i {
+        font-size: 40px;
+    }
+}
+
+.row-labels {
+    padding: 1.15rem;
+    padding-left: 1.65rem;
+    margin-left: 0;
+    @media (max-width: $break) {
+        display: none;
+    }
+}
+
+.row-element {
+    @media (max-width: $break) {
+        width: 100%;
+    }
+}
+
+.row-element-no-display {
+    @media (max-width: $break) {
+        display: none;
+    }
+}
+
+.row-badge {
+    @media (max-width: $break) {
+        padding-left: .5rem;
+    }
+}
+
+.top-right-button-container {
+    padding: 40px 0 15px;
+
+    @media (min-width: $break) {
+        padding: 0;
+    }
+}
+
+
+.no-institution {
+    background-image: url("/assets/img/backgrounds/noinst.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    min-height: 100vh;
+}
+
+.btns-edit-delete {
+    :hover {
+        cursor: pointer;
+        opacity: .8;
+
+        i {
+            color: black !important;
+            font-weight: bold;
+        }
+    }
+
+}
+
+.btns-edit-delete i {
+    font-size: 16px !important;
+
+}

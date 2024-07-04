@@ -1,0 +1,312 @@
+{
+	"titulo": "Crear formulario",
+	"layouts": [
+		{
+			"i": "988fb65d-02f4-25fb-1bc2-985bed1013e7_col",
+			"x": 0,
+			"y": 0,
+			"w": 4,
+			"h": 10,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": { "titulo": "", "relleno": true, "tooltip": "" },
+			"rowH": 0,
+			"moved": false,
+			"static": false,
+			"content": [
+				{
+					"i": "6e8fb38b-ea79-3e80-4a95-c10947ea1c11_col",
+					"type": "container",
+					"w": 2,
+					"config": {
+						"titulo": "Dirección regional",
+						"relleno": false,
+						"tooltip": ""
+					}
+				},
+				{
+					"i": "cce066e3-dda5-8a69-1efc-569080039d08_col",
+					"type": "container",
+					"w": 2,
+					"config": {
+						"titulo": "Director regional",
+						"relleno": false,
+						"tooltip": ""
+					}
+				}
+			]
+		},
+		{
+			"i": "384dcfc9-e996-21b7-f5a3-679b80422afd_col",
+			"x": 0,
+			"y": 10,
+			"w": 4,
+			"h": 10,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": { "titulo": "", "relleno": true, "tooltip": "" },
+			"rowH": 0,
+			"moved": false,
+			"static": false,
+			"content": [
+				{
+					"i": "78d03382-84a4-a12b-a667-5eed0db93a55_col",
+					"type": "container",
+					"w": 2,
+					"config": {
+						"titulo": "Supervisión circuital",
+						"relleno": false,
+						"tooltip": ""
+					}
+				},
+				{
+					"i": "82328b78-bbc0-b1ca-5115-c6bb636530c2_col",
+					"type": "container",
+					"w": 2,
+					"config": {
+						"titulo": "Supervisor circuital",
+						"relleno": false,
+						"tooltip": ""
+					}
+				}
+			]
+		}
+	],
+	"contents": [
+		{
+			"layoutId": "ab92663c-7202-568f-ea78-1203098c62fc_col",
+			"fields": [
+				{
+					"id": "c8e5bc3d-c44f-0c0f-34b1-7aec4e30d4ff_ab92663c-7202-568f-ea78-1203098c62fc_col",
+					"type": "unic",
+					"label": "Región socioeconómica",
+					"langKey": "expediente_ce>informacion_general>ubicacion_geo>poblacional>region",
+					"source": "",
+					"options": [],
+					"config": { "required": true, "tooltipText": "" }
+				},
+				{
+					"id": "d3f75feb-bec7-a54c-3bd9-2fd469754368_ab92663c-7202-568f-ea78-1203098c62fc_col",
+					"type": "unic",
+					"label": "Zona",
+					"langKey": "expediente_ce>informacion_general>ubicacion_geo>poblacional>zona",
+					"source": "",
+					"options": [],
+					"config": { "required": true, "tooltipText": "" }
+				}
+			],
+			"order": 3
+		},
+		{
+			"layoutId": "5f334bb7-e576-a01b-3c20-3daec7f0a730_col",
+			"fields": [
+				{
+					"id": "be9255ff-fe89-dd64-cded-6fc163955850_5f334bb7-e576-a01b-3c20-3daec7f0a730_col",
+					"type": "unic",
+					"label": "Tipo de territorio",
+					"langKey": "expediente_ce>informacion_general>ubicacion_geo>poblacional>tipo",
+					"source": "",
+					"options": [],
+					"config": { "required": true, "tooltipText": "" }
+				}
+			],
+			"order": 4
+		},
+		{
+			"layoutId": "988fb65d-02f4-25fb-1bc2-985bed1013e7_col",
+			"fields": [],
+			"order": 5,
+			"config": {
+				"titulo": "Dirección regional",
+				"relleno": false,
+				"tooltip": ""
+			}
+		},
+		{
+			"layoutId": "384dcfc9-e996-21b7-f5a3-679b80422afd_col",
+			"fields": [],
+			"order": 6,
+			"config": { "titulo": "", "relleno": true, "tooltip": "" }
+		},
+		{
+			"layoutId": "6e8fb38b-ea79-3e80-4a95-c10947ea1c11_col",
+			"fields": [
+				{
+					"type": "text",
+					"label": "Nombre de la dirección regional",
+					"langKey": "expediente_ce>informacion_general>ubicacion_adm>direccion_regional>nombre",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": "",
+						"mask": ""
+					},
+					"id": "d86b9cda-f22d-fbb0-0e49-f51dad54398b_6e8fb38b-ea79-3e80-4a95-c10947ea1c11_col",
+					"row": false
+				},
+				{
+					"type": "text",
+					"label": "Teléfono principal",
+					"langKey": "expediente_ce>informacion_general>ubicacion_adm>direccion_regional>telefono",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					},
+					"id": "1_179308aa-bc99-d660-3cc9-abecccfcabf5_6e8fb38b-ea79-3e80-4a95-c10947ea1c11_col",
+					"row": false
+				},
+				{
+					"id": "3764dd69-55ef-46bc-b325-300bf8603308_6e8fb38b-ea79-3e80-4a95-c10947ea1c11_col",
+					"type": "text",
+					"label": "Correo oficial",
+					"langKey": "expediente_ce>informacion_general>ubicacion_adm>direccion_regional>correo",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					},
+					"row": false
+				}
+			],
+			"order": 7
+		},
+		{
+			"layoutId": "cce066e3-dda5-8a69-1efc-569080039d08_col",
+			"fields": [
+				{
+					"type": "text",
+					"label": "Nombre completo del director regional",
+					"langkey": "expediente_ce>informacion_general>ubicacion_adm>director_regional>nombre",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					},
+					"id": "1_cbcdaf7c-acc3-6d44-904e-1e9f5b701ba4_cce066e3-dda5-8a69-1efc-569080039d08_col",
+					"row": false
+				},
+				{
+					"type": "text",
+					"label": "Cédula director regional",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					},
+					"id": "1_88a28bd5-79c8-a202-dbd7-9049733f6bf7_cce066e3-dda5-8a69-1efc-569080039d08_col",
+					"row": false
+				},
+				{
+					"type": "text",
+					"label": "Correo director regional",
+					"langKey": "expediente_ce>informacion_general>ubicacion_adm>director_regional>correo",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					},
+					"id": "1_fdd919b3-b275-f964-c52b-1117a2cc2861_cce066e3-dda5-8a69-1efc-569080039d08_col",
+					"row": false
+				}
+			],
+			"order": 8
+		},
+		{
+			"layoutId": "78d03382-84a4-a12b-a667-5eed0db93a55_col",
+			"fields": [
+				{
+					"type": "text",
+					"label": "Nombre de circuito",
+					"langKey": "expediente_ce>informacion_general>ubicacion_adm>supervision_circuital>nombre",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					},
+					"id": "1_a437144f-6629-ce5e-9e36-02a319440c91_78d03382-84a4-a12b-a667-5eed0db93a55_col",
+					"row": false
+				},
+				{
+					"type": "text",
+					"label": "Teléfono principal",
+					"langKey": "expediente_ce>informacion_general>ubicacion_adm>supervision_circuital>telefono",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					},
+					"id": "1_5bf4b222-d752-458b-d042-c4d7bfb4850e_78d03382-84a4-a12b-a667-5eed0db93a55_col",
+					"row": false
+				},
+				{
+					"type": "text",
+					"label": "Correo oficial",
+					"langKey": "expediente_ce>informacion_general>ubicacion_adm>supervision_circuital>correo",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					},
+					"id": "1_70cede42-9547-c9c4-dec7-32043c81f406_78d03382-84a4-a12b-a667-5eed0db93a55_col",
+					"row": false
+				}
+			],
+			"order": 9
+		},
+		{
+			"layoutId": "82328b78-bbc0-b1ca-5115-c6bb636530c2_col",
+			"fields": [
+				{
+					"type": "text",
+					"label": "Nombre completo del asesor supervisor",
+					"langKey": "expediente_ce>informacion_general>ubicacion_adm>supervisor_circuital>nombre",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					},
+					"id": "1_a6e9cccf-d3b3-ca5e-0b81-2b9b98c7a645_82328b78-bbc0-b1ca-5115-c6bb636530c2_col",
+					"row": false
+				},
+				{
+					"type": "text",
+					"label": "Cédula asesor supervisor",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					},
+					"id": "1_e9bbb3d4-7671-64b3-69d8-09c509314688_82328b78-bbc0-b1ca-5115-c6bb636530c2_col",
+					"row": false
+				},
+				{
+					"type": "text",
+					"label": "Correo asesor supervisor",
+					"langKey": "expediente_ce>informacion_general>ubicacion_adm>supervisor_circuital>correo",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					},
+					"id": "1_b11cd6f4-e46f-da0a-fa72-445079f960c0_82328b78-bbc0-b1ca-5115-c6bb636530c2_col",
+					"row": false
+				}
+			],
+			"order": 10
+		}
+	],
+	"sources": []
+}

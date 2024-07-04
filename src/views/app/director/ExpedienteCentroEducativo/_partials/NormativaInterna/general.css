@@ -1,0 +1,31 @@
+.margen{
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-bottom: 2%;
+    margin: 0 !important;
+}
+
+.div-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    padding-top: 2%;
+    margin-left: 2%;
+    margin-right: 2%;
+}
+
+.btn-void{
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    padding-left: 15% ;
+    padding-right:10%;
+    color: grey
+}
+
+.div-cuadricula{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}

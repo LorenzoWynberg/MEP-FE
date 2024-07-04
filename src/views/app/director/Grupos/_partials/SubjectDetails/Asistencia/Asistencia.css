@@ -1,0 +1,182 @@
+.container-nav {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table {
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 2px 2px 2px 4px rgba(0, 0, 0, 0.2);
+  margin-top: 2%;
+  width: 100%;
+  height: 100%;
+}
+
+.scrolltable {
+  overflow-x: scroll;
+  margin-left: 2%;
+  margin-right: 2%;
+  display: flex;
+}
+
+.div-container-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.div-buttons-date2 {
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
+
+.div-buttons-date {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  margin: 2%;
+  margin-top: 3.5%;
+}
+
+.btn-date {
+  border: none;
+  cursor: pointer;
+  background-color: #fff;
+  margin-bottom: 1.3%;
+}
+
+.btn-history {
+  align-content: center;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  margin: 2%;
+  margin-top: 3.5%;
+  border-radius: 100px;
+  font-size: small;
+}
+
+.input-search {
+  margin: 4%;
+  padding: 4.5%;
+  width: 91%;
+}
+
+.row-absolute {
+  display: flex;
+  flex-direction: column;
+}
+
+.row-cons {
+  display: flex;
+  flex-direction: row;
+  margin-top: 2%;
+}
+
+.btn-green {
+  border: none;
+  background: rgba(163, 201, 24, 1);
+  border-radius: 15px;
+  width: 5rem;
+  height: 1.6rem;
+  cursor: pointer;
+}
+
+.btn-red {
+  border: none;
+  background: rgb(255, 58, 58);
+  border-radius: 15px;
+  width: 5rem;
+  height: 1.6rem;
+  cursor: pointer;
+}
+
+.btn-yellow {
+  border: none;
+  background: rgb(252, 217, 23);
+  border-radius: 15px;
+  width: 5rem;
+  height: 1.6rem;
+  cursor: pointer;
+}
+
+.btn-orange {
+  border: none;
+  background: rgb(252, 160, 23);
+  border-radius: 15px;
+  width: 5rem;
+  height: 1.6rem;
+  cursor: pointer;
+}
+
+.item-nombre {
+  width: 54%;
+  margin-left: 2%;
+}
+
+.btns {
+  display: flex;
+  justify-content: space-between;
+}
+.btn1 {
+  margin-left: 2.5%;
+}
+
+.btn2 {
+  width: 20%;
+  margin-right: 7.5%;
+}
+
+.espaciado {
+  display: flex;
+  justify-content: space-between;
+  span {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.div-column {
+  display: flex;
+  flex-direction: column;
+  margin-top: 3%;
+}
+
+.link {
+  border: none;
+  background: none;
+  color: #145388;
+  font-weight: bolder;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.fondo {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  background: rgba(236, 236, 236, 0.932);
+  margin: 2% 0;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.igualar {
+  font-size: small;
+  display: grid;
+  grid-template-columns: 19rem 10rem;
+  align-items: center;
+  align-content: center;
+  padding-bottom: 1%;
+}
+
+.btn-table {
+  border: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid lightgray;
+  text-align: start;
+}

@@ -1,0 +1,6 @@
+export const REGISTER_LOADING = 'REGISTER_LOADING'
+export const REGISTER_FAILURE = 'REGISTER_FAILURE'
+
+export const USER_LOADING = 'USER_LOADING'
+export const USER_LOAD = 'USER_LOAD'
+export const USER_FAILURE = 'USER_FAILURE'

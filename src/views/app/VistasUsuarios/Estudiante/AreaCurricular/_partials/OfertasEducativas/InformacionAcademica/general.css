@@ -1,0 +1,19 @@
+.grid{
+    display: grid;
+    grid-template-columns: 35% 35%;
+    gap: 5%;
+}
+
+.grid2{
+    display: grid;
+    grid-template-columns: 30% 65%;
+    gap: 5%;
+}
+
+.btn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin:1%;
+}

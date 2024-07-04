@@ -1,0 +1,8 @@
+enum types {
+    GET_PROFESSOR_LESSONS,
+    CREATE_PROFESOR_LESSON,
+    UPDATE_PROFESOR_LESSON,
+    DELETE_PROFESOR_LESSON,
+}
+
+export default types

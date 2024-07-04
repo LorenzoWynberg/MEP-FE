@@ -1,0 +1,84 @@
+{
+	"layouts": [
+		{
+			"i": "89e0ec4e-1a1b-def9-311d-5136ff311910_col",
+			"x": 0,
+			"y": 0,
+			"w": 2,
+			"h": 20,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Teléfonos asociados",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false
+		}
+	],
+	"contents": [
+		{
+			"layoutId": "89e0ec4e-1a1b-def9-311d-5136ff311910_col",
+			"fields": [
+				{
+					"type": "text",
+					"label": "Teléfono",
+					"langKey": "expediente_ce>informacion_general>informacion>telefonos>columna_telefono",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": "",
+						"mask": "9999-9999"
+					},
+					"id": "f26f66d0-936a-b6f4-c161-4cd9a4b84339_89e0ec4e-1a1b-def9-311d-5136ff311910_col"
+				},
+				{
+					"type": "text",
+					"label": "Descripción",
+					"langKey": "expediente_ce>informacion_general>informacion>telefonos>columna_descripcion",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": "",
+						"mask": ""
+					},
+					"id": "c8851fbf-ea92-4123-8678-ad474d14493f_89e0ec4e-1a1b-def9-311d-5136ff311910_col"
+				},
+				{
+					"type": "crudTable",
+					"label": "Extensiones",
+					"langKey": "expediente_ce>informacion_general>informacion>extensiones",
+					"config": {
+						"columns": [
+							{
+								"titulo": "Extensión",
+								"langKey": "expediente_ce>informacion_general>informacion>extensiones>extension",
+								"id": "ad98a0fa-eb5b-9f45-fe50-4c6fa1a488c6"
+							},
+							{
+								"titulo": "Descripción",
+								"langKey": "expediente_ce>informacion_general>informacion>extensiones>descripcion",
+								"id": "7d45cc6f-bd5f-c62b-f61c-55244d7247da"
+							}
+						],
+						"btnSubmitLangKey": "expediente_ce>informacion_general>informacion>extensiones>agregar",
+						"avoidFirstColDuplicated": true,
+						"tooltipText": ""
+					},
+					"id": "b5295c77-b1b9-6804-43b7-87bbf5a0ccd6_89e0ec4e-1a1b-def9-311d-5136ff311910_col"
+				}
+			],
+			"order": 1,
+			"config": {
+				"titulo": "Teléfonos asociados",
+				"relleno": true,
+				"tooltip": ""
+			}
+		}
+	],
+	"sources": []
+}

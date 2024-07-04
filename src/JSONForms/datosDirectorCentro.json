@@ -1,0 +1,96 @@
+{
+	"titulo": "Crear formulario",
+	"layouts": [
+		{
+			"i": "cc98acae-3314-bc0c-69a0-e558b74b4032_col",
+			"x": 0,
+			"y": 0,
+			"w": 2,
+			"h": 14,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Datos del director",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false
+		}
+	],
+	"contents": [
+		{
+			"layoutId": "cc98acae-3314-bc0c-69a0-e558b74b4032_col",
+			"fields": [
+				{
+					"id": "7f008588-e98b-7d7e-db6b-aae26b29359a_cc98acae-3314-bc0c-69a0-e558b74b4032_col",
+					"type": "text",
+					"label": "Identificación",
+					"langKey": "expediente_ce>informacion_general>datos_director>identificacion",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "",
+						"placeholder": ""
+					}
+				},
+				{
+					"id": "1a3f5913-f36a-0b51-0366-3db524890ff3_cc98acae-3314-bc0c-69a0-e558b74b4032_col",
+					"type": "text",
+					"label": "Nombre",
+					"langKey": "expediente_ce>informacion_general>datos_director>nombre",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "",
+						"placeholder": ""
+					}
+				},
+				{
+					"id": "b87e802d-4770-ca9e-426e-2d260946c669_cc98acae-3314-bc0c-69a0-e558b74b4032_col",
+					"type": "text",
+					"label": "Primer apellido",
+					"langKey": "expediente_ce>informacion_general>datos_director>primer_apellido",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "",
+						"placeholder": ""
+					}
+				},
+				{
+					"id": "8fc94f52-62b0-9bc3-5db0-2f2b39b87fcd_cc98acae-3314-bc0c-69a0-e558b74b4032_col",
+					"type": "text",
+					"label": "Segundo apellido",
+					"langKey": "expediente_ce>informacion_general>datos_director>segundo_apellido",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "",
+						"placeholder": ""
+					}
+				},
+				{
+					"id": "6a616901-aeab-08bc-3a26-336e4d3af396_cc98acae-3314-bc0c-69a0-e558b74b4032_col",
+					"type": "text",
+					"label": "Correo electrónico ",
+					"langKey": "expediente_ce>informacion_general>datos_director>correo",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					}
+				}
+			],
+			"order": 1,
+			"config": {
+				"titulo": "Datos del director",
+				"relleno": true,
+				"tooltip": ""
+			}
+		}
+	],
+	"sources": []
+}

@@ -1,0 +1,112 @@
+.ModalBtn {
+  position: relative;
+  left: 0px;
+  top: -12px;
+  margin-left: 132px;
+}
+.modelPrincipal {
+  top: 238px;
+}
+.nav-item {
+  cursor: pointer !important;
+}
+.btnCancelCarpeta {
+  margin: 10px !important;
+  background-color: #ffffff !important;
+  border-radius: 18px !important;
+  border: 1px solid #1a1c1f !important;
+  color: #1a1c1f !important;
+}
+.iconCrearCarpeta {
+  color: #145388;
+  right: 7%;
+  position: relative;
+  font-size: 28px !important;
+}
+.btnGuardarCarpeta {
+  background-color: #145388;
+}
+.tresPuntos {
+  position: absolute;
+  top: 0px;
+  left: 16px;
+  font-size: x-large;
+}
+.btnDropDown {
+  all: unset !important;
+}
+.tresPuntosComu {
+  position: absolute;
+  top: -20px;
+  left: 44px;
+  font-size: 14px;
+}
+.btnDropDownComu {
+  all: unset !important;
+}
+
+.btnFolder {
+  margin: 14px !important;
+  background-color: #ffffff !important;
+  border-radius: 40px !important;
+  border: 1px solid #1a1c1f !important;
+  max-width: 300px;
+  min-height: 67px;
+}
+
+.btnVolver {
+  background: #145388;
+  position: relative;
+  top: -16px;
+}
+.arrowClass {
+  position: relative;
+  right: 10px;
+}
+.detalleCarpeta {
+  top: 19px;
+  position: relative;
+}
+.iconoCarpetaEstilo {
+  position: relative;
+}
+.iconCarpeta {
+  color: #145388;
+  //  position:  initial;
+  font-size: 28px !important;
+  width: 35.24px !important;
+  height: 28.19px !important;
+  position: initial;
+}
+.tresPuntos {
+  position: initial !important;
+  width: 35.24px !important;
+  height: 28.19px !important;
+}
+.nombreFolder {
+  vertical-align: -webkit-baseline-middle !important;
+  left: 22px !important;
+  white-space: normal !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: inline-block !important;
+  color: rgb(83, 85, 88) !important;
+  word-wrap: break-word;
+  width: 106px;
+  height: auto;
+}
+.modelPrincipal .close {
+  display: none !important;
+}
+.dropClass {
+  position: absolute;
+  top: -14px;
+  right: 9pc;
+}
+@media only screen and (max-width: 1755px) {
+  .dropClass {
+    position: absolute;
+    top: -13px;
+    right: 62px;
+  }
+}

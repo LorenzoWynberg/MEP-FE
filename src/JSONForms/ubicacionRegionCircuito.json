@@ -1,0 +1,148 @@
+{
+	"titulo": "Crear formulario",
+	"layouts": [
+		{
+			"i": "b156cdb0-f426-fc00-0ee2-df86eb02cfc5_col",
+			"x": 0,
+			"y": 0,
+			"w": 4,
+			"h": 13,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Ubicación Geográfica",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false
+		}
+	],
+	"contents": [
+		{
+			"layoutId": "b156cdb0-f426-fc00-0ee2-df86eb02cfc5_col",
+			"fields": [
+				{
+					"type": "locationExact",
+					"components": {
+						"location": {
+							"type": "location",
+							"orientation": "column",
+							"dropDowns": [
+								{
+									"type": "dropDown",
+									"id": "b9876ee4-c219-ff5e-9981-bf3f8425d241",
+									"label": "Provincia",
+									"langKey": "ubicacion_region_circuito>provincia",
+									"options": [
+										{
+											"label": "",
+											"value": 0,
+											"default": true
+										}
+									],
+									"config": {}
+								},
+								{
+									"type": "dropDown",
+									"id": "af473821-026e-9a0d-9195-423ee96d9450",
+									"label": "Cantón",
+									"langKey": "ubicacion_region_circuito>canton",
+									"options": [
+										{
+											"label": "",
+											"value": 0,
+											"default": true
+										}
+									],
+									"config": {}
+								},
+								{
+									"type": "dropDown",
+									"id": "7a825880-c38d-d0ab-7603-244423aef4d5",
+									"label": "Distrito",
+									"langKey": "ubicacion_region_circuito>distrito",
+									"options": [
+										{
+											"label": "",
+											"value": 0,
+											"default": true
+										}
+									],
+									"config": {},
+									"buttons": true
+								},
+								{
+									"type": "dropDown",
+									"id": "d329e0a2-9322-9a4d-4a3f-ef35dc49892d",
+									"label": "Poblado",
+									"langKey": "ubicacion_region_circuito>poblado",
+									"options": [
+										{
+											"label": "",
+											"value": 0,
+											"default": true
+										}
+									],
+									"config": {}
+								},
+								{
+									"type": "textArea",
+									"id": "ae24068b-697c-668d-78ae-26d7a6b98820",
+									"label": "Dirección exacta",
+									"langKey": "ubicacion_region_circuito>direccion_exacta",
+									"options": [],
+									"config": {
+										"required": true,
+										"tooltipText": ""
+									}
+								}
+							],
+							"config": { "h": 12, "required": true }
+						},
+						"coordinates": {
+							"type": "coordinates",
+							"showLocation": true,
+							"defaultHidden": true,
+							"options": [
+								{
+									"type": "map",
+									"id": "ff0d63d1-eb6f-cb4c-a3c0-87f755566565",
+									"controlledMap": true
+								},
+								{
+									"type": "text",
+									"id": "5311ce25-6888-3a2b-e9ad-59028d58aad7",
+									"label": "Latitud",
+									"config": {
+										"tooltipText": "",
+										"required": true
+									}
+								},
+								{
+									"type": "text",
+									"id": "760083df-0bde-a5b0-b982-41a8b9562139",
+									"label": "Longitud",
+									"config": {
+										"tooltipText": "",
+										"required": true
+									}
+								}
+							],
+							"config": {
+								"h": 12,
+								"required": true,
+								"useModal": false
+							}
+						}
+					},
+					"config": { "required": true, "h": 12 },
+					"id": "b8d34cf0-e5db-988b-bee6-41f42a6d7729_b156cdb0-f426-fc00-0ee2-df86eb02cfc5_col"
+				}
+			],
+			"order": 1
+		}
+	],
+	"sources": []
+}

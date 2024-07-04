@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <link rel="shortcut icon" href=<%= favicon %> />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=no" />
+
+  <meta name="theme-color" content="#000000" />
+  <link rel="stylesheet" href="/assets/fonts/simple-line-icons/css/simple-line-icons.css">
+  <link rel="stylesheet" href="/assets/fonts/iconsmind-s/css/iconsminds.css">
+  <link rel="stylesheet" href="/assets/fonts/iconsmind/style.css">
+  <script src="/assets/fonts/fontawesome/kitfontawesome.js" crossorigin="anonymous"></script>
+  <link rel="manifest" href="manifest.json" />
+ 
+  <title><%= title %></title>
+
+   <!--Start of Tawk.to Script-->
+<script type="text/javascript">
+  var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+  (function(){
+  var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+  s1.async=true;
+  s1.src='https://embed.tawk.to/6407a37131ebfa0fe7f13efb/1gr1f5f6q';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
+  s0.parentNode.insertBefore(s1,s0);
+  })();
+  </script>
+  <!--End of Tawk.to Script-->
+
+</head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <script>
+    var theme = "light.purple";
+    if (typeof Storage !== "undefined") {
+      if (localStorage.getItem("__theme_color")) {
+        theme = localStorage.getItem("__theme_color");
+      }
+    }
+    if (theme.indexOf("dark") != -1) {
+      document.documentElement.style.background = "#1b191b";
+    }
+  </script>
+
+ 
+
+  <div id="root">
+    <div class="loading"></div>
+  </div>
+</body>
+
+</html>

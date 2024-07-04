@@ -1,0 +1,2 @@
+export const LOAD_FALTAS = 'LOAD_FALTAS'
+export const SET_TIPOS_FALTAS = 'SET_TIPOS_FALTAS'

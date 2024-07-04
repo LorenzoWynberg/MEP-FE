@@ -1,0 +1,716 @@
+{
+	"titulo": "Crear formulario",
+	"layouts": [
+		{
+			"i": "82345e40-d4d4-c93d-18fd-937dbf982858_col",
+			"x": 0,
+			"y": 0,
+			"w": 4,
+			"h": 10,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Detalles del terreno",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false,
+			"content": [
+				{
+					"i": "cf26b7c5-10fe-8d21-76de-6f95be7e83b8_col",
+					"type": "container",
+					"w": 2,
+					"config": { "titulo": "", "relleno": false, "tooltip": "" }
+				},
+				{
+					"i": "d1de4078-3068-0253-e6e3-aa3e9a80fe07_col",
+					"type": "container",
+					"w": 2,
+					"config": { "titulo": "", "relleno": false, "tooltip": "" }
+				}
+			]
+		},
+		{
+			"i": "2d9ea82c-ca2e-336d-ea91-39621b120621_col",
+			"x": 0,
+			"y": 10,
+			"w": 4,
+			"h": 18,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Ubicación geográfica",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 5,
+			"moved": false,
+			"static": false
+		},
+		{
+			"i": "c160b6e5-f23e-cae0-e0f0-ee73f75bc621_col",
+			"x": 0,
+			"y": 28,
+			"w": 4,
+			"h": 10,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Información topográfica",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false,
+			"content": [
+				{
+					"i": "a189fc90-4052-d085-80be-5313b525f5bf_col",
+					"type": "container",
+					"w": 2,
+					"config": { "titulo": "", "relleno": false, "tooltip": "" }
+				},
+				{
+					"i": "4493d121-cb30-072a-b7fd-ad6dd1a51875_col",
+					"type": "container",
+					"w": 2,
+					"config": { "titulo": "", "relleno": false, "tooltip": "" }
+				}
+			]
+		},
+		{
+			"i": "dd253e06-0750-8c0d-8578-4d72267bf0ce_col",
+			"x": 0,
+			"y": 38,
+			"w": 4,
+			"h": 7,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Información de acceso",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false,
+			"content": [
+				{
+					"i": "d3c4dd47-62d7-b03a-06f7-7917e522e188_col",
+					"type": "container",
+					"w": 2,
+					"config": { "titulo": "", "relleno": false, "tooltip": "" }
+				},
+				{
+					"i": "c2216cb0-452b-ac01-3add-0129ed06e824_col",
+					"type": "container",
+					"w": 2,
+					"config": { "titulo": "", "relleno": false, "tooltip": "" }
+				}
+			]
+		}
+	],
+	"contents": [
+		{
+			"layoutId": "82345e40-d4d4-c93d-18fd-937dbf982858_col",
+			"fields": [],
+			"order": 1,
+			"config": { "titulo": "", "relleno": false, "tooltip": "" }
+		},
+		{
+			"layoutId": "cf26b7c5-10fe-8d21-76de-6f95be7e83b8_col",
+			"fields": [
+				[
+					[
+						{
+							"id": "4927bd91-a550-895b-bc68-e3e8a07a6473_cf26b7c5-10fe-8d21-76de-6f95be7e83b8_col",
+							"type": "text",
+							"label": "Identificación",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>detalles_identificacion",
+							"options": [],
+							"config": {
+								"required": false,
+								"tooltipText": "",
+								"placeholder": ""
+							},
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "text",
+							"label": "Número de plano catastro",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>detalles_numero_catastro",
+							"options": [],
+							"config": {
+								"required": true,
+								"tooltipText": "Colocar el número asignado en el plano catastro por ejemplo (SJ-123456-1998 o 1-123456-98)",
+								"placeholder": ""
+							},
+							"id": "1_12c3dcbc-65ec-7dd4-43a0-2a1024143a5a_cf26b7c5-10fe-8d21-76de-6f95be7e83b8_col",
+							"row": true,
+							"col": true
+						}
+					],
+					[
+						{
+							"type": "text",
+							"label": "Número de finca",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>detalles_numero_finca",
+							"options": [],
+							"config": {
+								"numbersOnly": true,
+								"required": true,
+								"tooltipText": "El número de finca es un número indentificador único asignado a la propiedad el momento del registro, puede ser consultado en la certificación literal. Su formato suele ser  (SJ-123456-A-F-000 o 1-123456-Z-000)",
+								"placeholder": ""
+							},
+							"id": "1_1b6b5c16-50fe-ce50-0231-c94a00afcdbc_cf26b7c5-10fe-8d21-76de-6f95be7e83b8_col",
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "radio",
+							"label": "Uso condicionado del terreno",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>detalles_uso_terreno",
+							"source": "",
+							"options": [
+								{
+									"id": "1_radio",
+									"value": "Sí",
+									"label": "Sí"
+								},
+								{
+									"id": "2_radio",
+									"value": "No",
+									"label": "No"
+								}
+							],
+							"config": {
+								"required": true,
+								"tooltipText": "Se debe indicar si existe una condición para el uso de la propiedad como un ALQUILER o CONVENIO",
+								"orientation": "row",
+								"h": 3.5
+							},
+							"id": "1_10d7d290-c9ff-79f0-1f78-686f0064b1f4_cf26b7c5-10fe-8d21-76de-6f95be7e83b8_col",
+							"row": true,
+							"col": true
+						}
+					]
+				],
+				{
+					"id": "e1e2d320-d484-0954-3339-f862f222f703_cf26b7c5-10fe-8d21-76de-6f95be7e83b8_col",
+					"type": "textArea",
+					"label": "Descripción",
+					"langKey": "expediente_ce>infraestructura>agregar_terreno>detalles_descripcion",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "Indique una breve descripción del uso principal que se le da al terreno, por ejemplo: Pabellón de Aulas Académicas"
+					}
+				}
+			],
+			"order": 2
+		},
+		{
+			"layoutId": "d1de4078-3068-0253-e6e3-aa3e9a80fe07_col",
+			"fields": [
+				{
+					"id": "4fbe0757-d7f9-9df8-2b73-5b6179a69fe4_d1de4078-3068-0253-e6e3-aa3e9a80fe07_col",
+					"type": "uploadFile",
+					"label": "Adjuntar plano de catastro",
+					"langKey": "expediente_ce>infraestructura>agregar_terreno>detalles_plano_catastro",
+					"config": {
+						"required": true,
+						"type": "archivo",
+						"icon": "archivo",
+						"h": 6,
+						"maxFiles": "5",
+						"typesAccepted": ",.PDF,.JPG",
+						"tooltipText": "Adjuntar el plano de catastro correspondiente a la propiedad."
+					},
+					"row": false
+				},
+				{
+					"id": "05d61179-ef1b-86bc-8013-3aa551e0bfdd_d1de4078-3068-0253-e6e3-aa3e9a80fe07_col",
+					"type": "unic",
+					"label": "Dueño registral",
+					"langKey": "expediente_ce>infraestructura>agregar_terreno>detalles_dueño_registral",
+					"source": "",
+					"options": "duenioRegistral",
+					"config": {
+						"required": true,
+						"tooltipText": "Indicar el propietario del inmueble que figura en el registro",
+						"h": 13
+					}
+				}
+			],
+			"order": 3
+		},
+		{
+			"layoutId": "2d9ea82c-ca2e-336d-ea91-39621b120621_col",
+			"fields": [
+				{
+					"id": "477a2022-e3ed-b0f2-0219-c190cddd1b6c_2d9ea82c-ca2e-336d-ea91-39621b120621_col",
+					"type": "locationExact",
+					"components": {
+						"location": {
+							"type": "location",
+							"orientation": "column",
+							"dropDowns": [
+								{
+									"type": "dropDown",
+									"id": 5,
+									"label": "Provincia",
+									"langKey": "expediente_ce>infraestructura>agregar_terreno>localizacion_provincia",
+									"options": [
+										{
+											"label": "",
+											"value": 0,
+											"default": true
+										}
+									],
+									"config": {}
+								},
+								{
+									"type": "dropDown",
+									"id": 6,
+									"label": "Cantón",
+									"langKey": "expediente_ce>infraestructura>agregar_terreno>localizacion_canton",
+									"options": [
+										{
+											"label": "",
+											"value": 0,
+											"default": true
+										}
+									],
+									"config": {}
+								},
+								{
+									"type": "dropDown",
+									"id": 7,
+									"label": "Distrito",
+									"langKey": "expediente_ce>infraestructura>agregar_terreno>localizacion_distrito",
+									"options": [
+										{
+											"label": "",
+											"value": 0,
+											"default": true
+										}
+									],
+									"config": {},
+									"buttons": true
+								},
+								{
+									"type": "dropDown",
+									"id": 8,
+									"label": "Poblado",
+									"langKey": "expediente_ce>infraestructura>agregar_terreno>localizacion_poblado",
+									"options": [
+										{
+											"label": "",
+											"value": 0,
+											"default": true
+										}
+									],
+									"config": {}
+								},
+								{
+									"type": "textArea",
+									"id": "36b16bf1-18de-46a6-fe8f-4399ca0245fe_25c814d4-7189-0703-1b14-45fc1d7b5643_col",
+									"label": "Dirección exacta",
+									"langKey": "expediente_ce>infraestructura>agregar_terreno>localizacion_direccion",
+									"options": [],
+									"config": {
+										"required": true,
+										"tooltipText": ""
+									}
+								}
+							],
+							"config": { "h": 12, "required": true }
+						},
+						"coordinates": {
+							"type": "coordinates",
+							"showLocation": true,
+							"defaultHidden": true,
+							"options": [
+								{
+									"type": "text",
+									"id": 12,
+									"label": "Latitud",
+									"langKey": "expediente_ce>infraestructura>agregar_terreno>coordenadas_latitud",
+									"config": {
+										"tooltipText": "",
+										"required": true
+									}
+								},
+								{
+									"type": "map",
+									"id": 11,
+									"controlledMap": true
+								},
+								{
+									"type": "text",
+									"id": 10,
+									"label": "Longitud",
+									"langKey": "expediente_ce>infraestructura>agregar_terreno>coordenadas_longitud",
+									"config": {
+										"tooltipText": "",
+										"required": true
+									}
+								}
+							],
+							"config": {
+								"h": 12,
+								"required": true,
+								"useModal": false
+							}
+						}
+					},
+					"config": {
+						"required": true,
+						"h": 12,
+						"tooltips": {
+							"descripcion": "Describir con más detalle y/o referencias con la dirección exacta del terreno"
+						}
+					},
+					"row": false
+				},
+				[
+					[
+						{
+							"id": "94f1541b-3906-0d87-6039-9a098455c99b_2d9ea82c-ca2e-336d-ea91-39621b120621_col",
+							"type": "unic",
+							"label": "Zona",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>ubicacion_geografica_zona",
+							"source": "",
+							"options": "zona",
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"h": 4
+							},
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "unic",
+							"label": "Región socioeconómica",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>ubicacion_geografica_region",
+							"source": "",
+							"options": "regionSocioEconomica",
+							"config": {
+								"required": true,
+								"tooltipText": "Indicar la región socioeconómica a la que pertenece el terreno.",
+								"h": 5.5
+							},
+							"id": "1_88f6ade6-6610-42d5-4214-75052a166398_2d9ea82c-ca2e-336d-ea91-39621b120621_col",
+							"row": true,
+							"col": true
+						}
+					],
+					{
+						"type": "unic",
+						"label": "Índice de desarrollo social",
+						"langKey": "expediente_ce>infraestructura>agregar_terreno>ubicacion_geografica_indice_desarrollo",
+						"source": "",
+						"options": "indiceDesarrolloSocial",
+						"config": {
+							"required": true,
+							"tooltipText": "Indique la opción a la que pertenece el Distrito, según el Indice de Desarrollo Social Vigente (información en www.mideplan.go.cr)",
+							"h": 4.5
+						},
+						"id": "1_c21f567a-848b-6c15-56e4-18d91a8e1d30_2d9ea82c-ca2e-336d-ea91-39621b120621_col",
+						"row": true
+					}
+				]
+			],
+			"order": 4,
+			"config": {
+				"titulo": "Ubicación geográfica",
+				"relleno": true,
+				"tooltip": ""
+			}
+		},
+		{
+			"layoutId": "c160b6e5-f23e-cae0-e0f0-ee73f75bc621_col",
+			"fields": [],
+			"order": 5,
+			"config": { "titulo": "", "relleno": false, "tooltip": "" }
+		},
+		{
+			"layoutId": "a189fc90-4052-d085-80be-5313b525f5bf_col",
+			"fields": [
+				[
+					[
+						{
+							"id": "095026ab-9362-27e3-b955-11359c8083d7_a189fc90-4052-d085-80be-5313b525f5bf_col",
+							"type": "text",
+							"label": "Área según catastro (m²)",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>informacion_topografica_area_catastro",
+							"options": [],
+							"config": {
+								"numbersOnly": true,
+								"required": true,
+								"tooltipText": "Debe colocar el dato del área del terreno que se muestra en el plano catastro.",
+								"placeholder": ""
+							},
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "text",
+							"label": "Área real terreno(m²)",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>informacion_topografica_area",
+							"options": [],
+							"config": {
+								"numbersOnly": true,
+								"required": true,
+								"tooltipText": "Si el usuario reconoce una diferencia entre el área registrada (del catastro o de la finca) y el área real que posee el terreno, se solicita que se indique el dato real conocido por el usuario",
+								"placeholder": ""
+							},
+							"id": "1_569a91a7-a0c8-ff4e-7a11-3f12c403dfc4_a189fc90-4052-d085-80be-5313b525f5bf_col",
+							"row": true,
+							"col": true
+						}
+					],
+					[
+						{
+							"type": "text",
+							"label": "Área según número de finca (m²)",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>informacion_topografica_area_numero_finca",
+							"options": [],
+							"config": {
+								"numbersOnly": true,
+								"required": false,
+								"tooltipText": "Debe colocar el dato del área del terreno que se muestra en la certificación literal correspondiente al número de finca. En algunas ocasiones puede ser distinto a la del plano catastro",
+								"placeholder": ""
+							},
+							"id": "1_ae3dca5e-afbe-0c98-032e-d8fc76ca6abf_a189fc90-4052-d085-80be-5313b525f5bf_col",
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "unic",
+							"label": "Topografía predominante",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>informacion_topografica_topografia",
+							"source": "",
+							"options": "topografiaPredomiante",
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"h": 4
+							},
+							"id": "1_f51a39dd-3075-fd60-278c-686a7445cc7d_a189fc90-4052-d085-80be-5313b525f5bf_col",
+							"row": true,
+							"col": true
+						}
+					]
+				],
+				{
+					"id": "ae8a9fbc-8ee1-a3c5-0b4f-ccd22278a333_a189fc90-4052-d085-80be-5313b525f5bf_col",
+					"type": "unic",
+					"label": "Clima predominante",
+					"langKey": "expediente_ce>infraestructura>agregar_terreno>informacion_topografica_clima",
+					"source": "",
+					"options": "climaPredomiante",
+					"config": {
+						"required": true,
+						"tooltipText": "Escoger la opción que mejor representa las características climáticas de la zona",
+						"h": 4
+					}
+				}
+			],
+			"order": 6
+		},
+		{
+			"layoutId": "4493d121-cb30-072a-b7fd-ad6dd1a51875_col",
+			"fields": [
+				[
+					[
+						{
+							"type": "unic",
+							"label": "Dirección de la pendiente",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>informacion_topografica_direccion_pendiente",
+							"source": "",
+							"options": "direccionDeLaPendiente",
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"h": 4
+							},
+							"id": "1_5163f857-cea1-dee9-1d64-55d0a2952981_4493d121-cb30-072a-b7fd-ad6dd1a51875_col",
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "text",
+							"label": "Altura sobre el nivel del mar (msnm)",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>informacion_topografica_altura",
+							"options": [],
+							"config": {
+								"required": true,
+								"numbersOnly": "true",
+								"tooltipText": "Debe colocar el dato del área del terreno que se muestra en la certificación literal correspondiente al número de finca. En algunas ocasiones puede ser distinto a la del plano catastro",
+								"placeholder": "",
+								"minLength": ""
+							},
+							"id": "1_52069aee-01de-c981-9918-ace57e1facb3_4493d121-cb30-072a-b7fd-ad6dd1a51875_col",
+							"row": true,
+							"col": true
+						}
+					],
+					[
+						{
+							"type": "unic",
+							"label": "Altura respecto nivel de calle",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>informacion_topografica_altura_nivel_calle",
+							"source": "",
+							"options": "alturaRespectoNivelDeCalle",
+							"config": {
+								"required": true,
+								"tooltipText": "Referencia aproximada con respecto al nivel de la calle principal\n",
+								"h": 4.5
+							},
+							"id": "1_06648465-2ae1-1ae0-129f-940de3d25272_4493d121-cb30-072a-b7fd-ad6dd1a51875_col",
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "unic",
+							"label": "Región climática",
+							"langKey": "expediente_ce>infraestructura>agregar_terreno>informacion_topografica_region",
+							"source": "",
+							"options": "regionClimatica",
+							"config": {
+								"required": true,
+								"tooltipText": "Seleccionar la zona climática en la que se encuentra el terreno. (Consultar información en www.imn.ac.cr)",
+								"h": 6
+							},
+							"id": "1_7838cc30-49dc-7a2d-7d60-cfe10d9d79bf_4493d121-cb30-072a-b7fd-ad6dd1a51875_col",
+							"row": true,
+							"col": true
+						}
+					]
+				]
+			],
+			"order": 7
+		},
+		{
+			"layoutId": "dd253e06-0750-8c0d-8578-4d72267bf0ce_col",
+			"fields": [],
+			"order": 8,
+			"config": { "titulo": "", "relleno": false, "tooltip": "" }
+		},
+		{
+			"layoutId": "d3c4dd47-62d7-b03a-06f7-7917e522e188_col",
+			"fields": [
+				{
+					"id": "c5ef6ecf-6ec1-6c27-863d-906080897f0d_d3c4dd47-62d7-b03a-06f7-7917e522e188_col",
+					"type": "multiple",
+					"label": "Característica de acceso al terreno",
+					"langKey": "expediente_ce>infraestructura>agregar_terreno>informacion_acceso_caracteristicas",
+					"source": "",
+					"options": "caracteristicaAcceso",
+					"config": {
+						"required": true,
+						"tooltipText": "Indique una o varias opciones que describan mejor las condiciones de acceso y el estado del trayecto para llegar hasta el terreno. Considere el trayecto de una persona que no es de la zona."
+					},
+					"row": false
+				},
+				{
+					"id": "728787f7-8be9-441d-0436-8511c82cd334_d3c4dd47-62d7-b03a-06f7-7917e522e188_col",
+					"type": "radio",
+					"label": "Sobre red vial nacional",
+					"langKey": "expediente_ce>infraestructura>agregar_terreno>informacion_acceso_red_nacional",
+					"source": "",
+					"options": [
+						{ "id": "1_radio", "value": "Sí", "label": "Sí" },
+						{ "id": "2_radio", "value": "No", "label": "No" }
+					],
+					"config": {
+						"required": true,
+						"tooltipText": "Debe indicarse cuando cualquier costado o sección del terreno colinde con una carretera Nacional.",
+						"orientation": "row",
+						"h": 3.5
+					},
+					"row": false
+				}
+			],
+			"order": 9
+		},
+		{
+			"layoutId": "c2216cb0-452b-ac01-3add-0129ed06e824_col",
+			"fields": [
+				{
+					"id": "2f0ac16c-84ed-f210-dc54-a653b1658129_c2216cb0-452b-ac01-3add-0129ed06e824_col",
+					"type": "multiple",
+					"label": "Otras afectaciones al terreno",
+					"langKey": "expediente_ce>infraestructura>agregar_terreno>informacion_acceso_afectaciones",
+					"source": "",
+					"options": "otrasAfectacionesTerreno",
+					"config": {
+						"required": false,
+						"tooltipText": "Otras afectaciones al terreno",
+						"h": 4.5
+					},
+					"row": false
+				},
+				{
+					"id": "ee48bcaf-c43c-3bfd-7f32-20f486250f9c_c2216cb0-452b-ac01-3add-0129ed06e824_col",
+					"type": "radio",
+					"label": "Sobre red vial cantonal",
+					"langKey": "expediente_ce>infraestructura>agregar_terreno>informacion_acceso_red_cantonal",
+					"source": "",
+					"options": [
+						{ "id": "1_radio", "value": "Sí", "label": "Sí" },
+						{ "id": "2_radio", "value": "No", "label": "No" }
+					],
+					"config": {
+						"required": true,
+						"tooltipText": "Debe indicarse cuando cualquier costado o sección del terreno que colinde con una o varias carreteras cantonales.",
+						"orientation": "row",
+						"h": 3.5
+					},
+					"row": false
+				}
+			],
+			"order": 10
+		}
+	],
+	"sources": [],
+	"table": {
+		"actions": [
+			{ "actionName": "button.remove", "actionFunction": "delete" }
+		],
+		"actionRow": [
+			{
+				"actionName": "label.edit",
+				"actionFunction": "edit",
+				"actionDisplay": true
+			},
+			{
+				"actionName": "button.remove",
+				"actionFunction": "delete",
+				"actionDisplay": true
+			}
+		],
+		"backendPaginated": false,
+		"thumbView": false,
+		"columns": [
+			{ "column": "nroFinca", "label": "N. de finca" },
+			{ "column": "nroPlano", "label": "N. plano" },
+			{ "column": "descripcion", "label": "Descripción" },
+			{
+				"column": "ubicacionGeografica",
+				"label": "Ubicación geográfica"
+			},
+			{ "column": "registralOwner", "label": "Dueño registral" }
+		],
+		"mobileColumns": [
+			{ "column": "nroFinca", "label": "N. de Finca" },
+			{ "column": "nroPlano", "label": "N. plano" },
+			{ "column": "registralOwner", "label": "Dueño registral" }
+		]
+	}
+}

@@ -1,0 +1,399 @@
+{
+	"titulo": "Crear formulario",
+	"layouts": [
+		{
+			"i": "b316ef4d-b4df-121a-0e46-065e33de3257_col",
+			"x": 0,
+			"y": 0,
+			"w": 4,
+			"h": 8,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "centro educativo",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false,
+			"content": [
+				{
+					"i": "301c8f69-bb14-585a-3244-5713195d51ff_col",
+					"type": "container",
+					"w": 2,
+					"config": { "titulo": "", "relleno": false, "tooltip": "" }
+				},
+				{
+					"i": "c87e762b-9ebc-522f-f7b6-516bae11c3a1_col",
+					"type": "container",
+					"w": 2,
+					"config": { "titulo": "", "relleno": false, "tooltip": "" }
+				}
+			]
+		}
+	],
+	"contents": [
+		{
+			"layoutId": "b316ef4d-b4df-121a-0e46-065e33de3257_col",
+			"fields": [],
+			"order": 1,
+			"config": { "titulo": "", "relleno": false, "tooltip": "" }
+		},
+		{
+			"layoutId": "301c8f69-bb14-585a-3244-5713195d51ff_col",
+			"fields": [
+				[
+					{
+						"id": "6d597f71-b229-0f19-6150-fd8753d1445c_301c8f69-bb14-585a-3244-5713195d51ff_col",
+						"type": "text",
+						"label": "Código",
+						"langKey": "expediente_ce>informacion_general>perfil>codigo",
+						"options": [],
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"placeholder": "",
+							"size": "3"
+						},
+						"row": true
+					},
+					{
+						"type": "text",
+						"label": "Nombre oficial",
+						"langKey": "expediente_ce>informacion_general>perfil>nombre",
+						"options": [],
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"placeholder": "",
+							"size": "9"
+						},
+						"id": "1_90d4ba36-584e-4f5d-6145-1eec25214429_301c8f69-bb14-585a-3244-5713195d51ff_col",
+						"row": true
+					}
+				],
+				[
+					{
+						"id": "bba3784b-65ea-eb61-1b55-3c94e16c6708_301c8f69-bb14-585a-3244-5713195d51ff_col",
+						"type": "text",
+						"label": "Conocido como",
+						"langKey": "expediente_ce>informacion_general>perfil>conocido_como",
+						"options": [],
+						"config": {
+							"required": true,
+							"tooltipText": "Puede ingresar otro nombre que se utilice para identificar el centro educativo",
+							"placeholder": "",
+							"size": "6"
+						},
+						"row": true
+					},
+					{
+						"type": "text",
+						"label": "Fecha fundación",
+						"langKey": "expediente_ce>informacion_general>perfil>fecha_fundacion",
+						"options": [],
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"placeholder": "",
+							"size": "6"
+						},
+						"id": "1_885c7d51-83d3-85f8-69d9-bd8feaff8ae2_301c8f69-bb14-585a-3244-5713195d51ff_col",
+						"row": true
+					}
+				],
+				{
+					"id": "0d8e465d-3fcd-1370-bcf3-b12f6a4a69b4_301c8f69-bb14-585a-3244-5713195d51ff_col",
+					"type": "text",
+					"label": "Código presupuestario",
+					"langKey": "general_ce>codigo_presupuestario",
+					"options": [],
+					"config": {
+						"required": false,
+						"tooltipText": "",
+						"placeholder": "",
+						"mask": ""
+					}
+				}
+			],
+			"order": 2
+		},
+		{
+			"layoutId": "c87e762b-9ebc-522f-f7b6-516bae11c3a1_col",
+			"fields": [
+				[
+					{
+						"id": "66b7fb5c-faf0-5d95-bf1f-324291ed94c7_c87e762b-9ebc-522f-f7b6-516bae11c3a1_col",
+						"type": "text",
+						"label": "Tipo de centro",
+						"langKey": "general_ce>tipo_de_centro",
+						"options": [],
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"placeholder": ""
+						},
+						"row": true
+					},
+					{
+						"type": "text",
+						"label": "Estado del centro educativo",
+						"langKey": "general_ce>estado_del_centro_educativo",
+						"options": [],
+						"config": {
+							"required": true,
+							"tooltipText": "",
+							"placeholder": ""
+						},
+						"id": "1_e4d4ab42-0d1d-d43f-30ba-9a8fe36ba0f4_c87e762b-9ebc-522f-f7b6-516bae11c3a1_col",
+						"row": true
+					}
+				],
+				{
+					"id": "563ac934-869c-9ab6-a412-bdefcea0cfa7_c87e762b-9ebc-522f-f7b6-516bae11c3a1_col",
+					"type": "text",
+					"label": "Motivo de estado",
+					"langKey": "general_ce>motivo_de_estado",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					}
+				}
+			],
+			"order": 3
+		},
+		{
+			"layoutId": "276a206c-594d-894b-b4ec-e141fb50daa7_col",
+			"fields": [
+				[
+					[
+						{
+							"id": "61de5d47-a8e0-0570-9414-a8aba3bd9308_276a206c-594d-894b-b4ec-e141fb50daa7_col",
+							"type": "text",
+							"label": "Códigos presupuestarios",
+							"langKey": "general_ce>codigos_presupuestarios",
+							"options": [],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"placeholder": ""
+							},
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "text",
+							"label": "",
+							"options": [],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"placeholder": ""
+							},
+							"id": "1_bef4e606-39d0-3bd5-0c26-2a7498444261_276a206c-594d-894b-b4ec-e141fb50daa7_col",
+							"row": true,
+							"col": true
+						}
+					],
+					[
+						{
+							"type": "text",
+							"label": "Detalle de los códigos presupuestarios",
+							"langKey": "general_ce>detalle_de_los_codigos_presupuestarios",
+							"options": [],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"placeholder": ""
+							},
+							"id": "1_d8500c76-a879-a4a4-c7ea-f5366718de20_276a206c-594d-894b-b4ec-e141fb50daa7_col",
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "text",
+							"label": "",
+							"options": [],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"placeholder": ""
+							},
+							"id": "1_af9e48fc-6af5-b5c7-6106-388771d26b50_276a206c-594d-894b-b4ec-e141fb50daa7_col",
+							"row": true,
+							"col": true
+						}
+					]
+				]
+			],
+			"order": 5
+		},
+		{
+			"layoutId": "d15e7594-a2c6-52e2-26ca-9e57c2145413_col",
+			"fields": [
+				{
+					"id": "ac537c69-de20-81e3-b043-f8a9421580ea_d15e7594-a2c6-52e2-26ca-9e57c2145413_col",
+					"type": "text",
+					"label": "Oferta / Modalidad / Servicio asociado",
+					"langKey": "general_ce>oferta_modalidad_servicio_asociado",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					}
+				},
+				{
+					"id": "3c38e420-6c6b-7258-181a-cc3778232c5f_d15e7594-a2c6-52e2-26ca-9e57c2145413_col",
+					"type": "text",
+					"label": "",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": ""
+					}
+				}
+			],
+			"order": 6
+		},
+		{
+			"layoutId": "8e8987d1-2d08-57f1-5444-65e41c4c4dbf_col",
+			"fields": [
+				[
+					[
+						{
+							"id": "cadba966-e38a-4c86-b639-fb156f278c9c_8e8987d1-2d08-57f1-5444-65e41c4c4dbf_col",
+							"type": "text",
+							"label": "Código",
+							"langKey": "general_ce>codigo",
+							"options": [],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"placeholder": "",
+								"size": "3"
+							},
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "text",
+							"label": "",
+							"options": [],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"placeholder": ""
+							},
+							"id": "1_f47c6b94-6217-68fb-cf46-9fa250758818_8e8987d1-2d08-57f1-5444-65e41c4c4dbf_col",
+							"row": true,
+							"col": true
+						}
+					],
+					[
+						{
+							"type": "text",
+							"label": "Nombre del centro educativo",
+							"langKey": "general_ce>nombre_del_centro_educativo",
+							"options": [],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"placeholder": "",
+								"size": "9"
+							},
+							"id": "1_07275294-d784-b524-e820-d0cd4cb1a2e6_8e8987d1-2d08-57f1-5444-65e41c4c4dbf_col",
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "text",
+							"label": "",
+							"options": [],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"placeholder": ""
+							},
+							"id": "1_00203e69-41a5-4551-e4d7-883553d20178_8e8987d1-2d08-57f1-5444-65e41c4c4dbf_col",
+							"row": true,
+							"col": true
+						}
+					]
+				]
+			],
+			"order": 8
+		},
+		{
+			"layoutId": "bad1407e-e234-fece-a5aa-5b4d98f86cd0_col",
+			"fields": [
+				[
+					[
+						{
+							"id": "23c7067f-0429-c04d-5a11-3eef758a1a7a_bad1407e-e234-fece-a5aa-5b4d98f86cd0_col",
+							"type": "text",
+							"label": "Tipo de asociación",
+							"langKey": "general_ce>tipo_de_asociacion",
+							"options": [],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"placeholder": "",
+								"size": "6"
+							},
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "text",
+							"label": "",
+							"options": [],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"placeholder": ""
+							},
+							"id": "1_107478a5-117c-f812-418e-8b94c888e82a_bad1407e-e234-fece-a5aa-5b4d98f86cd0_col",
+							"row": true,
+							"col": true
+						}
+					],
+					[
+						{
+							"type": "text",
+							"label": "Observaciones",
+							"langKey": "general_ce>observaciones",
+							"options": [],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"placeholder": ""
+							},
+							"id": "1_6f976b34-d3f3-3ab0-f0ad-2184049c065c_bad1407e-e234-fece-a5aa-5b4d98f86cd0_col",
+							"row": true,
+							"col": true
+						},
+						{
+							"type": "text",
+							"label": "",
+							"options": [],
+							"config": {
+								"required": true,
+								"tooltipText": "",
+								"placeholder": ""
+							},
+							"id": "1_e81650f9-e367-d25b-7eb2-384c575d1efa_bad1407e-e234-fece-a5aa-5b4d98f86cd0_col",
+							"row": true,
+							"col": true
+						}
+					]
+				]
+			],
+			"order": 9
+		}
+	]
+}

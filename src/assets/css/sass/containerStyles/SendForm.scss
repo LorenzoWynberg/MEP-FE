@@ -1,0 +1,123 @@
+.modalHeaderClass {
+  padding: 5px !important;
+  margin: 0 !important;
+  position: relative !important;
+  font-family: 'initial' !important;
+  color: '#000000' !important;
+}
+.modal-title {
+  margin-bottom: 0;
+  line-height: 1.5;
+  left: 41px;
+  position: relative;
+}
+.asuntoClass {
+  position: relative;
+  display: flex;
+  padding: 0;
+  margin: 0;
+  margin-top: 13px;
+  font-family: 'Nunito';
+}
+.modalSendForm {
+  top: 117px;
+  display: flex !important;
+  max-width: min-content !important;
+  position: absolute;
+  left: 457px;
+}
+.inputSendForm {
+  position: relative;
+  margin-bottom: 14px;
+}
+.modalSendForm .close {
+  display: none !important;
+}
+.BtnSendForm {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  top: -10px;
+  margin-left: 692px;
+}
+.btnCopiarVinculo {
+  margin: 10px !important;
+  background-color: #145388 !important;
+  border-radius: 0px !important;
+  border: 1px solid #1a1c1f !important;
+  color: #ffffff !important;
+  top: 26px;
+  position: relative;
+  width: 118%;
+  right: 28px;
+}
+
+.rowVinculo {
+  position: relative !important;
+  width: 226px !important;
+  right: 55px !important;
+}
+.btnSubirClass {
+  margin: 5px !important;
+  background-color: #ffffff !important;
+  border-radius: 40px !important;
+  border: 1px solid #145388 !important;
+}
+.autoCompleteClass {
+  border-bottom: 1px solid black;
+}
+
+.btnCancelForm {
+  margin: 10px !important;
+  background-color: #ffffff !important;
+  border-radius: 18px !important;
+  border: 1px solid #145388 !important;
+  color: #145388 !important;
+  width: 105px;
+}
+.btnSiguiente {
+  background-color: #145388 !important;
+  position: relative !important;
+  top: -52px !important;
+  margin-left: 119px !important;
+  width: 105px;
+}
+.btnCopiar {
+  background-color: #145388 !important;
+  position: relative !important;
+  width: 105px;
+  border-radius: 0px !important;
+}
+.contenedor {
+  width: 50%;
+  //  position: absolute;
+  background-color: white;
+  box-shadow: 2px 2px 5px #999;
+}
+.css-xb97g8:hover {
+  background-color: transparent !important;
+  color: black !important;
+}
+.css-1rhbuit-multiValue {
+  background-color: transparent !important;
+  border-radius: 20px !important;
+  display: -webkit-box !important;
+  display: -webkit-flex !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+  margin: 2px !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  border-width: 1px !important;
+  border-style: solid !important;
+  border-color: black !important;
+}
+.css-yk16xz-control {
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: 0px 1px 1px #999 !important;
+}
+.xClass {
+  cursor: pointer !important;
+  display: inline-block !important;
+}

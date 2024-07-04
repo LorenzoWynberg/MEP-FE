@@ -1,0 +1,142 @@
+.modalValidacion {
+
+  .modal-header,
+  .modal-body {
+    padding: 40px;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+}
+
+.studentInfo span {
+  color: #145389 !important;
+  font-weight: bold !important;
+}
+
+.container-icon-oferta-plain {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.container-icon-oferta-plain .icon-oferta {
+  margin-left: 20px;
+}
+
+.wizard-buttons {
+  width: 100%;
+  margin-top: 30px;
+  margin-bottom: 30px;
+
+  button {
+    margin-right: 15px !important;
+  }
+}
+
+.nivel-container {
+  position: relative;
+  float: left;
+  width: 24%;
+  border-radius: 10px;
+  border: 1px solid #c6c6c6;
+  background-color: white;
+  margin-left: 1%;
+  margin-bottom: 30px;
+  margin-top: 20px;
+  height: 240px;
+
+  .nivel-encabezado {
+    position: relative;
+    float: left;
+    width: 100%;
+    background: rgb(22, 21, 21);
+    background: -moz-linear-gradient(0deg,
+        rgba(22, 21, 21, 1) 0%,
+        rgba(37, 37, 38, 1) 0%,
+        rgba(20, 83, 136, 1) 35%);
+    background: -webkit-linear-gradient(0deg,
+        rgba(22, 21, 21, 1) 0%,
+        rgba(37, 37, 38, 1) 0%,
+        rgba(20, 83, 136, 1) 35%);
+    background: linear-gradient(0deg,
+        rgba(22, 21, 21, 1) 0%,
+        rgba(37, 37, 38, 1) 0%,
+        rgba(20, 83, 136, 1) 35%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#161515", endColorstr="#145388", GradientType=1);
+    color: white;
+    padding: 20px;
+    border-radius: 10px 10px 0px 0px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+
+    h2 {
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+  }
+
+  .nivel-detalle {
+    position: relative;
+    float: left;
+    width: 100%;
+    color: white;
+    padding: 20px;
+
+    h3 {
+      color: #145388;
+      font-size: 1.3em;
+      font-weight: bold;
+    }
+
+    span {
+      float: left;
+      width: 100%;
+      color: #757575;
+    }
+
+    .icons-container {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 16px;
+
+      small {
+        margin-left: 5px;
+      }
+
+      .simple-icon-user-female {
+        color: #ae669e;
+        margin-right: 5px;
+      }
+
+      .simple-icon-user {
+        color: #43b2e0;
+        margin-right: 5px;
+      }
+
+      .color-female {
+        color: #ae669e;
+      }
+
+      .color-male {
+        color: #43b2e0;
+      }
+    }
+  }
+}
+
+.nivel-container:hover {
+  cursor: pointer;
+  -webkit-box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.35);
+  box-shadow: 0px 0px 6px 1px rgba(0, 0, 0, 0.35);
+}
+
+.nivel-container.selected {
+  border: 2px solid rgba(20, 83, 136, 1) !important;
+  -webkit-box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.35);
+  box-shadow: 0px 0px 6px 3px rgba(0, 0, 0, 0.35);
+}

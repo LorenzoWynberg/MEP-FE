@@ -1,0 +1,62 @@
+.btn-just{
+    border-radius: 15px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-content: center;
+    width: 18.5%;
+    height: 1.5rem;
+    margin-right: 1.3%
+}
+
+.btn-present{
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    background: #145388;
+    width: 150px;
+    border-radius: 2px;
+}
+
+.btn-aus{
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    background: #FFA0A0;
+    width: 150px;
+    border-radius: 2px;
+}
+
+.btn-tard{
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    background: rgb(46, 128, 252);
+    width: 150px;
+    border-radius: 2px;
+}
+
+.btn-void{
+    border: none;
+    cursor: pointer;
+    background: none;
+}
+
+.igualar2{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: small;
+    width: 100%;
+}
+
+.btn-noimpartida{
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    background: #6d6f70;
+    width: 150px;
+    border-radius: 2px;
+}

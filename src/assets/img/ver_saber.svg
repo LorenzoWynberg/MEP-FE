@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="MDI_eye" data-name="MDI / eye" opacity="0.6">
+    <g id="Boundary" stroke="rgba(0,0,0,0)" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="Path_eye" data-name="Path / eye" d="M12,9a3,3,0,1,0,3,3,3,3,0,0,0-3-3m0,8a5,5,0,1,1,5-5,5,5,0,0,1-5,5M12,4.5A11.827,11.827,0,0,0,1,12a11.817,11.817,0,0,0,22,0A11.827,11.827,0,0,0,12,4.5Z" transform="translate(0 0.5)"/>
+  </g>
+</svg>

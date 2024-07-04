@@ -1,0 +1,201 @@
+{
+	"titulo": "Crear formulario",
+	"layouts": [
+		{
+			"i": "75c90e4b-134c-8eaa-143e-ac3d637ad52e_col",
+			"x": 0,
+			"y": 0,
+			"w": 2,
+			"h": 23,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Creación de alerta nueva",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 5,
+			"moved": false,
+			"static": false,
+			"content": []
+		},
+		{
+			"i": "507b7ecd-7658-ce4d-90a6-ccb46d310e45_col",
+			"x": 2,
+			"y": 0,
+			"w": 2,
+			"h": 15,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": {
+				"titulo": "Normativas",
+				"relleno": true,
+				"tooltip": ""
+			},
+			"rowH": 0,
+			"moved": false,
+			"static": false
+		},
+		{
+			"i": "89cbf64f-3403-bffa-e53b-2f53d27dabfe_col",
+			"x": 2,
+			"y": 15,
+			"w": 2,
+			"h": 7,
+			"titulo": "new Layout",
+			"type": "containerParent",
+			"config": { "titulo": "Ficha", "relleno": true, "tooltip": "" },
+			"rowH": 0,
+			"moved": false,
+			"static": false
+		}
+	],
+	"contents": [
+		{
+			"layoutId": "75c90e4b-134c-8eaa-143e-ac3d637ad52e_col",
+			"fields": [
+				{
+					"type": "text",
+					"label": "Nombre de la alerta",
+					"langKey":"alertas_por_estudiante>alerta_temprana>nombre_alerta",
+					"options": [],
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"placeholder": "",
+						"mask": ""
+					},
+					"id": "b819641a-13fb-66b5-2ec1-a1108a3c235e_75c90e4b-134c-8eaa-143e-ac3d637ad52e_col"
+				},
+				[
+					{
+						"type": "unic",
+						"label": "Seleccione el contexto",
+						"langKey":"alertas_por_estudiante>alerta_temprana>seleccione_contexto",
+						"source": "",
+						"options": [],
+						"config": { "required": true, "tooltipText": "" },
+						"id": "2bbce626-2602-dab3-c27b-22ddcaa20452_75c90e4b-134c-8eaa-143e-ac3d637ad52e_col",
+						"row": true
+					},
+					{
+						"type": "unic",
+						"label": "Seleccione la dimensión",
+						"langKey": "alertas_por_estudiante>alerta_temprana>seleccione_dimension",
+						"source": "",
+						"options": [],
+						"config": { "required": true, "tooltipText": "" },
+						"id": "025b4be2-37aa-5dad-2eed-421728d88e6e_75c90e4b-134c-8eaa-143e-ac3d637ad52e_col",
+						"row": true
+					}
+				],
+				{
+					"type": "radio",
+					"label": "¿Requiere de atención inmediata?",
+					"langKey": "alertas_por_estudiante>alerta_temprana>requiere_atencion_inmediata",
+					"source": "",
+					"options": "sino",
+					"config": {
+						"required": true,
+						"tooltipText": "",
+						"orientation": "row",
+						"h": 3.5
+					},
+					"id": "01c84a7b-90f4-2dda-54be-3d53c7d7342b_75c90e4b-134c-8eaa-143e-ac3d637ad52e_col"
+				},
+				{
+					"type": "multiple",
+					"label": "Responsable de recibir la alerta",
+					"langKey": "alertas_por_estudiante>alerta_temprana>responsable_recibir_alerta",
+					"source": "",
+					"options": [],
+					"config": { "required": true, "tooltipText": "" },
+					"id": "446b5abb-24a4-1c0c-2911-7c00a230a820_75c90e4b-134c-8eaa-143e-ac3d637ad52e_col"
+				},
+				{
+					"type": "textArea",
+					"label": "Descripción",
+					"langKey": "alertas_por_estudiante>alerta_temprana>descripçion",
+					"options": [],
+					"config": { "required": true, "tooltipText": "" },
+					"id": "32a9360b-cc2f-492b-2473-60e5231cf751_75c90e4b-134c-8eaa-143e-ac3d637ad52e_col"
+				},
+				{
+					"type": "unic",
+					"label": "Recordatorio",
+					"langKey": "alertas_por_estudiante>alerta_temprana>recordatorio",
+					"source": "",
+					"options": [],
+					"config": { "required": true, "tooltipText": "" },
+					"id": "fba4b97a-aa40-a6eb-b2fd-81cf4fdffbf6_75c90e4b-134c-8eaa-143e-ac3d637ad52e_col"
+				}
+			],
+			"order": 1,
+			"config": {
+				"titulo": "Creación de alerta nueva",
+				"langKey": "alertas_por_estudiante>alerta_temprana>creacion_alerta_nueva",
+				"relleno": true,
+				"tooltip": ""
+			}
+		},
+		{
+			"layoutId": "507b7ecd-7658-ce4d-90a6-ccb46d310e45_col",
+			"fields": [
+				{
+					"type": "crudTable",
+					"label": "",
+					"config": {
+						"columns": [
+							{
+								"titulo": "Enlance",
+								"langKey": "alertas_por_estudiante>alerta_temprana>enlace",
+								"id": "53a96f8c-58d9-a435-6dfe-c63d7dd879a5"
+							},
+							{
+								"titulo": "Nombre",
+								"langKey": "alertas_por_estudiante>alerta_temprana>nombrewf",
+								"id": "935ea399-140c-2a93-21ec-a3b774a9e516"
+							}
+						],
+						"tooltipText": ""
+					},
+					"id": "17ce8e02-b127-6f1f-8a0e-fff34a7364d9_507b7ecd-7658-ce4d-90a6-ccb46d310e45_col",
+					"row": false
+				},
+				{
+					"type": "uploadFile",
+					"label": "",
+					"config": {
+						"required": false,
+						"type": "archivo",
+						"icon": "archivo",
+						"h": 6
+					},
+					"id": "59e0edd0-114d-64a0-4976-30477f4d5b79_507b7ecd-7658-ce4d-90a6-ccb46d310e45_col",
+					"row": false
+				}
+			],
+			"order": 2,
+			"config": { "titulo": "Normativas", "relleno": true, "tooltip": "" }
+		},
+		{
+			"layoutId": "89cbf64f-3403-bffa-e53b-2f53d27dabfe_col",
+			"fields": [
+				{
+					"type": "uploadFile",
+					"label": "",
+					"config": {
+						"required": false,
+						"type": "archivo",
+						"icon": "archivo",
+						"h": 6
+					},
+					"id": "4a7c41ec-f7fc-8e00-153c-2c33f36f219b_89cbf64f-3403-bffa-e53b-2f53d27dabfe_col"
+				}
+			],
+			"order": 3,
+			"config": { "titulo": "Ficha", "relleno": true, "tooltip": "" }
+		}
+	],
+	"sources": ["", ""]
+}

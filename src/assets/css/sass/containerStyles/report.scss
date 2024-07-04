@@ -1,0 +1,216 @@
+.container {
+  //   background-color: red;
+  margin-top: 25px;
+}
+
+.header {
+  //   background-color: blue;
+  margin: 25px auto;
+  max-width: 790px;
+}
+
+.board {
+  margin: 0 auto;
+  display: flex;
+  max-width: 790px;
+
+  .qr-box {
+    padding-top: 0.5rem;
+    height: 150px;
+    width: 180px;
+    border-right: 1px solid black;
+  }
+
+  .title-boxes {
+    height: auto;
+    width: 100%;
+    display: block;
+  }
+
+  .up-box {
+    border-bottom: 1px solid black;
+  }
+}
+
+.box {
+  height: 50%;
+  text-align: center;
+  h5 {
+    font-weight: bold !important;
+  }
+}
+.box-container {
+  border: 1px solid black;
+}
+
+.statement {
+  //   background-color: green;
+  margin: 1px auto;
+  max-width: 790px;
+
+  .title {
+    text-align: center;
+    h3 {
+      font-weight: bold !important;
+    }
+  }
+}
+
+.table {
+  margin: 0px auto;
+  max-width: 790px;
+}
+
+.principal-sign {
+  height: 170px;
+  max-width: 790px;
+  margin: 10px auto;
+  //   background-color: orange;
+
+  .date {
+    text-align: left;
+    width: 100%;
+  }
+  .info {
+    text-align: center;
+    height: 100px;
+    bold {
+      font-weight: bold;
+    }
+  }
+  .stamp {
+    text-align: right;
+    text-align: right;
+    margin: 0px 45px 0px 0px;
+    font-weight: bold;
+  }
+}
+.footer {
+  //   background-color: violet;
+  max-width: 790px;
+  margin: 15px auto;
+  border-top: 1px double black;
+  text-align: center;
+  p {
+    font-style: italic;
+    font-weight: bold;
+    font-size: small;
+  }
+}
+
+.print-btn {
+  text-align: center;
+  margin-bottom: 20px;
+  @media print {
+    display: none;
+  }
+  button {
+    border-radius: 50px;
+    height: 30px;
+    width: 100px;
+    background-color: #145388;
+    border-color: #145388;
+    color: #fff;
+    cursor: pointer;
+    line-height: 1.5;
+    font-weight: 700;
+    letter-spacing: 0.05rem;
+    box-shadow: none !important;
+    font-size: 0.8rem;
+  }
+}
+.AddButon {
+  margin-bottom: -7px;
+  color: '#00aae4';
+}
+// .AgregarOpcionButon:hover{
+//   color: '#00aae4';
+// }
+.AgregarOpcionButon {
+  cursor: pointer;
+}
+
+.numberOption {
+  left: -14px;
+  position: relative;
+}
+
+.MuiSelect-filled.MuiSelect-filled {
+  padding-right: 104px !important;
+  padding-top: 23px !important;
+}
+.MuiFormControl-root {
+  position: relative !important;
+  top: -26px !important;
+}
+// .inputClass{
+//   padding-right: 293px  !important;
+// }
+.SelectOption {
+  background-color: #ffffff !important;
+  border: 1px solid rgb(111, 149, 181);
+  color: rgb(111, 149, 181);
+  width: 14rem;
+  height: 3rem;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#SelectId {
+  margin-left: 8px;
+}
+.inputPorcentajeClass {
+  padding-right: 1px !important;
+  border-radius: 5px 0px 0px 5px !important;
+}
+.PorcentajeOption {
+  background: #145388;
+  display: flex;
+  color: white;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 2rem;
+  border-radius: 0px 5px 5px 0px;
+}
+.buttonClass {
+  position: relative;
+  left: 149px;
+}
+.botton1 {
+  margin: 10px !important;
+  background-color: aliceblue !important;
+  border-radius: 18px !important;
+  border: 1px solid rgb(111, 149, 181) !important;
+  color: #000000;
+}
+
+.mainBontonDiv {
+  position: relative;
+  left: 151px;
+}
+.fr-popup.fr-files-manager {
+  width: auto !important;
+}
+
+.imgSubor {
+  margin: 1px;
+}
+.btnFileClass {
+  margin: 14px !important;
+  background-color: #ffffff !important;
+  border-radius: 40px !important;
+  border: 1px solid #1a1c1f !important;
+  min-width: 300px;
+  min-height: 67px;
+}
+.iconSube {
+  margin-right: 7px;
+}
+#selectColumns {
+  margin-left: 54px;
+  width: 184px;
+}

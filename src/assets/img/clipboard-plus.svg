@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="18.816" height="18.816" viewBox="0 0 18.816 18.816">
+  <g id="MDI_alert-circle" data-name="MDI / alert-circle" opacity="0.997">
+    <g id="Boundary" fill="#f65a54" stroke="rgba(0,0,0,0)" stroke-width="1" opacity="0">
+      <rect width="18.816" height="18.816" stroke="none"/>
+      <rect x="0.5" y="0.5" width="17.816" height="17.816" fill="none"/>
+    </g>
+    <path id="Path_clipboard-plus" data-name="Path / clipboard-plus" d="M15.544,2.568H12.267a2.343,2.343,0,0,0-4.422,0H4.568A1.568,1.568,0,0,0,3,4.136V15.112A1.568,1.568,0,0,0,4.568,16.68H15.544a1.568,1.568,0,0,0,1.568-1.568V4.136a1.568,1.568,0,0,0-1.568-1.568m-5.488,0a.784.784,0,1,1-.784.784.784.784,0,0,1,.784-.784m.784,7.056h2.352v1.568H10.84v2.352H9.272V11.192H6.92V9.624H9.272V7.272H10.84Z" transform="translate(-0.648 0.568)" fill="#70787f"/>
+  </g>
+</svg>

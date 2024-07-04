@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="71" height="71" viewBox="0 0 71 71">
+  <g id="icon-i" transform="translate(-339 -160)">
+    <g id="Elipse_91" data-name="Elipse 91" transform="translate(339 160)" fill="fill" stroke="#fff" stroke-width="2">
+      <circle cx="35.5" cy="35.5" r="35.5" stroke="none"/>
+      <circle cx="35.5" cy="35.5" r="34.5" fill="none"/>
+    </g>
+    <g id="Grupo_2125" data-name="Grupo 2125" transform="translate(343.961 171.907)">
+      <path id="Trazado_1560" data-name="Trazado 1560" d="M-249.1-3810.573l-12.708,6.192h25.672Z" transform="translate(279.363 3818.942)" fill="#fff"/>
+      <rect id="Rectángulo_683" data-name="Rectángulo 683" width="7.938" height="5.954" transform="translate(30.264 1)" fill="#fff"/>
+      <path id="Trazado_1562" data-name="Trazado 1562" d="M-106-3782.935V-3801.6" transform="translate(142.219 3817.873)" fill="#109ed9" stroke="#109ed9" stroke-width="1"/>
+      <path id="Trazado_1563" data-name="Trazado 1563" d="M-106-3782.935V-3801.6" transform="translate(130.311 3817.873)" fill="#109ed9" stroke="#109ed9" stroke-width="1"/>
+      <path id="Trazado_1561" data-name="Trazado 1561" d="M-280.047-3782.935h60.987l-1.98-2.414v-11.939l1.98-2.442h-19.707v-1.809h-21.706v1.809h-19.574l1.395,2.442v11.939Z" transform="translate(280.047 3817.873)" fill="#fff"/>
+    </g>
+    <g id="Grupo_2124" data-name="Grupo 2124" transform="translate(343.961 171.907)">
+      <path id="Rectángulo_684" data-name="Rectángulo 684" d="M2.977,0h0A2.977,2.977,0,0,1,5.954,2.977V7.938a0,0,0,0,1,0,0H0a0,0,0,0,1,0,0V2.977A2.977,2.977,0,0,1,2.977,0Z" transform="translate(27.287 27.783)" fill="fill"/>
+      <rect id="Rectángulo_685" data-name="Rectángulo 685" width="5.954" height="5.954" transform="translate(27.287 18.853)" fill="fill"/>
+      <rect id="Rectángulo_690" data-name="Rectángulo 690" width="4.961" height="4.961" transform="translate(3.473 20.838)" fill="fill"/>
+      <rect id="Rectángulo_686" data-name="Rectángulo 686" width="4.961" height="4.961" transform="translate(45.148 20.838)" fill="fill"/>
+      <rect id="Rectángulo_691" data-name="Rectángulo 691" width="4.961" height="4.961" transform="translate(10.42 20.838)" fill="fill"/>
+      <rect id="Rectángulo_687" data-name="Rectángulo 687" width="4.961" height="4.961" transform="translate(52.094 20.838)" fill="fill"/>
+      <rect id="Rectángulo_692" data-name="Rectángulo 692" width="4.961" height="4.961" transform="translate(3.473 27.783)" fill="fill"/>
+      <rect id="Rectángulo_688" data-name="Rectángulo 688" width="4.961" height="4.961" transform="translate(45.148 27.783)" fill="fill"/>
+      <rect id="Rectángulo_693" data-name="Rectángulo 693" width="4.961" height="4.961" transform="translate(10.42 27.783)" fill="fill"/>
+      <rect id="Rectángulo_689" data-name="Rectángulo 689" width="4.961" height="4.961" transform="translate(52.094 27.783)" fill="fill"/>
+    </g>
+  </g>
+</svg>
