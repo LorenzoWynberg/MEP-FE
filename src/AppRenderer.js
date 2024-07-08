@@ -17,7 +17,6 @@ axios.interceptors.request.use((config) => {
   const { authObject, currentInstitution, currentRoleOrganizacion, selectedActiveYear } =
     store.getState().authUser
   const token = authObject.user.token
-
   const activeYearId = selectedActiveYear?.id  // Anio seleccionado
   const esActivoYear = selectedActiveYear?.esActivo
   const expiration = authObject.user.expiration
@@ -27,11 +26,10 @@ axios.interceptors.request.use((config) => {
     localStorage.clear()
     window.location.reload()
   }
-
-  config.headers.common.Authorization = token ? ` Bearer ${token}` : ''
-  config.headers.common['Accept-Language'] = `${
-    localStorage.getItem('locale') || envVariables.DEFAULT_LOCALE
-  }`
+  !config.headers.common && (config.headers.common = {})
+  axios.defaults.headers.common['Authorization']  =  `Bearer ${token}`;
+  config.headers.common['Accept-Language'] = `${localStorage.getItem('locale') || envVariables.DEFAULT_LOCALE
+    }`
 
   config.headers.common['organizacion-seleccionada'] =
     currentRoleOrganizacion.accessRole.organizacionId || currentInstitution?.id
@@ -39,24 +37,24 @@ axios.interceptors.request.use((config) => {
     currentRoleOrganizacion.accessRole.rolId
   config.headers.common['nivel-acceso'] =
     currentRoleOrganizacion.accessRole.nivelAccesoId
-    config.headers.common['anio-seleccionado'] = activeYearId
-    config.headers.common['anio-seleccionado-esActivo'] = esActivoYear
-  
+  config.headers.common['anio-seleccionado'] = activeYearId
+  config.headers.common['anio-seleccionado-esActivo'] = esActivoYear
+
   return config
 })
-;(async function () {
-  await Preloader(store)
-  const container = document.getElementById('root')
-  const root = createRoot(container) // createRoot(container!) if you use TypeScript
+  ; (async function () {
+    await Preloader(store)
+    const container = document.getElementById('root')
+    const root = createRoot(container) // createRoot(container!) if you use TypeScript
 
-  root.render(
-    <Provider store={store}>
-      <Suspense fallback={<div className='loading' />}>
-        <App />
-      </Suspense>
-    </Provider>
-  )
-})()
+    root.render(
+      <Provider store={store}>
+        <Suspense fallback={<div className='loading' />}>
+          <App />
+        </Suspense>
+      </Provider>
+    )
+  })()
 
 /*
  * If you want your app to work offline and load faster, you can change
