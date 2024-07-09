@@ -240,7 +240,7 @@ export const getDirector = id => async dispatch => {
 export const desactivarServicioComunal = (id,history) => async dispatch => {
 	dispatch(loginUserLoading())
 
-	await axios.put(`${envVariables.BACKEND_URL}/api/ServicioComunal/DesactivarServicioComunal/${id}`)
+	await axios.put(`${envVariables.BACKEND_URL}/api/ServicioComunal/DesactivarServicioComunal?idServicioComunal=${id}`)
 	history.push('/')
 }
 
