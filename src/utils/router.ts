@@ -1,5 +1,6 @@
 import React, { LazyExoticComponent } from 'react'
 
+
 const BuscadorCentros = React.lazy(() => import('../views/app/director/Buscadores/BuscadorCentros'))
 
 const HistoricoExpediente = React.lazy(() => import('../views/app/director/Historico/HistoricoExpediente'))
@@ -54,6 +55,8 @@ const Configuracion = React.lazy(() => import('../views/app/director/Configuraci
 const Identidad = React.lazy(() => import('../views/app/configuracion/Identidad/main'))
 
 const Groups = React.lazy(() => import('../views/app/director/Grupos/main'))
+
+const ServicioComunal = React.lazy(() => import('../views/app/director/ServicioComunal/ServicioComunal'))
 
 const GestorUsuarios = React.lazy(() => import('../views/app/director/GestorUsuarios/GestorUsuarios'))
 const GestorRoles = React.lazy(() => import('../views/app/director/GestorUsuarios/Roles/index'))
@@ -1316,6 +1319,13 @@ const routes: Route[] = [
 		routeProps: {
 			active: 10
 		}
+	},
+
+	{
+		component: ServicioComunal,
+		isAuthenticated: true,
+		route: '/director/expediente/servicio-comunal/registro',
+		exact: true
 	},
 ]
 
