@@ -48,7 +48,12 @@ const data = [
     label: 'expediente_ce>nav>norvativa', // to use IntlMessages
     to: '/director/expediente-centro/normativaInterna',
     active: false
-  }
+  },
+  {
+		label: 'expediente_ce>nav>servicio_comunal', // to use IntlMessages
+		to: '/director/expediente-centro/servicioComunal',
+		active:true
+	}
 ]
 
 export default data

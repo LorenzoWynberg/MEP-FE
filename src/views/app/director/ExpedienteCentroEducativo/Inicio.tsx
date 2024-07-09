@@ -41,6 +41,8 @@ const Inicio = (props) => {
         return <GroupWorkIcon style={{ fontSize: 50 }} />
       case 9:
         return <Normativa />
+      case 10:
+        return <GroupWorkIcon style={{ fontSize: 50 }} />
     }
   }
   return (

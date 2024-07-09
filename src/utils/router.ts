@@ -2,6 +2,8 @@ import React, { LazyExoticComponent } from 'react'
 
 const BuscadorCentros = React.lazy(() => import('../views/app/director/Buscadores/BuscadorCentros'))
 
+const HistoricoExpediente = React.lazy(() => import('../views/app/director/Historico/HistoricoExpediente'))
+
 const BuscadorPersonas = React.lazy(() => import('../views/app/director/Buscadores/BuscadorPersonas'))
 const BuscadorDirecciones = React.lazy(() => import('../views/app/director/Buscadores/BuscadorDirecciones'))
 const ExpedienteDireccionRegional = React.lazy(
@@ -1303,7 +1305,18 @@ const routes: Route[] = [
 		routeProps: {
 			active: 0
 		}
-	}
+	},
+	
+	{
+		component: HistoricoExpediente,
+		exact: true,
+		route: '/director/expediente-centro/servicioComunal', 
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 10
+		}
+	},
 ]
 
 export { routes }
