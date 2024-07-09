@@ -13,13 +13,14 @@ import withRouter from 'react-router-dom/withRouter'
 
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import { IoEyeSharp } from 'react-icons/io5'
-import CancelIcon from '@mui/icons-material/Remove'
+import CancelIcon from '@mui/icons-material/RemoveCircle'
 import Tooltip from '@mui/material/Tooltip'
 import TouchAppIcon from '@material-ui/icons/TouchApp'
 import BuildIcon from '@mui/icons-material/Build'
 import {
   handleChangeInstitution,
-  updatePeriodosLectivos
+  updatePeriodosLectivos,
+  desactivarServicioComunal
 } from '../../../../redux/auth/actions'
 import BarLoader from 'Components/barLoader/barLoader'
 import { useHistory } from 'react-router-dom'
@@ -27,6 +28,7 @@ import { CustomInput } from 'Components/CommonComponents'
 import colors from 'assets/js/colors'
 import { useTranslation } from 'react-i18next'
 import { RemoveRedEyeRounded } from '@material-ui/icons'
+import SimpleModal from 'Components/Modal/simple'
 
 const HistoricoExpediente = (props) => {
   const [data, setData] = useState([])
@@ -34,6 +36,7 @@ const HistoricoExpediente = (props) => {
   const [dropdownToggle, setDropdownToggle] = useState(false)
   const [firstCalled, setFirstCalled] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [expediente, setExpediente] = useState(null)
   const { t } = useTranslation()
   const history = useHistory()
 
@@ -158,14 +161,10 @@ const HistoricoExpediente = (props) => {
                 />
               </Tooltip>
 
-              <Tooltip title={t('expediente_estudiantil>eliminar', 'Eliminar centro educativo')}>
+              <Tooltip title={t('expediente_estudiantil>eliminar', 'Eliminar Expediente')}>
                 <CancelIcon
                   onClick={() => {
-                    localStorage.setItem(
-                      'selectedInstitution',
-                      JSON.stringify(fullRow)
-                    )
-                    setInstitution(fullRow.institucionId)
+                    setExpediente(fullRow)
                   }}
                   style={{
                     fontSize: 25,
@@ -175,7 +174,7 @@ const HistoricoExpediente = (props) => {
                 />
               </Tooltip>
 
-              {BotonConfiguracion(fullRow)}
+              {/* {BotonConfiguracion(fullRow)} */}
             </div>
           )
         }
@@ -197,7 +196,8 @@ const HistoricoExpediente = (props) => {
     cleanInstitutions,
     GetServicioComunalByInstitucionId,
     handleChangeInstitution,
-    updatePeriodosLectivos
+    updatePeriodosLectivos,
+    desactivarServicioComunal
   })
 
   useEffect(() => {
@@ -216,6 +216,13 @@ const HistoricoExpediente = (props) => {
     <AppLayout items={directorItems}>
       <div className='dashboard-wrapper'>
         {loading && <BarLoader />}
+        {console.log('expediente', expediente)}
+        {expediente && <SimpleModal title="Eliminar Registro" onClose={() => setExpediente(null)}
+          onConfirm={() => {
+            actions.desactivarServicioComunal(expediente.id)
+            setExpediente(null)
+          }}
+          openDialog={expediente}>Está seguro que desea eliminar este registro de Servicio Comunal Estudiantil?</SimpleModal>}
         <Container>
           <Row>
             <Col xs={12}>

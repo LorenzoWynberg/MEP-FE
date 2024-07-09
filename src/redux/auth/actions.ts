@@ -158,28 +158,28 @@ export const clearCurrentInstitution = () => async dispatch => {
 
 export const setUserInstitution =
 	(institution, dropdown = false) =>
-	async (dispatch, getState) => {
-		const { authObject } = getState().authUser
-		try {
-			!dropdown && dispatch(setInstitutionDispatch(institution))
+		async (dispatch, getState) => {
+			const { authObject } = getState().authUser
+			try {
+				!dropdown && dispatch(setInstitutionDispatch(institution))
 
-			if (dropdown) {
-				const role = authObject.user.rolesOrganizaciones.filter(
-					role => role.organizacionId == institution.id
-				)[0]
-				dispatch(handleChangeRole(role))
+				if (dropdown) {
+					const role = authObject.user.rolesOrganizaciones.filter(
+						role => role.organizacionId == institution.id
+					)[0]
+					dispatch(handleChangeRole(role))
+				}
+
+				// Periodos lectivos activos por institucion
+				const response = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ExpedienteCentroEducativo/Institucion/GetPeriodosLectivos/${institution.id}`
+				)
+
+				dispatch(setPeriodosLectivosDispatch(response.data))
+			} catch (e) {
+				return { data: { message: e.message, error: true } }
 			}
-
-			// Periodos lectivos activos por institucion
-			const response = await axios.get(
-				`${envVariables.BACKEND_URL}/api/ExpedienteCentroEducativo/Institucion/GetPeriodosLectivos/${institution.id}`
-			)
-
-			dispatch(setPeriodosLectivosDispatch(response.data))
-		} catch (e) {
-			return { data: { message: e.message, error: true } }
 		}
-	}
 
 export const updatePeriodosLectivos = institucionId => async dispatch => {
 	try {
@@ -234,6 +234,14 @@ export const getDirector = id => async dispatch => {
 	} catch (e) {
 		logoutCurrentUser()
 	}
+}
+
+
+export const desactivarServicioComunal = (id,history) => async dispatch => {
+	dispatch(loginUserLoading())
+
+	await axios.put(`${envVariables.BACKEND_URL}/api/ServicioComunal/DesactivarServicioComunal/${id}`)
+	history.push('/')
 }
 
 export const createPassword = (user, history) => async dispatch => {
@@ -343,11 +351,11 @@ export const loginUser = (user, history) => {
 		dispatch(loginUserLoading())
 
 		try {
+			console.log('_user', _user)
 			const loggedUser = await axios.post(`${envVariables.BACKEND_URL}/api/Authentication/login`, _user)
-
+			console.log('loggedUser', loggedUser)
 			dispatch(loginUserSuccess(loggedUser, history))
 			dispatch(getUserData(loggedUser.data.userId))
-
 			const globalAccess = loggedUser.data.rolesOrganizaciones.filter(rol => rol.nivelAccesoId === 4)
 			dispatch(handleChangeRole(globalAccess[0] ? globalAccess[0] : loggedUser.data.rolesOrganizaciones[0]))
 
@@ -373,6 +381,7 @@ export const loginUser = (user, history) => {
 			history.push('/app')
 			return { error: false }
 		} catch (e) {
+			console.log('e', e)
 			if (e.response) {
 				const _error = e.response.data.error
 				if (_error.includes('cambiar contraseña')) {
@@ -492,7 +501,7 @@ export const handleChangeRole = (organizationRole: AccessRole) => async dispatch
 		} else {
 			dispatch(setDefaultInstitution())
 		}
-	} catch (e) {}
+	} catch (e) { }
 }
 
 export const handleChangeInstitution = (organizationId: number) => async dispatch => {
@@ -507,7 +516,7 @@ export const handleChangeInstitution = (organizationId: number) => async dispatc
 			// location.reload()
 		}
 		dispatch(setUserInstitution(response.data))
-	} catch (e) {}
+	} catch (e) { }
 }
 
 export const getActiveYears = () => async dispatch => {
@@ -531,7 +540,7 @@ export const getActiveYears = () => async dispatch => {
 			type: 'SHOW_CENSO_MODAL',
 			payload: test
 		})
-	} catch (e) {}
+	} catch (e) { }
 }
 
 export const setSelectedActiveYear = element => async dispatch => {
