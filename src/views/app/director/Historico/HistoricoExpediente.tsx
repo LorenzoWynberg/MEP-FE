@@ -12,7 +12,7 @@ import {
 import withRouter from 'react-router-dom/withRouter'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import { IoEyeSharp } from 'react-icons/io5'
-import IconButton from '@mui/material/IconButton'
+import CancelIcon from '@mui/icons-material/Remove'
 import Tooltip from '@mui/material/Tooltip'
 import TouchAppIcon from '@material-ui/icons/TouchApp'
 import BuildIcon from '@mui/icons-material/Build'
@@ -67,6 +67,7 @@ const HistoricoExpediente = (props) => {
       )
       .then((data) => {
         console.log('data', data)
+        setData(data.options)
         setLoading(false)
       })
   }, [accessRole])
@@ -97,41 +98,35 @@ const HistoricoExpediente = (props) => {
     }
     return [
       {
-        Header: t('buscador_ce>buscador>columna_codigo', 'Código'),
-        column: 'codigo',
-        accessor: 'codigo',
+        Header: t('expediente_estudiantil>area_proyecto', 'Area de Proyecto'),
+        column: 'areaProyecto',
+        accessor: 'areaProyecto',
         label: ''
       },
       {
-        Header: t('buscador_ce>buscador>columna_codigo_presupuestario', 'Código Presupuestario'),
-        column: 'codigoPresupuestario',
-        accessor: 'codigoPresupuestario',
+        Header: t('expediente_estudiantil>nombre', 'Nombre'),
+        column: 'nombreProyecto',
+        accessor: 'nombreProyecto',
         label: ''
       },
       {
-        Header: t('buscador_ce>buscador>columna_nombre', 'Nombre'),
-        column: 'nombre',
-        accessor: 'nombre',
+        Header: t('expediente_estudiantil>modalidad', 'Modalidad'),
+        column: 'modalidadProyecto',
+        accessor: 'modalidadProyecto',
         label: ''
       },
       {
-        Header: t('buscador_ce>buscador>columna_tipo_ce', 'Tipo de centro educativo'),
-        column: 'tipoInstitucion',
-        accessor: 'tipoInstitucion',
+        Header: t('expediente_estudiantil>fecha_conclusion', 'Fecha de Conclusion'),
+        column: 'fechaConclusionSCE',
+        accessor: 'fechaConclusionSCE',
         label: ''
       },
       {
-        Header: t('buscador_ce>buscador>columna_ubicacion_administrativa', 'Ubicación administrativa'),
-        column: 'regional',
-        accessor: 'regional',
+        Header: t('expediente_estudiantil>organizacion', 'Organizacion Contraparte'),
+        column: 'organizacionContraparte',
+        accessor: 'organizacionContraparte',
         label: ''
-      },
-      {
-        Header: t('buscador_ce>buscador>columna_estado', 'Estado'),
-        column: 'estado',
-        accessor: 'estado',
-        label: ''
-      },
+      }, 
       {
         Header: t('buscador_ce>buscador>columna_acciones', 'Acciones'),
         column: '',
@@ -162,8 +157,8 @@ const HistoricoExpediente = (props) => {
                 />
               </Tooltip>
 
-              <Tooltip title={t('buscador_ce>buscador>columna_acciones>seleccionar', 'Seleccionar centro educativo')}>
-                <TouchAppIcon
+              <Tooltip title={t('expediente_estudiantil>eliminar', 'Eliminar centro educativo')}>
+                <CancelIcon
                   onClick={() => {
                     localStorage.setItem(
                       'selectedInstitution',
@@ -210,23 +205,7 @@ const HistoricoExpediente = (props) => {
       actions.cleanInstitutions()
     }
   }, [])
-
-  useEffect(() => {
-    if (!state.centros.entityList) return
-    const datos = state.centros.entityList.map((i) => {
-      return {
-        institucionId: i.institucionId,
-        nombre: i.institucionNombre,
-        codigo: i.institucionCodigo,
-        tipoInstitucion: i.tipoInstitucion,
-        regional: i.regionalNombre,
-        estado: i.estado,
-        codigoPresupuestario: i.codigoPresupuestario,
-      }
-    })
-    setData(datos)
-  }, [state.centros.entityList])
-
+ 
   const setInstitution = async (id) => {
     await actions.handleChangeInstitution(id)
     await actions.updatePeriodosLectivos(id)
@@ -239,7 +218,7 @@ const HistoricoExpediente = (props) => {
         <Container>
           <Row>
             <Col xs={12}>
-              <h3>{t('buscador_ce>buscador', 'Buscador de Centros Educativos')}</h3>
+              <h3>{t('expediente_ce>titulo', 'Expediente Centro Educativo')}</h3>
             </Col>
             <Col xs={12}>
               <div

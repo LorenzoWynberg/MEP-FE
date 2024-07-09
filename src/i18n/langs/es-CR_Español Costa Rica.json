@@ -1837,6 +1837,13 @@
   "expediente_ce>recurso_humano>integra>propiamente_docentes>columna_nombre": "Nombre completo",
   "expediente_ce>titulo": "Expediente Centro educativo",
   "expediente_estudiantil>titulo": "Expediente Estudiantil",
+  "expediente_estudiantil>area_proyecto": "Area de Proyecto",
+  "expediente_estudiantil>nombre": "Nombre",
+  "expediente_estudiantil>modalidad": "Modalidad",
+  "expediente_estudiantil>eliminar": "Eliminar",
+  "expediente_estudiantil>fecha_conclusion": "Fecha de Conclusion",
+  "expediente_estudiantil>organizacion": "Organizacion Contraparte",
+  
   "formulario>enviar_formulario>adjuntar_archivo": "Adjuntar archivo",
   "formulario>enviar_formulario>archivo_adjuntado_correctamente": "Archivo adjuntado correctamente",
   "formulario>enviar_formulario>asunto": "Asunto",
