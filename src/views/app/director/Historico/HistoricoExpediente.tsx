@@ -10,6 +10,7 @@ import {
   GetServicioComunalByInstitucionId
 } from '../../../../redux/configuracion/actions'
 import withRouter from 'react-router-dom/withRouter'
+
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import { IoEyeSharp } from 'react-icons/io5'
 import CancelIcon from '@mui/icons-material/Remove'
@@ -21,7 +22,7 @@ import {
   updatePeriodosLectivos
 } from '../../../../redux/auth/actions'
 import BarLoader from 'Components/barLoader/barLoader'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useNavigate } from 'react-router-dom'
 import { CustomInput } from 'Components/CommonComponents'
 import colors from 'assets/js/colors'
 import { useTranslation } from 'react-i18next'
@@ -36,6 +37,7 @@ const HistoricoExpediente = (props) => {
   const { t } = useTranslation()
   const history = useHistory()
 
+  const navigate = useNavigate();
   const {
     hasAddAccess = true,
     hasEditAccess = true,
@@ -126,7 +128,7 @@ const HistoricoExpediente = (props) => {
         column: 'organizacionContraparte',
         accessor: 'organizacionContraparte',
         label: ''
-      }, 
+      },
       {
         Header: t('buscador_ce>buscador>columna_acciones', 'Acciones'),
         column: '',
@@ -205,7 +207,7 @@ const HistoricoExpediente = (props) => {
       actions.cleanInstitutions()
     }
   }, [])
- 
+
   const setInstitution = async (id) => {
     await actions.handleChangeInstitution(id)
     await actions.updatePeriodosLectivos(id)
@@ -240,6 +242,8 @@ const HistoricoExpediente = (props) => {
             <Col xs={12}>
               <TableReactImplementation
                 data={data}
+                showAddButton
+                onSubmitAddButton={() => { navigate('/director/expediente/servicio-comunal/registro') }}
                 handleGetData={async (
                   searchValue,
                   _,
