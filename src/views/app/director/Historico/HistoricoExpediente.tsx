@@ -22,7 +22,7 @@ import {
   updatePeriodosLectivos
 } from '../../../../redux/auth/actions'
 import BarLoader from 'Components/barLoader/barLoader'
-import { useHistory, useNavigate } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { CustomInput } from 'Components/CommonComponents'
 import colors from 'assets/js/colors'
 import { useTranslation } from 'react-i18next'
@@ -37,7 +37,6 @@ const HistoricoExpediente = (props) => {
   const { t } = useTranslation()
   const history = useHistory()
 
-  const navigate = useNavigate();
   const {
     hasAddAccess = true,
     hasEditAccess = true,
@@ -243,7 +242,7 @@ const HistoricoExpediente = (props) => {
               <TableReactImplementation
                 data={data}
                 showAddButton
-                onSubmitAddButton={() => { navigate('/director/expediente/servicio-comunal/registro') }}
+                onSubmitAddButton={() => { props.history.push('/director/expediente/servicio-comunal/registro') }}
                 handleGetData={async (
                   searchValue,
                   _,
