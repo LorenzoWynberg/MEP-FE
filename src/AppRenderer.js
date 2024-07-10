@@ -28,17 +28,17 @@ axios.interceptors.request.use((config) => {
   }
   !config.headers.common && (config.headers.common = {})
   axios.defaults.headers.common['Authorization']  =  `Bearer ${token}`;
-  config.headers.common['Accept-Language'] = `${localStorage.getItem('locale') || envVariables.DEFAULT_LOCALE
+  axios.defaults.headers.common['Accept-Language'] = `${localStorage.getItem('locale') || envVariables.DEFAULT_LOCALE
     }`
 
-  config.headers.common['organizacion-seleccionada'] =
+    axios.defaults.headers.common['organizacion-seleccionada'] =
     currentRoleOrganizacion.accessRole.organizacionId || currentInstitution?.id
-  config.headers.common['rol-seleccionado'] =
+    axios.defaults.headers.common['rol-seleccionado'] =
     currentRoleOrganizacion.accessRole.rolId
-  config.headers.common['nivel-acceso'] =
+    axios.defaults.headers.common['nivel-acceso'] =
     currentRoleOrganizacion.accessRole.nivelAccesoId
-  config.headers.common['anio-seleccionado'] = activeYearId
-  config.headers.common['anio-seleccionado-esActivo'] = esActivoYear
+    axios.defaults.headers.common['anio-seleccionado'] = activeYearId
+    axios.defaults.headers.common['anio-seleccionado-esActivo'] = esActivoYear
 
   return config
 })
