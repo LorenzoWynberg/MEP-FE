@@ -23,169 +23,133 @@ type IState = {
 	expedienteCentro: any
 }
 
+export const ServicioComunal: React.FC<IProps> = props => {
+	const { t } = useTranslation()
+	const [locationForm, setLocationForm] = React.useState({})
+	const [data, setData] = React.useState([])
+	const [total, setTotal] = React.useState([])
+	const [currentExtentions, setCurrentExtentions] = React.useState()
+	const [search, setSearch] = React.useState(null)
+	const [showMap, setShowMap] = React.useState(false)
+	const [institutionImage, setInstitutionImage] = React.useState(null)
+	const [loading, setLoading] = React.useState<boolean>(false)
+	// const actions = useActions({
 
-export const ServicioComunal: React.FC<IProps> = (props) => {
-  const { t } = useTranslation()
-  const [locationForm, setLocationForm] = React.useState({})
-  const [data, setData] = React.useState([])
-  const [total, setTotal] = React.useState([])
-  const [currentExtentions, setCurrentExtentions] = React.useState()
-  const [search, setSearch] = React.useState(null)
-  const [showMap, setShowMap] = React.useState(false)
-  const [institutionImage, setInstitutionImage] = React.useState(null)
-  const [loading, setLoading] = React.useState<boolean>(false)
-  // const actions = useActions({
-  
-  // })
+	// })
 
-  return (
-    <AppLayout items={directorItems}>
-      {loading && <BarLoader />}
-      <NavigationContainer
-        goBack={() => {
-				  props.history.push('/director/buscador/centro')
-        }}
-      />
-      <Wrapper>
-        <Title>
-          {t(
-					  'buscador_ce>ver_centro',
-					  'Servicio Comunal'
-          )}
-        </Title>
-        <Row>
-          <Col sm={12}>
-          <Card className='bg-white__radius'>
-        <CardTitle>
-          {t(
-					  'buscador_ce>ver_centro>centro_educativo',
-					  'Servicio Comunal'
-          )}
-        </CardTitle>
-        <Form>
-          <FormGroup>
-            <Label>
-              {t(
-							  'buscador_ce>ver_centro>centro_educativo>nombre',
-							  'Nombre oficial'
-              )}
-            </Label>
-            <Input
-              name='i'
-              value={ ''}
-              readOnly
-            />
-          </FormGroup>
-          <Row>
-            <Col
-              md={5}
-              className='d-flex align-items-center justify-content-center'
-            >
-              <Avatar
-                src={
-									institutionImage ||
-									'/assets/img/centro-educativo.png'
-								}
-                alt='Profile picture'
-              />
-            </Col>
-            <Col md={7}>
-              <FormGroup>
-                <Label>
-                  {t(
-									  'buscador_ce>ver_centro>centro_educativo>codigo',
-									  'Código'
-                  )}
-                </Label>
-                <Input
-                  name='codigo'
-                  value={
-										 ''
-									}
-                  readOnly
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>
-                  {t(
-									  'buscador_ce>ver_centro>centro_educativo>tipo_institucion',
-									  'Tipo de institución'
-                  )}
-                </Label>
-                <Input
-                  name='tipo_centro'
-                  value={''}
-                  readOnly
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>
-                  {t(
-									  'buscador_ce>ver_centro>centro_educativo>estado_centro',
-									  'Estado del centro educativo'
-                  )}
-                </Label>
-                <Input
-                  name='estado_centro'
-                  value={
-										 ''
-									}
-                  readOnly
-                />
-              </FormGroup>
-            </Col>
-          </Row>
-          <FormGroup>
-            <Label>
-              {t(
-							  'buscador_ce>ver_centro>centro_educativo>conocido_como',
-							  'Conocido como'
-              )}
-            </Label>
-            <Input
-              name='conocidoComo'
-              value={ ''}
-              autoComplete='off'
-              readOnly
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label>
-              {t(
-							  'buscador_ce>ver_centro>centro_educativo>fecha_fundacion',
-							  'Fecha de fundación'
-              )}
-            </Label>
-            <Input
-              name='fundacion'
-              autoComplete='off'
-              value={''}
-              readOnly
-              style={{ width: '30%' }}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label>
-              {t(
-							  'buscador_ce>ver_centro>centro_educativo>categorias',
-							  'Categorías vinculadas a la institución'
-              )}
-            </Label>
-            <StyledMultiSelect
-              options={[]}
-              selectedOptions={[]}
-              editable={false}
-            />
-          </FormGroup>
-        </Form>
-      </Card>
-          </Col>
-        
-          
-        </Row>
-      </Wrapper>
-    </AppLayout>
-  )
+	return (
+		<AppLayout items={directorItems}>
+			{loading && <BarLoader />}
+			<NavigationContainer
+				goBack={() => {
+					props.history.push('/director/buscador/centro')
+				}}
+			/>
+			<Wrapper>
+				<Title>{t('servicio_comunal_title', 'Servicio Comunal')}</Title>
+				<Row>
+					<Col sm={12}>
+						<Card className='bg-white__radius'>
+							<CardTitle>{t('registro_servicio_comunal', 'Registro Servicio Comunal')}</CardTitle>
+
+							<Form>
+								<Row>
+									<Col md={3}>
+										<FormGroup>
+											<Label>
+												{t('registro_servicio_comunal>area_proyecto', 'Area de proyecto')}
+											</Label>
+											<Input name='i' value={''} readOnly />
+										</FormGroup>
+									</Col>
+									<Col md={6}>
+										<FormGroup>
+											<Label>{t('registro_servicio_comunal>objetivonombre', 'objetivo')}</Label>
+											<Input name='codigo' value={''} readOnly />
+										</FormGroup>
+									</Col>
+									<Col sm={3}>
+										<FormGroup>
+											<Label>{t('registro_servicio_comunal>modalidad', 'Modalidad')}</Label>
+											<Input name='tipo_centro' value={''} readOnly />
+										</FormGroup>
+									</Col>
+								</Row>
+								<Row>
+									<Col sm={3}>
+										<FormGroup>
+											<Label>
+												{t('registro_servicio_comunal>caracteristicas', 'Caracteristicas')}
+											</Label>
+											<Input name='estado_centro' value={''} readOnly />
+										</FormGroup>
+									</Col>
+									<Col sm={3}>
+										{' '}
+										<FormGroup disabled>
+											<Label>
+												{t(
+													'registro_servicio_comunal>quien_registra',
+													'Quién registra y fecha de registros'
+												)}
+											</Label>
+											<Input name='conocidoComo' value={''} autoComplete='off' readOnly />
+										</FormGroup>
+									</Col>
+									<Col sm={3}>
+										<FormGroup>
+											<Label>
+												{t(
+													'registro_servicio_comunal>organizacion_contraparte',
+													'Tipo de organización contraparte'
+												)}
+											</Label>
+											<Input name='fundacion' autoComplete='off' value={''} readOnly />
+										</FormGroup>
+									</Col>
+									<Col sm={3}>
+										<FormGroup>
+											<Label>
+												{t(
+													'registro_servicio_comunal>docente_acompaña',
+													'Docente que acompaña el proyecto'
+												)}
+											</Label>
+											<Input
+												name='fundacion'
+												autoComplete='off'
+												value={''}
+												readOnly 
+                        
+											/>
+										</FormGroup>
+									</Col>
+								</Row>
+								<Row></Row>
+
+								<FormGroup>
+									<Label>
+										{t('registro_servicio_comunal>fecha_conclusion', 'Fecha de conclusión SCE')}
+									</Label>
+									<Input
+										name='fundacion'
+										autoComplete='off'
+										value={''}
+										readOnly
+										style={{ width: '30%' }}
+									/>
+								</FormGroup>
+								<FormGroup>
+									<Label>{t('registro_servicio_comunal>descripcion', 'Descripción')}</Label>
+									<StyledMultiSelect options={[]} selectedOptions={[]} editable={false} />
+								</FormGroup>
+							</Form>
+						</Card>
+					</Col>
+				</Row>
+			</Wrapper>
+		</AppLayout>
+	)
 }
 
 const Wrapper = styled.div``
