@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next'
 import Tooltip from '@mui/material/Tooltip'
 import { IoEyeSharp } from 'react-icons/io5'
 import BarLoader from 'Components/barLoader/barLoader'
-import TableStudents from '../MatricularEstudiantes/registro/new/tableStudents'
+import TableStudents from '../MatricularEstudiantes/registro/new/comunalTabla'
 
 type IProps = {}
 
