@@ -18,6 +18,8 @@ import { IoEyeSharp } from 'react-icons/io5'
 import BarLoader from 'Components/barLoader/barLoader'
 import TableStudents from '../MatricularEstudiantes/registro/new/comunalTabla'
 import SimpleModal from 'Components/Modal/simple'
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 type IProps = {}
 
@@ -80,7 +82,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					<Col sm={12}>
 						<Card className='bg-white__radius'>
 							<CardTitle>{t('registro_servicio_comunal', 'Registro Servicio Comunal')}</CardTitle>
-							``
+							
 							<Form>
 								<Row>
 									<Col md={3}>
@@ -117,15 +119,10 @@ export const ServicioComunal: React.FC<IProps> = props => {
 										{' '}
 										<FormGroup>
 											<Label>
+										
 												{t('registro_servicio_comunal>fecha_conclusion', 'Fecha de conclusión SCE')}
 											</Label>
-											<Input
-												name='fundacion'
-												autoComplete='off'
-												value={''}
-												readOnly
-
-											/>
+											<DatePicker label="servicio comunal date picker" />
 										</FormGroup>
 									</Col>
 									<Col sm={3}>
@@ -169,6 +166,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 						<TableStudents
 							onlyViewModule={false}
 							data={[]}
+
 							hasEditAccess={true}
 							onSelectedStudent={() => { }}
 							closeContextualMenu={false} ></TableStudents>
