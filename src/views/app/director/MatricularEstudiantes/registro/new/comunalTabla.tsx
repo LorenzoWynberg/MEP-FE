@@ -88,7 +88,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 			},
             {
 				Header: t(
-					'columnaTable>Registro_Servicio_Comunal>genero',
+					'servicio_comunal>registro_servicio_comunal>genero',
 					'Genero'
 				),
 				accessor: 'genero',
@@ -106,7 +106,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 			},
 			{
 				Header: t(
-					'columnaTable>Registro_Servicio_Comunal>edad',
+					'servicio_comunal>registro_servicio_comunal>edad',
 					'Edad'
 				),
 				accessor: 'edad',
@@ -116,7 +116,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 		
 			{
 				Header: t(
-					'columnaTable>Registro_Servicio_Comunal>discapacidad',
+					'servicio_comunal>registro_servicio_comunal>discapacidad',
 					'Discapacidad'
 				),
 				accessor: 'condicion',
@@ -141,7 +141,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 			},
 			{
 				Header: t(
-					'columnaTable>Registro_Servicio_Comunal>ofertas',
+					'servicio_comunal>registro_servicio_comunal>ofertas',
 					'Ofertas'
 				),
 				column: '',
