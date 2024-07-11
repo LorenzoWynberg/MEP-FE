@@ -17,58 +17,103 @@ import Tooltip from '@mui/material/Tooltip'
 import { IoEyeSharp } from 'react-icons/io5'
 import BarLoader from 'Components/barLoader/barLoader'
 import TableStudents from '../MatricularEstudiantes/registro/new/comunalTabla'
+import ModalRadio from './ModalRadio'
 import SimpleModal from 'Components/Modal/simple'
 
-type IProps = {}
+// const ModalRadio = (props) => {
+// 	console.log('props', props)
+// 	const [value, setValue] = React.useState(props.coleccion[0].id);
+// 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+// 		console.log('(event.target as HTMLInputElement).value', (event.target as HTMLInputElement).value)
+// 		setValue((event.target as HTMLInputElement).value);
+// 	  };
 
-type IState = {
-	expedienteCentro: any
-}
+
+// 	return <SimpleModal title="Areas Proyecto" openDialog={props.value} onConfirm={() => { props.setValueParent(false) }} onClose={() => props.setValueParent(false)}>
+// 		<FormControl>
+// 			<FormLabel id="demo-radio-buttons-group-label">{props.title}</FormLabel>
+// 			<RadioGroup
+// 				aria-labelledby="demo-radio-buttons-group-label"
+// 				name="radio-buttons-group"
+// 				value={value}
+// 				onChange={handleChange}
+// 			>
+// 			{props.coleccion.map(item => <Row><Col><FormControlLabel value={props.id} control={<Radio />} label={item.nombre} /></Col><Col>{item.descripcion}</Col></Row>)}
+// 		</RadioGroup>
+// 	</FormControl>
+// 	</SimpleModal >
+// }
+
 
 export const ServicioComunal: React.FC<IProps> = props => {
 	const { t } = useTranslation()
 	const [catalogos, setCatalogos] = React.useState([])
 	const [areaProyecto, setData] = React.useState([])
 	const [showAreaProyecto, setShowAreaProyecto] = React.useState(false)
+	const [showNombre, setShowNombre] = React.useState(false)
 	const [objetivoNombre, setObjetivoNombre] = React.useState([])
 	const [areasProyectoId, setAreasProyectoId] = React.useState()
 	const [currentExtentions, setCurrentExtentions] = React.useState()
-	const [search, setSearch] = React.useState(null)
+	const [nombresSeleccionados, setNombresSeleccionados] = React.useState([])
 	const [showMap, setShowMap] = React.useState(false)
 	const [institutionImage, setInstitutionImage] = React.useState(null)
 	const [loading, setLoading] = React.useState<boolean>(false)
+	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id);
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		console.log('(event.target as HTMLInputElement).value', (event.target as HTMLInputElement).value)
+		setValue((event.target as HTMLInputElement).value);
+	};
 
 
 	useEffect(() => {
-		ObtenerInfoCatalogos(
-
-
-		).then((respone) => {
+		ObtenerInfoCatalogos().then((respone) => {
 			setCatalogos(respone)
 		})
 	}, [])
-
 	return (
 		<AppLayout items={directorItems}>
 
+			{console.log('catalogos.areasProyecto', catalogos.areasProyecto)}
 			{loading && <BarLoader />}
-
 			{catalogos && console.log('catalogos', catalogos)}
-			{showAreaProyecto && catalogos &&
+			{/* {showAreaProyecto && catalogos.areasProyecto &&
+				<ModalRadio title="Area Proyecto" setValue={setShowAreaProyecto} value={showAreaProyecto} coleccion={catalogos.areasProyecto} />} */}
+			{showAreaProyecto && catalogos.areasProyecto &&
 				<SimpleModal title="Areas Proyecto" openDialog={showAreaProyecto} onConfirm={() => { setShowAreaProyecto(false) }} onClose={() => setShowAreaProyecto(false)}>
 					<FormControl>
 						<FormLabel id="demo-radio-buttons-group-label">Area Proyecto</FormLabel>
 						<RadioGroup
 							aria-labelledby="demo-radio-buttons-group-label"
-							defaultValue="female"
 							name="radio-buttons-group"
+							value={value}
 						>
-							{catalogos.areasProyecto.map((item, index) => <Row><Col><FormControlLabel value={areasProyectoId} control={<Radio />} label={item.nombre} /></Col><Col>{item.descripcion}</Col></Row>)}
-
+							{catalogos.areasProyecto.map(item => <FormControlLabel value={item.id} onClick={(e, v) => { e.persist(); setValue(e.target.value) }} checked={value == item.id} control={<Radio />} label={item.nombre} />)}
 						</RadioGroup>
 					</FormControl>
+				</SimpleModal >}
+			{value}
+			{showNombre && catalogos.nombresProyecto &&
+				<SimpleModal title="Areas Proyecto" openDialog={showNombre} onConfirm={() => { setShowNombre(false) }} onClose={() => setShowNombre(false)}>
+					<FormControl>
+						<FormLabel id="demo-radio-buttons-group-label">Nombre Proyecto</FormLabel>
+						{console.log('nombresSeleccionados', nombresSeleccionados)}
+						{catalogos.nombresProyecto.filter(item => parseInt(item.codigo) == parseInt(value)).map(item =>
+							<FormControlLabel control={<Checkbox
 
-				</SimpleModal>}
+
+								checked={nombresSeleccionados.includes(item.id)}
+								onChange={(e, v) => {
+									console.log('ev,[e,v]', [e, v])
+									let nombres = nombresSeleccionados; if (nombres.includes(item.id)) { nombres = nombres.filter(x => x != item.id) } else { nombres.push(item.id) } setNombresSeleccionados(nombres);
+								}}
+							/>}
+
+								label={item.nombre} />
+						)}
+
+
+					</FormControl>
+				</SimpleModal >}
 			<NavigationContainer
 				goBack={() => {
 					props.history.push('/director/buscador/centro')
@@ -94,7 +139,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 									<Col md={6}>
 										<FormGroup>
 											<Label>{t('registro_servicio_comunal>objetivonombre', 'objetivo')}</Label>
-											<Input name='codigo' value={objetivoNombre ? '' : objetivoNombre} readOnly />
+											<Input name='codigo' value={objetivoNombre ? '' : objetivoNombre} readOnly onClick={() => !showNombre && setShowNombre(true)} />
 										</FormGroup>
 									</Col>
 									<Col sm={3}>
