@@ -86,6 +86,15 @@ const ComunalTabla: React.FC<IProps> = props => {
 				label: '',
 				column: ''
 			},
+            {
+				Header: t(
+					'columnaTable>Registro_Servicio_Comunal>genero',
+					'Genero'
+				),
+				accessor: 'genero',
+				label: '',
+				column: ''
+			},
 			{
 				Header: t(
 					'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados>colum_fecha_nacimi',
@@ -97,26 +106,18 @@ const ComunalTabla: React.FC<IProps> = props => {
 			},
 			{
 				Header: t(
-					'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados>colum_edad',
-					'Edad cumplida'
+					'columnaTable>Registro_Servicio_Comunal>edad',
+					'Edad'
 				),
 				accessor: 'edad',
 				label: '',
 				column: ''
 			},
+		
 			{
 				Header: t(
-					'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados>colum_identi_genero',
-					'Identidad de género'
-				),
-				accessor: 'genero',
-				label: '',
-				column: ''
-			},
-			{
-				Header: t(
-					'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados>colum_condicion',
-					'Condición'
+					'columnaTable>Registro_Servicio_Comunal>discapacidad',
+					'Discapacidad'
 				),
 				accessor: 'condicion',
 				label: '',
@@ -140,8 +141,8 @@ const ComunalTabla: React.FC<IProps> = props => {
 			},
 			{
 				Header: t(
-					'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados>colum_acciones',
-					'Acciones'
+					'columnaTable>Registro_Servicio_Comunal>ofertas',
+					'Ofertas'
 				),
 				column: '',
 				accessor: '',
