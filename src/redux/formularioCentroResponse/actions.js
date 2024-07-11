@@ -49,7 +49,15 @@ export const UpdateFormResponse = async (data) => {
 // Obtiene resultados de formulario
 export const GetFormResponseById = async (id) => {
   const response = await axios.get(
-        `${formCentroUrl}GetById/${id}`
+    `${formCentroUrl}GetById/${id}`
+  )
+
+  return response.data
+}
+
+export const ObtenerInfoCatalogos = async () => {
+  const response = await axios.get(
+    `${envVariables.BACKEND_URL}/api/ServicioComunal/ObtenerInfoCatalogos`
   )
 
   return response.data
@@ -58,7 +66,7 @@ export const GetFormResponseById = async (id) => {
 // Obtiene el resultado de un determinado form e insittucion {para forms con respuesta unica}
 export const GetResponseByInstitutionAndFormName = async (institutionId, formName, first = true) => {
   const response = await axios.get(
-        `${formCentroUrl}GetAllByInstitucionAndFormName/${institutionId}/${formName}`
+    `${formCentroUrl}GetAllByInstitucionAndFormName/${institutionId}/${formName}`
   )
 
   if (first) {
@@ -71,7 +79,7 @@ export const GetResponseByInstitutionAndFormName = async (institutionId, formNam
 export const GetResponseByInstitutionAndFormNameUsingRedux = (institutionId, formName, reducerAction, first = true) => async (dispatch) => {
   try {
     const response = await axios.get(
-            `${formCentroUrl}GetAllByInstitucionAndFormName/${institutionId}/${formName}`
+      `${formCentroUrl}GetAllByInstitucionAndFormName/${institutionId}/${formName}`
     )
 
     if (first) {
@@ -89,7 +97,7 @@ export const GetResponseByInstitutionAndFormNameUsingRedux = (institutionId, for
 
 export const getlocationElementById = async (type, id) => {
   const response = await axios.get(
-        `${envVariables.BACKEND_URL}/api/${type}/GetById/${id}`
+    `${envVariables.BACKEND_URL}/api/${type}/GetById/${id}`
   )
   return response.data || {}
 }
@@ -97,7 +105,7 @@ export const getlocationElementById = async (type, id) => {
 // Obtiene todos los resultados de un determinado form e insittucion {para tabla}
 export const GetFormResponsesByInstitutionAndFormName = async (institutionId, formName) => {
   const response = await axios.get(
-        `${formCentroUrl}GetAllByInstitucionAndFormName/${institutionId}/${formName}`
+    `${formCentroUrl}GetAllByInstitucionAndFormName/${institutionId}/${formName}`
   )
 
   return response.data
@@ -116,7 +124,7 @@ export const DeleteFormResponses = async (ids) => {
 // Lista de las soluciones paginadas
 export const GetFormResponsesByInstitutionAndFormNamePaginated = async (institutionId, formName, page = 1, itemsByPage = 10) => {
   const response = await axios.get(
-        `${formCentroUrl}paginated/${institutionId}/${formName}/${page}/${itemsByPage}`
+    `${formCentroUrl}paginated/${institutionId}/${formName}/${page}/${itemsByPage}`
   )
 
   return response.data

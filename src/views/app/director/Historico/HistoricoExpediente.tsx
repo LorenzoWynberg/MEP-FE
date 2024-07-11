@@ -63,7 +63,7 @@ const HistoricoExpediente = (props) => {
     }
   })
 
-  useEffect(() => {
+  useEffect(() => { 
     setLoading(true)
     actions
       .GetServicioComunalByInstitucionId(
@@ -219,7 +219,7 @@ const HistoricoExpediente = (props) => {
         {console.log('expediente', expediente)}
         {expediente && <SimpleModal title="Eliminar Registro" onClose={() => setExpediente(null)}
           onConfirm={() => {
-            actions.desactivarServicioComunal(expediente.id)
+            actions.desactivarServicioComunal(expediente.id,history)
             setExpediente(null)
           }}
           openDialog={expediente}>Está seguro que desea eliminar este registro de Servicio Comunal Estudiantil?</SimpleModal>}

@@ -8,7 +8,7 @@ import withRouter from 'react-router-dom/withRouter'
 import Grid from '@material-ui/core/Grid'
 import { Checkbox } from '@material-ui/core'
 import StyledMultiSelect from '../../../../components/styles/StyledMultiSelect'
-import { GetResponseByInstitutionAndFormName } from '../../../../redux/formularioCentroResponse/actions'
+import { ObtenerInfoCatalogos } from '../../../../redux/formularioCentroResponse/actions'
 import NavigationContainer from '../../../../components/NavigationContainer'
 import axios from 'axios'
 import { envVariables } from 'Constants/enviroment'
@@ -17,6 +17,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { IoEyeSharp } from 'react-icons/io5'
 import BarLoader from 'Components/barLoader/barLoader'
 import TableStudents from '../MatricularEstudiantes/registro/new/comunalTabla'
+import SimpleModal from 'Components/Modal/simple'
 
 type IProps = {}
 
@@ -28,6 +29,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 	const { t } = useTranslation()
 	const [locationForm, setLocationForm] = React.useState({})
 	const [areaProyecto, setData] = React.useState([])
+	const [showAreaProyecto, setShowAreaProyecto] = React.useState(false)
 	const [objetivoNombre, setObjetivoNombre] = React.useState([])
 	const [total, setTotal] = React.useState([])
 	const [currentExtentions, setCurrentExtentions] = React.useState()
@@ -35,14 +37,27 @@ export const ServicioComunal: React.FC<IProps> = props => {
 	const [showMap, setShowMap] = React.useState(false)
 	const [institutionImage, setInstitutionImage] = React.useState(null)
 	const [loading, setLoading] = React.useState<boolean>(false)
- 
-	// const actions = useActions({
 
-	// })
+
+	useEffect(() => {
+		ObtenerInfoCatalogos(
+
+
+		).then((respone) => {
+			console.log('respone', respone)
+
+
+		})
+	}, [])
 
 	return (
 		<AppLayout items={directorItems}>
+
 			{loading && <BarLoader />}
+			{showAreaProyecto &&
+				<SimpleModal openDialog={showAreaProyecto} onConfirm={() => { setShowAreaProyecto(false) }} onClose={() => setShowAreaProyecto(false)}>
+
+				</SimpleModal>}
 			<NavigationContainer
 				goBack={() => {
 					props.history.push('/director/buscador/centro')
@@ -62,7 +77,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 											<Label>
 												{t('registro_servicio_comunal>area_proyecto', 'Area de proyecto')}
 											</Label>
-											<Input name='i' value={areaProyecto ? '' : areaProyecto} readOnly />
+											<Input name='i' value={areaProyecto ? '' : areaProyecto} readOnly onClick={() => !showAreaProyecto && setShowAreaProyecto(true)} />
 										</FormGroup>
 									</Col>
 									<Col md={6}>
@@ -90,17 +105,17 @@ export const ServicioComunal: React.FC<IProps> = props => {
 									<Col sm={3}>
 										{' '}
 										<FormGroup>
-									<Label>
-										{t('registro_servicio_comunal>fecha_conclusion', 'Fecha de conclusión SCE')}
-									</Label>
-									<Input
-										name='fundacion'
-										autoComplete='off'
-										value={''}
-										readOnly
-									
-									/>
-								</FormGroup>
+											<Label>
+												{t('registro_servicio_comunal>fecha_conclusion', 'Fecha de conclusión SCE')}
+											</Label>
+											<Input
+												name='fundacion'
+												autoComplete='off'
+												value={''}
+												readOnly
+
+											/>
+										</FormGroup>
 									</Col>
 									<Col sm={3}>
 										<FormGroup>
@@ -127,7 +142,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 								</Row>
 								<Row></Row>
 
-								
+
 								<FormGroup>
 									<Label>{t('registro_servicio_comunal>descripcion', 'Descripción')}</Label>
 									<StyledMultiSelect options={[]} selectedOptions={[]} editable={false} />
@@ -138,15 +153,15 @@ export const ServicioComunal: React.FC<IProps> = props => {
 				</Row>
 
 				<Row>
-					<Col sm = {12}>
-			
-					<TableStudents
-					onlyViewModule={false}
-					data={[]}
-					hasEditAccess={true}
-					onSelectedStudent={()=>{}}
-					closeContextualMenu={false} ></TableStudents>
-				
+					<Col sm={12}>
+
+						<TableStudents
+							onlyViewModule={false}
+							data={[]}
+							hasEditAccess={true}
+							onSelectedStudent={() => { }}
+							closeContextualMenu={false} ></TableStudents>
+
 					</Col>
 				</Row>
 			</Wrapper>
