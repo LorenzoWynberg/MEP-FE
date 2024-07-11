@@ -122,7 +122,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 										
 												{t('registro_servicio_comunal>fecha_conclusion', 'Fecha de conclusión SCE')}
 											</Label>
-											<DatePicker label="servicio comunal date picker" />
+											<DatePicker class="sc-BeQoi llwjVx form-control" style={{color:"#e9ecef"}} label="servicio comunal date picker" />
 										</FormGroup>
 									</Col>
 									<Col sm={3}>

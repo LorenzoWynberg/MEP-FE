@@ -22,7 +22,7 @@ import swal from 'sweetalert'
 import { useTranslation } from 'react-i18next'
 import { useHistory } from 'react-router'
 
-const BuscadorServicioComunal = (props) => {
+const BuscadorPersonasServicioComunal = (props) => {
   const [t] = useTranslation()
   const [fallecidos, setFallecidos] = useState<boolean>(false)
   const [data, setData] = useState<object[]>([])
@@ -229,4 +229,4 @@ const BuscadorServicioComunal = (props) => {
   )
 }
 
-export default withRouter(BuscadorServicioComunal)
+export default withRouter(BuscadorPersonasServicioComunal)
