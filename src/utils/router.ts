@@ -56,7 +56,7 @@ const Identidad = React.lazy(() => import('../views/app/configuracion/Identidad/
 
 const Groups = React.lazy(() => import('../views/app/director/Grupos/main'))
 
-const ServicioComunal = React.lazy(() => import('../views/app/director/ServicioComunal/ServicioComunal'))
+const ServicioComunal = React.lazy(() => import('../views/app/director/Historico/ServicioComunal'))
 
 const GestorUsuarios = React.lazy(() => import('../views/app/director/GestorUsuarios/GestorUsuarios'))
 const GestorRoles = React.lazy(() => import('../views/app/director/GestorUsuarios/Roles/index'))

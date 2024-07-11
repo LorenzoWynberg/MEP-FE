@@ -2630,7 +2630,7 @@
   "registro_servicio_comunal>caracteristicas":"Caracteristicas",
   "registro_servicio_comunal>quien_registra": "Quién registra y fecha de registros",
   "registro_servicio_comunal>organizacion_contraparte": "Tipo de organización contraparte",
-  "registro_servicio_comunal>docente_acompaña": "Docente que acompaña el proyecto",
+  "registro_servicio_comunal>acompañante_proyecto": "Acompañante de proyecto",
   "registro_servicio_comunal>descripcion": "Descripción",
   "registro_servicio_comunal>fecha_conclusion":"Fecha de conclusión",
 

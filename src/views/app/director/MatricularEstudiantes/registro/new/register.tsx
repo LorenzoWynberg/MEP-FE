@@ -530,6 +530,7 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 					hasAddAccess={hasAddAccess}
 					onMatricular={onMatricular}
 				/>
+				{console.log('test',[onlyViewModule, estudiantes, hasEditAccess, onSelectedStudent, verEstudianteModal])}
 				<TableStudents
 					onlyViewModule={onlyViewModule}
 					data={estudiantes}
