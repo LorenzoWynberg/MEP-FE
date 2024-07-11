@@ -6,7 +6,7 @@ import { Row, Col, ModalBody, ModalHeader, Modal, Input as ReactstrapInput } fro
 import colors from '../../../../assets/js/colors'
 import withRouter from 'react-router-dom/withRouter'
 import Grid from '@material-ui/core/Grid'
-import { Checkbox } from '@material-ui/core'
+import { Checkbox, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core'
 import StyledMultiSelect from '../../../../components/styles/StyledMultiSelect'
 import { ObtenerInfoCatalogos } from '../../../../redux/formularioCentroResponse/actions'
 import NavigationContainer from '../../../../components/NavigationContainer'
@@ -27,11 +27,11 @@ type IState = {
 
 export const ServicioComunal: React.FC<IProps> = props => {
 	const { t } = useTranslation()
-	const [locationForm, setLocationForm] = React.useState({})
+	const [catalogos, setCatalogos] = React.useState([])
 	const [areaProyecto, setData] = React.useState([])
 	const [showAreaProyecto, setShowAreaProyecto] = React.useState(false)
 	const [objetivoNombre, setObjetivoNombre] = React.useState([])
-	const [total, setTotal] = React.useState([])
+	const [areasProyectoId, setAreasProyectoId] = React.useState()
 	const [currentExtentions, setCurrentExtentions] = React.useState()
 	const [search, setSearch] = React.useState(null)
 	const [showMap, setShowMap] = React.useState(false)
@@ -44,9 +44,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 
 
 		).then((respone) => {
-			console.log('respone', respone)
-
-
+			setCatalogos(respone)
 		})
 	}, [])
 
@@ -54,8 +52,21 @@ export const ServicioComunal: React.FC<IProps> = props => {
 		<AppLayout items={directorItems}>
 
 			{loading && <BarLoader />}
-			{showAreaProyecto &&
-				<SimpleModal openDialog={showAreaProyecto} onConfirm={() => { setShowAreaProyecto(false) }} onClose={() => setShowAreaProyecto(false)}>
+
+			{catalogos && console.log('catalogos', catalogos)}
+			{showAreaProyecto && catalogos &&
+				<SimpleModal title="Areas Proyecto" openDialog={showAreaProyecto} onConfirm={() => { setShowAreaProyecto(false) }} onClose={() => setShowAreaProyecto(false)}>
+					<FormControl>
+						<FormLabel id="demo-radio-buttons-group-label">Area Proyecto</FormLabel>
+						<RadioGroup
+							aria-labelledby="demo-radio-buttons-group-label"
+							defaultValue="female"
+							name="radio-buttons-group"
+						>
+							{catalogos.areasProyecto.map((item, index) => <Row><Col><FormControlLabel value={areasProyectoId} control={<Radio />} label={item.nombre} /></Col><Col>{item.descripcion}</Col></Row>)}
+
+						</RadioGroup>
+					</FormControl>
 
 				</SimpleModal>}
 			<NavigationContainer
@@ -69,7 +80,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					<Col sm={12}>
 						<Card className='bg-white__radius'>
 							<CardTitle>{t('registro_servicio_comunal', 'Registro Servicio Comunal')}</CardTitle>
-
+							``
 							<Form>
 								<Row>
 									<Col md={3}>
