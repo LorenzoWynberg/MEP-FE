@@ -276,7 +276,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 				<CardBody>
 					<h4>
 						{t(
-							'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados',
+							 'columnaTable>Registro_Servicio_Comunal>titulo',
 							'Estudiantes matriculados'
 						)}
 					</h4>
