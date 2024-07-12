@@ -19,8 +19,8 @@ import BarLoader from 'Components/barLoader/barLoader'
 import TableStudents from '../MatricularEstudiantes/registro/new/comunalTabla'
 import ModalRadio from './ModalRadio'
 import SimpleModal from 'Components/Modal/simple'
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 // const ModalRadio = (props) => {
 // 	console.log('props', props)
@@ -29,7 +29,6 @@ import "react-datepicker/dist/react-datepicker.css";
 // 		console.log('(event.target as HTMLInputElement).value', (event.target as HTMLInputElement).value)
 // 		setValue((event.target as HTMLInputElement).value);
 // 	  };
-
 
 // 	return <SimpleModal title="Areas Proyecto" openDialog={props.value} onConfirm={() => { props.setValueParent(false) }} onClose={() => props.setValueParent(false)}>
 // 		<FormControl>
@@ -46,7 +45,6 @@ import "react-datepicker/dist/react-datepicker.css";
 // 	</SimpleModal >
 // }
 
-
 export const ServicioComunal: React.FC<IProps> = props => {
 	const { t } = useTranslation()
 	const [catalogos, setCatalogos] = React.useState([])
@@ -61,15 +59,22 @@ export const ServicioComunal: React.FC<IProps> = props => {
 	const [showMap, setShowMap] = React.useState(false)
 	const [institutionImage, setInstitutionImage] = React.useState(null)
 	const [loading, setLoading] = React.useState<boolean>(false)
-	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id);
+	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		console.log('(event.target as HTMLInputElement).value', (event.target as HTMLInputElement).value)
-		setValue((event.target as HTMLInputElement).value);
-	};
-
+		setValue((event.target as HTMLInputElement).value)
+	}
+	const [Cdate, setDate] = useState(new Date().toLocaleDateString('fr-FR'));
+	const [value1, setValue1] = React.useState('')
+	const [value2, setValue3] = React.useState('')
+	const [valueModalidad, setValueModalidad] = React.useState('')
+	const [valueCaracteristicas, setValueCaracteristicas] = React.useState('')
+	const [valueOrg, setValueOrg] = React.useState('')
+	const [acompañante, setValueAcompañante] = React.useState('')
+	const [descripcion, setValueDescripcion] = React.useState('')
 
 	useEffect(() => {
-		ObtenerInfoCatalogos().then((respone) => {
+		ObtenerInfoCatalogos().then(respone => {
 			setCatalogos(respone)
 		})
 	}, [])
@@ -82,11 +87,11 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					<ModalRadio title="Area Proyecto" setValue={setShowAreaProyecto} value={showAreaProyecto} coleccion={catalogos.areasProyecto} />} */}
 			{showAreaProyecto && catalogos.areasProyecto &&
 				<SimpleModal title="Areas Proyecto" openDialog={showAreaProyecto} onConfirm={() => { setShowAreaProyecto(false) }} onClose={() => setShowAreaProyecto(false)}>
-					<FormControl>
-						<FormLabel id="demo-radio-buttons-group-label">Area Proyecto</FormLabel>
+z					<FormControl>
+						<FormLabel id='demo-radio-buttons-group-label'>Area Proyecto</FormLabel>
 						<RadioGroup
-							aria-labelledby="demo-radio-buttons-group-label"
-							name="radio-buttons-group"
+							aria-labelledby='demo-radio-buttons-group-label'
+							name='radio-buttons-group'
 							value={value}
 						>
 							{catalogos.areasProyecto.map(item => <FormControlLabel value={item.id} onClick={(e, v) => { e.persist(); console.log('item.nombre', item.nombre); setValue(e.target.value); setAreaProyecto(item.nombre) }} checked={value == item.id} control={<Radio />} label={item.nombre} />)}
@@ -161,8 +166,15 @@ export const ServicioComunal: React.FC<IProps> = props => {
 									<Col sm={3}>
 										<FormGroup>
 											<Label>{t('registro_servicio_comunal>modalidad', 'Modalidad')}</Label>
-											<Input name='tipo_centro' value={''} readOnly />
+											<Input
+												name='tipo_centro'
+												type='text'
+												value={valueModalidad}  
+												onChange={e => setValueModalidad(e.target.valueModalidad)}
+												autoFocus={true}
+											/>
 										</FormGroup>
+										{valueModalidad}
 									</Col>
 								</Row>
 								<Row>
@@ -171,17 +183,34 @@ export const ServicioComunal: React.FC<IProps> = props => {
 											<Label>
 												{t('registro_servicio_comunal>caracteristicas', 'Caracteristicas')}
 											</Label>
-											<Input name='estado_centro' value={''} readOnly />
+											<Input
+												name='tipo_centro'
+												type='text'
+												value={valueCaracteristicas} 
+												onChange={e => setValueCaracteristicas(e.target.valueCaracteristicas)}
+												autoFocus={true}
+											/>
 										</FormGroup>
+										{valueCaracteristicas}
 									</Col>
 									<Col sm={3}>
 										{' '}
 										<FormGroup>
 											<Label>
-
-												{t('registro_servicio_comunal>fecha_conclusion', 'Fecha de conclusión SCE')}
+												{t(
+													'registro_servicio_comunal>fecha_conclusion',
+													'Fecha de conclusión SCE'
+												)}
 											</Label>
-											<DatePicker label="servicio comunal date picker" />
+											<DatePicker
+    dateFormat="dd/MM/yyyy"
+    value={Cdate}   
+    onChange={(date) => {
+      const d = new Date(date).toLocaleDateString('fr-FR');
+      console.log(d);
+      setDate(d);
+    }}
+  />
 										</FormGroup>
 									</Col>
 									<Col sm={3}>
@@ -192,8 +221,15 @@ export const ServicioComunal: React.FC<IProps> = props => {
 													'Tipo de organización contraparte'
 												)}
 											</Label>
-											<Input name='fundacion' autoComplete='off' value={''} readOnly />
+											<Input
+												name='tipo_centro' 
+												type='text'
+												value={valueOrg}
+												onChange={e => setValueOrg(e.target.valueOrg)}
+												autoFocus={true}
+											/>
 										</FormGroup>
+										{valueOrg}
 									</Col>
 									<Col sm={3}>
 										<FormGroup>
@@ -203,15 +239,30 @@ export const ServicioComunal: React.FC<IProps> = props => {
 													'Acompañante de proyecto'
 												)}
 											</Label>
-											<Input name='fundacion' autoComplete='off' value={''} readOnly />
+											<Input
+												name='tipo_centro'
+												type='text'  
+												value={acompañante}
+												onChange={e => setValueAcompañante(e.target.acompañante)}
+												autoFocus={true}
+											/>
 										</FormGroup>
+										{acompañante}
 									</Col>
 								</Row>
 								<Row></Row>
 
-
 								<FormGroup>
 									<Label>{t('registro_servicio_comunal>descripcion', 'Descripción')}</Label>
+									<Input
+												name='tipo_centro'
+												type='text'
+												value={descripcion}  
+												onChange={e => setValueDescripcion(e.target.descripcion)}
+												autoFocus={true}
+											/>
+									
+										{descripcion}
 									<StyledMultiSelect options={[]} selectedOptions={[]} editable={false} />
 								</FormGroup>
 							</Form>
@@ -221,15 +272,13 @@ export const ServicioComunal: React.FC<IProps> = props => {
 
 				<Row>
 					<Col sm={12}>
-
 						<TableStudents
 							onlyViewModule={false}
 							data={[]}
-
 							hasEditAccess={true}
-							onSelectedStudent={() => { }}
-							closeContextualMenu={false} ></TableStudents>
-
+							onSelectedStudent={() => {}}
+							closeContextualMenu={false}
+						></TableStudents>
 					</Col>
 				</Row>
 			</Wrapper>

@@ -89,7 +89,7 @@ const ComunalTabla: React.FC<IProps> = props => {
             {
 				Header: t(
 					'servicio_comunal>registro_servicio_comunal>genero',
-					'Genero'
+					'genero'
 				),
 				accessor: 'genero',
 				label: '',
@@ -276,8 +276,8 @@ const ComunalTabla: React.FC<IProps> = props => {
 				<CardBody>
 					<h4>
 						{t(
-							 'columnaTable>Registro_Servicio_Comunal>titulo',
-							'Estudiantes matriculados'
+							 'servicio_comunal>registro_servicio_comunal>titulo',
+							'título'
 						)}
 					</h4>
 
