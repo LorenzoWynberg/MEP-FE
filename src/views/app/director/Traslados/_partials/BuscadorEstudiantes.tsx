@@ -80,18 +80,18 @@ const BuscadorEstudiantes = (props) => {
           return (
             <div
               style={{
-							  display: 'flex',
-							  justifyContent: 'center',
-							  alignItems: 'center',
-							  alignContent: 'center'
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                alignContent: 'center'
               }}
             >
               <button
                 style={{
-								  border: 'none',
-								  background: 'transparent',
-								  cursor: 'pointer',
-								  color: 'grey'
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  color: 'grey'
                 }}
                 onClick={() => onConfirm(fullRow)}
               >
@@ -146,13 +146,13 @@ const BuscadorEstudiantes = (props) => {
           <TableReactImplementation
             data={data}
             handleGetData={async (
-						  searchValue: string,
-						  column: string | undefined | null
+              searchValue: string,
+              column: string | undefined | null
             ) => {
-						  if (!searchValue) return
-						  setLoading(true)
-						  await actions.getStudentFilter(searchValue, 1, 100)
-						  setLoading(false)
+              if (!searchValue) return
+              setLoading(true)
+              await actions.getStudentFilter(searchValue, 1, 100)
+              setLoading(false)
             }}
             columns={columns}
             orderOptions={[]}

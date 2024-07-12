@@ -22,10 +22,11 @@ import swal from 'sweetalert'
 import { useTranslation } from 'react-i18next'
 import { useHistory } from 'react-router'
 
-import { 
+import {
   GetServicioComunalByInstitucionId,
   getTablaEstudiantesServicioComunalById
 } from '../../../../redux/configuracion/actions'
+import { Button } from '@material-ui/core'
 
 const BuscadorPersonasServicioComunal = (props) => {
   const [t] = useTranslation()
@@ -40,13 +41,9 @@ const BuscadorPersonasServicioComunal = (props) => {
   const actions = useActions({
     getStudentDataFilter,
     getStudentFilter,
-    clearDataFilter
-  })
-
-  
-  const actions = useActions({
+    clearDataFilter,
     getTablaEstudiantesServicioComunalById
-    }) 
+  })
 
   const columns = useMemo(() => {
     return [
@@ -59,8 +56,8 @@ const BuscadorPersonasServicioComunal = (props) => {
       },
       {
         Header: t('servicio_comunal_table>registro_servicio_comunal>agregar_estudiante>nombre', 'Nombre completo'),
-        column: 'nombreCompleto',
-        accessor: 'nombreCompleto',
+        column: 'nombreEstudiante',
+        accessor: 'nombreEstudiante',
         label: ''
       },
       {
@@ -83,8 +80,8 @@ const BuscadorPersonasServicioComunal = (props) => {
     }, */
       {
         Header: t('servicio_comunal_table>registro_servicio_comunal>agregar_estudiante>fecha_nacimiento', 'Fecha de nacimiento'),
-        column: 'fechaNacimiento',
-        accessor: 'fechaNacimiento',
+        column: 'fechaNacimientoP',
+        accessor: 'fechaNacimientoP',
         label: ''
       },
       {
@@ -108,42 +105,27 @@ const BuscadorPersonasServicioComunal = (props) => {
           const fullRow = data[row.index]
           return (
             <div className='d-flex justify-content-center align-items-center'>
-              <RiFileInfoLine
-                title={t('estudiantes>matricula_estudiantes>ficha_informativa', 'Ficha informativa')}
-                onClick={() => {
-									  history.push(
-											`/director/ficha-estudiante/${fullRow.idEstudiante}`,
-											{
-											  from: window.location.href
-											}
-									  )
-
-									  if (fullRow.fallecido) {
-									    swal({
-									      icon: 'info',
-									      text: 'La persona estudiante que está consultando se encuentra registrada como FALLECIDA, por lo cual hay funcionalidades en el sistema que solamente son de consulta.',
-									      buttons: {
-									        ok: {
-									          text: 'Aceptar',
-									          value: true
-									        }
-									      }
-									    })
-									  }
-                }}
+              <Button primary onClick={() => {
+                console.log('arraasdasdyfullRow', fullRow)
+                let array = [...props.estudiantes]
+                array.push(fullRow)
+                console.log('arraasdasdyprops.estudiantes',props.estudiantes)
+                console.log('arraasdasdy',array)
+                props.setEstudiantes(array)
+              }}
                 style={{
-									  fontSize: 30,
-									  color: colors.darkGray,
-									  cursor: 'pointer'
-
+                  fontSize: 30,
+                  color: colors.darkGray,
+                  cursor: 'pointer'
                 }}
               />
             </div>
           )
+
         }
       }
     ]
-  }, [t])
+  }, [t,props.estudiantes])
 
   useEffect(() => {
     setFirstCalled(true)
@@ -191,6 +173,7 @@ const BuscadorPersonasServicioComunal = (props) => {
 
   return (
     <AppLayout items={directorItems}>
+      {console.log('state est', state.estudiantes)}
       <div className='dashboard-wrapper'>
         {loading && <BarLoader />}
         <Helmet>
@@ -204,27 +187,27 @@ const BuscadorPersonasServicioComunal = (props) => {
             <Col
               xs={12}
               style={{
-							  display: 'flex',
-							  flexDirection: 'column',
-							  alignItems: 'flex-end',
-							  width: '100%'
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-end',
+                width: '100%'
               }}
             />
             <Col xs={12}>
               <TableReactImplementation
                 data={data}
                 handleGetData={async (
-								  searchValue: string,
-								  column: string | undefined | null
+                  searchValue: string,
+                  column: string | undefined | null
                 ) => {
-								  if (!searchValue) return
-								  setLoading(true)
-								  await actions.getStudentFilter(
-								    searchValue,
-								    1,
-								    100
-								  )
-								  setLoading(false)
+                  if (!searchValue) return
+                  setLoading(true)
+                  await actions.getStudentFilter(
+                    searchValue,
+                    1,
+                    100
+                  )
+                  setLoading(false)
                 }}
                 columns={columns}
                 orderOptions={[]}

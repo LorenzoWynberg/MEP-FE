@@ -6,11 +6,12 @@ import { Row, Col, ModalBody, ModalHeader, Modal, Input as ReactstrapInput } fro
 import colors from '../../../../assets/js/colors'
 import withRouter from 'react-router-dom/withRouter'
 import Grid from '@material-ui/core/Grid'
-import { 
-  GetServicioComunalByInstitucionId,
-  getTablaEstudiantesServicioComunalById
+import {
+	crearServicioComunal,
+	getTablaEstudiantesServicioComunalById
 } from '../../../../redux/configuracion/actions'
-import { Checkbox, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core'
+import BuscadorServicioComunal from '../Buscadores/BuscadorServicioComunal'
+import { Checkbox, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Chip, Button } from '@material-ui/core'
 import StyledMultiSelect from '../../../../components/styles/StyledMultiSelect'
 import { ObtenerInfoCatalogos } from '../../../../redux/formularioCentroResponse/actions'
 import NavigationContainer from '../../../../components/NavigationContainer'
@@ -21,11 +22,11 @@ import Tooltip from '@mui/material/Tooltip'
 import { IoEyeSharp } from 'react-icons/io5'
 import BarLoader from 'Components/barLoader/barLoader'
 import TableStudents from '../MatricularEstudiantes/registro/new/comunalTabla'
-import ModalRadio from './ModalRadio'
 import SimpleModal from 'Components/Modal/simple'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useActions } from 'Hooks/useActions'
+import { useSelector } from 'react-redux'
 
 // const ModalRadio = (props) => {
 // 	console.log('props', props)
@@ -57,11 +58,23 @@ export const ServicioComunal: React.FC<IProps> = props => {
 	const [showAreaProyecto, setShowAreaProyecto] = React.useState(false)
 	const [showNombre, setShowNombre] = React.useState(false)
 	const [objetivoNombre, setObjetivoNombre] = React.useState([])
-	const [areasProyectoId, setAreasProyectoId] = React.useState()
-	const [currentExtentions, setCurrentExtentions] = React.useState()
+	const [busqueda, setBusqueda] = React.useState()
+	const [estudiantes, setEstudiantes] = React.useState([])
 	const [nombresSeleccionados, setNombresSeleccionados] = React.useState([])
 	const [nombresIdSeleccionados, setNombresIdSeleccionados] = React.useState([])
-	const [showMap, setShowMap] = React.useState(false)
+	const [showBuscador, setShowBuscador] = React.useState(false)
+	const [showTipoOrganizacion, setShowTipoOrganizacion] = React.useState(false)
+	const [organizacionId, setOrganizacionId] = React.useState()
+	const [organizacion, setOrganizacion] = React.useState()
+
+	const [showModalidades, setShowModalidades] = React.useState(false)
+	const [modalidadId, setModalidadId] = React.useState()
+	const [modalidad, setModalidad] = React.useState()
+
+	const [showCaracteristicas, setShowCaracteristicas] = React.useState(false)
+	const [caracteristicaId, setCaracteristicaId] = React.useState()
+	const [caracteristica, setCaracteristica] = React.useState()
+
 	const [institutionImage, setInstitutionImage] = React.useState(null)
 	const [loading, setLoading] = React.useState<boolean>(false)
 	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
@@ -70,16 +83,40 @@ export const ServicioComunal: React.FC<IProps> = props => {
 		setValue((event.target as HTMLInputElement).value)
 	}
 	const [Cdate, setDate] = useState(new Date().toLocaleDateString('fr-FR'))
-	const [value1, setValue1] = React.useState('')
-	const [value2, setValue3] = React.useState('')
 	const [valueModalidad, setValueModalidad] = React.useState('')
 	const [valueCaracteristicas, setValueCaracteristicas] = React.useState('')
 	const [valueOrg, setValueOrg] = React.useState('')
 	const [acompanante, setValueAcompanante] = React.useState('')
 	const [descripcion, setValueDescripcion] = React.useState('')
- 	const actions = useActions({
-	getTablaEstudiantesServicioComunalById
-	}) 
+	const [studentsSeleccionados, setStudentsSeleccionados] = React.useState([])
+
+	const [students, setStudents] = useState([])
+
+	const mapper = el => {
+		return {
+			...el,
+			id: el.matriculaId,
+			image: el.img,
+			edad: getYearsOld(el.fechaNacimiento),
+			fechaNacimientoP: format(parseISO(el.fechaNacimiento), 'dd/MM/yyyy'),
+			nacionalidad: Array.isArray(el.nacionalidades) ? el.nacionalidades[0].nacionalidad : '',
+			genero: Array.isArray(el.genero) ? el.genero[0].nombre : '',
+			cuentaCorreoOffice: el.cuentaCorreoOffice ? 'Sí' : 'No'
+		}
+	}
+	useEffect(() => {
+		const _data = studentsSeleccionados.map(mapper)
+		setStudents(_data)
+	}, [studentsSeleccionados])
+
+	useEffect(() => {
+		console.log('isssssasdasd', estudiantes)
+	}, [estudiantes])
+
+	const actions = useActions({
+		crearServicioComunal,
+		getTablaEstudiantesServicioComunalById
+	})
 
 	useEffect(() => {
 		ObtenerInfoCatalogos().then(respone => {
@@ -106,7 +143,49 @@ export const ServicioComunal: React.FC<IProps> = props => {
 						</RadioGroup>
 					</FormControl>
 				</SimpleModal >}
-			{console.log('nombresSeleccionados', nombresSeleccionados)}
+			{showCaracteristicas &&
+				<SimpleModal title="Areas Proyecto" openDialog={showCaracteristicas} onConfirm={() => { setShowCaracteristicas(false) }} onClose={() => setShowCaracteristicas(false)}>
+					<FormControl>
+						<FormLabel id='demo-radio-buttons-group-label'>Caracteristica</FormLabel>
+						<RadioGroup
+							aria-labelledby='demo-radio-buttons-group-label'
+							name='radio-buttons-group'
+							value={value}
+						>
+							{catalogos.caracteristicas.map(item => <FormControlLabel value={item.id} onClick={(e, v) => { e.persist(); setCaracteristicaId(e.target.value); setCaracteristica(item.nombre); }} checked={caracteristicaId == item.id} control={<Radio />} label={item.nombre} />)}
+						</RadioGroup>
+					</FormControl>
+				</SimpleModal >} }
+			{showModalidades &&
+				<SimpleModal title="Areas Proyecto" openDialog={showModalidades} onConfirm={() => { setShowModalidades(false) }} onClose={() => setShowModalidades(false)}>
+					<FormControl>
+						<FormLabel id='demo-radio-buttons-group-label'>Modalidad</FormLabel>
+						<RadioGroup
+							aria-labelledby='demo-radio-buttons-group-label'
+							name='radio-buttons-group'
+							value={value}
+						>
+							{catalogos.modalidades.map(item => <FormControlLabel value={item.id} onClick={(e, v) => { e.persist(); setModalidadId(e.target.value); setModalidad(item.nombre); }} checked={modalidadId == item.id} control={<Radio />} label={item.nombre} />)}
+						</RadioGroup>
+					</FormControl>
+				</SimpleModal >}
+			{showTipoOrganizacion &&
+				<SimpleModal title="Areas Proyecto" openDialog={showTipoOrganizacion} onConfirm={() => { setShowTipoOrganizacion(false) }} onClose={() => setShowTipoOrganizacion(false)}>
+					<FormControl>
+						<FormLabel id='demo-radio-buttons-group-label'>Tipo Organizacion</FormLabel>
+						<RadioGroup
+							aria-labelledby='demo-radio-buttons-group-label'
+							name='radio-buttons-group'
+							value={value}
+						>
+							{catalogos.tipoOrganizacion.map(item => <FormControlLabel value={item.id} onClick={(e, v) => { e.persist(); setOrganizacionId(e.target.value); setOrganizacion(item.nombre); }} checked={organizacionId == item.id} control={<Radio />} label={item.nombre} />)}
+						</RadioGroup>
+					</FormControl>
+				</SimpleModal >}
+			{showBuscador && <SimpleModal title="Estudiantes" openDialog={showBuscador} onConfirm={() => { setShowBuscador(false) }} onClose={() => setShowBuscador(false)}>
+				<BuscadorServicioComunal busqueda={busqueda} setEstudiantes={setEstudiantes} estudiantes={estudiantes} />
+			</SimpleModal >
+			}
 			{nombresSeleccionados && value && showNombre && catalogos.nombresProyecto &&
 				<SimpleModal title="Nmobre Proyecto" openDialog={showNombre} onConfirm={() => { setShowNombre(false) }} onClose={() => setShowNombre(false)}>
 					<FormControl>
@@ -175,14 +254,14 @@ export const ServicioComunal: React.FC<IProps> = props => {
 										<FormGroup>
 											<Label>{t('registro_servicio_comunal>modalidad', 'Modalidad')}</Label>
 											<Input
-												name='tipo_centro'
+												name='modalidad'
 												type='text'
-												value={valueModalidad}
-												onChange={e => setValueModalidad(e.target.valueModalidad)}
+												value={modalidad}
+												readOnly
+												onClick={() => !showModalidades && setShowModalidades(true)}
 												autoFocus={true}
 											/>
 										</FormGroup>
-										{valueModalidad}
 									</Col>
 								</Row>
 								<Row>
@@ -192,14 +271,14 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												{t('registro_servicio_comunal>caracteristicas', 'Caracteristicas')}
 											</Label>
 											<Input
-												name='tipo_centro'
+												name='modalidad'
 												type='text'
-												value={valueCaracteristicas}
-												onChange={e => setValueCaracteristicas(e.target.valueCaracteristicas)}
+												value={caracteristica}
+												readOnly
+												onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
 												autoFocus={true}
 											/>
 										</FormGroup>
-										{valueCaracteristicas}
 									</Col>
 									<Col sm={3}>
 										{' '}
@@ -232,8 +311,8 @@ export const ServicioComunal: React.FC<IProps> = props => {
 											<Input
 												name='tipo_centro'
 												type='text'
-												value={valueOrg}
-												onChange={e => setValueOrg(e.target.valueOrg)}
+												value={organizacion ? organizacion : ''} readOnly onClick={() => !showTipoOrganizacion && setShowTipoOrganizacion(true)}
+
 												autoFocus={true}
 											/>
 										</FormGroup>
@@ -258,7 +337,6 @@ export const ServicioComunal: React.FC<IProps> = props => {
 										{acompanante}
 									</Col>
 								</Row>
-								<Row></Row>
 
 								<FormGroup>
 									<Label>{t('registro_servicio_comunal>descripcion', 'Descripción')}</Label>
@@ -282,13 +360,56 @@ export const ServicioComunal: React.FC<IProps> = props => {
 				<Row>
 					<Col sm={12}>
 						<TableStudents
-							onlyViewModule={false}
-							data={[]}
+							onlyViewModule={true}
+							data={estudiantes}
+							// data={[
+							// 	{
+							// 		"idEstudiante": 1495875,
+							// 		"nombreEstudiante": "CASTILLO  NAVARRO AARON",
+							// 		"identificacion": "113420854",
+							// 		"fotografiaUrl": "",
+							// 		"conocidoComo": "",
+							// 		"nacionalidad": null,
+							// 		"idInstitucion": null,
+							// 		"idMatricula": null,
+							// 		"institucion": "",
+							// 		"codigoinstitucion": "",
+							// 		"modalidad": null,
+							// 		"grupo": "",
+							// 		"fallecido": false,
+							// 		"tipoInstitucion": null,
+							// 		"regional": "/",
+							// 		"fechaNacimiento": "1988-02-05T00:00:00",
+							// 		"nivel": null,
+							// 		"tipoIdentificacion": "CÉDULA"
+							// 	}
+							// ]}
 							hasEditAccess={true}
-							onSelectedStudent={() => { }}
+							handleGetData={() => { showBuscador ? setShowBuscador(false) : setShowBuscador(true) }}
+
 							closeContextualMenu={false}
 						></TableStudents>
 					</Col>
+				</Row>
+
+				<Row>
+					<Col sm={12}><Button primary onClick={() => actions.crearServicioComunal({
+						"sb_InstitucionesId": 0,
+						"sb_areaProyectoId": value,
+						"sb_nombreProyectoId": nombresSeleccionados[0].id,
+						"sb_modalidadId": modalidadId,
+						"sb_tipoOrganizacionContraparteId": organizacionId,
+						"docenteAcompanante": acompanante,
+						"descripcion": descripcion,
+						"fechaConclusionSCE": Cdate,
+						"insertadoPor": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+						"caracteristicas": [
+							caracteristicaId
+						],
+						"estudiantes":
+							estudiantes.map(e => e.idEstudiante)
+
+					})}>Guardar</Button></Col>
 				</Row>
 			</Wrapper>
 		</AppLayout>

@@ -280,9 +280,9 @@ export const getTablaEstudiantesServicioComunalById =
 		async (dispatch: any): Promise<actionResponse> => {
 			try {
 				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServicioComunalByStudentId/{idEstudiante}${id}`
+					`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServicioComunalByStudentId/${id}`
 				)
-				console.log('response', response)
+				console.log('response getTablaEstudiantesServicioComunalById', response)
 				return { error: false, options: response.data }
 			} catch (e) {
 				dispatch(configError(e.message))
@@ -390,6 +390,19 @@ export const advancedFilterInstitutionsPaginated =
 			return { error: e.message }
 		}
 	}
+
+export const crearServicioComunal = (data) => async dispatch => {
+	try {
+		const response = await axios.post(`${envVariables.BACKEND_URL}/api/ServicioComunal/CrearServicioComunal`, data)
+
+
+		return { error: false, response: response.data }
+	} catch (e) {
+		const backErrors = handleErrors(e)
+		dispatch(configErrorFeedback({ ...backErrors, error: e.message }))
+		return { error: e.message }
+	}
+}
 
 export const createInstitution = (data, page, qnt, cb) => async dispatch => {
 	try {

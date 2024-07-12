@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { TableReactImplementation } from 'Components/TableReactImplementation'
+import { TableReactImplementationServicio } from 'Components/TableReactImplementationServicio'
 import ContextualMenu from 'Components/TableReactImplementation/ContextualMenu'
 import { getYearsOld } from 'Utils/years'
 import { Card, CardBody } from 'reactstrap'
@@ -13,6 +13,7 @@ interface IProps {
 	data: Array<any>
 	onSelectedStudent: Function
 	hasEditAccess: boolean
+	handleGetData?: Function
 	closeContextualMenu?: boolean
 	onlyViewModule: boolean
 }
@@ -86,7 +87,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 				label: '',
 				column: ''
 			},
-            {
+			{
 				Header: t(
 					'servicio_comunal>registro_servicio_comunal>genero',
 					'genero'
@@ -113,7 +114,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 				label: '',
 				column: ''
 			},
-		
+
 			{
 				Header: t(
 					'servicio_comunal>registro_servicio_comunal>discapacidad',
@@ -276,12 +277,12 @@ const ComunalTabla: React.FC<IProps> = props => {
 				<CardBody>
 					<h4>
 						{t(
-							 'servicio_comunal>registro_servicio_comunal>titulo',
+							'servicio_comunal>registro_servicio_comunal>titulo',
 							'título'
 						)}
 					</h4>
 
-					<TableReactImplementation orderOptions={[]} columns={columns} data={students} />
+					<TableReactImplementationServicio handleGetData={() => { props.handleGetData() }} orderOptions={[]} columns={columns} data={students} />
 				</CardBody>
 			</Card>
 		</Colxx>
