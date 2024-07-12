@@ -100,7 +100,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 					'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados>colum_fecha_nacimi',
 					'Fecha de nacimiento'
 				),
-				accessor: 'fechaNacimientoP',
+				accessor: 'fechaNacimiento',
 				label: '',
 				column: ''
 			},

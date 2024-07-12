@@ -275,6 +275,21 @@ export const getInstitucion =
 		}
 
 
+export const getTablaEstudiantesServicioComunalById =
+	(id: number): ((any) => Promise<actionResponse>) =>
+		async (dispatch: any): Promise<actionResponse> => {
+			try {
+				const response: any = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServicioComunalByStudentId/{idEstudiante}${id}`
+				)
+				console.log('response', response)
+				return { error: false, options: response.data }
+			} catch (e) {
+				dispatch(configError(e.message))
+				return { error: e.message, options: [] }
+			}
+		}
+
 export const GetServicioComunalByInstitucionId =
 	(id: number): ((any) => Promise<actionResponse>) =>
 		async (dispatch: any): Promise<actionResponse> => {

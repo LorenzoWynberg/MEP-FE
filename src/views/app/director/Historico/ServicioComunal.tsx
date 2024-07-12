@@ -6,7 +6,11 @@ import { Row, Col, ModalBody, ModalHeader, Modal, Input as ReactstrapInput } fro
 import colors from '../../../../assets/js/colors'
 import withRouter from 'react-router-dom/withRouter'
 import Grid from '@material-ui/core/Grid'
-import { Checkbox, Chip, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core'
+import { 
+  GetServicioComunalByInstitucionId,
+  getTablaEstudiantesServicioComunalById
+} from '../../../../redux/configuracion/actions'
+import { Checkbox, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core'
 import StyledMultiSelect from '../../../../components/styles/StyledMultiSelect'
 import { ObtenerInfoCatalogos } from '../../../../redux/formularioCentroResponse/actions'
 import NavigationContainer from '../../../../components/NavigationContainer'
@@ -21,6 +25,7 @@ import ModalRadio from './ModalRadio'
 import SimpleModal from 'Components/Modal/simple'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { useActions } from 'Hooks/useActions'
 
 // const ModalRadio = (props) => {
 // 	console.log('props', props)
@@ -64,14 +69,17 @@ export const ServicioComunal: React.FC<IProps> = props => {
 		console.log('(event.target as HTMLInputElement).value', (event.target as HTMLInputElement).value)
 		setValue((event.target as HTMLInputElement).value)
 	}
-	const [Cdate, setDate] = useState(new Date().toLocaleDateString('fr-FR'));
+	const [Cdate, setDate] = useState(new Date().toLocaleDateString('fr-FR'))
 	const [value1, setValue1] = React.useState('')
 	const [value2, setValue3] = React.useState('')
 	const [valueModalidad, setValueModalidad] = React.useState('')
 	const [valueCaracteristicas, setValueCaracteristicas] = React.useState('')
 	const [valueOrg, setValueOrg] = React.useState('')
-	const [acompañante, setValueAcompañante] = React.useState('')
+	const [acompanante, setValueAcompanante] = React.useState('')
 	const [descripcion, setValueDescripcion] = React.useState('')
+ 	const actions = useActions({
+	getTablaEstudiantesServicioComunalById
+	}) 
 
 	useEffect(() => {
 		ObtenerInfoCatalogos().then(respone => {
@@ -242,19 +250,21 @@ export const ServicioComunal: React.FC<IProps> = props => {
 											<Input
 												name='tipo_centro'
 												type='text'
-												value={acompañante}
-												onChange={e => setValueAcompañante(e.target.acompañante)}
+												value={acompanante}
+												onChange={e => setValueAcompanante(e.target.acompañante)}
 												autoFocus={true}
 											/>
 										</FormGroup>
-										{acompañante}
+										{acompanante}
 									</Col>
 								</Row>
 								<Row></Row>
 
 								<FormGroup>
 									<Label>{t('registro_servicio_comunal>descripcion', 'Descripción')}</Label>
+
 									<Input
+										style={{}}
 										name='tipo_centro'
 										type='text'
 										value={descripcion}
@@ -263,7 +273,6 @@ export const ServicioComunal: React.FC<IProps> = props => {
 									/>
 
 									{descripcion}
-									<StyledMultiSelect options={[]} selectedOptions={[]} editable={false} />
 								</FormGroup>
 							</Form>
 						</Card>
