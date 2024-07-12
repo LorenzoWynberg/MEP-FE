@@ -87,7 +87,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					<ModalRadio title="Area Proyecto" setValue={setShowAreaProyecto} value={showAreaProyecto} coleccion={catalogos.areasProyecto} />} */}
 			{showAreaProyecto && catalogos.areasProyecto &&
 				<SimpleModal title="Areas Proyecto" openDialog={showAreaProyecto} onConfirm={() => { setShowAreaProyecto(false) }} onClose={() => setShowAreaProyecto(false)}>
-z					<FormControl>
+					<FormControl>
 						<FormLabel id='demo-radio-buttons-group-label'>Area Proyecto</FormLabel>
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
@@ -107,7 +107,7 @@ z					<FormControl>
 							<FormControlLabel
 								control={
 									<Checkbox
-										checked={nombresSeleccionados.includes(item.id)}
+										checked={nombresSeleccionados.map(v => v.id).includes(item.id)}
 										value={item.id}
 									/>
 								}
@@ -120,8 +120,8 @@ z					<FormControl>
 										nombres.push(item)
 										nombresId.push(item.id)
 									} else {
-										nombres = nombres.filter(n => n != item.id)
-										nombresId = nombresId.filter(n => n.id != item.id)
+										nombres = nombres.filter(n => n.id != item.id)
+										nombresId = nombresId.filter(n => n != item.id)
 									}
 									setNombresSeleccionados(nombres);
 									setNombresIdSeleccionados(nombresId);
@@ -158,7 +158,7 @@ z					<FormControl>
 											<Input name='codigo' value={objetivoNombre ? '' : objetivoNombre} readOnly onClick={() => !showNombre && setShowNombre(true)} />
 										</FormGroup>}
 										{nombresSeleccionados.length > 0 &&
-											<div onClick={() => !showNombre && setShowNombre(true)}  style={{ padding: 8, background: '#e9ecef' }} > 
+											<div onClick={() => !showNombre && setShowNombre(true)} style={{ padding: 8, background: '#e9ecef' }} >
 												{nombresSeleccionados.map(n => <Chip label={n.nombre} />)}
 											</div>
 										}
@@ -169,7 +169,7 @@ z					<FormControl>
 											<Input
 												name='tipo_centro'
 												type='text'
-												value={valueModalidad}  
+												value={valueModalidad}
 												onChange={e => setValueModalidad(e.target.valueModalidad)}
 												autoFocus={true}
 											/>
@@ -186,7 +186,7 @@ z					<FormControl>
 											<Input
 												name='tipo_centro'
 												type='text'
-												value={valueCaracteristicas} 
+												value={valueCaracteristicas}
 												onChange={e => setValueCaracteristicas(e.target.valueCaracteristicas)}
 												autoFocus={true}
 											/>
@@ -203,14 +203,14 @@ z					<FormControl>
 												)}
 											</Label>
 											<DatePicker
-    dateFormat="dd/MM/yyyy"
-    value={Cdate}   
-    onChange={(date) => {
-      const d = new Date(date).toLocaleDateString('fr-FR');
-      console.log(d);
-      setDate(d);
-    }}
-  />
+												dateFormat="dd/MM/yyyy"
+												value={Cdate}
+												onChange={(date) => {
+													const d = new Date(date).toLocaleDateString('fr-FR');
+													console.log(d);
+													setDate(d);
+												}}
+											/>
 										</FormGroup>
 									</Col>
 									<Col sm={3}>
@@ -222,7 +222,7 @@ z					<FormControl>
 												)}
 											</Label>
 											<Input
-												name='tipo_centro' 
+												name='tipo_centro'
 												type='text'
 												value={valueOrg}
 												onChange={e => setValueOrg(e.target.valueOrg)}
@@ -241,7 +241,7 @@ z					<FormControl>
 											</Label>
 											<Input
 												name='tipo_centro'
-												type='text'  
+												type='text'
 												value={acompañante}
 												onChange={e => setValueAcompañante(e.target.acompañante)}
 												autoFocus={true}
@@ -255,14 +255,14 @@ z					<FormControl>
 								<FormGroup>
 									<Label>{t('registro_servicio_comunal>descripcion', 'Descripción')}</Label>
 									<Input
-												name='tipo_centro'
-												type='text'
-												value={descripcion}  
-												onChange={e => setValueDescripcion(e.target.descripcion)}
-												autoFocus={true}
-											/>
-									
-										{descripcion}
+										name='tipo_centro'
+										type='text'
+										value={descripcion}
+										onChange={e => setValueDescripcion(e.target.descripcion)}
+										autoFocus={true}
+									/>
+
+									{descripcion}
 									<StyledMultiSelect options={[]} selectedOptions={[]} editable={false} />
 								</FormGroup>
 							</Form>
@@ -276,7 +276,7 @@ z					<FormControl>
 							onlyViewModule={false}
 							data={[]}
 							hasEditAccess={true}
-							onSelectedStudent={() => {}}
+							onSelectedStudent={() => { }}
 							closeContextualMenu={false}
 						></TableStudents>
 					</Col>
