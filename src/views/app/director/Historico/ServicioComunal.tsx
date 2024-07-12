@@ -155,7 +155,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 							{catalogos.caracteristicas.map(item => <FormControlLabel value={item.id} onClick={(e, v) => { e.persist(); setCaracteristicaId(e.target.value); setCaracteristica(item.nombre); }} checked={caracteristicaId == item.id} control={<Radio />} label={item.nombre} />)}
 						</RadioGroup>
 					</FormControl>
-				</SimpleModal >} }
+				</SimpleModal >} 
 			{showModalidades &&
 				<SimpleModal title="Areas Proyecto" openDialog={showModalidades} onConfirm={() => { setShowModalidades(false) }} onClose={() => setShowModalidades(false)}>
 					<FormControl>
