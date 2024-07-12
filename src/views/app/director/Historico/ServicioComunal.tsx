@@ -66,6 +66,11 @@ export const ServicioComunal: React.FC<IProps> = props => {
 	const [Cdate, setDate] = useState(new Date().toLocaleDateString('fr-FR'));
 	const [value1, setValue1] = React.useState('')
 	const [value2, setValue3] = React.useState('')
+	const [valueModalidad, setValueModalidad] = React.useState('')
+	const [valueCaracteristicas, setValueCaracteristicas] = React.useState('')
+	const [valueOrg, setValueOrg] = React.useState('')
+	const [acompañante, setValueAcompañante] = React.useState('')
+	const [descripcion, setValueDescripcion] = React.useState('')
 
 	useEffect(() => {
 		ObtenerInfoCatalogos().then(respone => {
@@ -193,12 +198,12 @@ export const ServicioComunal: React.FC<IProps> = props => {
 											<Input
 												name='tipo_centro'
 												type='text'
-												value={value1}
-												onChange={e => setValue1(e.target.value1)}
+												value={valueModalidad}  
+												onChange={e => setValueModalidad(e.target.valueModalidad)}
 												autoFocus={true}
 											/>
 										</FormGroup>
-										{value1}
+										{valueModalidad}
 									</Col>
 								</Row>
 								<Row>
@@ -210,12 +215,12 @@ export const ServicioComunal: React.FC<IProps> = props => {
 											<Input
 												name='tipo_centro'
 												type='text'
-												value={value1}
-												onChange={e => setValue1(e.target.value1)}
+												value={valueCaracteristicas} 
+												onChange={e => setValueCaracteristicas(e.target.valueCaracteristicas)}
 												autoFocus={true}
 											/>
 										</FormGroup>
-										{value1}
+										{valueCaracteristicas}
 									</Col>
 									<Col sm={3}>
 										{' '}
@@ -228,7 +233,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 											</Label>
 											<DatePicker
     dateFormat="dd/MM/yyyy"
-    value={Cdate}
+    value={Cdate}   
     onChange={(date) => {
       const d = new Date(date).toLocaleDateString('fr-FR');
       console.log(d);
@@ -246,14 +251,14 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												)}
 											</Label>
 											<Input
-												name='tipo_centro'
+												name='tipo_centro' 
 												type='text'
-												value={value1}
-												onChange={e => setValue1(e.target.value1)}
+												value={valueOrg}
+												onChange={e => setValueOrg(e.target.valueOrg)}
 												autoFocus={true}
 											/>
 										</FormGroup>
-										{value1}
+										{valueOrg}
 									</Col>
 									<Col sm={3}>
 										<FormGroup>
@@ -265,13 +270,13 @@ export const ServicioComunal: React.FC<IProps> = props => {
 											</Label>
 											<Input
 												name='tipo_centro'
-												type='text'
-												value={value1}
-												onChange={e => setValue1(e.target.value1)}
+												type='text'  
+												value={acompañante}
+												onChange={e => setValueAcompañante(e.target.acompañante)}
 												autoFocus={true}
 											/>
 										</FormGroup>
-										{value1}
+										{acompañante}
 									</Col>
 								</Row>
 								<Row></Row>
@@ -281,12 +286,12 @@ export const ServicioComunal: React.FC<IProps> = props => {
 									<Input
 												name='tipo_centro'
 												type='text'
-												value={value2}
-												onChange={e => setValue3(e.target.value2)}
+												value={descripcion}  
+												onChange={e => setValueDescripcion(e.target.descripcion)}
 												autoFocus={true}
 											/>
 									
-										{value2}
+										{descripcion}
 									<StyledMultiSelect options={[]} selectedOptions={[]} editable={false} />
 								</FormGroup>
 							</Form>
