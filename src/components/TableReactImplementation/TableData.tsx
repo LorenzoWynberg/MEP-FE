@@ -44,6 +44,7 @@ interface IProps {
 	handleChangeSelectAll?: (value: boolean) => void
 	actions?: []
 	checked?: boolean
+	onSearch?: () => void
 }
 
 interface IBackendPaginatedProps extends IProps {
