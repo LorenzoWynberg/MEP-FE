@@ -22,6 +22,11 @@ import swal from 'sweetalert'
 import { useTranslation } from 'react-i18next'
 import { useHistory } from 'react-router'
 
+import { 
+  GetServicioComunalByInstitucionId,
+  getTablaEstudiantesServicioComunalById
+} from '../../../../redux/configuracion/actions'
+
 const BuscadorPersonasServicioComunal = (props) => {
   const [t] = useTranslation()
   const [fallecidos, setFallecidos] = useState<boolean>(false)
@@ -37,6 +42,11 @@ const BuscadorPersonasServicioComunal = (props) => {
     getStudentFilter,
     clearDataFilter
   })
+
+  
+  const actions = useActions({
+    getTablaEstudiantesServicioComunalById
+    }) 
 
   const columns = useMemo(() => {
     return [
