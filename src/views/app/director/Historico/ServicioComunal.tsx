@@ -53,13 +53,14 @@ import { useActions } from 'Hooks/useActions'
 export const ServicioComunal: React.FC<IProps> = props => {
 	const { t } = useTranslation()
 	const [catalogos, setCatalogos] = React.useState([])
-	const [areaProyecto, setData] = React.useState([])
+	const [areaProyecto, setAreaProyecto] = React.useState()
 	const [showAreaProyecto, setShowAreaProyecto] = React.useState(false)
 	const [showNombre, setShowNombre] = React.useState(false)
 	const [objetivoNombre, setObjetivoNombre] = React.useState([])
 	const [areasProyectoId, setAreasProyectoId] = React.useState()
 	const [currentExtentions, setCurrentExtentions] = React.useState()
 	const [nombresSeleccionados, setNombresSeleccionados] = React.useState([])
+	const [nombresIdSeleccionados, setNombresIdSeleccionados] = React.useState([])
 	const [showMap, setShowMap] = React.useState(false)
 	const [institutionImage, setInstitutionImage] = React.useState(null)
 	const [loading, setLoading] = React.useState<boolean>(false)
@@ -91,77 +92,52 @@ export const ServicioComunal: React.FC<IProps> = props => {
 			{loading && <BarLoader />}
 			{catalogos && console.log('catalogos', catalogos)}
 			{/* {showAreaProyecto && catalogos.areasProyecto &&
-				<ModalRadio title="Area Proyecto" setValue={setShowAreaProyecto} value={showAreaProyecto} coleccion={catalogos.areasProyecto} />} */}
-			{showAreaProyecto && catalogos.areasProyecto && (
-				<SimpleModal
-					title='Areas Proyecto'
-					openDialog={showAreaProyecto}
-					onConfirm={() => {
-						setShowAreaProyecto(false)
-					}}
-					onClose={() => setShowAreaProyecto(false)}
-				>
-					<FormControl>
+					<ModalRadio title="Area Proyecto" setValue={setShowAreaProyecto} value={showAreaProyecto} coleccion={catalogos.areasProyecto} />} */}
+			{showAreaProyecto && catalogos.areasProyecto &&
+				<SimpleModal title="Areas Proyecto" openDialog={showAreaProyecto} onConfirm={() => { setShowAreaProyecto(false) }} onClose={() => setShowAreaProyecto(false)}>
+z					<FormControl>
 						<FormLabel id='demo-radio-buttons-group-label'>Area Proyecto</FormLabel>
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
 							name='radio-buttons-group'
 							value={value}
 						>
-							{catalogos.areasProyecto.map(item => (
-								<FormControlLabel
-									value={item.id}
-									onClick={(e, v) => {
-										e.persist()
-										setValue(e.target.value)
-									}}
-									checked={value == item.id}
-									control={<Radio />}
-									label={item.nombre}
-								/>
-							))}
+							{catalogos.areasProyecto.map(item => <FormControlLabel value={item.id} onClick={(e, v) => { e.persist(); console.log('item.nombre', item.nombre); setValue(e.target.value); setAreaProyecto(item.nombre) }} checked={value == item.id} control={<Radio />} label={item.nombre} />)}
 						</RadioGroup>
 					</FormControl>
-				</SimpleModal>
-			)}
-			{value}
-			{showNombre && catalogos.nombresProyecto && (
-				<SimpleModal
-					title='Areas Proyecto'
-					openDialog={showNombre}
-					onConfirm={() => {
-						setShowNombre(false)
-					}}
-					onClose={() => setShowNombre(false)}
-				>
+				</SimpleModal >}
+			{console.log('nombresSeleccionados', nombresSeleccionados)}
+			{nombresSeleccionados && value && showNombre && catalogos.nombresProyecto &&
+				<SimpleModal title="Nmobre Proyecto" openDialog={showNombre} onConfirm={() => { setShowNombre(false) }} onClose={() => setShowNombre(false)}>
 					<FormControl>
-						<FormLabel id='demo-radio-buttons-group-label'>Nombre Proyecto</FormLabel>
-						{console.log('nombresSeleccionados', nombresSeleccionados)}
-						{catalogos.nombresProyecto
-							.filter(item => parseInt(item.codigo) == parseInt(value))
-							.map(item => (
-								<FormControlLabel
-									control={
-										<Checkbox
-											checked={nombresSeleccionados.includes(item.id)}
-											onChange={(e, v) => {
-												console.log('ev,[e,v]', [e, v])
-												let nombres = nombresSeleccionados
-												if (nombres.includes(item.id)) {
-													nombres = nombres.filter(x => x != item.id)
-												} else {
-													nombres.push(item.id)
-												}
-												setNombresSeleccionados(nombres)
-											}}
-										/>
+						<FormLabel id="demo-radio-buttons-group-label">Nombre Proyecto</FormLabel>
+						{catalogos.nombresProyecto.filter(item => parseInt(item.codigo) == parseInt(value)).map((item, index) =>
+							<FormControlLabel
+								control={
+									<Checkbox
+										checked={nombresSeleccionados.includes(item.id)}
+										value={item.id}
+									/>
+								}
+								label={item.nombre}
+								onClick={async () => {
+									let nombres = [...nombresSeleccionados];
+									let nombresId = [...nombresIdSeleccionados];
+									console.log('nombres', nombres)
+									if (!nombresId.includes(item.id)) {
+										nombres.push(item)
+										nombresId.push(item.id)
+									} else {
+										nombres = nombres.filter(n => n != item.id)
+										nombresId = nombresId.filter(n => n.id != item.id)
 									}
-									label={item.nombre}
-								/>
-							))}
+									setNombresSeleccionados(nombres);
+									setNombresIdSeleccionados(nombresId);
+								}}
+							/>
+						)}
 					</FormControl>
-				</SimpleModal>
-			)}
+				</SimpleModal>}
 			<NavigationContainer
 				goBack={() => {
 					props.history.push('/director/buscador/centro')
@@ -173,7 +149,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					<Col sm={12}>
 						<Card className='bg-white__radius'>
 							<CardTitle>{t('registro_servicio_comunal', 'Registro Servicio Comunal')}</CardTitle>
-
+							{nombresSeleccionados && console.log('nombresSeleccionados', nombresSeleccionados)}
 							<Form>
 								<Row>
 									<Col md={3}>
@@ -181,24 +157,19 @@ export const ServicioComunal: React.FC<IProps> = props => {
 											<Label>
 												{t('registro_servicio_comunal>area_proyecto', 'Area de proyecto')}
 											</Label>
-											<Input
-												name='i'
-												value={areaProyecto ? '' : areaProyecto}
-												readOnly
-												onClick={() => !showAreaProyecto && setShowAreaProyecto(true)}
-											/>
+											<Input key={areaProyecto} name='i' value={areaProyecto ? areaProyecto : ''} readOnly onClick={() => !showAreaProyecto && setShowAreaProyecto(true)} />
 										</FormGroup>
 									</Col>
 									<Col md={6}>
-										<FormGroup>
+										{nombresSeleccionados.length == 0 && <FormGroup>
 											<Label>{t('registro_servicio_comunal>objetivonombre', 'objetivo')}</Label>
-											<Input
-												name='codigo'
-												value={objetivoNombre ? '' : objetivoNombre}
-												readOnly
-												onClick={() => !showNombre && setShowNombre(true)}
-											/>
-										</FormGroup>
+											<Input name='codigo' value={objetivoNombre ? '' : objetivoNombre} readOnly onClick={() => !showNombre && setShowNombre(true)} />
+										</FormGroup>}
+										{nombresSeleccionados.length > 0 &&
+											<div onClick={() => !showNombre && setShowNombre(true)}  style={{ padding: 8, background: '#e9ecef' }} > 
+												{nombresSeleccionados.map(n => <Chip label={n.nombre} />)}
+											</div>
+										}
 									</Col>
 									<Col sm={3}>
 										<FormGroup>
