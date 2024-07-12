@@ -187,7 +187,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 			</SimpleModal >
 			}
 			{nombresSeleccionados && value && showNombre && catalogos.nombresProyecto &&
-				<SimpleModal title="Nmobre Proyecto" openDialog={showNombre} onConfirm={() => { setShowNombre(false) }} onClose={() => setShowNombre(false)}>
+				<SimpleModal title="Nombre Proyecto" openDialog={showNombre} onConfirm={() => { setShowNombre(false) }} onClose={() => setShowNombre(false)}>
 					<FormControl>
 						<FormLabel id="demo-radio-buttons-group-label">Nombre Proyecto</FormLabel>
 						{catalogos.nombresProyecto.filter(item => parseInt(item.codigo) == parseInt(value)).map((item, index) =>

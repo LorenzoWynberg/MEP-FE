@@ -104,8 +104,8 @@ const BuscadorPersonasServicioComunal = (props) => {
         Cell: ({ cell, row, data }) => {
           const fullRow = data[row.index]
           return (
-            <div className='d-flex justify-content-center align-items-center'>
-              <Button primary onClick={() => {
+            <div className='d-flex justify-content-center align-items-center' >
+              <Button color="primary" primary onClick={() => {
                 console.log('arraasdasdyfullRow', fullRow)
                 let array = [...props.estudiantes]
                 array.push(fullRow)
@@ -114,11 +114,13 @@ const BuscadorPersonasServicioComunal = (props) => {
                 props.setEstudiantes(array)
               }}
                 style={{
-                  fontSize: 30,
+                  fontSize: 10,
                   color: colors.darkGray,
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  
+                  
                 }}
-              />
+              >Agregar estudiante</Button>
             </div>
           )
 
@@ -182,7 +184,7 @@ const BuscadorPersonasServicioComunal = (props) => {
         <Container>
           <Row>
             <Col xs={12}>
-              <h3>{t('estudiantes>buscador_per>titulo', 'Buscar personas')}</h3>
+              <h3>{t('servicio_comunal_table>registro_servicio_comunal>agregar_estudiante>titulo', 'Agregar estudiante')}</h3>
             </Col>
             <Col
               xs={12}

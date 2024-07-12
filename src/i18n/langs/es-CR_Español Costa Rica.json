@@ -105,6 +105,7 @@
   "servicio_comunal_table>registro_servicio_comunal>agregar_estudiante>fecha_nacimiento":"Fecha nacimiento",
   "servicio_comunal_table>registro_servicio_comunal>agregar_estudiante>edad":"Edad",
   "servicio_comunal_table>registro_servicio_comunal>agregar_estudiante>discapacidad":"Discapacidad",
+  "servicio_comunal_table>registro_servicio_comunal>agregar_estudiante>titulo":"Agregar estudiante",
   "comunicados>bandeja>enviar_papelera": "Enviar a Papelera",
   "comunicados>bandeja>imprimir": "Imprimir",
   "comunicados>bandeja>marcar_no_leido": "Marcar como no leído",
