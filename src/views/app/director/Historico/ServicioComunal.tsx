@@ -251,7 +251,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												name='tipo_centro'
 												type='text'
 												value={acompanante}
-												onChange={e => setValueAcompanante(e.target.acompañante)}
+												onChange={e => setValueAcompanante(e.target.acompanante)}
 												autoFocus={true}
 											/>
 										</FormGroup>
