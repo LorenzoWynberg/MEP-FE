@@ -393,7 +393,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 				</Row>
 
 				<Row>
-					<Col sm={12}><Button primary onClick={() => actions.crearServicioComunal({
+					<Col sm={12}><Button class="sc-iqcoie bQFwPO cursor-pointer" primary onClick={() => actions.crearServicioComunal({
 						"sb_InstitucionesId": 0,
 						"sb_areaProyectoId": value,
 						"sb_nombreProyectoId": nombresSeleccionados[0].id,
