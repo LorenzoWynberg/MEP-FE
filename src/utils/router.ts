@@ -1326,7 +1326,7 @@ const routes: Route[] = [
 	{
 		component: ExpedienteServicioComunal,
 		exact: true,
-		route: '/director/expediente-estudiante/servicio-comunal/', 
+		route: '/director/expediente-estudiante/servicio-comunal/:idServicio', 
 		isAuthenticated: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {

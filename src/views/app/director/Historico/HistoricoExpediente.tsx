@@ -63,7 +63,7 @@ const HistoricoExpediente = (props) => {
     }
   })
 
-  useEffect(() => { 
+  useEffect(() => {
     setLoading(true)
     actions
       .GetServicioComunalByInstitucionId(
@@ -144,6 +144,7 @@ const HistoricoExpediente = (props) => {
         label: '',
         Cell: ({ _, row, data }) => {
           const fullRow = data[row.index]
+          console.log('fullRow', fullRow)
           return (
             <div
               style={{
@@ -152,12 +153,12 @@ const HistoricoExpediente = (props) => {
                 gap: '5px'
               }}
             >
-              <Tooltip title={t('buscador_ce>buscador>columna_acciones>ficha', 'Ver ficha del centro educativo')}>
+              <Tooltip title={t('buscador_ce>buscador>columna_acciones>ficha', 'Ver ficha del SCE')}>
                 <RemoveRedEyeRounded
 
                   onClick={() =>
                     props.history.push(
-                      `/director/ficha-centro/${fullRow.institucionId}`
+                      `/director/expediente-estudiante/servicio-comunal/${fullRow.id}`
                     )}
                   style={{
                     fontSize: 25,
@@ -222,10 +223,9 @@ const HistoricoExpediente = (props) => {
     <AppLayout items={directorItems}>
       <div className='dashboard-wrapper'>
         {loading && <BarLoader />}
-        {console.log('expediente', expediente)}
         {expediente && <SimpleModal title="Eliminar Registro" onClose={() => setExpediente(null)}
           onConfirm={() => {
-            actions.desactivarServicioComunal(expediente.id,history)
+            actions.desactivarServicioComunal(expediente.id, history)
             setExpediente(null)
           }}
           openDialog={expediente}>Está seguro que desea eliminar este registro de Servicio Comunal Estudiantil?</SimpleModal>}
@@ -255,6 +255,7 @@ const HistoricoExpediente = (props) => {
               <TableReactImplementation
                 data={data}
                 showAddButton
+                // avoidSearch
                 onSubmitAddButton={() => { props.history.push('/director/expediente/servicio-comunal/registro') }}
                 handleGetData={async (
                   searchValue,

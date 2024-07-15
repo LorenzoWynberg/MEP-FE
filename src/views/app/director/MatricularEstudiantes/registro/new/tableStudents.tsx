@@ -43,7 +43,7 @@ const TableStudents: React.FC<IProps> = props => {
 		}
 	}
 
-	const columns = useMemo(() => {
+	const columns = props.columns ? props.columns : useMemo(() => {
 		// Si tiene permiso para des-matricular, se agrega la columna de acciones
 
 		// ID #2 -> Director
@@ -280,7 +280,7 @@ const TableStudents: React.FC<IProps> = props => {
 						)}
 					</h4>
 
-					<TableReactImplementation orderOptions={[]} columns={columns} data={students} />
+					<TableReactImplementation avoidSearch={props.avoidSearch} orderOptions={[]} columns={columns} data={students} />
 				</CardBody>
 			</Card>
 		</Colxx>

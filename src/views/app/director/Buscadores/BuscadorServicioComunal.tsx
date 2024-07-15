@@ -105,15 +105,15 @@ const BuscadorPersonasServicioComunal = (props) => {
           const fullRow = data[row.index]
           return (
             <div className='d-flex justify-content-center align-items-center' >
-              <Button     onClick={() => {
+              <Button onClick={() => {
                 console.log('arraasdasdyfullRow', fullRow)
                 let array = [...props.estudiantes]
                 array.push(fullRow)
-                console.log('arraasdasdyprops.estudiantes',props.estudiantes)
-                console.log('arraasdasdy',array)
+                console.log('arraasdasdyprops.estudiantes', props.estudiantes)
+                console.log('arraasdasdy', array)
                 props.setEstudiantes(array)
               }}
-               style={{ backgroundColor: '#10426d', color: 'white' }} variant='contained'
+                style={{ backgroundColor: '#10426d', color: 'white' }} variant='contained'
               >Agregar estudiante</Button>
             </div>
           )
@@ -121,7 +121,7 @@ const BuscadorPersonasServicioComunal = (props) => {
         }
       }
     ]
-  }, [t,props.estudiantes])
+  }, [t, props.estudiantes])
 
   useEffect(() => {
     setFirstCalled(true)
@@ -166,6 +166,19 @@ const BuscadorPersonasServicioComunal = (props) => {
       }
     }
   }, [state.estudiantes])
+
+  useEffect(async () => {
+
+    setLoading(true)
+    let val = document.getElementById('search').value;
+    console.log('the value is',val)
+    await actions.getStudentFilter(
+      val,
+      1,
+      100
+    )
+    setLoading(false)
+  }, [])
 
   return (
     <AppLayout items={directorItems}>

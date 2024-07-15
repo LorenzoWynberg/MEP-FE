@@ -27,6 +27,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
+import { Search } from 'Components/TableReactImplementationServicio/Header'
 
 // const ModalRadio = (props) => {
 // 	console.log('props', props)
@@ -356,9 +357,11 @@ export const ServicioComunal: React.FC<IProps> = props => {
 
 				<Row>
 					<Col sm={12}>
+						<div style={{ marginLeft: 16 }}><Search onSearch={() => { showBuscador ? setShowBuscador(false) : setShowBuscador(true) }} /></div>
 						<TableStudents
 							onlyViewModule={true}
 							data={estudiantes}
+							avoidSearch={true}
 							// data={[
 							// 	{
 							// 		"idEstudiante": 1495875,
@@ -382,7 +385,6 @@ export const ServicioComunal: React.FC<IProps> = props => {
 							// 	}
 							// ]}
 							hasEditAccess={true}
-							handleGetData={() => { showBuscador ? setShowBuscador(false) : setShowBuscador(true) }}
 							setEstudiantes={setEstudiantes} estudiantes={estudiantes}
 							closeContextualMenu={false}
 						></TableStudents>

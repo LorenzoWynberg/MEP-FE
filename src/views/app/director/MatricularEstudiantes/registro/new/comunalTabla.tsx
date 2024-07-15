@@ -215,7 +215,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 						)}
 					</h4>
 
-					<TableReactImplementationServicio handleGetData={() => { props.handleGetData() }} orderOptions={[]} columns={columns} data={students} />
+					<TableReactImplementationServicio  avoidSearch={props.avoidSearch} handleGetData={() => { props.handleGetData() }} orderOptions={[]} columns={columns} data={students} />
 				</CardBody>
 			</Card>
 		</Colxx>
