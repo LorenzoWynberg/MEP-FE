@@ -11,15 +11,15 @@ interface IProps {
 const Search: FC<IProps> = props => {
 	const { t } = useTranslation()
 
-	const { onSearch,defaultText } = props
-	const [text, setText] = React.useState<string>(defaultText? defaultText : '')
+	const { onSearch, defaultText } = props
+	const [text, setText] = React.useState<string>(defaultText ? defaultText : '')
 	return (
 		<SearchContainer className='mr-4'>
 			<InputSearchDiv>
 				<Input
 					type='text'
 					name='keyword'
-					id='search'
+					id={props.newId ? props.newId : 'search'}
 					value={text}
 					onKeyPress={e => {
 						if (e.key === 'Enter') {
