@@ -270,9 +270,9 @@ const TableStudents: React.FC<IProps> = props => {
 
 	onlyViewModule && columns.splice(7, 1)
 	return (
-		<Colxx className='mb-5' sm='12' lg='12' xl='12'>
+		<Colxx className={props.noMargin ? 'mb-0' : 'mb-5'} style={props.noMargin ? { margin: 0 , padding:0} : {}} sm='12' lg='12' xl='12' >
 			<Card>
-				<CardBody>
+				<CardBody style={props.noMargin ? { margin: 0 , padding:0} : {}} >
 					<h4>
 						{t(
 							'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados',
@@ -283,7 +283,7 @@ const TableStudents: React.FC<IProps> = props => {
 					<TableReactImplementation avoidSearch={props.avoidSearch} orderOptions={[]} columns={columns} data={students} />
 				</CardBody>
 			</Card>
-		</Colxx>
+		</Colxx >
 	)
 }
 

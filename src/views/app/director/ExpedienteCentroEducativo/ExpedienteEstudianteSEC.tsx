@@ -166,10 +166,10 @@ const ExpedienteEstudianteSEC = (props) => {
 			<div className="dashboard-wrapper">
 				<Container>
 					{showProyecto &&
-						<>
-						<Row>
-							<strong>Detalle del Servicio Comunal Estudiantil:</strong>
-						</Row>
+						<div >
+							<Row>
+								<Col style={{marginBottom:16}} sm={12}><strong>Detalle del Servicio Comunal Estudiantil:</strong></Col>
+							</Row>
 							<Row >
 								<Col sm={4}>
 
@@ -210,79 +210,78 @@ const ExpedienteEstudianteSEC = (props) => {
 									<strong>{t('informationcarddetalle>organizaciónContraParte', 'Tipo de organización contraparte')}:</strong> {sce.nombreOrganizacionContraparte}
 
 								</Col>
-							</Row ></>
+							</Row ></div>
 
 					}
-					<Row>
-						<Col sm={12}>
-							<TableStudents
-								onlyViewModule={true}
-								avoidSearch={true}
-								data={[
-									{
-										"identificacion": "123210049",
-										"nombreEstudiante": "NATASHA CASTILLO  ROJAS",
-										"nacionalidad": "COSTARRICENSE",
-										"nacionalidadShow": "COSTARRICENSE",
-										"genero": "MUJER",
-										"generoShow": "MUJER",
-										"fechaNacimiento": new Date("10/01/2019").toISOString(),
-										"edad": "5 años y 6 meses",
-										"tieneDiscapacidad": "NO"
-									},
-									{
-										"identificacion": "123130198",
-										"nombreEstudiante": "AINARA LOPEZ  ROJAS",
-										"nacionalidad": "COSTARRICENSE",
-										"nacionalidadShow": "COSTARRICENSE",
-										"genero": "MUJER",
-										"generoShow": "MUJER",
-										"fechaNacimiento": new Date("11/09/2018").toISOString(),
-										"edad": "5 años y 10 meses",
-										"tieneDiscapacidad": "NO"
-									},
-									{
-										"identificacion": "123050055",
-										"nombreEstudiante": "RIHANNA JOYSIE MORALES  MORALES",
-										"nacionalidad": "COSTARRICENSE",
-										"nacionalidadShow": "COSTARRICENSE",
-										"genero": "MUJER",
-										"generoShow": "MUJER",
-										"fechaNacimiento": new Date("11/05/2018").toISOString(),
-										"edad": "6 años y 2 meses",
-										"tieneDiscapacidad": "NO"
-									}
-								]}
-								columns={columns}
-								// data={[
-								// 	{
-								// 		"idEstudiante": 1495875,
-								// 		"nombreEstudiante": "CASTILLO  NAVARRO AARON",
-								// 		"identificacion": "113420854",
-								// 		"fotografiaUrl": "",
-								// 		"conocidoComo": "",
-								// 		"nacionalidad": null,
-								// 		"idInstitucion": null,
-								// 		"idMatricula": null,
-								// 		"institucion": "",
-								// 		"codigoinstitucion": "",
-								// 		"modalidad": null,
-								// 		"grupo": "",
-								// 		"fallecido": false,
-								// 		"tipoInstitucion": null,
-								// 		"regional": "/",
-								// 		"fechaNacimiento": "1988-02-05T00:00:00",
-								// 		"nivel": null,
-								// 		"tipoIdentificacion": "CÉDULA"
-								// 	}
-								// ]}
-								hasEditAccess={true}
-								// handleGetData={() => { showBuscador ? setShowBuscador(false) : setShowBuscador(true) }}
-								// setEstudiantes={setEstudiantes} estudiantes={estudiantes}
-								closeContextualMenu={false}
-							></TableStudents>
-						</Col>
-					</Row>
+					<TableStudents
+					noMargin={true}
+						onlyViewModule={true}
+						avoidSearch={true}
+						data={[
+							{
+								"identificacion": "123210049",
+								"nombreEstudiante": "NATASHA CASTILLO  ROJAS",
+								"nacionalidad": "COSTARRICENSE",
+								"nacionalidadShow": "COSTARRICENSE",
+								"genero": "MUJER",
+								"generoShow": "MUJER",
+								"fechaNacimiento": new Date("10/01/2019").toISOString(),
+								"edad": "5 años y 6 meses",
+								"tieneDiscapacidad": "NO"
+							},
+							{
+								"identificacion": "123130198",
+								"nombreEstudiante": "AINARA LOPEZ  ROJAS",
+								"nacionalidad": "COSTARRICENSE",
+								"nacionalidadShow": "COSTARRICENSE",
+								"genero": "MUJER",
+								"generoShow": "MUJER",
+								"fechaNacimiento": new Date("11/09/2018").toISOString(),
+								"edad": "5 años y 10 meses",
+								"tieneDiscapacidad": "NO"
+							},
+							{
+								"identificacion": "123050055",
+								"nombreEstudiante": "RIHANNA JOYSIE MORALES  MORALES",
+								"nacionalidad": "COSTARRICENSE",
+								"nacionalidadShow": "COSTARRICENSE",
+								"genero": "MUJER",
+								"generoShow": "MUJER",
+								"fechaNacimiento": new Date("11/05/2018").toISOString(),
+								"edad": "6 años y 2 meses",
+								"tieneDiscapacidad": "NO"
+							}
+						]}
+						columns={columns}
+						// data={[
+						// 	{
+						// 		"idEstudiante": 1495875,
+						// 		"nombreEstudiante": "CASTILLO  NAVARRO AARON",
+						// 		"identificacion": "113420854",
+						// 		"fotografiaUrl": "",
+						// 		"conocidoComo": "",
+						// 		"nacionalidad": null,
+						// 		"idInstitucion": null,
+						// 		"idMatricula": null,
+						// 		"institucion": "",
+						// 		"codigoinstitucion": "",
+						// 		"modalidad": null,
+						// 		"grupo": "",
+						// 		"fallecido": false,
+						// 		"tipoInstitucion": null,
+						// 		"regional": "/",
+						// 		"fechaNacimiento": "1988-02-05T00:00:00",
+						// 		"nivel": null,
+						// 		"tipoIdentificacion": "CÉDULA"
+						// 	}
+						// ]}
+						hasEditAccess={true}
+						// handleGetData={() => { showBuscador ? setShowBuscador(false) : setShowBuscador(true) }}
+						// setEstudiantes={setEstudiantes} estudiantes={estudiantes}
+						closeContextualMenu={false}
+					></TableStudents>
+
+
 				</Container>
 			</div>
 		</AppLayout >
