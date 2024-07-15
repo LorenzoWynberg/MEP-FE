@@ -60,6 +60,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 	const [objetivoNombre, setObjetivoNombre] = React.useState([])
 	const [busqueda, setBusqueda] = React.useState()
 	const [estudiantes, setEstudiantes] = React.useState([])
+	const [caracteristicas, setCaracteristicas] = React.useState([])
 	const [nombresSeleccionados, setNombresSeleccionados] = React.useState([])
 	const [nombresIdSeleccionados, setNombresIdSeleccionados] = React.useState([])
 	const [showBuscador, setShowBuscador] = React.useState(false)
@@ -109,10 +110,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 		setStudents(_data)
 	}, [studentsSeleccionados])
 
-	useEffect(() => {
-		console.log('isssssasdasd', estudiantes)
-	}, [estudiantes])
-
+ 
 	const actions = useActions({
 		crearServicioComunal,
 		getTablaEstudiantesServicioComunalById
@@ -125,7 +123,6 @@ export const ServicioComunal: React.FC<IProps> = props => {
 	}, [])
 	return (
 		<AppLayout items={directorItems}>
-			{console.log('catalogos.areasProyecto', catalogos.areasProyecto)}
 			{loading && <BarLoader />}
 			{catalogos && console.log('catalogos', catalogos)}
 			{/* {showAreaProyecto && catalogos.areasProyecto &&
@@ -147,15 +144,34 @@ export const ServicioComunal: React.FC<IProps> = props => {
 				<SimpleModal title="Areas Proyecto" openDialog={showCaracteristicas} onConfirm={() => { setShowCaracteristicas(false) }} onClose={() => setShowCaracteristicas(false)}>
 					<FormControl>
 						<FormLabel id='demo-radio-buttons-group-label'>Caracteristica</FormLabel>
-						<RadioGroup
-							aria-labelledby='demo-radio-buttons-group-label'
-							name='radio-buttons-group'
-							value={value}
-						>
-							{catalogos.caracteristicas.map(item => <FormControlLabel value={item.id} onClick={(e, v) => { e.persist(); setCaracteristicaId(e.target.value); setCaracteristica(item.nombre); }} checked={caracteristicaId == item.id} control={<Radio />} label={item.nombre} />)}
-						</RadioGroup>
+						{catalogos.caracteristicas.filter(item => parseInt(item.codigo) == parseInt(value)).map((item, index) =>
+							<FormControlLabel
+								control={
+									<Checkbox
+										checked={caracteristicasSeleccionados.map(v => v.id).includes(item.id)}
+										value={item.id}
+									/>
+								}
+								label={item.caracteristicas}
+								onClick={async () => {
+									let caracteristicas = [...caracteristicasSeleccionados];
+									let caracteristicasId = [...caracteristicasIdSeleccionados];
+									console.log('caracteristicas', caracteristicas)
+									if (!caracteristicasId.includes(item.id)) {
+										caracteristicas.push(item)
+										caracteristicasId.push(item.id)
+									} else {
+										caracteristicas = caracteristicas.filter(n => n.id != item.id)
+										caracteristicasId = caracteristicasId.filter(n => n != item.id)
+									}
+									setCaracteristicasSeleccionados(caracteristicas);
+									setCaracteristicasIdSeleccionados(caracteristicasId);
+								}}
+							/>
+						)}
 					</FormControl>
-				</SimpleModal >} 
+				</SimpleModal >
+			}
 			{showModalidades &&
 				<SimpleModal title="Areas Proyecto" openDialog={showModalidades} onConfirm={() => { setShowModalidades(false) }} onClose={() => setShowModalidades(false)}>
 					<FormControl>
@@ -281,7 +297,6 @@ export const ServicioComunal: React.FC<IProps> = props => {
 										</FormGroup>
 									</Col>
 									<Col sm={3}>
-										{' '}
 										<FormGroup>
 											<Label>
 												{t(
@@ -386,7 +401,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 							// ]}
 							hasEditAccess={true}
 							handleGetData={() => { showBuscador ? setShowBuscador(false) : setShowBuscador(true) }}
-
+							setEstudiantes={setEstudiantes} estudiantes={estudiantes}
 							closeContextualMenu={false}
 						></TableStudents>
 					</Col>
@@ -404,7 +419,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 						"fechaConclusionSCE": Cdate,
 						"insertadoPor": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
 						"caracteristicas": [
-							caracteristicaId
+							caracteristicas.map(e => e.caracteristicaId)
 						],
 						"estudiantes":
 							estudiantes.map(e => e.idEstudiante)

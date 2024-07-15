@@ -8,6 +8,7 @@ import { format, parseISO } from 'date-fns'
 import colors from 'Assets/js/colors'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
+import { Button } from '@material-ui/core'
 
 interface IProps {
 	data: Array<any>
@@ -142,128 +143,60 @@ const ComunalTabla: React.FC<IProps> = props => {
 			},
 			{
 				Header: t(
-					'servicio_comunal>registro_servicio_comunal>ofertas',
-					'Ofertas'
+					'servicio_comunal>registro_servicio_comunal>Eliminar',
+					'Eliminar'
+				),
+				accessor: 'Eliminar',
+				label: '',
+				column: '',
+				Cell: ({ cell, row, data }) => {
+					const _row = data[row.index]
+
+					return (
+						<p
+							style={{
+								background: colors.primary,
+								color: '#fff',
+								textAlign: 'center',
+								borderRadius: ' 20px'
+							}}
+						>
+							{_row.id}
+						</p>
+					)
+				}
+			},
+			{
+				Header: t(
+					'servicio_comunal>registro_servicio_comunal>eliminar',
+					'Eliminar'
 				),
 				column: '',
 				accessor: '',
 				label: '',
 				Cell: ({ cell, row, data }) => {
-					let _options = []
 
-					const rowData = data[row.index]
-
-					if (rowData.estadoCodigo == 1) {
-						// Regular
-						_options = [
-							{
-								name: t(
-									'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados>colum_acciones>ver',
-									'Ver'
-								),
-								action: _row => {
-									onSelectedStudent(_row, 'see')
-								}
-							},
-							{
-								name: t(
-									'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados>colum_acciones>riesgo',
-									'Riesgo de exclusión'
-								),
-								action: _row => {
-									onSelectedStudent(_row, '3')
-								}
-							},
-							{
-								name: t(
-									'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados>colum_acciones>excluido',
-									'Excluído'
-								),
-								action: _row => {
-									onSelectedStudent(_row, '4')
-								}
-							},
-							{
-								name: t(
-									'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados>colum_acciones>des_matricular',
-									'Des-matricular'
-								),
-								action: _row => {
-									onSelectedStudent(_row, 'remove')
-								}
-							}
-						]
-					} else if (rowData.estadoCodigo == 3) {
-						// Riesgo de exclusión
-
-						_options = [
-							{
-								name: 'Ver',
-								action: _row => {
-									onSelectedStudent(_row, 'see')
-								}
-							},
-							{
-								name: 'Excluído',
-								action: _row => {
-									onSelectedStudent(_row, '4')
-								}
-							}
-						]
-					} else if (rowData.estadoCodigo == 4) {
-						// Excluído
-
-						_options = [
-							{
-								name: 'Ver',
-								action: _row => {
-									onSelectedStudent(_row, 'see')
-								}
-							},
-							{
-								name: 'Reincorporar',
-								action: _row => {
-									onSelectedStudent(_row, '1')
-								}
-							}
-						]
-					} else if (rowData.estadoCodigo == 5) {
-						// Fallecido
-						_options = []
-					} else if (rowData.estadoCodigo == 6) {
-						// Trasladado a otro Centro
-						_options = [
-							{
-								name: 'Ver',
-								action: _row => {
-									onSelectedStudent(_row, 'see')
-								}
-							},
-							{
-								name: 'Reincorporar',
-								action: _row => {
-									onSelectedStudent(_row, '1')
-								}
-							}
-						]
-					}
-
-					const fullRow = data[row.index]
-
-					if (!hasEditAccess) {
-						_options.splice(1, 1)
-						_options.splice(2, 1)
-						_options.splice(3, 1)
-						_options.splice(1, 2)
-						_options.splice(2, 2)
-					}
-					if (!permisoDesMatricular) {
-						_options.splice(3, 4)
-					}
 					return (
-						<div key={row.index} className='d-flex justify-content-center align-items-center'>
-							<ContextualMenu options={_options} row={fullRow} close={closeContextualMenu} />
-						</div>
+						<p
+							style={{
+								background: colors.primary,
+								color: '#fff',
+								textAlign: 'center',
+								borderRadius: ' 20px'
+							}}
+						>
+							<Button onClick={() => {
+								const _row = data[row.index]
+								console.log('_row', _row)
+								let newEstudiantes = [...props.estudiantes]
+
+								newEstudiantes = newEstudiantes.filter(function (obj) {
+									return obj.idEstudiante !== _row.idEstudiante;
+								});
+								console.log('newEstudiantes',newEstudiantes)
+								props.setEstudiantes(newEstudiantes)
+							}}>Eliminar</Button>
+						</p>
 					)
 				}
 			}

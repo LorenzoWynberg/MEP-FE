@@ -85,6 +85,10 @@ const ContenedorPrincipal = (props) => {
 									)}
 									data={centroBreadcrumb}
 								/>
+								{t(
+										'expediente_ce>titulo',
+										'Expediente Centro educativo'
+									)}
 								<br />
 							</Col>
 						)}
