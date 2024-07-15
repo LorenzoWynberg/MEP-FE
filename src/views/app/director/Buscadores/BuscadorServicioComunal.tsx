@@ -105,7 +105,7 @@ const BuscadorPersonasServicioComunal = (props) => {
           const fullRow = data[row.index]
           return (
             <div className='d-flex justify-content-center align-items-center' >
-              <Button color="primary" primary onClick={() => {
+              <Button     onClick={() => {
                 console.log('arraasdasdyfullRow', fullRow)
                 let array = [...props.estudiantes]
                 array.push(fullRow)
@@ -113,13 +113,7 @@ const BuscadorPersonasServicioComunal = (props) => {
                 console.log('arraasdasdy',array)
                 props.setEstudiantes(array)
               }}
-                style={{
-                  fontSize: 10,
-                  color: colors.darkGray,
-                  cursor: 'pointer',
-                  
-                  
-                }}
+               style={{ backgroundColor: '#10426d', color: 'white' }} variant='contained'
               >Agregar estudiante</Button>
             </div>
           )
