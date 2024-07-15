@@ -1337,7 +1337,7 @@ const routes: Route[] = [
 	{
 		component: ServicioComunal,
 		isAuthenticated: true,
-		route: '/director/expediente/servicio-comunal/registro',
+		route: '/director/expediente-centro/servicio-comunal/registro',
 		exact: true
 	},
 ]
