@@ -82,13 +82,13 @@ const ExpedienteEstudianteSEC = (props) => {
 								<Breadcrumb
 									header={t(
 										'expediente_ce>titulo',
-										'Expediente Centro educativo'
+										'Expediente Centro Educativo'
 									)}
 									data={centroBreadcrumb}
 								/>
 								{t(
 										'expediente_ce>titulo',
-										'Expediente Centro educativo'
+										'Expediente Centro Educativo'
 									)}
 								<br />
 							</Col>

@@ -151,7 +151,7 @@ const HistoricoExpediente = (props) => {
 
                   onClick={() =>
                     props.history.push(
-                      `/director/ficha-centro/${fullRow.institucionId}`
+                      `/director/expediente-estudiante/servicio-comunal`
                     )}
                   style={{
                     fontSize: 25,
