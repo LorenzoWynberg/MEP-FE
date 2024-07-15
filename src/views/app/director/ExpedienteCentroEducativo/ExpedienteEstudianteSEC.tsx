@@ -1,4 +1,4 @@
-import React from 'react'
+	import React from 'react'
 import centroBreadcrumb from 'Constants/centroBreadcrumb'
 import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
@@ -17,10 +17,10 @@ const Ofertas = React.lazy(() => import('./Ofertas'))
 const RecursoHumano = React.lazy(() => import('./RecursoHumano'))
 const Infraestructura = React.lazy(() => import('./Infraestructura'))
 const OrganizacionAuxiliar = React.lazy(() => import('./OrganizacionAuxiliar'))
-const InformationCard = React.lazy(() => import('./_partials/InformationCard'))
+const InformationCardExpediente = React.lazy(() => import('./_partials/InformationCardExpediente'))
 const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
 
-const ContenedorPrincipal = (props) => {
+const ExpedienteEstudianteSEC = (props) => {
 	const { t } = useTranslation()
 	centroBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
@@ -75,7 +75,8 @@ const ContenedorPrincipal = (props) => {
 			<div className="dashboard-wrapper">
 				<Container>
 					<Row>
-						<InformationCard data={{}} />
+						{console.log(' centroBreadcrumb',centroBreadcrumb)}
+						<InformationCardExpediente data={{}} />
 						{props.active !== 0 && (
 							<Col xs={12}>
 								<Breadcrumb
@@ -92,22 +93,7 @@ const ContenedorPrincipal = (props) => {
 								<br />
 							</Col>
 						)}
-						<Col xs={12}>
-							{
-								{
-									0: <Inicio {...props} />,
-									1: <General {...props} />,
-									2: <Ofertas {...props} />,
-									3: <RecursoHumano {...props} />,
-									4: <Horarios {...props} />,
-									5: <Infraestructura {...props} />,
-									6: <OrganizacionAuxiliar {...props} />,
-									7: <Estadistica {...props} />,
-									8: <Grupos {...props} />,
-									9: <NormativaInterna {...props} />
-								}[props.active]
-							}
-						</Col>
+			
 					</Row>
 				</Container>
 			</div>
@@ -115,4 +101,5 @@ const ContenedorPrincipal = (props) => {
 	)
 }
 
-export default ContenedorPrincipal
+export default ExpedienteEstudianteSEC
+
