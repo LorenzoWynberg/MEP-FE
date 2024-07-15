@@ -19,9 +19,9 @@ import Tooltip from '@mui/material/Tooltip'
 import BarLoader from 'Components/barLoader/barLoader'
 import colors from 'Assets/js/colors'
 import swal from 'sweetalert'
+
 import { useTranslation } from 'react-i18next'
 import { useHistory } from 'react-router'
-
 import {
   GetServicioComunalByInstitucionId,
   getTablaEstudiantesServicioComunalById
@@ -105,7 +105,7 @@ const BuscadorPersonasServicioComunal = (props) => {
           const fullRow = data[row.index]
           return (
             <div className='d-flex justify-content-center align-items-center' >
-              <Button     onClick={() => {
+              <Button color="primary" primary onClick={() => {
                 console.log('arraasdasdyfullRow', fullRow)
                 let array = [...props.estudiantes]
                 array.push(fullRow)
@@ -113,7 +113,13 @@ const BuscadorPersonasServicioComunal = (props) => {
                 console.log('arraasdasdy',array)
                 props.setEstudiantes(array)
               }}
-               style={{ backgroundColor: '#10426d', color: 'white' }} variant='contained'
+                style={{
+                  fontSize: 10,
+                  color: colors.darkGray,
+                  cursor: 'pointer',
+                  
+                  
+                }}
               >Agregar estudiante</Button>
             </div>
           )
@@ -170,11 +176,12 @@ const BuscadorPersonasServicioComunal = (props) => {
   return (
     <AppLayout items={directorItems}>
       {console.log('state est', state.estudiantes)}
-      <div className='dashboard-wrapper'>
+      
         {loading && <BarLoader />}
         <Helmet>
           <title>Buscador de personas</title>
         </Helmet>
+      
         <Container>
           <Row>
             <Col xs={12}>
@@ -190,6 +197,7 @@ const BuscadorPersonasServicioComunal = (props) => {
               }}
             />
             <Col xs={12}>
+            <div>
               <TableReactImplementation
                 data={data}
                 handleGetData={async (
@@ -209,11 +217,11 @@ const BuscadorPersonasServicioComunal = (props) => {
                 orderOptions={[]}
                 pageSize={10}
                 backendSearch
-              />
+              /></div>
             </Col>
           </Row>
         </Container>
-      </div>
+      
     </AppLayout>
   )
 }
