@@ -170,38 +170,49 @@ const ExpedienteEstudianteSEC = (props) => {
 					{console.log('scre',sce)}
 					{showProyecto && 
 					<Row >
-						<DivContainer>
-							<Columna>
-								<span>
+						
+							<Col sm={4}>
+								
 									{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}: {sce.nombreAreaProyecto}
-								</span>
-								<span>
-									{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}: {sce.nombreProyecto}
-								</span>
-								<span>
-									{t('informationcarddetalle>modalidad', 'Modalidad')}: {sce.nombreModalidad}
-								</span>
-							</Columna>
-							<Columna>
-								<span>
+									</Col>
+									<Col sm={4}>
 									{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}: {sce.caracteristicas}
-								</span>
-								<span>
-									{t('informationcarddetalle>quienRegistra', 'Quién registra y fecha de registros(bitácora)')}: {sce.usuarioFechaRegistro}
-								</span>
-								<span>
-									{t('informationcarddetalle>organizaciónContraParte', 'Tipo de organización contraparte')}: {sce.nombreOrganizacionContraparte}
-								</span>
-							</Columna>
-							<Columna>
-								<span>
-									{t('informationcarddetalle>docenteAcompana', 'Docente que acompaña el proyecto')}: {sce.nombreDocente}  	</span>
-								<span>
-									{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}: {sce.fechaConclusion}
-								</span>
+								
+									</Col>
+									<Col sm={4}>
+									{t('informationcarddetalle>docenteAcompana', 'Docente que acompaña el proyecto')}: {sce.nombreDocente}
+								</Col>
+							
 
-							</Columna>
-						</DivContainer>
+
+
+
+							
+							<Col sm={4}>
+								
+								{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}: {sce.nombreProyecto}
+								</Col>
+								<Col sm={4}>
+									{t('informationcarddetalle>quienRegistra', 'Quién registra y fecha de registros(bitácora)')}: {sce.usuarioFechaRegistro}
+									</Col>
+									<Col sm={4}>
+									{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}: {sce.fechaConclusion}
+									
+								
+							</Col>
+							
+							<Col sm={4}>
+							{t('informationcarddetalle>modalidad', 'Modalidad')}: {sce.nombreModalidad}
+									  	
+							</Col>
+							<Col sm={4}>
+							{t('informationcarddetalle>organizaciónContraParte', 'Tipo de organización contraparte')}: {sce.nombreOrganizacionContraparte}
+									
+									</Col>
+
+						
+							
+						
 					</Row>}
 					<Row>
 						<Col sm={12}>

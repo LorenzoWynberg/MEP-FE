@@ -172,12 +172,19 @@ const BuscadorPersonasServicioComunal = (props) => {
     let val = document.getElementById('servicioComunalSearch').value;
     console.log('the value is', document.getElementById('servicioComunalSearch'))
     console.log('the value is', val)
-    if (val != '')
+    if (val != '') { 
       actions.getStudentFilter(
         val,
         1,
         100
       ).then(() => setLoading(false))
+
+    }
+    else {
+      setLoading(false)
+      
+    }
+      
 
   }, [])
 
