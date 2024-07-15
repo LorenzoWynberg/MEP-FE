@@ -224,7 +224,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 				</SimpleModal>}
 			<NavigationContainer
 				goBack={() => {
-					props.history.push('/director/expediente-centro/servicioComunal')
+					props.history.push('/director/expediente-centro/servicio-comunal')
 				}}
 			/>
 			<Wrapper>
@@ -410,7 +410,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 						"estudiantes":
 							estudiantes.map(e => e.idEstudiante)
 
-					}).then(() => { props.history.push('/director/expediente-centro/servicioComunal') })}>Guardar</Button></Col>
+					}).then(() => { props.history.push('/director/expediente-centro/servicio-comunal') })}>Guardar</Button></Col>
 				</Row>
 			</Wrapper>
 		</AppLayout>

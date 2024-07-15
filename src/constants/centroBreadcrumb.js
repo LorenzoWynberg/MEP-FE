@@ -51,7 +51,7 @@ const data = [
   },
   {
 		label: 'expediente_ce>nav>servicio_comunal', // to use IntlMessages
-		to: '/director/expediente-centro/servicioComunal',
+		to: '/director/expediente-centro/servicio-comunal',
 		active:true
 	}
 ]

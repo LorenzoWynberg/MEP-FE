@@ -242,7 +242,7 @@ export const desactivarServicioComunal = (id, history) => async dispatch => {
 
 	await axios.put(`${envVariables.BACKEND_URL}/api/ServicioComunal/DesactivarServicioComunal?idServicioComunal=${id}`)
 
-	history.push('/director/expediente-centro/servicioComunal')
+	history.push('/director/expediente-centro/servicio-comunal')
 }
 
 export const createPassword = (user, history) => async dispatch => {

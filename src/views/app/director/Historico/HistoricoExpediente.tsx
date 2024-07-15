@@ -233,7 +233,7 @@ const HistoricoExpediente = (props) => {
             setExpediente(null)
           }}
           openDialog={expediente}>Está seguro que desea eliminar este registro de Servicio Comunal Estudiantil?</SimpleModal>}
-        {servicioComunalId && <SimpleModal title="Registro" onClose={() => setServicioComunalId(null)}
+        {servicioComunalId && <SimpleModal title="Registro" onClose={() => setServicioComunalId(null)} stylesContent={{margin:0}}
           onConfirm={() => { 
             setServicioComunalId(null)
           }}

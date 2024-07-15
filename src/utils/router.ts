@@ -1315,7 +1315,7 @@ const routes: Route[] = [
 	{
 		component: HistoricoExpediente,
 		exact: true,
-		route: '/director/expediente-centro/servicioComunal', 
+		route: '/director/expediente-centro/servicio-comunal', 
 		isAuthenticated: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
