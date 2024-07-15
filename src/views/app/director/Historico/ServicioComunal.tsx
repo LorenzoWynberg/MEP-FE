@@ -222,7 +222,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 				</SimpleModal>}
 			<NavigationContainer
 				goBack={() => {
-					props.history.push('/director/expediente-centro/')
+					props.history.push('/director/expediente-centro/servicioComunal')
 				}}
 			/>
 			<Wrapper>

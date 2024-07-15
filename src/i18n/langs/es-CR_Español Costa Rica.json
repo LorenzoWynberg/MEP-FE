@@ -1846,7 +1846,7 @@
   "expediente_ce>recurso_humano>integra>propiamente_docentes>columna_identificacion": "Identificación",
   "expediente_ce>recurso_humano>integra>propiamente_docentes>columna_nombramientos": "Nombramientos",
   "expediente_ce>recurso_humano>integra>propiamente_docentes>columna_nombre": "Nombre completo",
-  "expediente_ce>titulo": "Expediente Centro educativo",
+  "expediente_ce>titulo": "Expediente Centro Educativo",
   "expediente_estudiantil>titulo": "Expediente Estudiantil",
   "expediente_estudiantil>area_proyecto": "Area de Proyecto",
   "expediente_estudiantil>nombre": "Nombre",
@@ -2486,7 +2486,19 @@
   "informationcard>institucion": "Institución",
   "informationcard>provincia": "Provincia",
   "informationcard>tipoinstitucion": "Tipo de institución",
-  "informationcardexpediente>nombre": "Nombre",
+  "informationcarddetalle>areaProyecto": "Área de Proyecto",
+  "informationcarddetalle>nombreProyecto":"Nombre de Proyecto",
+  "informationcarddetalle>modalidad": "Modalidad",
+  "informationcarddetalle>caracteristicas": "Caracteristicas",
+  "informationcarddetalle>quienRegistra":"Quién registra y fecha de registros(bitácora)",
+  "informationcarddetalle>organizaciónContraParte":"Tipo de organización contraparte",
+  "informationcarddetalle>docenteAcompana":"Docente que acompaña el proyecto",
+  "informationcarddetalle>fechaConclusion":"Fecha de Conclusión",
+
+
+
+
+
   "informationcardexpediente>identificacion": "Identificación",
   "informationcardexpediente>grupo":"Grupo",
   "informationcardexpediente>oferta":"Oferta Educativa",
