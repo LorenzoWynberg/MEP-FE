@@ -30,15 +30,9 @@ const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
 
 const ExpedienteEstudianteSEC = (props) => {
 	const { t } = useTranslation()
-	const [area, setArea] = useState();
-	const [fecha, setFecha] = useState();
-	const [nombre, setNombre] = useState();
-	const [modalidad, setModalidad] = useState();
-	const [caracteristicas, setCaracteristicas] = useState();
-	const [docente, setDocente] = useState();
-	const [organizacion, setOrganizacion] = useState();
-	const [usuarioRegistro, setUsuarioRegistro] = useState();
-	const [estudiantes, setEstudiantes] = useState();
+	const [sce, setSCE] = useState();
+	const [showProyecto, setShowProyecto] = useState(false);
+	
 	centroBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
 		return item
@@ -52,15 +46,9 @@ const ExpedienteEstudianteSEC = (props) => {
 			parseInt(props.location.state.servicioComunalId)
 
 		).then((res) => {
-			setArea(res[0].nombreAreaProyecto);
-			setFecha(res[0].fechaConclusion);
-			setNombre(res[0].nombreProyecto);
-			setModalidad(res[0].nombreModalidad);
-			setCaracteristicas(res[0].caracteristicas);
-			setDocente(res[0].nombreDocente);
-			setOrganizacion(res[0].nombreOrganizacionContraparte);
-			setUsuarioRegistro(res[0].usuarioFechaRegistro);
-			setEstudiantes(res[0].listaEstudiantes);
+			console.log('resresres',res)
+			setSCE(res[0]);
+			setShowProyecto(true)
 		})
 	}, [props.location])
 
@@ -179,40 +167,42 @@ const ExpedienteEstudianteSEC = (props) => {
 			</Helmet>
 			<div className="dashboard-wrapper">
 				<Container>
-					<Row>
+					{console.log('scre',sce)}
+					{showProyecto && 
+					<Row >
 						<DivContainer>
 							<Columna>
 								<span>
-									{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}: {area}
+									{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}: {sce.nombreAreaProyecto}
 								</span>
 								<span>
-									{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}: {nombre}
+									{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}: {sce.nombreProyecto}
 								</span>
 								<span>
-									{t('informationcarddetalle>modalidad', 'Modalidad')}: {modalidad}
-								</span>
-							</Columna>
-							<Columna>
-								<span>
-									{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}: {caracteristicas}
-								</span>
-								<span>
-									{t('informationcarddetalle>quienRegistra', 'Quién registra y fecha de registros(bitácora)')}: {usuarioRegistro}
-								</span>
-								<span>
-									{t('informationcarddetalle>organizaciónContraParte', 'Tipo de organización contraparte')}: {organizacion}
+									{t('informationcarddetalle>modalidad', 'Modalidad')}: {sce.nombreModalidad}
 								</span>
 							</Columna>
 							<Columna>
 								<span>
-									{t('informationcarddetalle>docenteAcompana', 'Docente que acompaña el proyecto')}: {docente}  	</span>
+									{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}: {sce.caracteristicas}
+								</span>
 								<span>
-									{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}: {fecha}
+									{t('informationcarddetalle>quienRegistra', 'Quién registra y fecha de registros(bitácora)')}: {sce.usuarioFechaRegistro}
+								</span>
+								<span>
+									{t('informationcarddetalle>organizaciónContraParte', 'Tipo de organización contraparte')}: {sce.nombreOrganizacionContraparte}
+								</span>
+							</Columna>
+							<Columna>
+								<span>
+									{t('informationcarddetalle>docenteAcompana', 'Docente que acompaña el proyecto')}: {sce.nombreDocente}  	</span>
+								<span>
+									{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}: {sce.fechaConclusion}
 								</span>
 
 							</Columna>
 						</DivContainer>
-					</Row>
+					</Row>}
 					<Row>
 						<Col sm={12}>
 							<TableStudents
