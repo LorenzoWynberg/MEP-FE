@@ -32,7 +32,7 @@ const ExpedienteEstudianteSEC = (props) => {
 	const { t } = useTranslation()
 	const [sce, setSCE] = useState();
 	const [showProyecto, setShowProyecto] = useState(false);
-	
+
 	centroBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
 		return item
@@ -40,17 +40,15 @@ const ExpedienteEstudianteSEC = (props) => {
 
 	const actions = useActions({ GetServicioComunalInfoById })
 	useEffect(() => {
-		console.log('urlparma', props.location)
 
 		actions.GetServicioComunalInfoById(
-			parseInt(props.location.state.servicioComunalId)
+			parseInt(props.servicioComunalId)
 
 		).then((res) => {
-			console.log('resresres',res)
 			setSCE(res[0]);
 			setShowProyecto(true)
 		})
-	}, [props.location])
+	}, [props.servicioComunalId])
 
 	const columns = [
 		{
@@ -167,53 +165,54 @@ const ExpedienteEstudianteSEC = (props) => {
 			</Helmet>
 			<div className="dashboard-wrapper">
 				<Container>
-					{console.log('scre',sce)}
-					{showProyecto && 
-					<Row >
-						
-							<Col sm={4}>
-								
-									{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}: {sce.nombreAreaProyecto}
-									</Col>
-									<Col sm={4}>
-									{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}: {sce.caracteristicas}
-								
-									</Col>
-									<Col sm={4}>
-									{t('informationcarddetalle>docenteAcompana', 'Docente que acompaña el proyecto')}: {sce.nombreDocente}
-								</Col>
-							
+					{showProyecto &&
+						<>
+						<Row>
+							<strong>Detalle del Servicio Comunal Estudiantil:</strong>
+						</Row>
+							<Row >
+								<Col sm={4}>
 
-
-
-
-							
-							<Col sm={4}>
-								
-								{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}: {sce.nombreProyecto}
+									<strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong> {sce.nombreAreaProyecto}
 								</Col>
 								<Col sm={4}>
-									{t('informationcarddetalle>quienRegistra', 'Quién registra y fecha de registros(bitácora)')}: {sce.usuarioFechaRegistro}
-									</Col>
-									<Col sm={4}>
-									{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}: {sce.fechaConclusion}
-									
-								
-							</Col>
-							
-							<Col sm={4}>
-							{t('informationcarddetalle>modalidad', 'Modalidad')}: {sce.nombreModalidad}
-									  	
-							</Col>
-							<Col sm={4}>
-							{t('informationcarddetalle>organizaciónContraParte', 'Tipo de organización contraparte')}: {sce.nombreOrganizacionContraparte}
-									
-									</Col>
+									<strong>{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}:</strong> {sce.caracteristicas}
 
-						
-							
-						
-					</Row>}
+								</Col>
+								<Col sm={4}>
+									<strong>{t('informationcarddetalle>docenteAcompana', 'Docente que acompaña el proyecto')}:</strong> {sce.nombreDocente}
+								</Col>
+
+
+							</Row >
+
+
+							<Row >
+								<Col sm={4}>
+
+									<strong>{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}:</strong> {sce.nombreProyecto}
+								</Col>
+								<Col sm={4}>
+									<strong>{t('informationcarddetalle>quienRegistra', 'Quién registra y fecha de registros(bitácora)')}:</strong> {sce.usuarioFechaRegistro}
+								</Col>
+								<Col sm={4}>
+									<strong>{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:</strong> {sce.fechaConclusion}
+
+
+								</Col>
+
+							</Row >	<Row >
+								<Col sm={4}>
+									<strong>{t('informationcarddetalle>modalidad', 'Modalidad')}:</strong> {sce.nombreModalidad}
+
+								</Col>
+								<Col sm={4}>
+									<strong>{t('informationcarddetalle>organizaciónContraParte', 'Tipo de organización contraparte')}:</strong> {sce.nombreOrganizacionContraparte}
+
+								</Col>
+							</Row ></>
+
+					}
 					<Row>
 						<Col sm={12}>
 							<TableStudents
@@ -286,7 +285,7 @@ const ExpedienteEstudianteSEC = (props) => {
 					</Row>
 				</Container>
 			</div>
-		</AppLayout>
+		</AppLayout >
 	)
 }
 const DivContainer = styled.div`

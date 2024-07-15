@@ -17,6 +17,8 @@ import CancelIcon from '@mui/icons-material/RemoveCircle'
 import Tooltip from '@mui/material/Tooltip'
 import TouchAppIcon from '@material-ui/icons/TouchApp'
 import BuildIcon from '@mui/icons-material/Build'
+
+import styles from './ServicioComunal.css' 
 import {
   handleChangeInstitution,
   updatePeriodosLectivos,
@@ -29,13 +31,16 @@ import colors from 'assets/js/colors'
 import { useTranslation } from 'react-i18next'
 import { RemoveRedEyeRounded } from '@material-ui/icons'
 import SimpleModal from 'Components/Modal/simple'
+import ExpedienteEstudianteSEC from '../ExpedienteCentroEducativo/ExpedienteEstudianteSEC'
 
 const HistoricoExpediente = (props) => {
   const [data, setData] = useState([])
   const [publicos, setPublicos] = useState(true)
   const [dropdownToggle, setDropdownToggle] = useState(false)
   const [firstCalled, setFirstCalled] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [showBuscadorServicioComunal, setShowBuscadorServicioComunal] = useState(false)
+  const [servicioComunalId, setServicioComunalId] = useState()
+  const [loading, setLoading] = useState(false) 
   const [expediente, setExpediente] = useState(null)
   const { t } = useTranslation()
   const history = useHistory()
@@ -156,12 +161,9 @@ const HistoricoExpediente = (props) => {
               <Tooltip title={t('buscador_ce>buscador>columna_acciones>ficha', 'Ver ficha del SCE')}>
                 <RemoveRedEyeRounded
 
-                  onClick={() =>
-                    props.history.push(
-                      {
-                        pathname: `/director/expediente-estudiante/servicio-comunal/${fullRow.id}`
-                        , state: { servicioComunalId: fullRow.id }
-                      })}
+                  onClick={() =>{
+                    setServicioComunalId(fullRow.id) 
+                  }}
                   style={{
                     fontSize: 25,
                     color: colors.darkGray,
@@ -222,7 +224,7 @@ const HistoricoExpediente = (props) => {
   }
 
   return (
-    <AppLayout items={directorItems}>
+    <AppLayout className={styles} items={directorItems}>
       <div className='dashboard-wrapper'>
         {loading && <BarLoader />}
         {expediente && <SimpleModal title="Eliminar Registro" onClose={() => setExpediente(null)}
@@ -231,6 +233,11 @@ const HistoricoExpediente = (props) => {
             setExpediente(null)
           }}
           openDialog={expediente}>Está seguro que desea eliminar este registro de Servicio Comunal Estudiantil?</SimpleModal>}
+        {servicioComunalId && <SimpleModal title="Registro" onClose={() => setServicioComunalId(null)}
+          onConfirm={() => { 
+            setServicioComunalId(null)
+          }}
+          openDialog={servicioComunalId}><ExpedienteEstudianteSEC servicioComunalId={servicioComunalId}/></SimpleModal>}
         <Container>
           <Row>
             <Col xs={12}>
