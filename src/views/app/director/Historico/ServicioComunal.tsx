@@ -61,8 +61,11 @@ export const ServicioComunal: React.FC<IProps> = props => {
 	const [busqueda, setBusqueda] = React.useState()
 	const [estudiantes, setEstudiantes] = React.useState([])
 	const [caracteristicas, setCaracteristicas] = React.useState([])
+	const [caracteristicasIdSeleccionados, setCaracteristicasIdSeleccionados] = React.useState([])
+	const [caracteristicasSeleccionados, setCaracteristicasSeleccionados] = React.useState([])
 	const [nombresSeleccionados, setNombresSeleccionados] = React.useState([])
-	const [nombresIdSeleccionados, setNombresIdSeleccionados] = React.useState([])
+	const [nombreSend, setNombreSend] = React.useState([])
+	const [nombreId, setNombreId] = React.useState()
 	const [showBuscador, setShowBuscador] = React.useState(false)
 	const [showTipoOrganizacion, setShowTipoOrganizacion] = React.useState(false)
 	const [organizacionId, setOrganizacionId] = React.useState()
@@ -83,7 +86,8 @@ export const ServicioComunal: React.FC<IProps> = props => {
 		console.log('(event.target as HTMLInputElement).value', (event.target as HTMLInputElement).value)
 		setValue((event.target as HTMLInputElement).value)
 	}
-	const [Cdate, setDate] = useState(new Date().toLocaleDateString('fr-FR'))
+	const [Cdate, setCDate] = useState(new Date().toLocaleDateString('fr-FR'))
+	const [date, setDate] = useState(new Date())
 	const [valueModalidad, setValueModalidad] = React.useState('')
 	const [valueCaracteristicas, setValueCaracteristicas] = React.useState('')
 	const [valueOrg, setValueOrg] = React.useState('')
@@ -110,7 +114,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 		setStudents(_data)
 	}, [studentsSeleccionados])
 
- 
+
 	const actions = useActions({
 		crearServicioComunal,
 		getTablaEstudiantesServicioComunalById
@@ -144,7 +148,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 				<SimpleModal title="Areas Proyecto" openDialog={showCaracteristicas} onConfirm={() => { setShowCaracteristicas(false) }} onClose={() => setShowCaracteristicas(false)}>
 					<FormControl>
 						<FormLabel id='demo-radio-buttons-group-label'>Caracteristica</FormLabel>
-						{catalogos.caracteristicas.filter(item => parseInt(item.codigo) == parseInt(value)).map((item, index) =>
+						{catalogos.caracteristicas.map((item, index) =>
 							<FormControlLabel
 								control={
 									<Checkbox
@@ -152,7 +156,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 										value={item.id}
 									/>
 								}
-								label={item.caracteristicas}
+								label={item.nombre}
 								onClick={async () => {
 									let caracteristicas = [...caracteristicasSeleccionados];
 									let caracteristicasId = [...caracteristicasIdSeleccionados];
@@ -205,37 +209,19 @@ export const ServicioComunal: React.FC<IProps> = props => {
 			{nombresSeleccionados && value && showNombre && catalogos.nombresProyecto &&
 				<SimpleModal title="Nombre Proyecto" openDialog={showNombre} onConfirm={() => { setShowNombre(false) }} onClose={() => setShowNombre(false)}>
 					<FormControl>
-						<FormLabel id="demo-radio-buttons-group-label">Nombre Proyecto</FormLabel>
-						{catalogos.nombresProyecto.filter(item => parseInt(item.codigo) == parseInt(value)).map((item, index) =>
-							<FormControlLabel
-								control={
-									<Checkbox
-										checked={nombresSeleccionados.map(v => v.id).includes(item.id)}
-										value={item.id}
-									/>
-								}
-								label={item.nombre}
-								onClick={async () => {
-									let nombres = [...nombresSeleccionados];
-									let nombresId = [...nombresIdSeleccionados];
-									console.log('nombres', nombres)
-									if (!nombresId.includes(item.id)) {
-										nombres.push(item)
-										nombresId.push(item.id)
-									} else {
-										nombres = nombres.filter(n => n.id != item.id)
-										nombresId = nombresId.filter(n => n != item.id)
-									}
-									setNombresSeleccionados(nombres);
-									setNombresIdSeleccionados(nombresId);
-								}}
-							/>
-						)}
+						<FormLabel id='demo-radio-buttons-group-label'>Tipo Organizacion</FormLabel>
+						<RadioGroup
+							aria-labelledby='demo-radio-buttons-group-label'
+							name='radio-buttons-group'
+							value={value}
+						>
+							{catalogos.nombresProyecto.filter(item => parseInt(item.codigo) == parseInt(value)).map(item => <FormControlLabel value={item.id} onClick={(e, v) => { e.persist(); setNombreId(e.target.value); setNombreSend(item.nombre); }} checked={nombreId == item.id} control={<Radio />} label={item.nombre} />)}
+						</RadioGroup>
 					</FormControl>
 				</SimpleModal>}
 			<NavigationContainer
 				goBack={() => {
-					props.history.push('/director/buscador/centro')
+					props.history.push('/director/expediente-centro/')
 				}}
 			/>
 			<Wrapper>
@@ -256,15 +242,13 @@ export const ServicioComunal: React.FC<IProps> = props => {
 										</FormGroup>
 									</Col>
 									<Col md={6}>
-										{nombresSeleccionados.length == 0 && <FormGroup>
-											<Label>{t('registro_servicio_comunal>objetivonombre', 'objetivo')}</Label>
-											<Input name='codigo' value={objetivoNombre ? '' : objetivoNombre} readOnly onClick={() => !showNombre && setShowNombre(true)} />
-										</FormGroup>}
-										{nombresSeleccionados.length > 0 &&
-											<div onClick={() => !showNombre && setShowNombre(true)} style={{ padding: 8, background: '#e9ecef' }} >
-												{nombresSeleccionados.map(n => <Chip label={n.nombre} />)}
-											</div>
-										}
+										<FormGroup>
+											<Label>
+												{t('registro_servicio_comunal>objetivonombre', 'objetivo')}
+											</Label>
+											<Input key={nombreSend} name='i' value={nombreSend ? nombreSend : ''} readOnly onClick={() => !showNombre && setShowNombre(true)} />
+										</FormGroup>
+
 									</Col>
 									<Col sm={3}>
 										<FormGroup>
@@ -282,19 +266,16 @@ export const ServicioComunal: React.FC<IProps> = props => {
 								</Row>
 								<Row>
 									<Col sm={3}>
-										<FormGroup>
-											<Label>
-												{t('registro_servicio_comunal>caracteristicas', 'Caracteristicas')}
-											</Label>
-											<Input
-												name='modalidad'
-												type='text'
-												value={caracteristica}
-												readOnly
-												onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
-												autoFocus={true}
-											/>
-										</FormGroup>
+										<Label>{t('registro_servicio_comunal>caracteristicas', 'Caracteristicas')}</Label>
+
+										{caracteristicasSeleccionados.length == 0 && <FormGroup>
+											<Input name='codigo' value={''} readOnly onClick={() => !showCaracteristicas && setShowCaracteristicas(true)} />
+										</FormGroup>}
+										{caracteristicasSeleccionados.length > 0 &&
+											<div onClick={() => !showCaracteristicas && setShowCaracteristicas(true)} style={{ padding: 8, background: '#e9ecef' }} >
+												{caracteristicasSeleccionados.map(n => <Chip label={n.nombre} />)}
+											</div>
+										}
 									</Col>
 									<Col sm={3}>
 										<FormGroup>
@@ -308,9 +289,10 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												dateFormat="dd/MM/yyyy"
 												value={Cdate}
 												onChange={(date) => {
-													const d = new Date(date).toLocaleDateString('fr-FR');
+													const d = new Date(date);
 													console.log(d);
 													setDate(d);
+													setCDate(d.toLocaleDateString('fr-FR'));
 												}}
 											/>
 										</FormGroup>
@@ -411,20 +393,20 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					<Col sm={12}><Button class="sc-iqcoie bQFwPO cursor-pointer" primary onClick={() => actions.crearServicioComunal({
 						"sb_InstitucionesId": 0,
 						"sb_areaProyectoId": value,
-						"sb_nombreProyectoId": nombresSeleccionados[0].id,
+						"sb_nombreProyectoId": nombreId,
 						"sb_modalidadId": modalidadId,
 						"sb_tipoOrganizacionContraparteId": organizacionId,
 						"docenteAcompanante": acompanante,
 						"descripcion": descripcion,
-						"fechaConclusionSCE": Cdate,
+						"fechaConclusionSCE": date.toISOString(),
 						"insertadoPor": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-						"caracteristicas": [
-							caracteristicas.map(e => e.caracteristicaId)
-						],
+						"caracteristicas":
+							caracteristicasSeleccionados.map(e => e.id)
+						,
 						"estudiantes":
 							estudiantes.map(e => e.idEstudiante)
 
-					})}>Guardar</Button></Col>
+					}).then(() => { props.history.push('/director/expediente-centro/servicioComunal') })}>Guardar</Button></Col>
 				</Row>
 			</Wrapper>
 		</AppLayout>

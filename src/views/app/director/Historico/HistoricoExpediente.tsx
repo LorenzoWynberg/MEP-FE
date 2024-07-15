@@ -120,6 +120,12 @@ const HistoricoExpediente = (props) => {
         label: ''
       },
       {
+        Header: t('expediente_estudiantil>cantidadEstudiantes', 'Cantidad Estudiantes'),
+        column: 'cantidadEstudiantes',
+        accessor: 'cantidadEstudiantes',
+        label: ''
+      },
+      {
         Header: t('expediente_estudiantil>fecha_conclusion', 'Fecha de Conclusion'),
         column: 'fechaConclusionSCE',
         accessor: 'fechaConclusionSCE',
