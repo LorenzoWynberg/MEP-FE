@@ -234,7 +234,7 @@ const HistoricoExpediente = (props) => {
             <Col xs={12}>
               <h3>{t('expediente_ce>titulo', 'Expediente Centro Educativo')}</h3>
             </Col>
-            <Col xs={12}>
+            {/* <Col xs={12}>
               <div
                 style={{
                   display: 'flex',
@@ -250,7 +250,7 @@ const HistoricoExpediente = (props) => {
                   }}
                 />
               </div>
-            </Col>
+            </Col> */}
             <Col xs={12}>
               <TableReactImplementation
                 data={data}
