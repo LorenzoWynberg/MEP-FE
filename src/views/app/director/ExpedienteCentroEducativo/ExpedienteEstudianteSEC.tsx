@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import centroBreadcrumb from 'Constants/centroBreadcrumb'
 import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
@@ -12,7 +12,12 @@ import colors from 'Assets/js/colors'
 import { useTranslation } from 'react-i18next'
 import TableStudents from '../MatricularEstudiantes/registro/new/tableStudents'
 import { Button } from '@material-ui/core'
-
+import { useActions } from 'Hooks/useActions'
+import InformationCardDetalle from './_partials/InformationCardDetalle'
+import {
+	GetServicioComunalInfoById
+} from '../../../../redux/formularioCentroResponse/actions'
+import styled from 'styled-components'
 const Inicio = React.lazy(() => import('./Inicio'))
 const General = React.lazy(() => import('./General'))
 const Estadistica = React.lazy(() => import('./Estadistica'))
@@ -25,10 +30,40 @@ const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
 
 const ExpedienteEstudianteSEC = (props) => {
 	const { t } = useTranslation()
+	const [area, setArea] = useState();
+	const [fecha, setFecha] = useState();
+	const [nombre, setNombre] = useState();
+	const [modalidad, setModalidad] = useState();
+	const [caracteristicas, setCaracteristicas] = useState();
+	const [docente, setDocente] = useState();
+	const [organizacion, setOrganizacion] = useState();
+	const [usuarioRegistro, setUsuarioRegistro] = useState();
+	const [estudiantes, setEstudiantes] = useState();
 	centroBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
 		return item
 	})
+
+	const actions = useActions({ GetServicioComunalInfoById })
+	useEffect(() => {
+		console.log('urlparma', props.location)
+
+		actions.GetServicioComunalInfoById(
+			parseInt(props.location.state.servicioComunalId)
+
+		).then((res) => {
+			setArea(res[0].nombreAreaProyecto);
+			setFecha(res[0].fechaConclusion);
+			setNombre(res[0].nombreProyecto);
+			setModalidad(res[0].nombreModalidad);
+			setCaracteristicas(res[0].caracteristicas);
+			setDocente(res[0].nombreDocente);
+			setOrganizacion(res[0].nombreOrganizacionContraparte);
+			setUsuarioRegistro(res[0].usuarioFechaRegistro);
+			setEstudiantes(res[0].listaEstudiantes);
+		})
+	}, [props.location])
+
 	const columns = [
 		{
 			Header: t(
@@ -145,9 +180,38 @@ const ExpedienteEstudianteSEC = (props) => {
 			<div className="dashboard-wrapper">
 				<Container>
 					<Row>
+						<DivContainer>
+							<Columna>
+								<span>
+									{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}: {area}
+								</span>
+								<span>
+									{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}: {nombre}
+								</span>
+								<span>
+									{t('informationcarddetalle>modalidad', 'Modalidad')}: {modalidad}
+								</span>
+							</Columna>
+							<Columna>
+								<span>
+									{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}: {caracteristicas}
+								</span>
+								<span>
+									{t('informationcarddetalle>quienRegistra', 'Quién registra y fecha de registros(bitácora)')}: {usuarioRegistro}
+								</span>
+								<span>
+									{t('informationcarddetalle>organizaciónContraParte', 'Tipo de organización contraparte')}: {organizacion}
+								</span>
+							</Columna>
+							<Columna>
+								<span>
+									{t('informationcarddetalle>docenteAcompana', 'Docente que acompaña el proyecto')}: {docente}  	</span>
+								<span>
+									{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}: {fecha}
+								</span>
 
-
-
+							</Columna>
+						</DivContainer>
 					</Row>
 					<Row>
 						<Col sm={12}>
@@ -224,6 +288,20 @@ const ExpedienteEstudianteSEC = (props) => {
 		</AppLayout>
 	)
 }
+const DivContainer = styled.div`
+  display: grid;
+  grid-template-columns: 80px 1fr 1fr 1fr;
+//   background: ${props => props.theme.primary};
+  border-radius: 50px;
+  width: 100%;
+  padding: 5px 10px;
+  color: ${props => props.theme.primaryText};
+  align-items: center;
+`
+const Columna = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 
 export default ExpedienteEstudianteSEC
 

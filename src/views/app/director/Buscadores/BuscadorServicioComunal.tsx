@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { Col, Row, Container } from 'reactstrap'
 import AppLayout from 'Layout/AppLayout'
 import directorItems from 'Constants/directorMenu'
@@ -167,43 +167,43 @@ const BuscadorPersonasServicioComunal = (props) => {
     }
   }, [state.estudiantes])
 
-  useEffect(async () => {
-
+  useEffect(() => {
     setLoading(true)
-    let val = document.getElementById('search').value;
-    console.log('the value is',val)
-    await actions.getStudentFilter(
-      val,
-      1,
-      100
-    )
-    setLoading(false)
+    let val = document.getElementById('servicioComunalSearch').value;
+    console.log('the value is', document.getElementById('servicioComunalSearch'))
+    console.log('the value is', val)
+    if (val != '')
+      actions.getStudentFilter(
+        val,
+        1,
+        100
+      ).then(() => setLoading(false))
+
   }, [])
 
   return (
     <AppLayout items={directorItems}>
-      {console.log('state est', state.estudiantes)}
-      
-        {loading && <BarLoader />}
-        <Helmet>
-          <title>Buscador de personas</title>
-        </Helmet>
-      
-        <Container>
-          <Row>
-            <Col xs={12}>
-              <h3>{t('servicio_comunal_table>registro_servicio_comunal>agregar_estudiante>titulo', 'Agregar estudiante')}</h3>
-            </Col>
-            <Col
-              xs={12}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-end',
-                width: '100%'
-              }}
-            />
-            <Col xs={12}>
+
+      {loading && <BarLoader />}
+      <Helmet>
+        <title>Buscador de personas</title>
+      </Helmet>
+
+      <Container>
+        <Row>
+          <Col xs={12}>
+            <h3>{t('servicio_comunal_table>registro_servicio_comunal>agregar_estudiante>titulo', 'Agregar estudiante')}</h3>
+          </Col>
+          <Col
+            xs={12}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-end',
+              width: '100%'
+            }}
+          />
+          <Col xs={12}>
             <div>
               <TableReactImplementation
                 data={data}
@@ -225,10 +225,10 @@ const BuscadorPersonasServicioComunal = (props) => {
                 pageSize={10}
                 backendSearch
               /></div>
-            </Col>
-          </Row>
-        </Container>
-      
+          </Col>
+        </Row>
+      </Container>
+
     </AppLayout>
   )
 }

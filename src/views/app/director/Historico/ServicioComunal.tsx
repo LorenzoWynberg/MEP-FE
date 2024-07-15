@@ -10,6 +10,8 @@ import {
 	crearServicioComunal,
 	getTablaEstudiantesServicioComunalById
 } from '../../../../redux/configuracion/actions'
+
+import styles from './ServicioComunal.css' 
 import BuscadorServicioComunal from '../Buscadores/BuscadorServicioComunal'
 import { Checkbox, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Chip, Button } from '@material-ui/core'
 import StyledMultiSelect from '../../../../components/styles/StyledMultiSelect'
@@ -25,7 +27,7 @@ import TableStudents from '../MatricularEstudiantes/registro/new/comunalTabla'
 import SimpleModal from 'Components/Modal/simple'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { useActions } from 'Hooks/useActions'
+	import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import { Search } from 'Components/TableReactImplementationServicio/Header'
 
@@ -127,7 +129,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 		})
 	}, [])
 	return (
-		<AppLayout items={directorItems}>
+		<AppLayout className={styles} items={directorItems}>
 			{loading && <BarLoader />}
 			{catalogos && console.log('catalogos', catalogos)}
 			{/* {showAreaProyecto && catalogos.areasProyecto &&
@@ -357,7 +359,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 
 				<Row>
 					<Col sm={12}>
-						<div style={{ marginLeft: 16 }}><Search onSearch={() => { showBuscador ? setShowBuscador(false) : setShowBuscador(true) }} /></div>
+						<div style={{ marginLeft: 16 }}><Search newId="servicioComunalSearch" onSearch={() => { showBuscador ? setShowBuscador(false) : setShowBuscador(true) }} /></div>
 						<TableStudents
 							onlyViewModule={true}
 							data={estudiantes}

@@ -158,8 +158,10 @@ const HistoricoExpediente = (props) => {
 
                   onClick={() =>
                     props.history.push(
-                      `/director/expediente-estudiante/servicio-comunal/${fullRow.id}`
-                    )}
+                      {
+                        pathname: `/director/expediente-estudiante/servicio-comunal/${fullRow.id}`
+                        , state: { servicioComunalId: fullRow.id }
+                      })}
                   style={{
                     fontSize: 25,
                     color: colors.darkGray,
