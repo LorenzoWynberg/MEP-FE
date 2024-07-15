@@ -265,7 +265,7 @@ const HistoricoExpediente = (props) => {
                 data={data}
                 showAddButton
                 // avoidSearch
-                onSubmitAddButton={() => { props.history.push('/director/expediente/servicio-comunal/registro') }}
+                onSubmitAddButton={() => { props.history.push('/director/expediente-centro/servicio-comunal/registro') }}
                 handleGetData={async (
                   searchValue,
                   _,
