@@ -148,7 +148,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					</FormControl>
 				</SimpleModal >}
 			{showCaracteristicas &&
-				<SimpleModal title="Areas Proyecto" openDialog={showCaracteristicas} onConfirm={() => { setShowCaracteristicas(false) }} onClose={() => setShowCaracteristicas(false)}>
+				<SimpleModal title="Caracteristicas" openDialog={showCaracteristicas} onConfirm={() => { setShowCaracteristicas(false) }} onClose={() => setShowCaracteristicas(false)}>
 					<FormControl>
 						<FormLabel id='demo-radio-buttons-group-label'>Caracteristica</FormLabel>
 						{catalogos.caracteristicas.map((item, index) =>
@@ -180,7 +180,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 				</SimpleModal >
 			}
 			{showModalidades &&
-				<SimpleModal title="Areas Proyecto" openDialog={showModalidades} onConfirm={() => { setShowModalidades(false) }} onClose={() => setShowModalidades(false)}>
+				<SimpleModal title="Modalidades" openDialog={showModalidades} onConfirm={() => { setShowModalidades(false) }} onClose={() => setShowModalidades(false)}>
 					<FormControl>
 						<FormLabel id='demo-radio-buttons-group-label'>Modalidad</FormLabel>
 						<RadioGroup
@@ -193,7 +193,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					</FormControl>
 				</SimpleModal >}
 			{showTipoOrganizacion &&
-				<SimpleModal title="Areas Proyecto" openDialog={showTipoOrganizacion} onConfirm={() => { setShowTipoOrganizacion(false) }} onClose={() => setShowTipoOrganizacion(false)}>
+				<SimpleModal title="Organizacion" openDialog={showTipoOrganizacion} onConfirm={() => { setShowTipoOrganizacion(false) }} onClose={() => setShowTipoOrganizacion(false)}>
 					<FormControl>
 						<FormLabel id='demo-radio-buttons-group-label'>Tipo Organizacion</FormLabel>
 						<RadioGroup
