@@ -51,7 +51,8 @@ const SimpleModal: React.FC<IProps> = props => {
 		iconLabel,
 		actions,
 		alignButton,
-		btnSubmit = true
+		btnSubmit = true,
+		addMarginTitle = false
 	} = props
 
 	const { t } = useTranslation()
@@ -82,7 +83,7 @@ const SimpleModal: React.FC<IProps> = props => {
 			<DialogTitleStyled>
 				{icon && <Icon color={theme.palette.primary.main} className={'fas fa-' + iconLabel} />}
 				<Titles>
-					<TitleH2>{title}</TitleH2>
+					<div style={addMarginTitle && {marginLeft:28}}><TitleH2>{title}</TitleH2></div>
 					<SubTitle>{subTitle}</SubTitle>
 				</Titles>
 
