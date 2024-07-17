@@ -205,6 +205,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 
 	onlyViewModule && columns.splice(7, 1)
 	return (
+		<div style={{paddingTop:'10px'}}>
 		<Colxx className='mb-5' sm='12' lg='12' xl='12'>
 			<Card>
 				<CardBody>
@@ -219,6 +220,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 				</CardBody>
 			</Card>
 		</Colxx>
+		</div>
 	)
 }
 
