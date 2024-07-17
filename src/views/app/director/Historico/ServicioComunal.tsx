@@ -11,7 +11,7 @@ import {
 	getTablaEstudiantesServicioComunalById
 } from '../../../../redux/configuracion/actions'
 
-import styles from './ServicioComunal.css' 
+import styles from './ServicioComunal.css'
 import BuscadorServicioComunal from '../Buscadores/BuscadorServicioComunal'
 import { Checkbox, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup, Chip, Button } from '@material-ui/core'
 import StyledMultiSelect from '../../../../components/styles/StyledMultiSelect'
@@ -27,7 +27,7 @@ import TableStudents from '../MatricularEstudiantes/registro/new/comunalTabla'
 import SimpleModal from 'Components/Modal/simple'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-	import { useActions } from 'Hooks/useActions'
+import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import { Search } from 'Components/TableReactImplementationServicio/Header'
 
@@ -129,7 +129,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 		})
 	}, [])
 	return (
-		<AppLayout className={styles} items={directorItems}>
+		<AppLayout className={styles} items={directorItems}> 
 			{loading && <BarLoader />}
 			{catalogos && console.log('catalogos', catalogos)}
 			{/* {showAreaProyecto && catalogos.areasProyecto &&
@@ -394,26 +394,36 @@ export const ServicioComunal: React.FC<IProps> = props => {
 				</Row>
 
 				<Row>
-					<Col sm={12}><Button class="sc-iqcoie bQFwPO cursor-pointer" primary onClick={() => actions.crearServicioComunal({
-						"sb_InstitucionesId": 0,
-						"sb_areaProyectoId": value,
-						"sb_nombreProyectoId": nombreId,
-						"sb_modalidadId": modalidadId,
-						"sb_tipoOrganizacionContraparteId": organizacionId,
-						"docenteAcompanante": acompanante,
-						"descripcion": descripcion,
-						"fechaConclusionSCE": date.toISOString(),
-						"insertadoPor": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-						"caracteristicas":
-							caracteristicasSeleccionados.map(e => e.id)
-						,
-						"estudiantes":
-							estudiantes.map(e => e.idEstudiante)
+					<Col sm={12}><Button class="sc-iqcoie bQFwPO cursor-pointer" primary onClick={() => {
 
-					}).then(() => { props.history.push('/director/expediente-centro/servicio-comunal') })}>Guardar</Button></Col>
+						const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
+						console.log('selectedInstitution', selectedInstitution.institucionId
+						)
+						if (selectedInstitution?.institucionId != null) {
+							actions.crearServicioComunal({
+								"sb_InstitucionesId": selectedInstitution.institucionId,
+								"sb_areaProyectoId": value,
+								"sb_nombreProyectoId": nombreId,
+								"sb_modalidadId": modalidadId,
+								"sb_tipoOrganizacionContraparteId": organizacionId,
+								"docenteAcompanante": acompanante,
+								"descripcion": descripcion,
+								"fechaConclusionSCE": date.toISOString(),
+								"insertadoPor": localStorage.getItem('loggedUser'),
+								"caracteristicas":
+									caracteristicasSeleccionados.map(e => e.id)
+								,
+								"estudiantes":
+									estudiantes.map(e => e.idEstudiante)
+
+							}).then(() => { props.history.push('/director/expediente-centro/servicio-comunal') });
+						} else {
+							alert('Seleccione una institución');
+						}
+					}}>Guardar</Button></Col>
 				</Row>
 			</Wrapper>
-		</AppLayout>
+		</AppLayout >
 	)
 }
 

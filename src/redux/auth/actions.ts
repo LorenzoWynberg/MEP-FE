@@ -354,7 +354,7 @@ export const loginUser = (user, history) => {
 		try {
 			console.log('_user', _user)
 			const loggedUser = await axios.post(`${envVariables.BACKEND_URL}/api/Authentication/login`, _user)
-			console.log('loggedUser', loggedUser)
+
 			dispatch(loginUserSuccess(loggedUser, history))
 			dispatch(getUserData(loggedUser.data.userId))
 			const globalAccess = loggedUser.data.rolesOrganizaciones.filter(rol => rol.nivelAccesoId === 4)
@@ -363,7 +363,7 @@ export const loginUser = (user, history) => {
 			dispatch(getRoles(loggedUser.data.userId))
 
 			dispatch(getUserInstitutions())
-
+			localStorage.setItem('loggedUser', loggedUser.data.userId)
 			const isEstudiante = loggedUser.data.rolesOrganizaciones.find(
 				rol => rol.rolNombre.toLowerCase() === 'estudiante'
 			)

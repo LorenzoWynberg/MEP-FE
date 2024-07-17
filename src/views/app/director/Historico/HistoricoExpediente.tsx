@@ -18,7 +18,7 @@ import Tooltip from '@mui/material/Tooltip'
 import TouchAppIcon from '@material-ui/icons/TouchApp'
 import BuildIcon from '@mui/icons-material/Build'
 
-import styles from './ServicioComunal.css' 
+import styles from './ServicioComunal.css'
 import {
   handleChangeInstitution,
   updatePeriodosLectivos,
@@ -38,9 +38,8 @@ const HistoricoExpediente = (props) => {
   const [publicos, setPublicos] = useState(true)
   const [dropdownToggle, setDropdownToggle] = useState(false)
   const [firstCalled, setFirstCalled] = useState(false)
-  const [showBuscadorServicioComunal, setShowBuscadorServicioComunal] = useState(false)
   const [servicioComunalId, setServicioComunalId] = useState()
-  const [loading, setLoading] = useState(false) 
+  const [loading, setLoading] = useState(false)
   const [expediente, setExpediente] = useState(null)
   const { t } = useTranslation()
   const history = useHistory()
@@ -54,10 +53,15 @@ const HistoricoExpediente = (props) => {
   const toggle = () => {
     setDropdownToggle(!dropdownToggle)
   }
-
+  const { authUser } = useSelector((store) => store.authUser)
   const { accessRole } = useSelector(
     (state: any) => state?.authUser?.currentRoleOrganizacion
   )
+  const { currentInstitution } = useSelector((store: any) => {
+    const currentInstitution = store.authUser.currentInstitution
+    return currentInstitution
+  });
+
   const state = useSelector((store: any) => {
     return {
       centros: store.configuracion.instituciones,
@@ -70,16 +74,20 @@ const HistoricoExpediente = (props) => {
 
   useEffect(() => {
     setLoading(true)
+    const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
     actions
       .GetServicioComunalByInstitucionId(
-        2
+        selectedInstitution.institucionId
       )
       .then((data) => {
-        console.log('data', data)
         setData(data.options)
         setLoading(false)
-      })
-  }, [accessRole])
+      }).catch((error) => {
+        console.log('error', error)
+        setLoading(false)
+
+      });
+  }, [accessRole, currentInstitution])
 
   const columns = useMemo(() => {
     const tienePermiso = state.permisos.find(
@@ -161,8 +169,8 @@ const HistoricoExpediente = (props) => {
               <Tooltip title={t('buscador_ce>buscador>columna_acciones>ficha', 'Ver ficha del SCE')}>
                 <RemoveRedEyeRounded
 
-                  onClick={() =>{
-                    setServicioComunalId(fullRow.id) 
+                  onClick={() => {
+                    setServicioComunalId(fullRow.id)
                   }}
                   style={{
                     fontSize: 25,
@@ -233,11 +241,11 @@ const HistoricoExpediente = (props) => {
             setExpediente(null)
           }}
           openDialog={expediente}>Está seguro que desea eliminar este registro de Servicio Comunal Estudiantil?</SimpleModal>}
-        {servicioComunalId && <SimpleModal title="Registro" onClose={() => setServicioComunalId(null)} stylesContent={{margin:0}}
-          onConfirm={() => { 
+        {servicioComunalId && <SimpleModal title="Registro" onClose={() => setServicioComunalId(null)} stylesContent={{ margin: 0 }}
+          onConfirm={() => {
             setServicioComunalId(null)
           }}
-          openDialog={servicioComunalId}><ExpedienteEstudianteSEC servicioComunalId={servicioComunalId}/></SimpleModal>}
+          openDialog={servicioComunalId}><ExpedienteEstudianteSEC servicioComunalId={servicioComunalId} /></SimpleModal>}
         <Container>
           <Row>
             <Col xs={12}>
@@ -265,7 +273,9 @@ const HistoricoExpediente = (props) => {
                 data={data}
                 showAddButton
                 // avoidSearch
-                onSubmitAddButton={() => { props.history.push('/director/expediente-centro/servicio-comunal/registro') }}
+                onSubmitAddButton={() => {
+                  props.history.push('/director/expediente-centro/servicio-comunal/registro')
+                }}
                 handleGetData={async (
                   searchValue,
                   _,
