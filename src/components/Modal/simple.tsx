@@ -80,7 +80,7 @@ const SimpleModal: React.FC<IProps> = props => {
 			maxWidth='md'
 			aria-labelledby='responsive-dialog-title'
 		>
-			<DialogTitleStyled>
+			<DialogTitleStyled> 
 				{icon && <Icon color={theme.palette.primary.main} className={'fas fa-' + iconLabel} />}
 				<Titles>
 					<div style={addMarginTitle ? {marginLeft:28}:{}}><TitleH2>{title}</TitleH2></div>
