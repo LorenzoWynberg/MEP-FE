@@ -51,8 +51,7 @@ const SimpleModal: React.FC<IProps> = props => {
 		iconLabel,
 		actions,
 		alignButton,
-		btnSubmit = true,
-		addMarginTitle = false
+		btnSubmit = true
 	} = props
 
 	const { t } = useTranslation()
@@ -80,10 +79,10 @@ const SimpleModal: React.FC<IProps> = props => {
 			maxWidth='md'
 			aria-labelledby='responsive-dialog-title'
 		>
-			<DialogTitleStyled> 
+			<DialogTitleStyled>
 				{icon && <Icon color={theme.palette.primary.main} className={'fas fa-' + iconLabel} />}
 				<Titles>
-					<div style={addMarginTitle ? {marginLeft:28}:{}}><TitleH2>{title}</TitleH2></div>
+					<TitleH2>{title}</TitleH2>
 					<SubTitle>{subTitle}</SubTitle>
 				</Titles>
 
@@ -155,7 +154,7 @@ const Icon = styled.i<{ color: string }>`
 	flex: 0;
 `
 const DialogTitleStyled = styled.div`
-	
+	border-bottom: 1px solid #000;
 	padding: 10px;
 	display: flex;
 	align-items: center;
