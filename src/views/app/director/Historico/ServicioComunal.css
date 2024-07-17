@@ -1,3 +1,15 @@
 .MuiDialogContent-root main{
     margin: 0 !important;
 }
+
+
+.kveyuA {
+        margin: 25px;
+    }
+
+.MuiRadio-colorSecondary.Mui-checked{
+
+    color:#145388;
+
+
+    }

@@ -154,7 +154,7 @@ const Icon = styled.i<{ color: string }>`
 	flex: 0;
 `
 const DialogTitleStyled = styled.div`
-	border-bottom: 1px solid #000;
+	
 	padding: 10px;
 	display: flex;
 	align-items: center;
