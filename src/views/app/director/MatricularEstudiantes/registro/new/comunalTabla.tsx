@@ -75,7 +75,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 					'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados>colum_nombre',
 					'Nombre completo'
 				),
-				accessor: 'nombreCompleto',
+				accessor: 'nombreEstudiante',
 				label: '',
 				column: ''
 			},
