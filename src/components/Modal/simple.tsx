@@ -83,7 +83,7 @@ const SimpleModal: React.FC<IProps> = props => {
 			<DialogTitleStyled>
 				{icon && <Icon color={theme.palette.primary.main} className={'fas fa-' + iconLabel} />}
 				<Titles>
-					<div style={addMarginTitle && {marginLeft:28}}><TitleH2>{title}</TitleH2></div>
+					<div style={addMarginTitle ? {marginLeft:28}:{}}><TitleH2>{title}</TitleH2></div>
 					<SubTitle>{subTitle}</SubTitle>
 				</Titles>
 
