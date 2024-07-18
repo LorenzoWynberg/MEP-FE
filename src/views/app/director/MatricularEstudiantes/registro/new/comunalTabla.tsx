@@ -195,7 +195,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 								});
 								console.log('newEstudiantes',newEstudiantes)
 								props.setEstudiantes(newEstudiantes)
-							}}>Eliminar</Button>
+							}} style={{color:'white'}}>Eliminar</Button>
 						</p>
 					)
 				}
@@ -205,7 +205,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 
 	onlyViewModule && columns.splice(7, 1)
 	return (
-		<div style={{paddingTop:'10px'}}>
+		<div style={{paddingTop:'32px', margin:'-20px'}}>
 		<Colxx className='mb-5' sm='12' lg='12' xl='12'>
 			<Card>
 				<CardBody>
