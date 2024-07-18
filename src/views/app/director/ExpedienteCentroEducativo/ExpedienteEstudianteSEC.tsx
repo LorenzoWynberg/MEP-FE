@@ -14,9 +14,7 @@ import TableStudents from '../MatricularEstudiantes/registro/new/tableStudents'
 import { Button } from '@material-ui/core'
 import { useActions } from 'Hooks/useActions'
 import InformationCardDetalle from './_partials/InformationCardDetalle'
-import {
-	GetServicioComunalInfoById
-} from '../../../../redux/formularioCentroResponse/actions'
+import { GetServicioComunalInfoById } from '../../../../redux/formularioCentroResponse/actions'
 import styled from 'styled-components'
 const Inicio = React.lazy(() => import('./Inicio'))
 const General = React.lazy(() => import('./General'))
@@ -28,10 +26,10 @@ const OrganizacionAuxiliar = React.lazy(() => import('./OrganizacionAuxiliar'))
 const InformationCardExpediente = React.lazy(() => import('./_partials/InformationCardExpediente'))
 const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
 
-const ExpedienteEstudianteSEC = (props) => {
+const ExpedienteEstudianteSEC = props => {
 	const { t } = useTranslation()
-	const [sce, setSCE] = useState();
-	const [showProyecto, setShowProyecto] = useState(false);
+	const [sce, setSCE] = useState()
+	const [showProyecto, setShowProyecto] = useState(false)
 
 	centroBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
@@ -40,12 +38,8 @@ const ExpedienteEstudianteSEC = (props) => {
 
 	const actions = useActions({ GetServicioComunalInfoById })
 	useEffect(() => {
-
-		actions.GetServicioComunalInfoById(
-			parseInt(props.servicioComunalId)
-
-		).then((res) => {
-			setSCE(res[0]);
+		actions.GetServicioComunalInfoById(parseInt(props.servicioComunalId)).then(res => {
+			setSCE(res[0])
 			setShowProyecto(true)
 		})
 	}, [props.servicioComunalId])
@@ -79,10 +73,7 @@ const ExpedienteEstudianteSEC = (props) => {
 			column: ''
 		},
 		{
-			Header: t(
-				'servicio_comunal>registro_servicio_comunal>genero',
-				'genero'
-			),
+			Header: t('servicio_comunal>registro_servicio_comunal>genero', 'genero'),
 			accessor: 'generoShow',
 			label: '',
 			column: ''
@@ -97,27 +88,21 @@ const ExpedienteEstudianteSEC = (props) => {
 			column: ''
 		},
 		{
-			Header: t(
-				'servicio_comunal>registro_servicio_comunal>edad',
-				'Edad'
-			),
+			Header: t('servicio_comunal>registro_servicio_comunal>edad', 'Edad'),
 			accessor: 'edad',
 			label: '',
 			column: ''
 		},
 
 		{
-			Header: t(
-				'servicio_comunal>registro_servicio_comunal>discapacidad',
-				'Discapacidad'
-			),
+			Header: t('servicio_comunal>registro_servicio_comunal>discapacidad', 'Discapacidad'),
 			accessor: 'tieneDiscapacidad',
 			label: '',
-			column: '',
+			column: ''
 		}
 	]
 
-	const state = useSelector((store) => {
+	const state = useSelector(store => {
 		return {
 			currentInstitucion: store.authUser.currentInstitution
 		}
@@ -138,7 +123,7 @@ const ExpedienteEstudianteSEC = (props) => {
 	if (state.currentInstitucion?.id == -1) {
 		return (
 			<AppLayout items={directorItems}>
-				<div className="dashboard-wrapper">
+				<div className='dashboard-wrapper'>
 					<section>
 						<Container>
 							<Row>
@@ -163,93 +148,114 @@ const ExpedienteEstudianteSEC = (props) => {
 			<Helmet>
 				<title>Registro</title>
 			</Helmet>
-			<div className="dashboard-wrapper">
+			<div className='dashboard-wrapper'>
 				<Container>
-					{showProyecto &&
-						<div >
+					{showProyecto && (
+						<div>
 							<Row>
-								<Col style={{marginBottom:16}} sm={12}><strong>Detalle del Servicio Comunal Estudiantil:</strong></Col>
+								<Col style={{ marginBottom: 16 }} sm={12}>
+									<strong>Detalle del Servicio Comunal Estudiantil:</strong>
+								</Col>
 							</Row>
-							<Row >
+							<Row>
 								<Col sm={4}>
-
-									<strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong> {sce.nombreAreaProyecto}
+									<strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong>{' '}
+									{sce.nombreAreaProyecto}
 								</Col>
 								<Col sm={4}>
-									<strong>{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}:</strong> {sce.caracteristicas}
-
+									<strong>{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}:</strong>{' '}
+									{sce.caracteristicas}
 								</Col>
 								<Col sm={4}>
-									<strong>{t('informationcarddetalle>docenteAcompana', 'Docente que acompaña el proyecto')}:</strong> {sce.nombreDocente}
+									<strong>
+										{t(
+											'informationcarddetalle>docenteAcompana',
+											'Docente que acompaña el proyecto'
+										)}
+										:
+									</strong>
+									{sce.nombreDocente}
 								</Col>
-
-
-							</Row >
-
-
-							<Row >
+							</Row>
+							<Row>
 								<Col sm={4}>
-
-									<strong>{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}:</strong> {sce.nombreProyecto}
-								</Col>
-								<Col sm={4}>
-									<strong>{t('informationcarddetalle>quienRegistra', 'Quién registra y fecha de registros(bitácora)')}:</strong> {sce.usuarioFechaRegistro}
-								</Col>
-								<Col sm={4}>
-									<strong>{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:</strong> {sce.fechaConclusion}
-
-
-								</Col>
-
-							</Row >	<Row >
-								<Col sm={4}>
-									<strong>{t('informationcarddetalle>modalidad', 'Modalidad')}:</strong> {sce.nombreModalidad}
-
+									<strong>
+										{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}:
+									</strong>|
+									{sce.nombreProyecto}
 								</Col>
 								<Col sm={4}>
-									<strong>{t('informationcarddetalle>organizaciónContraParte', 'Tipo de organización contraparte')}:</strong> {sce.nombreOrganizacionContraparte}
-
+									<strong>
+										{t(
+											'informationcarddetalle>quienRegistra',
+											'Quién registra y fecha de registros(bitácora)'
+										)}
+										:
+									</strong>
+									{sce.usuarioFechaRegistro}
 								</Col>
-							</Row ></div>
-
-					}
+								<Col sm={4}>
+									<strong>
+										{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:
+									</strong>{' '}
+									{sce.fechaConclusion}
+								</Col>
+							</Row>{' '}
+							<Row>
+								<Col sm={4}>
+									<strong>{t('informationcarddetalle>modalidad', 'Modalidad')}:</strong>{' '}
+									{sce.nombreModalidad}
+								</Col>
+								<Col sm={4}>
+									<strong>
+										{t(
+											'informationcarddetalle>organizaciónContraParte',
+											'Tipo de organización contraparte'
+										)}
+										:
+									</strong>{' '}
+									{sce.nombreOrganizacionContraparte}
+								</Col>
+							</Row>
+						</div>
+					)}
 					<TableStudents
-					noMargin={true}
+						noMargin={true}
 						onlyViewModule={true}
 						avoidSearch={true}
 						data={[
 							{
-								"identificacion": "123210049",
-								"nombreEstudiante": "NATASHA CASTILLO  ROJAS",
-								"nacionalidad": "COSTARRICENSE",
-								"nacionalidadShow": "COSTARRICENSE",
-								"genero": "MUJER",
-								"generoShow": "MUJER",
-								"fechaNacimiento": new Date("10/01/2019").toISOString(),
-								"edad": "5 años y 6 meses",
-								"tieneDiscapacidad": "NO"
+								identificacion: '123210049',
+								nombreEstudiante: 'NATASHA CASTILLO  ROJAS',
+								nacionalidad: 'COSTARRICENSE',
+								nacionalidadShow: 'COSTARRICENSE',
+								genero: 'MUJER',
+								generoShow: 'MUJER',
+								fechaNacimiento: new Date('10/01/2019').toISOString(),
+								edad: '5 años y 6 meses',
+								tieneDiscapacidad: 'NO'
 							},
 							{
-								"identificacion": "123130198",
-								"nombreEstudiante": "AINARA LOPEZ  ROJAS",
-								"nacionalidad": "COSTARRICENSE",
-								"nacionalidadShow": "COSTARRICENSE",
-								"genero": "MUJER",
-								"generoShow": "MUJER",
-								"fechaNacimiento": new Date("11/09/2018").toISOString(),
-								"edad": "5 años y 10 meses",
-								"tieneDiscapacidad": "NO"
+								identificacion: '123130198',
+								nombreEstudiante: 'AINARA LOPEZ  ROJAS',
+								nacionalidad: 'COSTARRICENSE',
+								nacionalidadShow: 'COSTARRICENSE',
+								genero: 'MUJER',
+								generoShow: 'MUJER',
+								fechaNacimiento: new Date('11/09/2018').toISOString(),
+								edad: '5 años y 10 meses',
+								tieneDiscapacidad: 'NO'
 							},
 							{
-								"identificacion": "123050055",
-								"nombreEstudiante": "RIHANNA JOYSIE MORALES  MORALES",
-								"nacionalidad": "COSTARRICENSE",
-								"nacionalidadShow": "COSTARRICENSE",
-								"genero": "MUJER",
-								"generoShow": "MUJER",
-								"fechaNacimiento": new Date("11/05/2018").toISOString(),
-								"edad": "6 años y 2 meses",
-								"tieneDiscapacidad": "NO"
+								identificacion: '123050055',
+								nombreEstudiante: 'RIHANNA JOYSIE MORALES  MORALES',
+								nacionalidad: 'COSTARRICENSE',
+								nacionalidadShow: 'COSTARRICENSE',
+								genero: 'MUJER',
+								generoShow: 'MUJER',
+								fechaNacimiento: new Date('11/05/2018').toISOString(),
+								edad: '6 años y 2 meses',
+								tieneDiscapacidad: 'NO'
 							}
 						]}
 						columns={columns}
@@ -280,27 +286,24 @@ const ExpedienteEstudianteSEC = (props) => {
 						// setEstudiantes={setEstudiantes} estudiantes={estudiantes}
 						closeContextualMenu={false}
 					></TableStudents>
-
-
 				</Container>
 			</div>
-		</AppLayout >
+		</AppLayout>
 	)
 }
 const DivContainer = styled.div`
-  display: grid;
-  grid-template-columns: 80px 1fr 1fr 1fr;
-//   background: ${props => props.theme.primary};
-  border-radius: 50px;
-  width: 100%;
-  padding: 5px 10px;
-  color: ${props => props.theme.primaryText};
-  align-items: center;
+	display: grid;
+	grid-template-columns: 80px 1fr 1fr 1fr;
+	//   background: ${props => props.theme.primary};
+	border-radius: 50px;
+	width: 100%;
+	padding: 5px 10px;
+	color: ${props => props.theme.primaryText};
+	align-items: center;
 `
 const Columna = styled.div`
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 `
 
 export default ExpedienteEstudianteSEC
-
