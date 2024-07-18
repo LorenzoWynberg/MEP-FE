@@ -15,3 +15,8 @@
 
     max-height:420px;
 }
+
+.MuiCheckbox-colorSecondary.Mui-checked {
+
+    color:#145388;
+}
