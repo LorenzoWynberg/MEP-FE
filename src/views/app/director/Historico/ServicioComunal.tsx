@@ -165,9 +165,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 											/>
 										</Col>
 										<Col sm={9}>
-											<FormLabel>
-												{item.descripcion}
-											</FormLabel>
+											{item.descripcion}
 										</Col>
 									</Row>
 								))}
@@ -195,7 +193,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 							<Col sm={9}><Typography variant='h6'>Descripcion</Typography></Col>
 						</Row>
 						{catalogos.caracteristicas.map((item, index) => (
-							<Row style={{ width: '70vw' }}>
+							<Row >
 								<Col
 									style={{
 										display: 'flex',
@@ -203,7 +201,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 										justifyContent: 'center',
 										alignItems: 'center'
 									}}
-									sm={5}
+									sm={3}
 								>
 									<FormControlLabel
 										control={
@@ -212,7 +210,20 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												value={item.id}
 											/>
 										}
-										label={item.nombre}
+										label={<div onClick={async () => {
+											let caracteristicas = [...caracteristicasSeleccionados]
+											let caracteristicasId = [...caracteristicasIdSeleccionados]
+											console.log('caracteristicas', caracteristicas)
+											if (!caracteristicasId.includes(item.id)) {
+												caracteristicas.push(item)
+												caracteristicasId.push(item.id)
+											} else {
+												caracteristicas = caracteristicas.filter(n => n.id != item.id)
+												caracteristicasId = caracteristicasId.filter(n => n != item.id)
+											}
+											setCaracteristicasSeleccionados(caracteristicas)
+											setCaracteristicasIdSeleccionados(caracteristicasId)
+										}} >{item.nombre}</div>}
 										onClick={async () => {
 											let caracteristicas = [...caracteristicasSeleccionados]
 											let caracteristicasId = [...caracteristicasIdSeleccionados]
@@ -229,8 +240,8 @@ export const ServicioComunal: React.FC<IProps> = props => {
 										}}
 									/>
 								</Col>
-								<Col sm={6}>
-									<FormLabel id='demo-radio-buttons-group-label'>{item.descripcion}</FormLabel>
+								<Col sm={9}>
+									{item.descripcion}
 								</Col>
 							</Row>
 						))}
@@ -247,44 +258,41 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					}}
 					onClose={() => setShowModalidades(false)}
 				>
-					<FormControl>
-						<Row>
-							<Col style={{
-								display: 'flex',
-								textAlign: 'center',
-								justifyContent: 'center',
-								alignItems: 'center'
-							}} sm={4}><Typography variant='h6'>Modalidad</Typography></Col>
-							<Col sm={8}><Typography variant='h6'>Descripcion</Typography></Col>
-						</Row>
-						<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
-							{catalogos.modalidades.map(item => {
-								<Row style={{ width: '70vw' }}>
-									<Col
-										style={{
-											display: 'flex',
-											textAlign: 'center',
-											justifyContent: 'center',
-											alignItems: 'center'
-										}}
-										sm={6}
-									>
-										<FormControlLabel
-											value={item.id}
-											onClick={(e, v) => {
-												e.persist()
-												setModalidadId(e.target.value)
-												setModalidad(item.nombre)
+					{catalogos && console.log('catalogos', catalogos)}
+					<Row>
+
+						<FormControl>
+							<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
+								{catalogos.modalidades && catalogos.modalidades.map(item =>
+									<Row >
+										<Col
+											style={{
+												display: 'flex',
+												justifyContent: 'center',
+												alignItems: 'left'
 											}}
-											checked={modalidadId == item.id}
-											control={<Radio />}
-											label={item.nombre}
-										/>
-									</Col>
-								</Row>
-							})}
-						</RadioGroup>
-					</FormControl>
+											sm={3}
+										>
+											<FormControlLabel
+												value={item.id}
+												onClick={(e, v) => {
+													e.persist()
+													setModalidadId(e.target.value)
+													setModalidad(item.nombre)
+												}}
+												checked={modalidadId == item.id}
+												control={<Radio />}
+												label={item.nombre}
+											/>
+										</Col>
+										<Col sm={9}>
+											{item.descripcion}
+										</Col>
+									</Row>
+								)}
+							</RadioGroup>
+						</FormControl>
+					</Row>
 				</SimpleModal>
 			)}
 			{showTipoOrganizacion && (
@@ -302,8 +310,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 								display: 'flex',
 								justifyContent: 'center',
 								alignItems: 'center'
-							}} sm={4}><Typography variant='h6'>>Tipo</Typography></Col>
-							<Col sm={8}><Typography variant='h6'>Descripcion</Typography></Col>
+							}} sm={3}><Typography variant='h6'>Tipo</Typography></Col> 
 						</Row>
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
@@ -311,17 +318,21 @@ export const ServicioComunal: React.FC<IProps> = props => {
 							value={value}
 						>
 							{catalogos.tipoOrganizacion.map(item => (
-								<FormControlLabel
-									value={item.id}
-									onClick={(e, v) => {
-										e.persist()
-										setOrganizacionId(e.target.value)
-										setOrganizacion(item.nombre)
-									}}
-									checked={organizacionId == item.id}
-									control={<Radio />}
-									label={item.nombre}
-								/>
+								<Row>
+									<Col sm={12}>
+										<FormControlLabel
+											value={item.id}
+											onClick={(e, v) => {
+												e.persist()
+												setOrganizacionId(e.target.value)
+												setOrganizacion(item.nombre)
+											}}
+											checked={organizacionId == item.id}
+											control={<Radio />}
+											label={item.nombre}
+										/>
+									</Col> 
+								</Row>
 							))}
 						</RadioGroup>
 					</FormControl>
@@ -343,7 +354,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					/>
 				</SimpleModal>
 			)}
-			{nombresSeleccionados && value && showNombre && catalogos.nombresProyecto && (
+			{nombresSeleccionados && value && !showBuscador && showNombre && catalogos.nombresProyecto && (
 				<SimpleModal
 					title='Nombre Proyecto'
 					openDialog={showNombre}
@@ -362,17 +373,22 @@ export const ServicioComunal: React.FC<IProps> = props => {
 							{catalogos.nombresProyecto
 								.filter(item => parseInt(item.codigo) == parseInt(value))
 								.map(item => (
-									<FormControlLabel
-										value={item.id}
-										onClick={(e, v) => {
-											e.persist()
-											setNombreId(e.target.value)
-											setNombreSend(item.nombre)
-										}}
-										checked={nombreId == item.id}
-										control={<Radio />}
-										label={item.nombre}
-									/>
+									<Row>
+										<Col sm={12}>
+											<FormControlLabel
+												value={item.id}
+												onClick={(e, v) => {
+													e.persist()
+													setNombreId(e.target.value)
+													setNombreSend(item.nombre)
+												}}
+												checked={nombreId == item.id}
+												control={<Radio />}
+												label={item.nombre}
+											/>
+										</Col> 
+									</Row>
+
 								))}
 						</RadioGroup>
 					</FormControl>
@@ -539,7 +555,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 
 				<Row>
 					<Col sm={12}>
-						<div style={{ marginLeft: 16 }}>
+						<div >
 							<Search
 								newId='servicioComunalSearch'
 								onSearch={() => {

@@ -1,22 +1,30 @@
-.MuiDialogContent-root main{
+.MuiDialogContent-root main {
     margin: 0 !important;
 }
 
+.MuiRadio-colorSecondary.Mui-checked {
+
+    color: #145388;
 
 
-.MuiRadio-colorSecondary.Mui-checked{
+}
 
-    color:#145388;
+.MuiPaper-root {
 
-
-    }
-
-.MuiPaper-root{
-
-    max-height:420px;
+    max-height: 600px;
 }
 
 .MuiCheckbox-colorSecondary.Mui-checked {
 
-    color:#145388;
+    color: #145388;
+}
+
+.MuiRadio-colorSecondary, .Mui-focused {
+    color: rgba(0, 0, 0, 0.87) !important;
+
+}
+
+.MuiFormLabel-root {
+
+    color: rgba(0, 0, 0, 0.87);
 }
