@@ -126,9 +126,14 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					onClose={() => setShowAreaProyecto(false)}
 				>
 					<FormControl>
-						<Row>
-						<Col sm={4}><Typography variant='h3'>Servicio Comunal</Typography></Col>
-						<Col sm={8}></Col>
+						<Row  >
+							<Col style={{
+								display: 'flex',
+								textAlign: 'center',
+								justifyContent: 'center',
+								alignItems: 'center'
+							}} sm={3}><Typography variant='h6'>Area De Proyecto</Typography></Col>
+							<Col sm={9}><Typography variant='h6'>Descripcion</Typography></Col>
 						</Row>
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
@@ -137,7 +142,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 						>
 							{catalogos?.areasProyecto &&
 								catalogos.areasProyecto.map(item => (
-									<Row style={{ width: '75vw' }}>
+									<Row >
 										<Col
 											style={{
 												display: 'flex',
@@ -145,7 +150,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												justifyContent: 'center',
 												alignItems: 'center'
 											}}
-											sm={4}
+											sm={3}
 										>
 											<FormControlLabel
 												value={item.id}
@@ -159,7 +164,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												label={item.nombre}
 											/>
 										</Col>
-										<Col sm={8}>
+										<Col sm={9}>
 											<FormLabel>
 												{item.descripcion}
 											</FormLabel>
@@ -180,9 +185,15 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					onClose={() => setShowCaracteristicas(false)}
 				>
 					<FormControl>
-						<Typography style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-							Area Proyecto
-						</Typography>
+						<Row>
+							<Col style={{
+								display: 'flex',
+								textAlign: 'center',
+								justifyContent: 'center',
+								alignItems: 'center'
+							}} sm={3}><Typography variant='h6'>Caracteristica</Typography></Col>
+							<Col sm={9}><Typography variant='h6'>Descripcion</Typography></Col>
+						</Row>
 						{catalogos.caracteristicas.map((item, index) => (
 							<Row style={{ width: '70vw' }}>
 								<Col
@@ -237,10 +248,18 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					onClose={() => setShowModalidades(false)}
 				>
 					<FormControl>
-						<FormLabel id='demo-radio-buttons-group-label'>Modalidad</FormLabel>
+						<Row>
+							<Col style={{
+								display: 'flex',
+								textAlign: 'center',
+								justifyContent: 'center',
+								alignItems: 'center'
+							}} sm={4}><Typography variant='h6'>Modalidad</Typography></Col>
+							<Col sm={8}><Typography variant='h6'>Descripcion</Typography></Col>
+						</Row>
 						<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
 							{catalogos.modalidades.map(item => {
-								;<Row style={{ width: '70vw' }}>
+								<Row style={{ width: '70vw' }}>
 									<Col
 										style={{
 											display: 'flex',
@@ -278,7 +297,14 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					onClose={() => setShowTipoOrganizacion(false)}
 				>
 					<FormControl>
-						<FormLabel id='demo-radio-buttons-group-label'>Tipo Organizacion</FormLabel>
+						<Row>
+							<Col style={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center'
+							}} sm={4}><Typography variant='h6'>>Tipo</Typography></Col>
+							<Col sm={8}><Typography variant='h6'>Descripcion</Typography></Col>
+						</Row>
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
 							name='radio-buttons-group'
