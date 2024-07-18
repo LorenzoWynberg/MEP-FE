@@ -7,7 +7,7 @@ import colors from '../../../../assets/js/colors'
 import withRouter from 'react-router-dom/withRouter'
 import Grid from '@material-ui/core/Grid'
 import { crearServicioComunal, getTablaEstudiantesServicioComunalById } from '../../../../redux/configuracion/actions'
-
+import { getYearsOld } from 'Utils/years'
 import styles from './ServicioComunal.css'
 import BuscadorServicioComunal from '../Buscadores/BuscadorServicioComunal'
 import {
@@ -70,7 +70,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 	const [loading, setLoading] = React.useState<boolean>(false)
 	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		console.log('(event.target as HTMLInputElement).value', (event.target as HTMLInputElement).value)
+		// console.log('(event.target as HTMLInputElement).value', (event.target as HTMLInputElement).value)
 		setValue((event.target as HTMLInputElement).value)
 	}
 	const [Cdate, setCDate] = useState(new Date().toLocaleDateString('fr-FR'))
@@ -89,10 +89,10 @@ export const ServicioComunal: React.FC<IProps> = props => {
 			...el,
 			id: el.matriculaId,
 			image: el.img,
-			edad: getYearsOld(el.fechaNacimiento),
-			fechaNacimientoP: format(parseISO(el.fechaNacimiento), 'dd/MM/yyyy'),
-			nacionalidad: Array.isArray(el.nacionalidades) ? el.nacionalidades[0].nacionalidad : '',
-			genero: Array.isArray(el.genero) ? el.genero[0].nombre : '',
+			edad: el.edad,
+			fechaNacimiento: el.fechaNacimiento,
+			nacionalidad: el.nacionalidad ? el.nacionalidad : '',
+			genero: el.genero ? el.genero : '',
 			cuentaCorreoOffice: el.cuentaCorreoOffice ? 'Sí' : 'No'
 		}
 	}
@@ -126,14 +126,21 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					onClose={() => setShowAreaProyecto(false)}
 				>
 					<FormControl>
-						<Row  >
-							<Col style={{
-								display: 'flex',
-								textAlign: 'center',
-								justifyContent: 'center',
-								alignItems: 'center'
-							}} sm={3}><Typography variant='h6'>Area De Proyecto</Typography></Col>
-							<Col sm={9}><Typography variant='h6'>Descripcion</Typography></Col>
+						<Row>
+							<Col
+								style={{
+									display: 'flex',
+									textAlign: 'center',
+									justifyContent: 'center',
+									alignItems: 'center'
+								}}
+								sm={3}
+							>
+								<Typography variant='h6'>Area De Proyecto</Typography>
+							</Col>
+							<Col sm={9}>
+								<Typography variant='h6'>Descripcion</Typography>
+							</Col>
 						</Row>
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
@@ -142,7 +149,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 						>
 							{catalogos?.areasProyecto &&
 								catalogos.areasProyecto.map(item => (
-									<Row >
+									<Row>
 										<Col
 											style={{
 												display: 'flex',
@@ -164,9 +171,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												label={item.nombre}
 											/>
 										</Col>
-										<Col sm={9}>
-											{item.descripcion}
-										</Col>
+										<Col sm={9}>{item.descripcion}</Col>
 									</Row>
 								))}
 						</RadioGroup>
@@ -184,16 +189,23 @@ export const ServicioComunal: React.FC<IProps> = props => {
 				>
 					<FormControl>
 						<Row>
-							<Col style={{
-								display: 'flex',
-								textAlign: 'center',
-								justifyContent: 'center',
-								alignItems: 'center'
-							}} sm={3}><Typography variant='h6'>Caracteristica</Typography></Col>
-							<Col sm={9}><Typography variant='h6'>Descripcion</Typography></Col>
+							<Col
+								style={{
+									display: 'flex',
+									textAlign: 'center',
+									justifyContent: 'center',
+									alignItems: 'center'
+								}}
+								sm={3}
+							>
+								<Typography variant='h6'>Caracteristica</Typography>
+							</Col>
+							<Col sm={9}>
+								<Typography variant='h6'>Descripcion</Typography>
+							</Col>
 						</Row>
 						{catalogos.caracteristicas.map((item, index) => (
-							<Row >
+							<Row>
 								<Col
 									style={{
 										display: 'flex',
@@ -210,24 +222,28 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												value={item.id}
 											/>
 										}
-										label={<div onClick={async () => {
-											let caracteristicas = [...caracteristicasSeleccionados]
-											let caracteristicasId = [...caracteristicasIdSeleccionados]
-											console.log('caracteristicas', caracteristicas)
-											if (!caracteristicasId.includes(item.id)) {
-												caracteristicas.push(item)
-												caracteristicasId.push(item.id)
-											} else {
-												caracteristicas = caracteristicas.filter(n => n.id != item.id)
-												caracteristicasId = caracteristicasId.filter(n => n != item.id)
-											}
-											setCaracteristicasSeleccionados(caracteristicas)
-											setCaracteristicasIdSeleccionados(caracteristicasId)
-										}} >{item.nombre}</div>}
+										label={
+											<div
+												onClick={async () => {
+													let caracteristicas = [...caracteristicasSeleccionados]
+													let caracteristicasId = [...caracteristicasIdSeleccionados]
+													if (!caracteristicasId.includes(item.id)) {
+														caracteristicas.push(item)
+														caracteristicasId.push(item.id)
+													} else {
+														caracteristicas = caracteristicas.filter(n => n.id != item.id)
+														caracteristicasId = caracteristicasId.filter(n => n != item.id)
+													}
+													setCaracteristicasSeleccionados(caracteristicas)
+													setCaracteristicasIdSeleccionados(caracteristicasId)
+												}}
+											>
+												{item.nombre}
+											</div>
+										}
 										onClick={async () => {
 											let caracteristicas = [...caracteristicasSeleccionados]
 											let caracteristicasId = [...caracteristicasIdSeleccionados]
-											console.log('caracteristicas', caracteristicas)
 											if (!caracteristicasId.includes(item.id)) {
 												caracteristicas.push(item)
 												caracteristicasId.push(item.id)
@@ -240,9 +256,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 										}}
 									/>
 								</Col>
-								<Col sm={9}>
-									{item.descripcion}
-								</Col>
+								<Col sm={9}>{item.descripcion}</Col>
 							</Row>
 						))}
 					</FormControl>
@@ -260,36 +274,34 @@ export const ServicioComunal: React.FC<IProps> = props => {
 				>
 					{catalogos && console.log('catalogos', catalogos)}
 					<Row>
-
 						<FormControl>
 							<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
-								{catalogos.modalidades && catalogos.modalidades.map(item =>
-									<Row >
-										<Col
-											style={{
-												display: 'flex',
-												justifyContent: 'center',
-												alignItems: 'left'
-											}}
-											sm={3}
-										>
-											<FormControlLabel
-												value={item.id}
-												onClick={(e, v) => {
-													e.persist()
-													setModalidadId(e.target.value)
-													setModalidad(item.nombre)
+								{catalogos.modalidades &&
+									catalogos.modalidades.map(item => (
+										<Row>
+											<Col
+												style={{
+													display: 'flex',
+													justifyContent: 'center',
+													alignItems: 'left'
 												}}
-												checked={modalidadId == item.id}
-												control={<Radio />}
-												label={item.nombre}
-											/>
-										</Col>
-										<Col sm={9}>
-											{item.descripcion}
-										</Col>
-									</Row>
-								)}
+												sm={3}
+											>
+												<FormControlLabel
+													value={item.id}
+													onClick={(e, v) => {
+														e.persist()
+														setModalidadId(e.target.value)
+														setModalidad(item.nombre)
+													}}
+													checked={modalidadId == item.id}
+													control={<Radio />}
+													label={item.nombre}
+												/>
+											</Col>
+											<Col sm={9}>{item.descripcion}</Col>
+										</Row>
+									))}
 							</RadioGroup>
 						</FormControl>
 					</Row>
@@ -306,11 +318,16 @@ export const ServicioComunal: React.FC<IProps> = props => {
 				>
 					<FormControl>
 						<Row>
-							<Col style={{
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center'
-							}} sm={3}><Typography variant='h6'>Tipo</Typography></Col> 
+							<Col
+								style={{
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center'
+								}}
+								sm={3}
+							>
+								<Typography variant='h6'>Tipo</Typography>
+							</Col>
 						</Row>
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
@@ -331,7 +348,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 											control={<Radio />}
 											label={item.nombre}
 										/>
-									</Col> 
+									</Col>
 								</Row>
 							))}
 						</RadioGroup>
@@ -386,9 +403,8 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												control={<Radio />}
 												label={item.nombre}
 											/>
-										</Col> 
+										</Col>
 									</Row>
-
 								))}
 						</RadioGroup>
 					</FormControl>
@@ -488,7 +504,6 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												value={Cdate}
 												onChange={date => {
 													const d = new Date(date)
-													console.log(d)
 													setDate(d)
 													setCDate(d.toLocaleDateString('fr-FR'))
 												}}
@@ -555,7 +570,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 
 				<Row>
 					<Col sm={12}>
-						<div >
+						<div>
 							<Search
 								newId='servicioComunalSearch'
 								onSearch={() => {
@@ -604,7 +619,6 @@ export const ServicioComunal: React.FC<IProps> = props => {
 							primary
 							onClick={() => {
 								const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
-								console.log('selectedInstitution', selectedInstitution.institucionId)
 								if (selectedInstitution?.institucionId != null) {
 									actions
 										.crearServicioComunal({
