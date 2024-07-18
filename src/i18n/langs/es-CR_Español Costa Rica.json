@@ -2494,6 +2494,17 @@
   "informationcarddetalle>organizaciónContraParte":"Tipo de organización contraparte",
   "informationcarddetalle>docenteAcompana":"Docente que acompaña el proyecto",
   "informationcarddetalle>fechaConclusion":"Fecha de Conclusión",
+  "expedienteEstudiantil>nombre":"Nombre",
+  "expedienteEstudiantil>identificacion":"Identificación",
+  "expedienteEstudiantil>grupo":"Grupo",
+  "expedienteEstudiantil>ofertaEducativa":"Oferta Educativa",
+  "expedienteEstudiantil>modalidad":"Modalidad",
+  "expedienteEstudiantil>nivel":"Nivel",
+  "expedienteEstudiantil>codigo":"Código",
+  "expedienteEstudiantil>nombreCentroEducativo":"Nombre Centro Educativo",
+  "expedienteEstudiantil>estadoEstudiante":"Estado del estudiante en el periodo",
+
+
 
 
 

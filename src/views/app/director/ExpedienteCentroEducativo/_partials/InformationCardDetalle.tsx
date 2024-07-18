@@ -180,36 +180,41 @@ const InformationCardDetalle = ({ data }) => {
       </Columna>
       <Columna>
         <span>
-          {t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}: {state.institucion.nombre}
+          {t('expedienteEstudiantil>nombre', 'Nombre')}: {state.institucion.nombre}
         </span>
         <span>
-          {t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}: {state.institucion.codigo}
+          {t('expedienteEstudiantil>identificacion', 'Identificación')}: {state.institucion.codigo}
         </span>
         <span>
-          {t('informationcarddetalle>modalidad', 'Modalidad')}: {state.institucion.codigoPresupuestario}
-        </span>
-      </Columna>
-      <Columna>
-        <span>
-          {t('informationcarddetalle>caracteristicas', 'Caracteristicas')}: {state.institucion?.regionNombre}
-        </span>
-        <span>
-          {t('informationcarddetalle>quienRegistra', 'Quién registra y fecha de registros(bitácora)')}: {state.institucion.circuitoNombre}
-        </span>
-        <span>
-          {t('informationcarddetalle>organizaciónContraParte', 'Tipo de organización contraparte')}: {state.institucion?.esPrivado ? 'Privada' : 'Pública'}
+          {t('expedienteEstudiantil>grupo', 'Grupo')}: {state.institucion.codigoPresupuestario}
         </span>
       </Columna>
       <Columna>
         <span>
-          {t('informationcarddetalle>docenteAcompana', 'Docente que acompaña el proyecto')}: {locationInfo.provincia}
+          {t('expedienteEstudiantil>ofertaEducativa', 'Oferta Educativa')}: {state.institucion?.regionNombre}
         </span>
         <span>
-          {t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}: {locationInfo.canton}
+          {t('expedienteEstudiantil>modalidad', 'Modalidad')}: {state.institucion.circuitoNombre}
+        </span>
+        <span>
+          {t('expedienteEstudiantil>nivel', 'Nivel')}: {state.institucion?.esPrivado ? 'Privada' : 'Pública'}
+        </span>
+      </Columna>
+      <Columna>
+        <span>
+          {t('expedienteEstudiantil>codigo', 'Código')}: {locationInfo.provincia}
+        </span>
+        <span>
+          {t('expedienteEstudiantil>nombreCentroEducativo', 'Nombre Centro Educativo')}: {locationInfo.canton}
+        </span>
+        <span>
+          {t('expedienteEstudiantil>estadoEstudiante', 'Estado del estudiante en el periodo')}: {locationInfo.canton}
         </span>
       
       </Columna>
     </DivContainer>
+
+    
   )
 }
 const Img = styled.img`
