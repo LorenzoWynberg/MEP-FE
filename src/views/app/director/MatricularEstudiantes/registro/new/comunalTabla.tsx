@@ -4,7 +4,6 @@ import ContextualMenu from 'Components/TableReactImplementation/ContextualMenu'
 import { getYearsOld } from 'Utils/years'
 import { Card, CardBody } from 'reactstrap'
 import { Colxx } from 'Components/common/CustomBootstrap'
-import { format, parseISO } from 'date-fns'
 import colors from 'Assets/js/colors'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
@@ -37,10 +36,10 @@ const ComunalTabla: React.FC<IProps> = props => {
 			...el,
 			id: el.matriculaId,
 			image: el.img,
-			edad: getYearsOld(el.fechaNacimiento),
-			fechaNacimientoP: format(parseISO(el.fechaNacimiento), 'dd/MM/yyyy'),
-			nacionalidad: Array.isArray(el.nacionalidades) ? el.nacionalidades[0].nacionalidad : '',
-			genero: Array.isArray(el.genero) ? el.genero[0].nombre : '',
+			edad: el.edad,
+			fechaNacimiento: el.fechaNacimiento,
+			nacionalidad: el.nacionalidad ? el.nacionalidad : '',
+			genero: el.genero ? el.genero : '',
 			cuentaCorreoOffice: el.cuentaCorreoOffice ? 'Sí' : 'No'
 		}
 	}
@@ -89,10 +88,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 				column: ''
 			},
 			{
-				Header: t(
-					'servicio_comunal>registro_servicio_comunal>genero',
-					'genero'
-				),
+				Header: t('servicio_comunal>registro_servicio_comunal>genero', 'genero'),
 				accessor: 'genero',
 				label: '',
 				column: ''
@@ -107,51 +103,25 @@ const ComunalTabla: React.FC<IProps> = props => {
 				column: ''
 			},
 			{
-				Header: t(
-					'servicio_comunal>registro_servicio_comunal>edad',
-					'Edad'
-				),
+				Header: t('servicio_comunal>registro_servicio_comunal>edad', 'Edad'),
 				accessor: 'edad',
 				label: '',
 				column: ''
 			},
 
 			{
-				Header: t(
-					'servicio_comunal>registro_servicio_comunal>discapacidad',
-					'Discapacidad'
-				),
-				accessor: 'condicion',
+				Header: t('servicio_comunal>registro_servicio_comunal>discapacidad', 'Discapacidad'),
+				accessor: 'discapacidad',
 				label: '',
-				column: '',
-				Cell: ({ cell, row, data }) => {
-					const _row = data[row.index]
-
-					return (
-						<p
-							style={{
-								background: colors.primary,
-								color: '#fff',
-								textAlign: 'center',
-								borderRadius: ' 20px'
-							}}
-						>
-							{_row.estadoNombre}
-						</p>
-					)
-				}
+				column: ''
 			},
 			{
-				Header: t(
-					'servicio_comunal>registro_servicio_comunal>Eliminar',
-					'Eliminar'
-				),
+				Header: t('servicio_comunal>registro_servicio_comunal>Eliminar', 'Eliminar'),
 				accessor: 'Eliminar',
 				label: '',
 				column: '',
 				Cell: ({ cell, row, data }) => {
 					const _row = data[row.index]
-
 					return (
 						<p
 							style={{
@@ -167,15 +137,11 @@ const ComunalTabla: React.FC<IProps> = props => {
 				}
 			},
 			{
-				Header: t(
-					'servicio_comunal>registro_servicio_comunal>eliminar',
-					'Eliminar'
-				),
+				Header: t('servicio_comunal>registro_servicio_comunal>eliminar', 'Eliminar'),
 				column: '',
 				accessor: '',
 				label: '',
 				Cell: ({ cell, row, data }) => {
-
 					return (
 						<p
 							style={{
@@ -185,17 +151,22 @@ const ComunalTabla: React.FC<IProps> = props => {
 								borderRadius: ' 20px'
 							}}
 						>
-							<Button onClick={() => {
-								const _row = data[row.index]
-								console.log('_row', _row)
-								let newEstudiantes = [...props.estudiantes]
+							<Button
+								onClick={() => {
+									const _row = data[row.index]
+									console.log('_row', _row)
+									let newEstudiantes = [...props.estudiantes]
 
-								newEstudiantes = newEstudiantes.filter(function (obj) {
-									return obj.idEstudiante !== _row.idEstudiante;
-								});
-								console.log('newEstudiantes',newEstudiantes)
-								props.setEstudiantes(newEstudiantes)
-							}} style={{color:'white'}}>Eliminar</Button>
+									newEstudiantes = newEstudiantes.filter(function (obj) {
+										return obj.idEstudiante !== _row.idEstudiante
+									})
+									console.log('newEstudiantes', newEstudiantes)
+									props.setEstudiantes(newEstudiantes)
+								}}
+								style={{ color: 'white' }}
+							>
+								Eliminar
+							</Button>
 						</p>
 					)
 				}
@@ -205,21 +176,24 @@ const ComunalTabla: React.FC<IProps> = props => {
 
 	onlyViewModule && columns.splice(7, 1)
 	return (
-		<div style={{paddingTop:'32px', margin:'-20px'}}>
-		<Colxx className='mb-5' sm='12' lg='12' xl='12'>
-			<Card>
-				<CardBody>
-					<h4>
-						{t(
-							'servicio_comunal>registro_servicio_comunal>titulo',
-							'título'
-						)}
-					</h4>
+		<div style={{ paddingTop: '32px', margin: '-20px' }}>
+			<Colxx className='mb-5' sm='12' lg='12' xl='12'>
+				<Card>
+					<CardBody>
+						<h4>{t('servicio_comunal>registro_servicio_comunal>titulo', 'título')}</h4>
 
-					<TableReactImplementationServicio  avoidSearch={props.avoidSearch} handleGetData={() => { props.handleGetData() }} orderOptions={[]} columns={columns} data={students} />
-				</CardBody>
-			</Card>
-		</Colxx>
+						<TableReactImplementationServicio
+							avoidSearch={props.avoidSearch}
+							handleGetData={() => {
+								props.handleGetData()
+							}}
+							orderOptions={[]}
+							columns={columns}
+							data={students}
+						/>
+					</CardBody>
+				</Card>
+			</Colxx>
 		</div>
 	)
 }
