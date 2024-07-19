@@ -241,8 +241,20 @@ const HistoricoExpediente = props => {
 						title='Eliminar Registro'
 						onClose={() => setExpediente(null)}
 						onConfirm={() => {
+							setLoading(true)
 							actions.desactivarServicioComunal(expediente.id, history)
 							setExpediente(null)
+							const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
+							actions
+								.GetServicioComunalByInstitucionId(selectedInstitution.institucionId)
+								.then(data => {
+									setData(data.options)
+									setLoading(false)
+								})
+								.catch(error => {
+									console.log('error', error)
+									setLoading(false)
+								})
 						}}
 						openDialog={expediente}
 					>
