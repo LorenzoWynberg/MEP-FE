@@ -290,6 +290,20 @@ export const getTablaEstudiantesServicioComunalById =
 			}
 		}
 
+export const GetServicioComunalInfoById  =
+	(id: number): ((any) => Promise<actionResponse>) =>
+		async (dispatch: any): Promise<actionResponse> => {
+			try {
+				const response: any = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServicioComunalInfoById/${id}`
+				)
+				console.log('response', response)
+				return { error: false, options: response.data }
+			} catch (e) {
+				dispatch(configError(e.message))
+				return { error: e.message, options: [] }
+			}
+		}
 export const GetServicioComunalByInstitucionId =
 	(id: number): ((any) => Promise<actionResponse>) =>
 		async (dispatch: any): Promise<actionResponse> => {
@@ -391,18 +405,31 @@ export const advancedFilterInstitutionsPaginated =
 		}
 	}
 
-export const crearServicioComunal = (data) => async dispatch => {
-	try {
-		const response = await axios.post(`${envVariables.BACKEND_URL}/api/ServicioComunal/CrearServicioComunal`, data)
-
-
-		return { error: false, response: response.data }
-	} catch (e) {
-		const backErrors = handleErrors(e)
-		dispatch(configErrorFeedback({ ...backErrors, error: e.message }))
-		return { error: e.message }
+	export const crearServicioComunal = (data) => async dispatch => {
+		try {
+			const response = await axios.post(`${envVariables.BACKEND_URL}/api/ServicioComunal/CrearServicioComunal`, data)
+	
+	
+			return { error: false, response: response.data }
+		} catch (e) {
+			const backErrors = handleErrors(e)
+			dispatch(configErrorFeedback({ ...backErrors, error: e.message }))
+			return { error: e.message }
+		}
 	}
-}
+
+	export const actualizarServicioComunal = (data) => async dispatch => {
+		try {
+			const response = await axios.put(`${envVariables.BACKEND_URL}/api/ServicioComunal/ActualizarServicioComunal`, data)
+	
+	
+			return { error: false, response: response.data }
+		} catch (e) {
+			const backErrors = handleErrors(e)
+			dispatch(configErrorFeedback({ ...backErrors, error: e.message }))
+			return { error: e.message }
+		}
+	}
 
 export const createInstitution = (data, page, qnt, cb) => async dispatch => {
 	try {

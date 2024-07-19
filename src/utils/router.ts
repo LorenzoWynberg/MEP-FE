@@ -58,6 +58,8 @@ const Groups = React.lazy(() => import('../views/app/director/Grupos/main'))
 
 const ServicioComunal = React.lazy(() => import('../views/app/director/Historico/ServicioComunal'))
 
+const ServicioComunalEdit = React.lazy(() => import('../views/app/director/Historico/ServicioComunalEdit'))
+
 const ContenedorExpSCE = React.lazy(() => import('../views/app/director/ExpedienteEstudiante/ContenedorExpSCE')) 
 
 const GestorUsuarios = React.lazy(() => import('../views/app/director/GestorUsuarios/GestorUsuarios'))
@@ -1335,6 +1337,12 @@ const routes: Route[] = [
 		component: ServicioComunal,
 		isAuthenticated: true,
 		route: '/director/expediente-centro/servicio-comunal/registro',
+		exact: true
+	},
+	{
+		component: ServicioComunalEdit,
+		isAuthenticated: true,
+		route: '/director/expediente-centro/servicio-comunal/editar/:id',
 		exact: true
 	},
 ]
