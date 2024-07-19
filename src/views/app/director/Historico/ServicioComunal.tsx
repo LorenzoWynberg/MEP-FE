@@ -547,7 +547,6 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												autoFocus={true}
 											/>
 										</FormGroup>
-										{acompanante}
 									</Col>
 								</Row>
 
@@ -564,8 +563,6 @@ export const ServicioComunal: React.FC<IProps> = props => {
 										}}
 										autoFocus={true}
 									/>
-
-									{descripcion}
 								</FormGroup>
 							</Form>
 						</Card>

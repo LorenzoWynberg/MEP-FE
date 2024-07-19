@@ -173,7 +173,7 @@ const ExpedienteEstudianteSEC = props => {
 											'Docente que acompaña el proyecto'
 										)}
 										:
-									</strong>
+									</strong>{' '}
 									{sce.nombreDocente}
 								</Col>
 							</Row>
@@ -191,7 +191,7 @@ const ExpedienteEstudianteSEC = props => {
 											'Quién registra y fecha de registros(bitácora)'
 										)}
 										:
-									</strong>
+									</strong>{' '}
 									{sce.usuarioFechaRegistro}
 								</Col>
 								<Col sm={4}>
