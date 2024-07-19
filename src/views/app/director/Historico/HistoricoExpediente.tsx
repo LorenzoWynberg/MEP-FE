@@ -10,14 +10,12 @@ import {
 	GetServicioComunalByInstitucionId
 } from '../../../../redux/configuracion/actions'
 import withRouter from 'react-router-dom/withRouter'
-
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import { IoEyeSharp } from 'react-icons/io5'
 import CancelIcon from '@mui/icons-material/RemoveCircle'
 import Tooltip from '@mui/material/Tooltip'
 import TouchAppIcon from '@material-ui/icons/TouchApp'
 import BuildIcon from '@mui/icons-material/Build'
-
 import styles from './ServicioComunal.css'
 import {
 	handleChangeInstitution,
@@ -29,7 +27,7 @@ import { useHistory } from 'react-router-dom'
 import { CustomInput } from 'Components/CommonComponents'
 import colors from 'assets/js/colors'
 import { useTranslation } from 'react-i18next'
-import { RemoveRedEyeRounded } from '@material-ui/icons'
+import { RemoveRedEyeRounded, Edit } from '@material-ui/icons'
 import SimpleModal from 'Components/Modal/simple'
 import ExpedienteEstudianteSEC from '../ExpedienteCentroEducativo/ExpedienteEstudianteSEC'
 
@@ -165,7 +163,26 @@ const HistoricoExpediente = props => {
 									}}
 								/>
 							</Tooltip>
-
+							<Tooltip
+								title={
+									'Editar'
+									// TODO: i18
+									// t('buscador_ce>buscador>columna_acciones>ficha', 'Ver ficha del SCE')
+								}
+							>
+								<Edit
+									onClick={() => {
+										props.history.push(
+											`/director/expediente-centro/servicio-comunal/editar/${fullRow.id}`
+										)
+									}}
+									style={{
+										fontSize: 25,
+										color: colors.darkGray,
+										cursor: 'pointer'
+									}}
+								/>
+							</Tooltip>
 							<Tooltip title={t('expediente_estudiantil>eliminar', 'Eliminar Expediente')}>
 								<CancelIcon
 									onClick={() => {
@@ -178,8 +195,6 @@ const HistoricoExpediente = props => {
 									}}
 								/>
 							</Tooltip>
-
-							{/* {BotonConfiguracion(fullRow)} */}
 						</div>
 					)
 				}
@@ -253,23 +268,6 @@ const HistoricoExpediente = props => {
 						<Col xs={12}>
 							<h3>{t('expediente_ce>titulo', 'Expediente Centro Educativo')}</h3>
 						</Col>
-						{/* <Col xs={12}>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-end'
-                }}
-              >
-                <CustomInput
-                  type="checkbox"
-                  label="Buscar sólo centros educativos públicos"
-                  checked={publicos}
-                  onClick={() => {
-                    setPublicos(!publicos)
-                  }}
-                />
-              </div>
-            </Col> */}
 						<Col xs={12}>
 							<TableReactImplementation
 								data={data}
