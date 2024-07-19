@@ -15,6 +15,7 @@ import AppLayout from 'Layout/AppLayout'
 import directorItems from 'Constants/directorMenu'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import ContenedorExpSCE from './ContenedorExpSCE'
 
 const Navegacion = React.lazy(() => import('./Navegacion'))
 const Contacto = React.lazy(() => import('./Contacto'))
@@ -113,40 +114,41 @@ const ContenedorPrincipal = (props) => {
 						{loading ? (
 							<Loader />
 						) : (
-								<div style={{ width: '100%' }}>	
-									<>
+							<div style={{ width: '100%' }}>
+								<>
+									{
 										{
-											{
-												0: <Buscador {...props} />,
-												1: <Navegacion {...props} />,
-												2: <General {...props} />,
-												3: <Contacto {...props} />,
-												4: <Hogar {...props} />,
-												5: <Beneficios {...props} />,
-												6: <Apoyo {...props} />,
-												7: <AreaCurricular {...props} />,
-												8: <Salud {...props} />,
-												9: (
-													<Oferta
-														{...props}
-														historialMatricula={
-															state.historialMatricula
-														}
-													/>
-												),
-												// 	10: <Sinirube {...props} />,
-												 	//10: <CuentaCorreo {...props} />,
-												    10: (
-												 		<CuentaUsuarios
-												 			{...props}
-												 			expedienteEstudiantil={
-												 				state.expedienteEstudiantil
-												 			}
-												 		/>
-												 	)
-											}[active]
-										}
-									</>
+											0: <Buscador {...props} />,
+											1: <Navegacion {...props} />,
+											2: <General {...props} />,
+											3: <Contacto {...props} />,
+											4: <Hogar {...props} />,
+											5: <Beneficios {...props} />,
+											6: <Apoyo {...props} />,
+											7: <AreaCurricular {...props} />,
+											8: <Salud {...props} />,
+											9: (
+												<Oferta
+													{...props}
+													historialMatricula={
+														state.historialMatricula
+													}
+												/>
+											),
+											// 	10: <Sinirube {...props} />,
+											//10: <CuentaCorreo {...props} />,
+											10: (
+												<CuentaUsuarios
+													{...props}
+													expedienteEstudiantil={
+														state.expedienteEstudiantil
+													}
+												/>
+											),
+											11: <ContenedorExpSCE   {...props} />,
+										}[active]
+									}
+								</>
 							</div>
 						)}
 					</Row>

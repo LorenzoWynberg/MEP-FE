@@ -64,10 +64,15 @@ const data = [
     active: false,
   }, */
    {
-     label: 'estudiantes>expediente>nav>salud>user_account', //to use IntlMessages
-     to: '/director/expediente-estudiante/cuenta-usuario',
-     active: false,
-   },
+    label: 'estudiantes>expediente>nav>salud>user_account', //to use IntlMessages
+    to: '/director/expediente-estudiante/cuenta-usuario',
+    active: false,
+  },
+  {
+    label: 'estudiantes>expediente>nav>servicio_comunal',  
+    to: '/director/expediente-estudiante/servicio-comunal',
+    active: false,
+  },
 ]
 
 export default data

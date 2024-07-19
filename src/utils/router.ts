@@ -58,7 +58,7 @@ const Groups = React.lazy(() => import('../views/app/director/Grupos/main'))
 
 const ServicioComunal = React.lazy(() => import('../views/app/director/Historico/ServicioComunal'))
 
-const ExpedienteServicioComunal = React.lazy(() => import('../views/app/director/ExpedienteCentroEducativo/MostrarExpedienteSCE')) 
+const ContenedorExpSCE = React.lazy(() => import('../views/app/director/ExpedienteEstudiante/ContenedorExpSCE')) 
 
 const GestorUsuarios = React.lazy(() => import('../views/app/director/GestorUsuarios/GestorUsuarios'))
 const GestorRoles = React.lazy(() => import('../views/app/director/GestorUsuarios/Roles/index'))
@@ -1324,7 +1324,7 @@ const routes: Route[] = [
 	},
 
 	{
-		component: ExpedienteServicioComunal,
+		component: ContenedorExpSCE,
 		exact: true,
 		route: '/director/expediente-estudiante/servicio-comunal', 
 		isAuthenticated: true,

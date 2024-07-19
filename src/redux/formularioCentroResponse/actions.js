@@ -87,6 +87,19 @@ export const GetServicioComunalInfoById = (idServicioComunal) => async (dispatch
     return { error: e.message }
   }
 }
+
+// Obtiene el resultado de un determinado form e insittucion {para forms con respuesta unica}
+export const GetServicioComunalInfoByStudentId = (idStudent) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+     `${envVariables.BACKEND_URL}/api/ServicioComunal/GetServicioComunalByStudentId/${idStudent}`
+    )
+ 
+    return response.data
+  } catch (e) {
+    return { error: e.message }
+  }
+}
 // Obtiene el resultado de un determinado form e insittucion {para forms con respuesta unica}
 export const GetResponseByInstitutionAndFormNameUsingRedux = (institutionId, formName, reducerAction, first = true) => async (dispatch) => {
   try {
