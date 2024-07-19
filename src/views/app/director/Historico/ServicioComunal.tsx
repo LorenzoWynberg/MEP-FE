@@ -541,7 +541,9 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												name='tipo_centro'
 												type='text'
 												value={acompanante}
-												onChange={e => setValueAcompanante(e.target.acompanante)}
+												onChange={e => {
+													setValueAcompanante(e.target.value)
+												}}
 												autoFocus={true}
 											/>
 										</FormGroup>
@@ -557,7 +559,9 @@ export const ServicioComunal: React.FC<IProps> = props => {
 										name='tipo_centro'
 										type='text'
 										value={descripcion}
-										onChange={e => setValueDescripcion(e.target.descripcion)}
+										onChange={e => {
+											setValueDescripcion(e.target.value)
+										}}
 										autoFocus={true}
 									/>
 
@@ -618,6 +622,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 							class='sc-iqcoie bQFwPO cursor-pointer'
 							primary
 							onClick={() => {
+								console.log(acompanante)
 								const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
 								if (selectedInstitution?.institucionId != null) {
 									actions
