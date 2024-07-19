@@ -67,7 +67,7 @@ export const ServicioComunalEdit: React.FC<IProps> = props => {
 	const [caracteristica, setCaracteristica] = React.useState()
 
 	const [institutionImage, setInstitutionImage] = React.useState(null)
-	const [loading, setLoading] = React.useState<boolean>(false)
+	const [loading, setLoading] = React.useState<boolean>(true)
 	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		// console.log('(event.target as HTMLInputElement).value', (event.target as HTMLInputElement).value)
@@ -111,22 +111,27 @@ export const ServicioComunalEdit: React.FC<IProps> = props => {
 
 		ObtenerInfoCatalogos().then(respone => {
 			setCatalogos(respone)
-			console.log('respone',respone)
+			console.log('respone', respone)
 		})
 	}, [])
 	useEffect(() => {
 		console.log('props.match?.params?.id', props.match?.params?.id)
 		actions.GetServicioComunalInfoById(props.match.params.id).then(res => {
 			let data = res.options[0]
-			setEstudiantes(data.listaEstudiantes)
+			console.log('GetServicioComunalInfoById', data)
+			setEstudiantes(data.listaEstudiantes.map(e => ({ ...e, idEstudiante: e.id })))
 			setAreaProyecto(data.nombreAreaProyecto)
+			setValue(data.areaProyectoId)
 			setOrganizacion(data.nombreOrganizacionContraparte)
+			setOrganizacionId(data.organizacionId)
 			setValueAcompanante(data.nombreDocente)
 			setModalidad(data.nombreModalidad)
+			setModalidadId(data.modalidadId)
 			setNombreSend(data.nombreProyecto)
+			setNombreId(data.nombreProyectoId)
 			setValueDescripcion(data.descripcion)
-			setCaracteristicasSeleccionados([{ id: 1, nombre: data.caracteristicas }])
-		})
+			setCaracteristicasSeleccionados(data.caracteristicas)
+		}).finally(() => { setLoading(false) })
 	}, [props.match?.params?.id])
 	return (
 		<AppLayout className={styles} items={directorItems}>
@@ -639,7 +644,7 @@ export const ServicioComunalEdit: React.FC<IProps> = props => {
 								if (selectedInstitution?.institucionId != null) {
 									actions
 										.actualizarServicioComunal({
-											id: props.match.params.id,
+											id: parseInt(props.match.params.id),
 											sb_InstitucionesId: selectedInstitution.institucionId,
 											sb_areaProyectoId: value,
 											sb_nombreProyectoId: nombreId,
@@ -652,8 +657,10 @@ export const ServicioComunalEdit: React.FC<IProps> = props => {
 											caracteristicas: caracteristicasSeleccionados.map(e => e.id),
 											estudiantes: estudiantes.map(e => e.idEstudiante)
 										})
-										.then(() => {
-											props.history.push('/director/expediente-centro/servicio-comunal')
+										.then((r) => {
+											console.log('responseEdit', r)
+											r.response == false ? alert('Error al editar') : props.history.push('/director/expediente-centro/servicio-comunal')
+
 										})
 								} else {
 									alert('Seleccione una institución')

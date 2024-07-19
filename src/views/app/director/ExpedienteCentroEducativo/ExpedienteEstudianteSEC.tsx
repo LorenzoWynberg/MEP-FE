@@ -28,7 +28,7 @@ const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
 
 const ExpedienteEstudianteSEC = props => {
 	const { t } = useTranslation()
-	const [sce, setSCE] = useState()
+	const [sce, setSCE] = useState({})
 	const [showProyecto, setShowProyecto] = useState(false)
 
 	centroBreadcrumb.map((item, idx) => {
@@ -160,11 +160,13 @@ const ExpedienteEstudianteSEC = props => {
 							<Row>
 								<Col sm={4}>
 									<strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong>{' '}
-									<span>{sce.nombreAreaProyecto}</span>
+									<span>{sce.nombreAreaProyecto && sce.nombreAreaProyecto}</span>
 								</Col>
 								<Col sm={4}>
 									<strong>{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}:</strong>{' '}
-									<span>{sce.caracteristicas}</span>
+
+									{<span>{sce.caracteristicas && sce.caracteristicas.map(item => <span>{item.nombre}</span>)
+										.reduce((acc, x) => acc === null ? x : <>{acc}, {x}</>, null)}</span>}
 								</Col>
 								<Col sm={4}>
 									<strong>
@@ -174,7 +176,7 @@ const ExpedienteEstudianteSEC = props => {
 										)}
 										:
 									</strong>{' '}
-									<span>{sce.nombreDocente}</span>
+									<span>{sce.nombreDocente && sce.nombreDocente}</span>
 								</Col>
 							</Row>
 							<Row>
@@ -182,7 +184,7 @@ const ExpedienteEstudianteSEC = props => {
 									<strong>
 										{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}:
 									</strong>
-									<span>{sce.nombreProyecto}</span>
+									<span>{sce.nombreProyecto && sce.nombreProyecto}</span>
 								</Col>
 								<Col sm={4}>
 									<strong>
@@ -192,19 +194,19 @@ const ExpedienteEstudianteSEC = props => {
 										)}
 										:
 									</strong>{' '}
-									<span>{sce.usuarioFechaRegistro}</span>
+									<span>{sce.usuarioFechaRegistro && sce.usuarioFechaRegistro}</span>
 								</Col>
 								<Col sm={4}>
 									<strong>
 										{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:
 									</strong>{' '}
-									<span>{sce.fechaConclusion}</span>
+									<span>{sce.fechaConclusion && sce.fechaConclusion}</span>
 								</Col>
 							</Row>{' '}
 							<Row>
 								<Col sm={4}>
 									<strong>{t('informationcarddetalle>modalidad', 'Modalidad')}:</strong>{' '}
-									<span>{sce.nombreModalidad}</span>
+									<span>{sce.nombreModalidad && sce.nombreModalidad}</span>
 								</Col>
 								<Col sm={4}>
 									<strong>
@@ -214,7 +216,7 @@ const ExpedienteEstudianteSEC = props => {
 										)}
 										:
 									</strong>{' '}
-									<span>{sce.nombreOrganizacionContraparte}</span>
+									<span>{sce.nombreOrganizacionContraparte && sce.nombreOrganizacionContraparte}</span>
 								</Col>
 							</Row>
 						</div>
