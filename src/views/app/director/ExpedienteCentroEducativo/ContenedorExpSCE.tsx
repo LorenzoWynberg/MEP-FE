@@ -111,7 +111,7 @@ const ContenedorExpSCE = (props) => {
 					<div>
     <Row>
       <Col style={{ marginBottom: 16 }} sm={12}>
-        <strong>Detalle del Servicio Comunal Estudiantil:</strong>
+        <strong><h2>Información</h2></strong>
       </Col>
     </Row>
     <Row>
@@ -119,10 +119,39 @@ const ContenedorExpSCE = (props) => {
         <strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong>{' '}
       
       </Col>
-      <Col sm={4}>
-        <strong>{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}:</strong>{' '}
+
+	  <Col sm={4}>
+        <strong>
+          {t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}:
+        </strong>
         
       </Col>
+
+	  <Col sm={4}>
+        <strong>{t('informationcarddetalle>modalidad', 'Modalidad')}:</strong>{' '}
+       
+      </Col>
+   
+    </Row>
+    <Row>
+	<Col sm={4}>
+        <strong>
+          {t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:
+        </strong>{' '}
+        
+      </Col>
+
+	  <Col sm={4}>
+        <strong>
+          {t(
+            'informationcarddetalle>organizaciónContraParte',
+            'Tipo de organización contraparte'
+          )}
+          :
+        </strong>{' '}
+        
+      </Col>
+  
       <Col sm={4}>
         <strong>
           {t(
@@ -133,46 +162,22 @@ const ContenedorExpSCE = (props) => {
         </strong>
         
       </Col>
-    </Row>
+   
+   
+    </Row>{' '}
     <Row>
-      <Col sm={4}>
-        <strong>
-          {t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}:
-        </strong>
-        
-      </Col>
-      <Col sm={4}>
+    
+	<Col sm={4}>
         <strong>
           {t(
-            'informationcarddetalle>quienRegistra',
-            'Quién registra y fecha de registros(bitácora)'
+            'informationcarddetalle>institucion',
+            'Institución'
           )}
           :
         </strong>
     
       </Col>
-      <Col sm={4}>
-        <strong>
-          {t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:
-        </strong>{' '}
-        
-      </Col>
-    </Row>{' '}
-    <Row>
-      <Col sm={4}>
-        <strong>{t('informationcarddetalle>modalidad', 'Modalidad')}:</strong>{' '}
-       
-      </Col>
-      <Col sm={4}>
-        <strong>
-          {t(
-            'informationcarddetalle>organizaciónContraParte',
-            'Tipo de organización contraparte'
-          )}
-          :
-        </strong>{' '}
-        
-      </Col>
+	 
     </Row>
   </div>
 				</Container>

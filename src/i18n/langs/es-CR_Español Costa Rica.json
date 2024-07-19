@@ -2491,7 +2491,7 @@
   "informationcarddetalle>nombreProyecto":"Nombre de Proyecto",
   "informationcarddetalle>modalidad": "Modalidad",
   "informationcarddetalle>caracteristicas": "Caracteristicas",
-  "informationcarddetalle>quienRegistra":"Quién registra y fecha de registros(bitácora)",
+  "informationcarddetalle>institucion":"Institución",
   "informationcarddetalle>organizaciónContraParte":"Tipo de organización contraparte",
   "informationcarddetalle>docenteAcompana":"Docente que acompaña el proyecto",
   "informationcarddetalle>fechaConclusion":"Fecha de Conclusión",
