@@ -58,7 +58,7 @@ const Groups = React.lazy(() => import('../views/app/director/Grupos/main'))
 
 const ServicioComunal = React.lazy(() => import('../views/app/director/Historico/ServicioComunal'))
 
-const ExpedienteServicioComunal = React.lazy(() => import('../views/app/director/ExpedienteCentroEducativo/_partials/InformationCardDetalle')) 
+const ExpedienteServicioComunal = React.lazy(() => import('../views/app/director/ExpedienteCentroEducativo/MostrarExpedienteSCE')) 
 
 const GestorUsuarios = React.lazy(() => import('../views/app/director/GestorUsuarios/GestorUsuarios'))
 const GestorRoles = React.lazy(() => import('../views/app/director/GestorUsuarios/Roles/index'))

@@ -8,12 +8,13 @@ import { useSelector } from 'react-redux'
 import {
   GetResponseByInstitutionAndFormNameUsingRedux,
   getlocationElementById
-} from '../../../../../redux/formularioCentroResponse/actions'
+} from '../../../.././redux/formularioCentroResponse/actions'
 import { useActions } from 'Hooks/useActions'
-import { LOAD_LOCATION } from '../../../../../redux/configuracion/types'
+import { LOAD_LOCATION } from '../../../.././redux/configuracion/types'
 import Navegacion from 'views/app/director/ExpedienteEstudiante/Navegacion.js'
-import MostrarExpedienteSEC from '../MostrarExpedienteSCE'
-import ContenedorPrincipal from '../ContenedorPrincipal'
+
+import ContenedorSCE from './ContenedorExpSCE'
+import InformationCard from '../ExpedienteEstudiante/_partials/InformationCard.js'
 
 import styled from 'styled-components'
 import { ReactComponent as InstImg } from 'Assets/images/front_institution.svg'
@@ -55,7 +56,7 @@ enum idParsed {
 	poblado = '9905c516-75b5-6c94-4703-507b2dfc00d0'
 }
 
-const InformationCardDetalle = ({ data }) => {
+const MostrarExpedienteSEC = ({ data }) => {
   const { t } = useTranslation()
   const [locationInfo, setLocationInfo] = useState<any>({})
   const actions = useActions({ GetResponseByInstitutionAndFormNameUsingRedux })
@@ -178,47 +179,13 @@ const InformationCardDetalle = ({ data }) => {
 
   return (
     <div>
-    <DivContainer>
-      <Columna>
-        <InstImg width='56px' height='56px' viewBox='0 0 71 71' fill={colors.getColor()} />
-      </Columna>
-      <Columna>
-        <span>
-          {t('expedienteEstudiantil>nombre', 'Nombre')}: {state.institucion.nombre}
-        </span>
-        <span>
-          {t('expedienteEstudiantil>identificacion', 'Identificación')}: {state.institucion.codigo}
-        </span>
-        <span>
-          {t('expedienteEstudiantil>grupo', 'Grupo')}: {state.institucion.codigoPresupuestario}
-        </span>
-      </Columna>
-      <Columna>
-        <span>
-          {t('expedienteEstudiantil>ofertaEducativa', 'Oferta Educativa')}: {state.institucion?.regionNombre}
-        </span>
-        <span>
-          {t('expedienteEstudiantil>modalidad', 'Modalidad')}: {state.institucion.circuitoNombre}
-        </span>
-        <span>
-          {t('expedienteEstudiantil>nivel', 'Nivel')}: {state.institucion?.esPrivado ? 'Privada' : 'Pública'}
-        </span>
-      </Columna>
-      <Columna>
-        <span>
-          {t('expedienteEstudiantil>codigo', 'Código')}: {locationInfo.provincia}
-        </span>
-        <span>
-          {t('expedienteEstudiantil>nombreCentroEducativo', 'Nombre Centro Educativo')}: {locationInfo.canton}
-        </span>
-        <span>
-          {t('expedienteEstudiantil>estadoEstudiante', 'Estado del estudiante en el periodo')}: {locationInfo.canton}
-        </span>
-      
-      </Columna>
-      </DivContainer>
+   
+
+      <ContenedorSCE/>
+
 
     
+
   </div>
   
 
@@ -246,4 +213,4 @@ const Columna = styled.div`
   flex-direction: column;
 `
 
-export default InformationCardDetalle
+export default MostrarExpedienteSEC
