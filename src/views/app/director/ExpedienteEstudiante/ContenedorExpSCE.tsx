@@ -154,7 +154,7 @@ const ContenedorExpSCE = (props) => {
 					<div>
 						<Row>
 							<Col style={{ marginBottom: 16 }} sm={12}>
-								<strong><h2>Información</h2></strong>
+								<strong><h2>Servicio Comunal</h2></strong>
 							</Col>
 							<Col sm={4}>
 								<strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong>{' '}
