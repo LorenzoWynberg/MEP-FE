@@ -160,11 +160,11 @@ const ExpedienteEstudianteSEC = props => {
 							<Row>
 								<Col sm={4}>
 									<strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong>{' '}
-									{sce.nombreAreaProyecto}
+									<span>{sce.nombreAreaProyecto}</span>
 								</Col>
 								<Col sm={4}>
 									<strong>{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}:</strong>{' '}
-									{sce.caracteristicas}
+									<span>{sce.caracteristicas}</span>
 								</Col>
 								<Col sm={4}>
 									<strong>
@@ -174,7 +174,7 @@ const ExpedienteEstudianteSEC = props => {
 										)}
 										:
 									</strong>{' '}
-									{sce.nombreDocente}
+									<span>{sce.nombreDocente}</span>
 								</Col>
 							</Row>
 							<Row>
@@ -182,7 +182,7 @@ const ExpedienteEstudianteSEC = props => {
 									<strong>
 										{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}:
 									</strong>
-									|{sce.nombreProyecto}
+									<span>{sce.nombreProyecto}</span>
 								</Col>
 								<Col sm={4}>
 									<strong>
@@ -192,19 +192,19 @@ const ExpedienteEstudianteSEC = props => {
 										)}
 										:
 									</strong>{' '}
-									{sce.usuarioFechaRegistro}
+									<span>{sce.usuarioFechaRegistro}</span>
 								</Col>
 								<Col sm={4}>
 									<strong>
 										{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:
 									</strong>{' '}
-									{sce.fechaConclusion}
+									<span>{sce.fechaConclusion}</span>
 								</Col>
 							</Row>{' '}
 							<Row>
 								<Col sm={4}>
 									<strong>{t('informationcarddetalle>modalidad', 'Modalidad')}:</strong>{' '}
-									{sce.nombreModalidad}
+									<span>{sce.nombreModalidad}</span>
 								</Col>
 								<Col sm={4}>
 									<strong>
@@ -214,7 +214,7 @@ const ExpedienteEstudianteSEC = props => {
 										)}
 										:
 									</strong>{' '}
-									{sce.nombreOrganizacionContraparte}
+									<span>{sce.nombreOrganizacionContraparte}</span>
 								</Col>
 							</Row>
 						</div>
