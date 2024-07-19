@@ -113,9 +113,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 	}, [])
 	return (
 		<AppLayout className={styles} items={directorItems}>
-			{loading && <BarLoader />}
-			{/* {showAreaProyecto && catalogos.areasProyecto &&
-					<ModalRadio title="Area Proyecto" setValue={setShowAreaProyecto} value={showAreaProyecto} coleccion={catalogos.areasProyecto} />} */}
+			{loading && <BarLoader />} 
 			{showAreaProyecto && catalogos.areasProyecto && (
 				<SimpleModal
 					title='Seleccion de Areas Proyecto'
@@ -164,7 +162,9 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												onClick={(e, v) => {
 													e.persist()
 													setValue(e.target.value)
-													setAreaProyecto(item.nombre)
+													setAreaProyecto(item.nombre) 
+													setNombreSend(null)
+													setNombreId(null)
 												}}
 												checked={value == item.id}
 												control={<Radio />}

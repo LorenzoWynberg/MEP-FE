@@ -115,7 +115,6 @@ export const ServicioComunalEdit: React.FC<IProps> = props => {
 		})
 	}, [])
 	useEffect(() => {
-		console.log('props.match?.params?.id', props.match?.params?.id)
 		actions.GetServicioComunalInfoById(props.match.params.id).then(res => {
 			let data = res.options[0]
 			console.log('GetServicioComunalInfoById', data)
@@ -130,7 +129,20 @@ export const ServicioComunalEdit: React.FC<IProps> = props => {
 			setNombreSend(data.nombreProyecto)
 			setNombreId(data.nombreProyectoId)
 			setValueDescripcion(data.descripcion)
-			setCaracteristicasSeleccionados(data.caracteristicas)
+			let caracteristicas = []
+			let caracteristicasId = [...caracteristicasIdSeleccionados]
+
+			data.caracteristicas.forEach(item => {
+				if (!caracteristicasId.includes(item.id)) {
+					caracteristicas.push(item)
+					caracteristicasId.push(item.id)
+				} else {
+					caracteristicas = caracteristicas.filter(n => n.id != item.id)
+					caracteristicasId = caracteristicasId.filter(n => n != item.id)
+				}
+			})
+			setCaracteristicasSeleccionados(caracteristicas)
+			setCaracteristicasIdSeleccionados(caracteristicasId)
 		}).finally(() => { setLoading(false) })
 	}, [props.match?.params?.id])
 	return (
@@ -185,6 +197,8 @@ export const ServicioComunalEdit: React.FC<IProps> = props => {
 													e.persist()
 													setValue(e.target.value)
 													setAreaProyecto(item.nombre)
+													setNombreSend(null)
+													setNombreId(null)
 												}}
 												checked={value == item.id}
 												control={<Radio />}
@@ -441,7 +455,6 @@ export const ServicioComunalEdit: React.FC<IProps> = props => {
 					<Col sm={12}>
 						<Card className='bg-white__radius'>
 							<CardTitle>Editar Servicio Comunal</CardTitle>
-							{nombresSeleccionados && console.log('nombresSeleccionados', nombresSeleccionados)}
 							<Form>
 								<Row>
 									<Col md={3}>
@@ -472,7 +485,7 @@ export const ServicioComunalEdit: React.FC<IProps> = props => {
 									</Col>
 									<Col sm={3}>
 										<FormGroup>
-											<Label>{t('registro_servicio_comunal>modalidad', 'Modalidad')}</Label>
+											<Label>{t('registro_servicio_comunal>modalidad', 'Tipo de Proyecto')}</Label>
 											<Input
 												name='modalidad'
 												type='text'

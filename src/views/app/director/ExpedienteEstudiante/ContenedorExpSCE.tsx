@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { useActions } from '../../../../hooks/useActions'
 import { GetServicioComunalInfoByStudentId } from 'Redux/formularioCentroResponse/actions'
 
+import BarLoader from 'Components/barLoader/barLoader'
 import InformationCard from './_partials/InformationCard'
 
 import studentBreadcrumb from 'Constants/studentBreadcrumb'
@@ -33,6 +34,7 @@ const CuentaUsuarios = React.lazy(() => import('./CuentaUsuario'))
 const ContenedorExpSCE = props => {
 	const { t } = useTranslation()
 	const [servicioData, setServicioData] = React.useState(null)
+	const [loading, setLoading] = React.useState(true)
 	const actions = useActions({
 		GetServicioComunalInfoByStudentId
 	})
@@ -56,7 +58,7 @@ const ContenedorExpSCE = props => {
 		actions.GetServicioComunalInfoByStudentId(id).then(res => {
 			console.log('res', res)
 			setServicioData(res)
-		})
+		}).finally(() => setLoading(false))
 	}, [state.expedienteEstudiantil.currentStudent.idEstudiante])
 	useEffect(() => {
 		state.expedienteEstudiantil?.currentStudent?.idEstudiante &&
@@ -137,6 +139,7 @@ const ContenedorExpSCE = props => {
 					</Row>
 
 					<div>
+						{loading && <BarLoader />}
 						<Row>
 							<Col style={{ marginBottom: 16 }} sm={12}>
 								<strong>
@@ -154,7 +157,7 @@ const ContenedorExpSCE = props => {
 							</Col>
 
 							<Col sm={4}>
-								<strong>{t('informationcarddetalle>modalidad', 'Modalidad')}:</strong>{' '}
+								<strong>{t('informationcarddetalle>modalidad', 'Tipo de Proyecto')}:</strong>{' '}
 								<span>{servicioData?.modalidadProyecto}</span>
 							</Col>
 
@@ -177,7 +180,7 @@ const ContenedorExpSCE = props => {
 
 							<Col sm={4}>
 								<strong>
-									{t('informationcarddetalle>docenteAcompana', 'Docente que acompaña el proyecto')}:{' '}
+									{t('informationcarddetalle>docenteAcompana', 'Acompañante de Proyecto')}:{' '}
 								</strong>
 								<span>{servicioData?.docenteAcompanante}</span>
 							</Col>
@@ -187,9 +190,7 @@ const ContenedorExpSCE = props => {
 
 								<span>{servicioData?.nombreInstitucion}</span>
 							</Col>
-						</Row>
-						<Row>
-							<Col sm={12}>
+							<Col sm={4}>
 								<strong>
 									{/* TODO: i18 */}
 									{/* {t(
@@ -200,6 +201,18 @@ const ContenedorExpSCE = props => {
 								</strong>
 
 								<span>{servicioData?.descripcion}</span>
+							</Col>
+							<Col sm={4}>
+								<strong>
+									{/* TODO: i18 */}
+									{/* {t(
+										'informationcarddetalle>institucion',
+										'Institución'
+									)} */}
+									Caracteristicas:{' '}
+								</strong>
+
+								<span>{servicioData?.caracteristicas}</span>
 							</Col>
 						</Row>
 					</div>
