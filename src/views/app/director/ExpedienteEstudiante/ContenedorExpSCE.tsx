@@ -30,24 +30,19 @@ const Sinirube = React.lazy(() => import('./Sinirube'))
 const CuentaCorreo = React.lazy(() => import('./CuentaCorreo'))
 const CuentaUsuarios = React.lazy(() => import('./CuentaUsuario'))
 
-const ContenedorExpSCE = (props) => {
+const ContenedorExpSCE = props => {
 	const { t } = useTranslation()
 	const [servicioData, setServicioData] = React.useState(null)
 	const actions = useActions({
-
 		GetServicioComunalInfoByStudentId
-
 	})
 	studentBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
 		return item
 	})
-	const storeIs = useSelector((store) =>
-		store
+	const storeIs = useSelector(store => store)
 
-	)
-
-	const state = useSelector((store) => {
+	const state = useSelector(store => {
 		return {
 			expedienteEstudiantil: store.expedienteEstudiantil,
 			identification: store.identification,
@@ -55,15 +50,20 @@ const ContenedorExpSCE = (props) => {
 		}
 	})
 	useEffect(() => {
-		let id = state.expedienteEstudiantil?.currentStudent?.idEstudiante ? state.expedienteEstudiantil?.currentStudent?.idEstudiante : localStorage.getItem('state.expedienteEstudiantil.currentStudent.idEstudiante')
-		actions.GetServicioComunalInfoByStudentId(id).then((res) => {
+		let id = state.expedienteEstudiantil?.currentStudent?.idEstudiante
+			? state.expedienteEstudiantil?.currentStudent?.idEstudiante
+			: localStorage.getItem('state.expedienteEstudiantil.currentStudent.idEstudiante')
+		actions.GetServicioComunalInfoByStudentId(id).then(res => {
 			console.log('res', res)
 			setServicioData(res)
 		})
 	}, [state.expedienteEstudiantil.currentStudent.idEstudiante])
 	useEffect(() => {
-		state.expedienteEstudiantil?.currentStudent?.idEstudiante && localStorage.setItem('state.expedienteEstudiantil.currentStudent.idEstudiante', state.expedienteEstudiantil.currentStudent.idEstudiante);
-
+		state.expedienteEstudiantil?.currentStudent?.idEstudiante &&
+			localStorage.setItem(
+				'state.expedienteEstudiantil.currentStudent.idEstudiante',
+				state.expedienteEstudiantil.currentStudent.idEstudiante
+			)
 	}, [state.expedienteEstudiantil.currentStudent.idEstudiante])
 
 	console.log('state storeIs', storeIs)
@@ -71,7 +71,7 @@ const ContenedorExpSCE = (props) => {
 	if (state.currentInstitucion?.id == -1) {
 		return (
 			<AppLayout items={directorItems}>
-				<div className="dashboard-wrapper">
+				<div className='dashboard-wrapper'>
 					<section>
 						<Container>
 							<Row>
@@ -96,19 +96,14 @@ const ContenedorExpSCE = (props) => {
 			<Helmet>
 				<title>Expediente de institución</title>
 			</Helmet>
-			<div className="dashboard-wrapper">
+			<div className='dashboard-wrapper'>
 				<Container>
 					<Row>
-						<InformationCard
-							data={state.expedienteEstudiantil.currentStudent}
-						/>
+						<InformationCard data={state.expedienteEstudiantil.currentStudent} />
 						{props.active !== 0 && (
 							<Col xs={12}>
 								<Breadcrumb
-									header={t(
-										'expediente_mostrar_sce>titulo',
-										'Expediente Estudiantil'
-									)}
+									header={t('expediente_mostrar_sce>titulo', 'Expediente Estudiantil')}
 									data={studentBreadcrumb}
 								/>
 								<br />
@@ -126,35 +121,27 @@ const ContenedorExpSCE = (props) => {
 									6: <Apoyo {...props} />,
 									7: <AreaCurricular {...props} />,
 									8: <Salud {...props} />,
-									9: (
-										<Oferta
-											{...props}
-											historialMatricula={
-												state.historialMatricula
-											}
-										/>
-									),
+									9: <Oferta {...props} historialMatricula={state.historialMatricula} />,
 									// 	10: <Sinirube {...props} />,
 									//10: <CuentaCorreo {...props} />,
 									10: (
 										<CuentaUsuarios
 											{...props}
-											expedienteEstudiantil={
-												state.expedienteEstudiantil
-											}
+											expedienteEstudiantil={state.expedienteEstudiantil}
 										/>
 									),
-									11: <ContenedorExpSCE   {...props} />,
+									11: <ContenedorExpSCE {...props} />
 								}[props.active]
 							}
 						</Col>
 					</Row>
 
-
 					<div>
 						<Row>
 							<Col style={{ marginBottom: 16 }} sm={12}>
-								<strong><h2>Servicio Comunal</h2></strong>
+								<strong>
+									<h2>Servicio Comunal</h2>
+								</strong>
 							</Col>
 							<Col sm={4}>
 								<strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong>{' '}
@@ -162,23 +149,17 @@ const ContenedorExpSCE = (props) => {
 							</Col>
 
 							<Col sm={4}>
-								<strong>
-									{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}:{' '}
-								</strong>
+								<strong>{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}: </strong>
 								<span>{servicioData?.modalidadProyecto}</span>
 							</Col>
 
 							<Col sm={4}>
 								<strong>{t('informationcarddetalle>modalidad', 'Modalidad')}:</strong>{' '}
-
 								<span>{servicioData?.modalidadProyecto}</span>
 							</Col>
 
 							<Col sm={4}>
-								<strong>
-									{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:
-								</strong>{' '}
-
+								<strong>{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:</strong>{' '}
 								<span>{servicioData?.fechaConclusionSCE}</span>
 							</Col>
 
@@ -187,36 +168,39 @@ const ContenedorExpSCE = (props) => {
 									{t(
 										'informationcarddetalle>organizaciónContraParte',
 										'Tipo de organización contraparte'
-									)}:{' '}</strong>
-
-									<span>{servicioData?.organizacionContraparte}</span>
-								
-
-							</Col>
-
-							<Col sm={4}>
-								<strong>
-									{t(
-										'informationcarddetalle>docenteAcompana',
-										'Docente que acompaña el proyecto'
-									)}:{' '}
+									)}
+									:{' '}
 								</strong>
-									<span>{servicioData?.docenteAcompanante}</span>
 
+								<span>{servicioData?.organizacionContraparte}</span>
 							</Col>
 
 							<Col sm={4}>
 								<strong>
-									{t(
+									{t('informationcarddetalle>docenteAcompana', 'Docente que acompaña el proyecto')}:{' '}
+								</strong>
+								<span>{servicioData?.docenteAcompanante}</span>
+							</Col>
+
+							<Col sm={4}>
+								<strong>{t('informationcarddetalle>institucion', 'Institución')}: </strong>
+
+								<span>{servicioData?.nombreInstitucion}</span>
+							</Col>
+						</Row>
+						<Row>
+							<Col sm={12}>
+								<strong>
+									{/* TODO: i18 */}
+									{/* {t(
 										'informationcarddetalle>institucion',
 										'Institución'
-									)}:{' '}
+									)} */}
+									Descripción:{' '}
 								</strong>
 
-									<span>{servicioData?.nombreInstitucion}</span>
-
+								<span>{servicioData?.descripcion}</span>
 							</Col>
-
 						</Row>
 					</div>
 				</Container>
