@@ -78,27 +78,9 @@ const HistoricoExpediente = props => {
 				setLoading(false)
 			})
 	}, [accessRole, currentInstitution])
-
+	// TODO: Poner permiso correcto
+	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'configurarinstituciones')
 	const columns = useMemo(() => {
-		const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'configurarinstituciones')
-
-		const BotonConfiguracion = row => {
-			if (!tienePermiso || tienePermiso?.leer == 0) return <></>
-			return (
-				<Tooltip title={t('buscador_ce>buscador>columna_acciones>configurar', 'Configurar centro educativo')}>
-					<BuildIcon
-						onClick={() => {
-							history.push(`/director/configuracion/centro/${row.institucionId}`)
-						}}
-						style={{
-							fontSize: 25,
-							color: colors.darkGray,
-							cursor: 'pointer'
-						}}
-					/>
-				</Tooltip>
-			)
-		}
 		return [
 			{
 				Header: t('expediente_estudiantil>area_proyecto', 'Area de Proyecto'),
@@ -146,9 +128,9 @@ const HistoricoExpediente = props => {
 					return (
 						<div
 							style={{
-								display: 'grid',
-								gridTemplateColumns: '1fr 1fr 1fr',
-								gap: '5px'
+								display: 'flex',
+								placeContent: 'center',
+								alignItems: 'center'
 							}}
 						>
 							<Tooltip title={t('buscador_ce>buscador>columna_acciones>ficha', 'Ver ficha del SCE')}>
@@ -163,38 +145,46 @@ const HistoricoExpediente = props => {
 									}}
 								/>
 							</Tooltip>
-							<Tooltip
-								title={
-									'Editar'
-									// TODO: i18
-									// t('buscador_ce>buscador>columna_acciones>ficha', 'Ver ficha del SCE')
-								}
-							>
-								<Edit
-									onClick={() => {
-										props.history.push(
-											`/director/expediente-centro/servicio-comunal/editar/${fullRow.id}`
-										)
-									}}
-									style={{
-										fontSize: 25,
-										color: colors.darkGray,
-										cursor: 'pointer'
-									}}
-								/>
-							</Tooltip>
-							<Tooltip title={t('expediente_estudiantil>eliminar', 'Eliminar Expediente')}>
-								<CancelIcon
-									onClick={() => {
-										setExpediente(fullRow)
-									}}
-									style={{
-										fontSize: 25,
-										color: colors.darkGray,
-										cursor: 'pointer'
-									}}
-								/>
-							</Tooltip>
+							{fullRow.actaId || !tienePermiso || tienePermiso?.editar == 0 ? (
+								<></>
+							) : (
+								<Tooltip
+									title={
+										'Editar'
+										// TODO: i18
+										// t('buscador_ce>buscador>columna_acciones>ficha', 'Ver ficha del SCE')
+									}
+								>
+									<Edit
+										onClick={() => {
+											props.history.push(
+												`/director/expediente-centro/servicio-comunal/editar/${fullRow.id}`
+											)
+										}}
+										style={{
+											fontSize: 25,
+											color: colors.darkGray,
+											cursor: 'pointer'
+										}}
+									/>
+								</Tooltip>
+							)}
+							{fullRow.actaId || !tienePermiso || tienePermiso?.eliminar == 0 ? (
+								<></>
+							) : (
+								<Tooltip title={t('expediente_estudiantil>eliminar', 'Eliminar Expediente')}>
+									<CancelIcon
+										onClick={() => {
+											setExpediente(fullRow)
+										}}
+										style={{
+											fontSize: 25,
+											color: colors.darkGray,
+											cursor: 'pointer'
+										}}
+									/>
+								</Tooltip>
+							)}
 						</div>
 					)
 				}
@@ -236,7 +226,7 @@ const HistoricoExpediente = props => {
 		<AppLayout className={styles} items={directorItems}>
 			<div className='dashboard-wrapper'>
 				{loading && <BarLoader />}
-				{expediente && (
+				{expediente && tienePermiso && tienePermiso.leer == 1 && (
 					<SimpleModal
 						title='Eliminar Registro'
 						onClose={() => setExpediente(null)}
@@ -261,7 +251,7 @@ const HistoricoExpediente = props => {
 						Está seguro que desea eliminar este registro de Servicio Comunal Estudiantil?
 					</SimpleModal>
 				)}
-				{servicioComunalId && (
+				{servicioComunalId && tienePermiso && tienePermiso.leer == 1 && (
 					<SimpleModal
 						addMarginTitle
 						title='Registro'
@@ -275,53 +265,64 @@ const HistoricoExpediente = props => {
 						<ExpedienteEstudianteSEC servicioComunalId={servicioComunalId} />
 					</SimpleModal>
 				)}
-				<Container>
-					<Row>
-						<Col xs={12}>
-							<h3>{t('expediente_ce>titulo', 'Expediente Centro Educativo')}</h3>
-						</Col>
-						<Col xs={12}>
-							<TableReactImplementation
-								data={data}
-								showAddButton
-								// avoidSearch
-								onSubmitAddButton={() => {
-									props.history.push('/director/expediente-centro/servicio-comunal/registro')
-								}}
-								handleGetData={async (searchValue, _, pageSize, page, column) => {
-									setPagination({
-										...pagination,
-										page,
-										pageSize,
-										column,
-										searchValue
-									})
 
-									if (firstCalled) {
-										setLoading(true)
-										await actions.getInstitucionesFinder(
-											publicos,
-											searchValue,
-											1,
-											250,
-											state.accessRole.nivelAccesoId == 3
-												? state.accessRole.organizacionId
-												: null,
-											state.accessRole.nivelAccesoId == 2
-												? state.accessRole.organizacionId
-												: null,
-											state.accessRole.nivelAccesoId == 1 ? state.accessRole.organizacionId : null
-										)
-										setLoading(false)
-									}
-								}}
-								columns={columns}
-								orderOptions={[]}
-								pageSize={10}
-								backendSearch
-							/>
-						</Col>
-					</Row>
+				<Container>
+					{!tienePermiso || tienePermiso.leer == 0 ? (
+						<Row>
+							<Col xs={12}>
+								<h5>No tiene permiso para visualizar esta pagina</h5>
+							</Col>
+						</Row>
+					) : (
+						<Row>
+							<Col xs={12}>
+								<h3>{t('expediente_ce>titulo', 'Expediente Centro Educativo')}</h3>
+							</Col>
+							<Col xs={12}>
+								<TableReactImplementation
+									data={data}
+									showAddButton
+									// avoidSearch
+									onSubmitAddButton={() => {
+										props.history.push('/director/expediente-centro/servicio-comunal/registro')
+									}}
+									handleGetData={async (searchValue, _, pageSize, page, column) => {
+										setPagination({
+											...pagination,
+											page,
+											pageSize,
+											column,
+											searchValue
+										})
+
+										if (firstCalled) {
+											setLoading(true)
+											await actions.getInstitucionesFinder(
+												publicos,
+												searchValue,
+												1,
+												250,
+												state.accessRole.nivelAccesoId == 3
+													? state.accessRole.organizacionId
+													: null,
+												state.accessRole.nivelAccesoId == 2
+													? state.accessRole.organizacionId
+													: null,
+												state.accessRole.nivelAccesoId == 1
+													? state.accessRole.organizacionId
+													: null
+											)
+											setLoading(false)
+										}
+									}}
+									columns={columns}
+									orderOptions={[]}
+									pageSize={10}
+									backendSearch
+								/>
+							</Col>
+						</Row>
+					)}
 				</Container>
 			</div>
 		</AppLayout>
