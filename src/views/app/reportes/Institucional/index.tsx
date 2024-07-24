@@ -6,6 +6,7 @@ import ReporteResumenRegistroMatricula from './ReporteResumenRegistroMatricula'
 import ReporteConducta from './ReporteConducta'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import GetHistoricoEstByInstitucionId from './GetHistoricoEstByInstitucionId'
 
 const ReporteInstitucional = () => {
   const { t } = useTranslation()
@@ -44,6 +45,10 @@ const ReporteInstitucional = () => {
     {
       titulo: t('reportes>institucional>reporte_resumen_de_registro_de_matricula', 'REPORTE Resumen de registro de matrícula'),
       descripcion: t('reportes>institucional>resumen_de_registro_de_matricula', 'Resumen de registro de matrícula')
+    },
+    {
+      titulo: t('reportes>institucional>reporte_historicoSCE', 'Reporte Historico Servicio Comunitario'),
+      descripcion: t('reportes>institucional>resumen_de_reporte_historicoSCE', 'Historico Servicio Comunitario')
     },
     // {
     //   titulo: t('reportes>institucional>reporte_conducta', 'REPORTE de conducta'),
@@ -95,13 +100,10 @@ const ReporteInstitucional = () => {
         )}
         {state == 2 && (
           <ReporteResumenRegistroMatricula regresarEvent={() => setState(0)} />
+        )} 
+        {state == 3 && (
+          <GetHistoricoEstByInstitucionId regresarEvent={() => setState(0)} />
         )}
-        {/* {state == 3 && (
-          <ReporteConducta regresarEvent={() => setState(0)} type="conducta"/>
-        )}
-        {state == 4 && (
-          <ReporteConducta regresarEvent={() => setState(0)} type="asistencia"/>
-        )} */}
       </>
     )
   }

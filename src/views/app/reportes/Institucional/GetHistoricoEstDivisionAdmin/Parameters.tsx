@@ -49,8 +49,8 @@ const Parameters = ({ showReportEvent }) => {
   return (
     <div>
       <ReportParameterCard
-        titulo='Reporte de aulas del centro educativo'
-        texto='Seleccione la dirección regional y el circuito'
+        titulo='Reporte Historico de SCE por Division Administrativa'
+        texto='Reporte Historico de SCE por Division Administrativa'
         selects={selects}
         onBtnGenerarEvent={(obj) => {
           if (showReportEvent) showReportEvent(obj)

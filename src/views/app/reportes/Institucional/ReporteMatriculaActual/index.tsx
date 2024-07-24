@@ -21,7 +21,7 @@ const ReporteMatriculaActual = ({ regresarEvent }) => {
     try {
       setLoader(true)
       const response = await axios.get(
-				`${envVariables.BACKEND_URL}/api/Areas/Reportes/ReportesGenerales/GetDatosRptMatriculaActual?institucionId=${institucionId}`
+        `${envVariables.BACKEND_URL}/api/Areas/Reportes/ReportesGenerales/GetDatosRptMatriculaActual?institucionId=${institucionId}`
       )
       setLoader(false)
       setReportData(response.data)
@@ -45,29 +45,29 @@ const ReporteMatriculaActual = ({ regresarEvent }) => {
     <div>
       <ReportBar
         regresarEvent={() => {
-			  regresarEvent()
-			  setState(0)
+          regresarEvent()
+          setState(0)
         }} imprimirRef={printRef} showBtn={state === 1}
       />
       {/* state === 0 && <Parameters showReportEvent={onShowReportEvent} /> */}
       {state === 1 && !loader && <Reporte innerRef={printRef} reportData={reportData} />}
       {loader && (
         <div style={{
-				  height: '100%',
-				  width: '100%',
-				  position: 'absolute',
-				  top: 0,
-				  left: 0,
-				  zIndex: 20
-				  }}
+          height: '100%',
+          width: '100%',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          zIndex: 20
+        }}
         >
           <div
             style={{
-					    position: 'absolute',
-					    top: '50%',
-					    left: '50%',
-					    transform: 'translate(-50%, -50%)'
-					  }}
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)'
+            }}
           >
             <Loader />
           </div>

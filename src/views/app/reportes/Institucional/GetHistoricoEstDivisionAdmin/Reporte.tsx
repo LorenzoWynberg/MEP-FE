@@ -154,15 +154,15 @@ const Reporte = ({ innerRef, reportData, reportParameters }) => {
   return (
     <div ref={innerRef}>
       <Card>
-        <h3>Reporte de aulas de centro educativo</h3>
-        <p>AÑO EDUCATIVO: 2022</p>
+        <h3>Reporte Historico de SCE por Division Administrativa</h3>
+        <p>AÑO EDUCATIVO: {new Date().getFullYear()}</p>
         {/* <p>DIRECCIÓN REGIONAL:{reportParameters.regionalId.label} </p>
         <p>CIRCUITO: {reportParameters.circuitoId.label}</p>
         <p>CENTRO EDUCATIVO: {reportParameters.institucionId.label}</p> */}
         <TableReactImplementation
           avoidSearch
           columns={tableMetadata.columns}
-          data={tableMetadata.data}
+          data={reportData}
         />
       </Card>
     </div>

@@ -290,7 +290,7 @@ export const getTablaEstudiantesServicioComunalById =
 			}
 		}
 
-export const GetServicioComunalInfoById  =
+export const GetServicioComunalInfoById =
 	(id: number): ((any) => Promise<actionResponse>) =>
 		async (dispatch: any): Promise<actionResponse> => {
 			try {
@@ -310,6 +310,62 @@ export const GetServicioComunalByInstitucionId =
 			try {
 				const response: any = await axios.get(
 					`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServicioComunalByInstitucionId/${id}`
+				)
+				console.log('response', response)
+				return { error: false, options: response.data }
+			} catch (e) {
+				dispatch(configError(e.message))
+				return { error: e.message, options: [] }
+			}
+		}
+export const GetActasByInstitucionId =
+	(id: number): ((any) => Promise<actionResponse>) =>
+		async (dispatch: any): Promise<actionResponse> => {
+			try {
+				const response: any = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${id}`
+				)
+				console.log('response', response)
+				return { error: false, options: response.data }
+			} catch (e) {
+				dispatch(configError(e.message))
+				return { error: e.message, options: [] }
+			}
+		}
+export const GetHistoricoEstByInstitucionId =
+	(id: number): ((any) => Promise<actionResponse>) =>
+		async (dispatch: any): Promise<actionResponse> => {
+			try {
+				const response: any = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstByInstitucionId/${id}`
+				)
+				console.log('response', response)
+				return { error: false, options: response.data }
+			} catch (e) {
+				dispatch(configError(e.message))
+				return { error: e.message, options: [] }
+			}
+		}
+export const GetHistoricoEstDivisionAdmin =
+	(idRegion: number, idCircuito: number): ((any) => Promise<actionResponse>) =>
+		async (dispatch: any): Promise<actionResponse> => {
+			try {
+				const response: any = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${idRegion}/${idCircuito}`
+				)
+				console.log('response', response)
+				return { error: false, options: response.data }
+			} catch (e) {
+				dispatch(configError(e.message))
+				return { error: e.message, options: [] }
+			}
+		}
+export const GetHistoricoEstDivisionGeog =
+	(idProvincia: number, idCanton: number, idDistrito: number): ((any) => Promise<actionResponse>) =>
+		async (dispatch: any): Promise<actionResponse> => {
+			try {
+				const response: any = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionGeog/${idProvincia}/${idCanton}/${idDistrito}`
 				)
 				console.log('response', response)
 				return { error: false, options: response.data }
@@ -405,31 +461,31 @@ export const advancedFilterInstitutionsPaginated =
 		}
 	}
 
-	export const crearServicioComunal = (data) => async dispatch => {
-		try {
-			const response = await axios.post(`${envVariables.BACKEND_URL}/api/ServicioComunal/CrearServicioComunal`, data)
-	
-	
-			return { error: false, response: response.data }
-		} catch (e) {
-			const backErrors = handleErrors(e)
-			dispatch(configErrorFeedback({ ...backErrors, error: e.message }))
-			return { error: e.message }
-		}
-	}
+export const crearServicioComunal = (data) => async dispatch => {
+	try {
+		const response = await axios.post(`${envVariables.BACKEND_URL}/api/ServicioComunal/CrearServicioComunal`, data)
 
-	export const actualizarServicioComunal = (data) => async dispatch => {
-		try {
-			const response = await axios.put(`${envVariables.BACKEND_URL}/api/ServicioComunal/ActualizarServicioComunal`, data)
-	
-	
-			return { error: false, response: response.data }
-		} catch (e) {
-			const backErrors = handleErrors(e)
-			dispatch(configErrorFeedback({ ...backErrors, error: e.message }))
-			return { error: e.message }
-		}
+
+		return { error: false, response: response.data }
+	} catch (e) {
+		const backErrors = handleErrors(e)
+		dispatch(configErrorFeedback({ ...backErrors, error: e.message }))
+		return { error: e.message }
 	}
+}
+
+export const actualizarServicioComunal = (data) => async dispatch => {
+	try {
+		const response = await axios.put(`${envVariables.BACKEND_URL}/api/ServicioComunal/ActualizarServicioComunal`, data)
+
+
+		return { error: false, response: response.data }
+	} catch (e) {
+		const backErrors = handleErrors(e)
+		dispatch(configErrorFeedback({ ...backErrors, error: e.message }))
+		return { error: e.message }
+	}
+}
 
 export const createInstitution = (data, page, qnt, cb) => async dispatch => {
 	try {

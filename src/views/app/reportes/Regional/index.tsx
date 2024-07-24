@@ -3,6 +3,7 @@ import ReportCard from '../_partials/ReportCard'
 import ReportCardContainer from '../_partials/ReportCardContainer'
 import ReporteMatriculaPorRegion from './ReporteMatriculaPorRegion'
 import { useTranslation } from 'react-i18next'
+import GetHistoricoEstDivisionGeog from './GetHistoricoEstDivisionGeog'
 
 const ReporteRegional = () => {
   const { t } = useTranslation()
@@ -21,6 +22,10 @@ const ReporteRegional = () => {
     {
       titulo: t('reportes>regional>reporte_de_matricula_por_direccion_regional', 'Reporte de Matrícula por Dirección Regional'),
       descripcion: t('reportes>regional>resumen_de_estudiantes_matriculados_por_centro_educativo', 'Resumen de estudiantes matriculados por centro educativo')
+    },
+    {
+      titulo: 'Historico SCE por Division Geografica',
+      descripcion: 'Historico SCE por Division Geografica'
     }
   ]
   const [state, setState] = React.useState(0)
@@ -45,6 +50,10 @@ const ReporteRegional = () => {
       ) */}
       {state == 1 && (
         <ReporteMatriculaPorRegion regresarEvent={() => setState(0)} />
+      )}
+
+      {state == 2 && (
+        <GetHistoricoEstDivisionGeog regresarEvent={() => setState(0)} />
       )}
     </>
   )

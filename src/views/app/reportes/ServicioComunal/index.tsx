@@ -1,8 +1,8 @@
 import React from 'react'
 import ReportCard from '../_partials/ReportCard'
 import ReportCardContainer from '../_partials/ReportCardContainer'
-import GetHistoricoEstDivisionGeog from './GetHistoricoEstDivisionGeog'
-import GetHistoricoEstByInstitucionId from './GetHistoricoEstByInstitucionId'
+import GetHistoricoEstDivisionGeog from '../Regional/GetHistoricoEstDivisionGeog'
+import GetHistoricoEstByInstitucionId from '../Institucional/GetHistoricoEstByInstitucionId'
 const ReportesNacional = () => {
   const reportes = [
     {
