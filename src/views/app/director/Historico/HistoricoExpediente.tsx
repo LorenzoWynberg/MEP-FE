@@ -253,8 +253,9 @@ const HistoricoExpediente = props => {
 				)}
 				{servicioComunalId && tienePermiso && tienePermiso.leer == 1 && (
 					<SimpleModal
+						btnCancel={false}
 						addMarginTitle
-						title='Registro'
+						title='Detalle del Servicio Comunal'
 						onClose={() => setServicioComunalId(null)}
 						stylesContent={{}}
 						onConfirm={() => {
@@ -263,6 +264,7 @@ const HistoricoExpediente = props => {
 						openDialog={servicioComunalId}
 					>
 						<ExpedienteEstudianteSEC servicioComunalId={servicioComunalId} />
+
 					</SimpleModal>
 				)}
 

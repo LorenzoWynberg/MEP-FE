@@ -282,12 +282,12 @@ const TableStudentsSCE: React.FC<IProps> = props => {
 		>
 			<Card>
 				<CardBody style={props.noMargin ? { margin: 0, padding: 0 } : {}}>
-					<h4>
+				{/* 	<h4>
 						{t(
 							'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados',
 							'Estudiantes matriculados'
 						)}
-					</h4>
+					</h4> */}
 
 					<TableReactImplementation
 						avoidSearch={props.avoidSearch}

@@ -16,6 +16,7 @@ import { useActions } from 'Hooks/useActions'
 import InformationCardDetalle from './_partials/InformationCardDetalle'
 import { GetServicioComunalInfoById } from '../../../../redux/formularioCentroResponse/actions'
 import styled from 'styled-components'
+import Loader from 'Components/LoaderContainer'
 const Inicio = React.lazy(() => import('./Inicio'))
 const General = React.lazy(() => import('./General'))
 const Estadistica = React.lazy(() => import('./Estadistica'))
@@ -30,6 +31,7 @@ const ExpedienteEstudianteSEC = props => {
 	const { t } = useTranslation()
 	const [sce, setSCE] = useState({})
 	const [showProyecto, setShowProyecto] = useState(false)
+	const [loading, setLoading] = useState(true)
 
 	centroBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
@@ -40,6 +42,7 @@ const ExpedienteEstudianteSEC = props => {
 	useEffect(() => {
 		actions.GetServicioComunalInfoById(parseInt(props.servicioComunalId)).then(res => {
 			setSCE(res[0])
+			setLoading(false)
 			setShowProyecto(true)
 		})
 	}, [props.servicioComunalId])
@@ -145,8 +148,9 @@ const ExpedienteEstudianteSEC = props => {
 
 	return (
 		<AppLayout items={directorItems}>
+			{loading && <Loader />}
 			<Helmet>
-				<title>Registro</title>
+				<title>Detalle del Servicio Comunal</title>
 			</Helmet>
 			<div className='dashboard-wrapper'>
 				<Container>
@@ -157,16 +161,31 @@ const ExpedienteEstudianteSEC = props => {
 									<strong>Detalle del Servicio Comunal Estudiantil:</strong>
 								</Col>
 							</Row>
-							<Row>
+							<Row className='mb-3'>
 								<Col sm={4}>
 									<strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong>{' '}
 									<span>{sce.nombreAreaProyecto && sce.nombreAreaProyecto}</span>
 								</Col>
 								<Col sm={4}>
 									<strong>{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}:</strong>{' '}
-
-									{<span>{sce.caracteristicas && sce.caracteristicas.map(item => <span>{item.nombre}</span>)
-										.reduce((acc, x) => acc === null ? x : <>{acc}, {x}</>, null)}</span>}
+									{
+										<span>
+											{sce.caracteristicas &&
+												sce.caracteristicas
+													.map(item => <span>{item.nombre}</span>)
+													.reduce(
+														(acc, x) =>
+															acc === null ? (
+																x
+															) : (
+																<>
+																	{acc}, {x}
+																</>
+															),
+														null
+													)}
+										</span>
+									}
 								</Col>
 								<Col sm={4}>
 									<strong>
@@ -179,21 +198,15 @@ const ExpedienteEstudianteSEC = props => {
 									<span>{sce.nombreDocente && sce.nombreDocente}</span>
 								</Col>
 							</Row>
-							<Row>
+							<Row className='mb-3'>
 								<Col sm={4}>
 									<strong>
-										{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}:
+										{t('informationcarddetalle>nombreProyecto', 'Nombre del proyecto')}:
 									</strong>
 									<span>{sce.nombreProyecto && sce.nombreProyecto}</span>
 								</Col>
 								<Col sm={4}>
-									<strong>
-										{t(
-											'informationcarddetalle>quienRegistra',
-											'Quién registra y fecha de registros(bitácora)'
-										)}
-										:
-									</strong>{' '}
+									<strong>{t('informationcarddetalle>quienRegistra', 'Quién registra')}:</strong>{' '}
 									<span>{sce.usuarioFechaRegistro && sce.usuarioFechaRegistro}</span>
 								</Col>
 								<Col sm={4}>
@@ -203,9 +216,15 @@ const ExpedienteEstudianteSEC = props => {
 									<span>{sce.fechaConclusion && sce.fechaConclusion}</span>
 								</Col>
 							</Row>{' '}
-							<Row>
+							<Row className='mb-3'>
 								<Col sm={4}>
 									<strong>{t('informationcarddetalle>modalidad', 'Modalidad')}:</strong>{' '}
+									<span>{sce.nombreModalidad && sce.nombreModalidad}</span>
+								</Col>
+								<Col sm={4}>
+									<strong>
+										{t('informationcarddetalle>fechaRegistro', ' fecha de registros(bitácora)')}:
+									</strong>{' '}
 									<span>{sce.nombreModalidad && sce.nombreModalidad}</span>
 								</Col>
 								<Col sm={4}>
@@ -216,11 +235,20 @@ const ExpedienteEstudianteSEC = props => {
 										)}
 										:
 									</strong>{' '}
-									<span>{sce.nombreOrganizacionContraparte && sce.nombreOrganizacionContraparte}</span>
+									<span>
+										{sce.nombreOrganizacionContraparte && sce.nombreOrganizacionContraparte}
+									</span>
+								</Col>
+							</Row>
+							<Row className='mb-3'>
+								<Col sm={12}>
+									<strong>{t('informationcarddetalle>descripcion', 'Descripción')}:</strong>{' '}
+									<span>{sce.nombreModalidad && sce.nombreModalidad}</span>
 								</Col>
 							</Row>
 						</div>
 					)}
+					{!loading && 
 					<TableStudents
 						noMargin={true}
 						onlyViewModule={true}
@@ -231,7 +259,7 @@ const ExpedienteEstudianteSEC = props => {
 						// handleGetData={() => { showBuscador ? setShowBuscador(false) : setShowBuscador(true) }}
 						// setEstudiantes={setEstudiantes} estudiantes={estudiantes}
 						closeContextualMenu={false}
-					></TableStudents>
+					></TableStudents>}
 				</Container>
 			</div>
 		</AppLayout>
