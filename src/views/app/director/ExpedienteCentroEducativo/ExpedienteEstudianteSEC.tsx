@@ -30,6 +30,7 @@ const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
 const ExpedienteEstudianteSEC = props => {
 	const { t } = useTranslation()
 	const [sce, setSCE] = useState({})
+	const [caracteristicasString, setCaracteristicasString] = useState('')
 	const [showProyecto, setShowProyecto] = useState(false)
 	const [loading, setLoading] = useState(true)
 
@@ -41,6 +42,23 @@ const ExpedienteEstudianteSEC = props => {
 	const actions = useActions({ GetServicioComunalInfoById })
 	useEffect(() => {
 		actions.GetServicioComunalInfoById(parseInt(props.servicioComunalId)).then(res => {
+			if (res[0]?.caracteristicas) {
+				setCaracteristicasString(() => {
+					return res[0]?.caracteristicas
+						.map(item => <span>{item.nombre}</span>)
+						.reduce(
+							(acc, x) =>
+								acc === null ? (
+									x
+								) : (
+									<>
+										{acc}, {x}
+									</>
+								),
+							null
+						)
+				})
+			}
 			setSCE(res[0])
 			setLoading(false)
 			setShowProyecto(true)
@@ -156,110 +174,93 @@ const ExpedienteEstudianteSEC = props => {
 				<Container>
 					{showProyecto && (
 						<div>
-							<Row>
-								<Col style={{ marginBottom: 16 }} sm={12}>
-									<strong>Detalle del Servicio Comunal Estudiantil:</strong>
-								</Col>
-							</Row>
-							<Row className='mb-3'>
-								<Col sm={4}>
-									<strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong>{' '}
+							<Row className='mt-2'>
+								<Col sm={4} className='mb-3'>
+									<strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong>
+									<br />
 									<span>{sce.nombreAreaProyecto && sce.nombreAreaProyecto}</span>
 								</Col>
-								<Col sm={4}>
-									<strong>{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}:</strong>{' '}
-									{
-										<span>
-											{sce.caracteristicas &&
-												sce.caracteristicas
-													.map(item => <span>{item.nombre}</span>)
-													.reduce(
-														(acc, x) =>
-															acc === null ? (
-																x
-															) : (
-																<>
-																	{acc}, {x}
-																</>
-															),
-														null
-													)}
-										</span>
-									}
-								</Col>
-								<Col sm={4}>
-									<strong>
-										{t(
-											'informationcarddetalle>docenteAcompana',
-											'Docente que acompaña el proyecto'
-										)}
-										:
-									</strong>{' '}
-									<span>{sce.nombreDocente && sce.nombreDocente}</span>
-								</Col>
-							</Row>
-							<Row className='mb-3'>
-								<Col sm={4}>
+								<Col sm={4} className='mb-3'>
 									<strong>
 										{t('informationcarddetalle>nombreProyecto', 'Nombre del proyecto')}:
 									</strong>
+									<br />
 									<span>{sce.nombreProyecto && sce.nombreProyecto}</span>
 								</Col>
-								<Col sm={4}>
-									<strong>{t('informationcarddetalle>quienRegistra', 'Quién registra')}:</strong>{' '}
-									<span>{sce.usuarioFechaRegistro && sce.usuarioFechaRegistro}</span>
-								</Col>
-								<Col sm={4}>
-									<strong>
-										{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:
-									</strong>{' '}
-									<span>{sce.fechaConclusion && sce.fechaConclusion}</span>
-								</Col>
-							</Row>{' '}
-							<Row className='mb-3'>
-								<Col sm={4}>
-									<strong>{t('informationcarddetalle>modalidad', 'Modalidad')}:</strong>{' '}
+								<Col sm={4} className='mb-3'>
+									<strong>{t('informationcarddetalle>modalidad', 'Modalidad')}:</strong>
+									<br />
 									<span>{sce.nombreModalidad && sce.nombreModalidad}</span>
 								</Col>
-								<Col sm={4}>
-									<strong>
-										{t('informationcarddetalle>fechaRegistro', ' fecha de registros(bitácora)')}:
-									</strong>{' '}
-									<span>{sce.nombreModalidad && sce.nombreModalidad}</span>
+								<Col sm={4} className='mb-3'>
+									<strong>{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}:</strong>
+									<br />
+									{<span>{sce.caracteristicas && caracteristicasString}</span>}
 								</Col>
-								<Col sm={4}>
+								<Col sm={4} className='mb-3'>
 									<strong>
 										{t(
 											'informationcarddetalle>organizaciónContraParte',
 											'Tipo de organización contraparte'
 										)}
 										:
-									</strong>{' '}
+									</strong>
+									<br />
 									<span>
 										{sce.nombreOrganizacionContraparte && sce.nombreOrganizacionContraparte}
 									</span>
 								</Col>
-							</Row>
-							<Row className='mb-3'>
-								<Col sm={12}>
-									<strong>{t('informationcarddetalle>descripcion', 'Descripción')}:</strong>{' '}
-									<span>{sce.nombreModalidad && sce.nombreModalidad}</span>
+								<Col sm={4} className='mb-3'>
+									<strong>
+										{t(
+											'informationcarddetalle>docenteAcompana',
+											'Docente que acompaña el proyecto'
+										)}
+										:
+									</strong>
+									<br />
+									<span>{sce.nombreDocente && sce.nombreDocente}</span>
+								</Col>
+								<Col sm={4} className='mb-3'>
+									<strong>
+										{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:
+									</strong>
+									<br />
+									<span>{sce.fechaConclusion && sce.fechaConclusion}</span>
+								</Col>
+								<Col sm={4} className='mb-3'>
+									<strong>{t('informationcarddetalle>quienRegistra', 'Quién registra')}:</strong>
+									<br />
+									<span>{sce.usuarioFechaRegistro && sce.usuarioFechaRegistro}</span>
+								</Col>
+								<Col sm={4} className='mb-3'>
+									<strong>
+										{t('informationcarddetalle>fechaRegistro', ' fecha de registros(bitácora)')}:
+									</strong>
+									<br />
+									<span>{sce.fechaInsercion && sce.fechaInsercion}</span>
+								</Col>
+								<Col sm={12} className='mb-1'>
+									<strong>{t('informationcarddetalle>descripcion', 'Descripción')}:</strong>
+									<br />
+									<span>{sce.descripcion && sce.descripcion}</span>
 								</Col>
 							</Row>
 						</div>
 					)}
-					{!loading && 
-					<TableStudents
-						noMargin={true}
-						onlyViewModule={true}
-						avoidSearch={true}
-						columns={columns}
-						data={sce?.listaEstudiantes ? sce.listaEstudiantes : []}
-						hasEditAccess={true}
-						// handleGetData={() => { showBuscador ? setShowBuscador(false) : setShowBuscador(true) }}
-						// setEstudiantes={setEstudiantes} estudiantes={estudiantes}
-						closeContextualMenu={false}
-					></TableStudents>}
+					{!loading && (
+						<TableStudents
+							noMargin={true}
+							onlyViewModule={true}
+							avoidSearch={true}
+							columns={columns}
+							data={sce?.listaEstudiantes ? sce.listaEstudiantes : []}
+							hasEditAccess={true}
+							// handleGetData={() => { showBuscador ? setShowBuscador(false) : setShowBuscador(true) }}
+							// setEstudiantes={setEstudiantes} estudiantes={estudiantes}
+							closeContextualMenu={false}
+						></TableStudents>
+					)}
 				</Container>
 			</div>
 		</AppLayout>
