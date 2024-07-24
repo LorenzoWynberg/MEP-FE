@@ -16,6 +16,7 @@ import BarLoader from 'Components/barLoader/barLoader'
 import InformationCard from './_partials/InformationCard'
 
 import studentBreadcrumb from 'Constants/studentBreadcrumb'
+import { Paper } from '@material-ui/core'
 
 const Navegacion = React.lazy(() => import('./Navegacion'))
 const Contacto = React.lazy(() => import('./Contacto'))
@@ -42,7 +43,6 @@ const ContenedorExpSCE = props => {
 		item.active = props.active === idx
 		return item
 	})
-	const storeIs = useSelector(store => store)
 
 	const state = useSelector(store => {
 		return {
@@ -55,10 +55,13 @@ const ContenedorExpSCE = props => {
 		let id = state.expedienteEstudiantil?.currentStudent?.idEstudiante
 			? state.expedienteEstudiantil?.currentStudent?.idEstudiante
 			: localStorage.getItem('state.expedienteEstudiantil.currentStudent.idEstudiante')
-		actions.GetServicioComunalInfoByStudentId(id).then(res => {
-			console.log('res', res)
-			setServicioData(res)
-		}).finally(() => setLoading(false))
+		actions
+			.GetServicioComunalInfoByStudentId(id)
+			.then(res => {
+				console.log('res', res)
+				setServicioData(res)
+			})
+			.finally(() => setLoading(false))
 	}, [state.expedienteEstudiantil.currentStudent.idEstudiante])
 	useEffect(() => {
 		state.expedienteEstudiantil?.currentStudent?.idEstudiante &&
@@ -68,8 +71,6 @@ const ContenedorExpSCE = props => {
 			)
 	}, [state.expedienteEstudiantil.currentStudent.idEstudiante])
 
-	console.log('state storeIs', storeIs)
-	console.log('state state', state)
 	if (state.currentInstitucion?.id == -1) {
 		return (
 			<AppLayout items={directorItems}>
@@ -140,81 +141,87 @@ const ContenedorExpSCE = props => {
 
 					<div>
 						{loading && <BarLoader />}
-						<Row>
-							<Col style={{ marginBottom: 16 }} sm={12}>
-								<strong>
-									<h2>Servicio Comunal</h2>
-								</strong>
-							</Col>
-							<Col sm={4}>
-								<strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong>{' '}
-								<span>{servicioData?.areaProyecto}</span>
-							</Col>
-
-							<Col sm={4}>
-								<strong>{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}: </strong>
-								<span>{servicioData?.modalidadProyecto}</span>
-							</Col>
-
-							<Col sm={4}>
-								<strong>{t('informationcarddetalle>modalidad', 'Tipo de Proyecto')}:</strong>{' '}
-								<span>{servicioData?.modalidadProyecto}</span>
-							</Col>
-
-							<Col sm={4}>
-								<strong>{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:</strong>{' '}
-								<span>{servicioData?.fechaConclusionSCE}</span>
-							</Col>
-
-							<Col sm={4}>
-								<strong>
-									{t(
-										'informationcarddetalle>organizaciónContraParte',
-										'Tipo de organización contraparte'
-									)}
-									:{' '}
-								</strong>
-
-								<span>{servicioData?.organizacionContraparte}</span>
-							</Col>
-
-							<Col sm={4}>
-								<strong>
-									{t('informationcarddetalle>docenteAcompana', 'Acompañante de Proyecto')}:{' '}
-								</strong>
-								<span>{servicioData?.docenteAcompanante}</span>
-							</Col>
-
-							<Col sm={4}>
-								<strong>{t('informationcarddetalle>institucion', 'Institución')}: </strong>
-
-								<span>{servicioData?.nombreInstitucion}</span>
-							</Col>
-							<Col sm={4}>
-								<strong>
-									{/* TODO: i18 */}
-									{/* {t(
+						<Paper className='p-5'>
+							<Row>
+								<Col style={{ marginBottom: 16 }} sm={12}>
+									<strong>
+										<h3>Servicio comunal estudiantil</h3>
+									</strong>
+									<hr />
+								</Col>
+								<Col sm={4} className='mb-3'>
+									<strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong>
+									<br />
+									<span>{servicioData?.areaProyecto}</span>
+								</Col>
+								<Col sm={4} className='mb-3'>
+									<strong>
+										{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}:{' '}
+									</strong>
+									<br />
+									<span>{servicioData?.modalidadProyecto}</span>
+								</Col>
+								<Col sm={4} className='mb-3'>
+									<strong>{t('informationcarddetalle>modalidad', 'Tipo de Proyecto')}:</strong>
+									<br />
+									<span>{servicioData?.modalidadProyecto}</span>
+								</Col>
+								<Col sm={4} className='mb-3'>
+									<strong>
+										{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:
+									</strong>
+									<br />
+									<span>{servicioData?.fechaConclusionSCE}</span>
+								</Col>
+								<Col sm={4} className='mb-3'>
+									<strong>
+										{t(
+											'informationcarddetalle>organizaciónContraParte',
+											'Tipo de organización contraparte'
+										)}
+										:
+									</strong>
+									<br />
+									<span>{servicioData?.organizacionContraparte}</span>
+								</Col>
+								<Col sm={4} className='mb-3'>
+									<strong>
+										{t('informationcarddetalle>docenteAcompana', 'Acompañante de Proyecto')}:
+									</strong>
+									<br />
+									<span>{servicioData?.docenteAcompanante}</span>
+								</Col>
+								<Col sm={4} className='mb-3'>
+									<strong>{t('informationcarddetalle>institucion', 'Institución')}: </strong>
+									<br />
+									<span>{servicioData?.nombreInstitucion}</span>
+								</Col>
+								<Col sm={4} className='mb-3'>
+									<strong>
+										{/* TODO: i18 */}
+										{/* {t(
 										'informationcarddetalle>institucion',
 										'Institución'
 									)} */}
-									Descripción:{' '}
-								</strong>
-
-								<span>{servicioData?.descripcion}</span>
-							</Col>
-							<Col sm={4}>
-								<strong>
-									{/* TODO: i18 */}
-									{/* {t(
+										Descripción:
+									</strong>
+									<br />
+									<span>{servicioData?.descripcion}</span>
+								</Col>
+								<Col sm={4} className='mb-3'>
+									<strong>
+										{/* TODO: i18 */}
+										{/* {t(
 										'informationcarddetalle>institucion',
 										'Institución'
 									)} */}
-									Caracteristicas:{' '}
-								</strong>
-
-								<span>{servicioData?.caracteristicas}</span>
-							</Col>
-						</Row>
+										Características:
+									</strong>
+									<br />
+									<span>{servicioData?.caracteristicas}</span>
+								</Col>
+							</Row>
+						</Paper>
 					</div>
 				</Container>
 			</div>
