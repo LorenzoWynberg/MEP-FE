@@ -27,6 +27,7 @@ const Buscador = React.lazy(() => import('./Buscador'))
 const Sinirube = React.lazy(() => import('./Sinirube'))
 const CuentaCorreo = React.lazy(() => import('./CuentaCorreo'))
 const CuentaUsuarios = React.lazy(() => import('./CuentaUsuario'))
+const ServicioComunalEstudiantil = React.lazy(() => import('./ServicioComunalEstudiantil'))
 
 const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
@@ -51,6 +52,7 @@ const ContenedorPrincipal = props => {
 			historialMatricula: store.identification.matriculaHistory
 		}
 	})
+
 	useEffect(() => {
 		setActive(props.active)
 	}, [props.active])
@@ -123,7 +125,7 @@ const ContenedorPrincipal = props => {
 													expedienteEstudiantil={state.expedienteEstudiantil}
 												/>
 											),
-											11: <ContenedorExpSCE {...props} />
+											11: <ServicioComunalEstudiantil {...props} />
 										}[active]
 									}
 								</>
