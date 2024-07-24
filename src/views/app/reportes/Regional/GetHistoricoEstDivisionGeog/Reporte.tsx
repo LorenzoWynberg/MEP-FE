@@ -23,19 +23,7 @@ const Reporte = ({ innerRef, reportData, reportParameters }) => {
     "refugiadoCount": 0,
     "totalEstudiantes": 0
     */
-    const columns = [
-      {
-        Header: 'Nombre Regional',
-        accessor: 'nombreRegional',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Nombre del circuito',
-        accessor: 'nombreCircuito',
-        label: '',
-        column: ''
-      },
+    const columns = [ 
       {
         Header: 'Nombre Oferta',
         accessor: 'nombreOferta',
