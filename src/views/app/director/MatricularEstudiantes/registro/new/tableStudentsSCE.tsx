@@ -280,23 +280,12 @@ const TableStudentsSCE: React.FC<IProps> = props => {
 			lg='12'
 			xl='12'
 		>
-			<Card>
-				<CardBody style={props.noMargin ? { margin: 0, padding: 0 } : {}}>
-				{/* 	<h4>
-						{t(
-							'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados',
-							'Estudiantes matriculados'
-						)}
-					</h4> */}
-
-					<TableReactImplementation
-						avoidSearch={props.avoidSearch}
-						orderOptions={[]}
-						columns={columns}
-						data={students}
-					/>
-				</CardBody>
-			</Card>
+			<TableReactImplementation
+				avoidSearch={props.avoidSearch}
+				orderOptions={[]}
+				columns={columns}
+				data={students}
+			/>
 		</Colxx>
 	)
 }
