@@ -3,8 +3,8 @@ import Parameters from './Parameters'
 import Reporte from './Reporte'
 import ReportBar from '../../_partials/ReportBar'
 import { envVariables } from 'Constants/enviroment'
-import axios from 'axios'
-import ReporteStyledTable from '../../_partials/ReporteStyledTable'
+import axios from 'axios' 
+import ReporteStyledTableCircuitos from '../../_partials/ReporteStyledTableCircuitos'
 
 const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
   const [state, setState] = React.useState(0)
@@ -34,6 +34,18 @@ const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
     console.log(parametros)
   }
   const columns = [ 
+    {
+      Header: 'Region',
+      accessor: 'nombreRegional',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Circuito',
+      accessor: 'nombreCircuito',
+      label: '',
+      column: ''
+    },
     {
       Header: 'Oferta',
       accessor: 'nombreOferta',
@@ -140,7 +152,7 @@ const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
         }} imprimirRef={printRef} showBtn={state === 1}
       />
       {state === 0 && <Parameters showReportEvent={onShowReportEvent} />}
-      {state === 1 && <ReporteStyledTable innerRef={printRef} data={reportData} columns={columns} title={'Historico SCE Estudiantes Por Institucion'} />}
+      {state === 1 && <ReporteStyledTableCircuitos innerRef={printRef} data={reportData} columns={columns} title={'Historico SCE Estudiantes Por Institucion'} />}
     </div>
   )
 }

@@ -10,7 +10,7 @@ const formatter = Intl.DateTimeFormat('es-ES', {
   timeStyle: 'short',
   hour12: true
 })
-const ReporteStyledTable = ({ innerRef, data, columns,title }) => {
+const ReporteStyledTableCircuitos = ({ innerRef, data, columns, title }) => {
   const state = useSelector<any, any>((store) => {
     return {
       user: store.authUser.authObject.user,
@@ -18,16 +18,18 @@ const ReporteStyledTable = ({ innerRef, data, columns,title }) => {
     }
   })
 
-  const Row = (item, index) => { 
+  const Row = (item) => {
+    console.log("itemtiemt", item)
     return (
-      <tr key={index}>
-        {Object.keys(item).map((key, index) => <td>{item[key]}</td>)}
+
+      <tr >
+        {Object.keys(item).map((key) => <td>{item[key]}</td>)}
       </tr>
     )
   }
 
   return (
-    <div ref={innerRef} style={{overflow:'auto'}}>
+    <div ref={innerRef} style={{ overflow: 'auto' }}>
       <Card>
         <ReportHeader mostrarContactoInstitucion />
         <Seccion style={{ marginTop: '1rem' }}>
@@ -39,10 +41,16 @@ const ReporteStyledTable = ({ innerRef, data, columns,title }) => {
         <p>
           <Table>
             <thead>
-              {columns && columns.map((item, index) => <th>{item.Header}</th>)}
+              {columns && columns.map((item) => <th>{item.Header}</th>)}
             </thead>
             <tbody>
-              {data && data.map((item, index) => Row(item, index))}
+              {data && data.map((item) => {
+
+
+
+                return <><tr ><h6 style={{marginTop:16}}>{item.circuitoNombre}</h6></tr>
+                  {item.datos.map(d => Row(d))}</>
+              })}
             </tbody>
           </Table>
         </p>
@@ -96,4 +104,4 @@ const Seccion = styled.section`
   text-align: center;
 `
 
-export default ReporteStyledTable
+export default ReporteStyledTableCircuitos
