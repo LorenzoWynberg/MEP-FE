@@ -14,7 +14,7 @@ const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
   const loadReportData = async (idRegion, idCircuito) => {
     try {
       const response = await axios.get(
-        `${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${idRegion}/${idCircuito}`
+        `${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${0}/${0}`
       )
       setReportData(response.data)
     } catch (e) {

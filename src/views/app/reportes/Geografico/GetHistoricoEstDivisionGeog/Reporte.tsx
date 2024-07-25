@@ -138,7 +138,7 @@ const Reporte = ({ innerRef, reportData, reportParameters }) => {
   return (
     <div ref={innerRef}>
       <Card>
-        <h3>Reporte de aulas de centro educativo</h3>
+        <h3>Reporte de SCE Historico por Division Geografica</h3>
         <p>AÑO EDUCATIVO: {new Date().getFullYear()}</p>
         {/* <p>DIRECCIÓN REGIONAL:{reportParameters.regionalId.label} </p>
         <p>CIRCUITO: {reportParameters.circuitoId.label}</p>

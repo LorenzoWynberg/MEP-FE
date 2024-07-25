@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import HeaderTab from 'Components/Tab/Header'
 import Regional from '../Regional'
+import ReporteGeografico from '../Geografico'
 import Circuital from '../Circuital'
 import Institucional from '../Institucional'
 import styled from 'styled-components'
@@ -19,7 +20,7 @@ const Reportes = props => {
 	const { t } = useTranslation()
 	const [activeTab, setActiveTab] = useState<number>(0)
 	const { accessRole } = useSelector((state: any) => state.authUser?.currentRoleOrganizacion)
-	const options = [t("gestion_usuario>usuarios>regional", "Regional"), t('reportes>circuital','Circuital'), t('reportes>institucional','Institucional')]
+	const options = [t("gestion_usuario>usuarios>regional", "Regional"), t('reportes>circuital', 'Circuital'), t('reportes>institucional', 'Institucional'), t('reportes>geografico', 'Geográfico')]
 
 	switch (accessRole.nivelAccesoId) {
 		case 1: // Institucion
@@ -35,7 +36,7 @@ const Reportes = props => {
 			break
 	}
 
-	if (accessRole.rolId===11) {
+	if (accessRole.rolId === 11) {
 		// Si el rol es Docente(11)  se oculta la seccion
 		return <></>
 	}
@@ -52,7 +53,8 @@ const Reportes = props => {
 								{
 									0: <Regional />,
 									1: <Circuital />,
-									2: <Institucional />
+									2: <Institucional />,
+									3: <ReporteGeografico />
 								}[activeTab]
 							}
 						</>
