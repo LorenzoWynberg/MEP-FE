@@ -2,7 +2,7 @@ import React from 'react'
 import ReportCard from '../_partials/ReportCard'
 import ReportCardContainer from '../_partials/ReportCardContainer'
 import ReporteMatriculaPorCircuito from './ReporteMatriculaPorCircuito'
-import GetHistoricoEstDivisionAdmin from '../Institucional/GetHistoricoEstDivisionAdmin'
+import GetHistoricoEstDivisionAdmin from './GetHistoricoEstDivisionAdmin'
 import { useTranslation } from 'react-i18next'
 
 const ReporteCircuital = () => {

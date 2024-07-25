@@ -4,6 +4,7 @@ import Reporte from './Reporte'
 import ReportBar from '../../_partials/ReportBar'
 import { envVariables } from 'Constants/enviroment'
 import axios from 'axios'
+import ReporteStyledTable from '../../_partials/ReporteStyledTable'
 
 const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
   const [state, setState] = React.useState(0)
@@ -31,7 +32,125 @@ const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
       setState(1)
     }) 
   }
-
+  const columns = [ 
+    { 
+      
+      Header: 'Provincia',
+      accessor: 'idProvincia',
+      label: '',
+      column: ''
+    },
+    { 
+      
+      Header: 'Canton',
+      accessor: 'idCanton',
+      label: '',
+      column: ''
+    },
+    { 
+      
+      Header: 'Distrito',
+      accessor: 'idDistrito',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Nombre Oferta',
+      accessor: 'nombreOferta',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Área del proyecto',
+      accessor: 'nombreAreaProyecto',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Descripción',
+      accessor: 'descripcion',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Nombre del proyecto',
+      accessor: 'nombreProyecto',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Nombre de la modalidad',
+      accessor: 'nombreModalidad',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Características',
+      accessor: 'caracteristicas',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Nombre de la organización contraparte',
+      accessor: 'nombreOrgContraparte',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Cantidad de cédulas',
+      accessor: 'cedulaCount',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Cantidad de DIMEX',
+      accessor: 'dimexCount',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Cantidad de YISRO',
+      accessor: 'yisRoCount',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Cantidad de discapacitados',
+      accessor: 'discapacidadCount',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Cantidad de hombres',
+      accessor: 'hombreCount',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Cantidad de mujeres',
+      accessor: 'mujerCount',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Cantidad de indígenas',
+      accessor: 'indigenaCount',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Cantidad de refugiados',
+      accessor: 'refugiadoCount',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Total de estudiantes',
+      accessor: 'totalEstudiantes',
+      label: '',
+      column: ''
+    }
+  ]
   return (
     <div>
       <ReportBar
@@ -41,7 +160,7 @@ const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
         }} imprimirRef={printRef} showBtn={state === 1}
       />
       {state === 0 && <Parameters showReportEvent={onShowReportEvent} />}
-      {state === 1 && <Reporte innerRef={printRef} reportData={reportData} reportParameters={reportParameters} />}
+      {state === 1 && <ReporteStyledTable innerRef={printRef} data={reportData} columns={columns} title={'Historico SCE Estudiantes Geografico'} />}
     </div>
   )
 }

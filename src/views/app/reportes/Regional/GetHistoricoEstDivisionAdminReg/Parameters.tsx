@@ -15,31 +15,30 @@ const initialState = [
 ]
 const Parameters = ({ showReportEvent }) => {
   const {
-    getInstitucionByCircuitoId,
     getRegionales,
     getCircuitosByRegionalId,
     setSelectInitialState,
     setSelectItems,
     selects
   } = useFiltroReportes()
-
+  console.log('regionArrselects', selects)
   React.useEffect(() => {
     setSelectInitialState(initialState)
     const fetch = async () => {
       const regionArr = await getRegionales()
-
       const mapeador = (item) => {
         return { value: item.id, label: item.nombre }
       }
       const onChange = (obj) => {
-        const onChangeCircuito = (obj) => {
-          getInstitucionByCircuitoId(obj.value).then((institucionArr) => {
-            setSelectItems(2, institucionArr.map(mapeador), null)
-          })
-        }
-        getCircuitosByRegionalId(obj.value).then((circuitosArr) => {
-          setSelectItems(1, circuitosArr.map(mapeador), onChangeCircuito)
-        })
+        // const onChangeCircuito = (obj) => {
+        //   getInstitucionByCircuitoId(obj.value).then((institucionArr) => {
+        //     // setSelectItems(2, institucionArr.map(mapeador), null)
+        //     // alert()
+        //   })
+        // }
+        // getCircuitosByRegionalId(obj.value).then((circuitosArr) => {
+        //   setSelectItems(1, circuitosArr.map(mapeador), onChangeCircuito)
+        // })
       }
       setSelectItems(0, regionArr.map(mapeador), onChange)
     }
@@ -51,10 +50,10 @@ const Parameters = ({ showReportEvent }) => {
       <ReportParameterCard
         titulo='Reporte Historico de SCE por Division Administrativa'
         texto='Reporte Historico de SCE por Division Administrativa'
-        selects={selects}
-        onBtnGenerarEvent={(obj) => {
-          if (showReportEvent) showReportEvent(obj)
-        }}
+        selects={selects.filter((item) => item.key != 'idCircuito' ? item : false).filter(Boolean)}
+      onBtnGenerarEvent={(obj) => {
+        if (showReportEvent) showReportEvent(obj)
+      }}
       />
     </div>
   )

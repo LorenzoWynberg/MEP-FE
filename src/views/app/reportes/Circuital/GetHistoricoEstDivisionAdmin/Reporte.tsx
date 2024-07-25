@@ -23,23 +23,7 @@ const Reporte = ({ innerRef, reportData, reportParameters }) => {
     "refugiadoCount": 0,
     "totalEstudiantes": 0
     */
-    const columns = [
-      {
-        Header: 'Provincia',
-        accessor: 'nombreProvincia',
-        label: '',
-        column: ''
-      }, {
-        Header: 'Cantón',
-        accessor: 'nombreCanton',
-        label: '',
-        column: ''
-      }, {
-        Header: 'Distrito',
-        accessor: 'nombreDistrito',
-        label: '',
-        column: ''
-      },
+    const columns = [ 
       {
         Header: 'Oferta',
         accessor: 'nombreOferta',

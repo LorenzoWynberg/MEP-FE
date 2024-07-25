@@ -23,104 +23,7 @@ const Reporte = ({ innerRef, reportData, reportParameters }) => {
     "refugiadoCount": 0,
     "totalEstudiantes": 0
     */
-    const columns = [
-      {
-        Header: 'Año de participación',
-        accessor: 'annoParticipacion',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Área del proyecto',
-        accessor: 'nombreAreaProyecto',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Descripción',
-        accessor: 'descripcion',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Nombre del proyecto',
-        accessor: 'nombreProyecto',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Nombre de la modalidad',
-        accessor: 'nombreModalidad',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Características',
-        accessor: 'caracteristicas',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Nombre de la organización contraparte',
-        accessor: 'nombreOrgContraparte',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Cantidad de cédulas',
-        accessor: 'cedulaCount',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Cantidad de DIMEX',
-        accessor: 'dimexCount',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Cantidad de YISRO',
-        accessor: 'yisRoCount',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Cantidad de discapacitados',
-        accessor: 'discapacidadCount',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Cantidad de hombres',
-        accessor: 'hombreCount',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Cantidad de mujeres',
-        accessor: 'mujerCount',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Cantidad de indígenas',
-        accessor: 'indigenaCount',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Cantidad de refugiados',
-        accessor: 'refugiadoCount',
-        label: '',
-        column: ''
-      },
-      {
-        Header: 'Total de estudiantes',
-        accessor: 'totalEstudiantes',
-        label: '',
-        column: ''
-      }
-    ]
+    
     const mapeador = (item) => {
       return {
         cantidad: item.cantidad,
@@ -143,8 +46,7 @@ const Reporte = ({ innerRef, reportData, reportParameters }) => {
         {/* <p>DIRECCIÓN REGIONAL:{reportParameters.regionalId.label} </p>
         <p>CIRCUITO: {reportParameters.circuitoId.label}</p>
         <p>CENTRO EDUCATIVO: {reportParameters.institucionId.label}</p> */}
-        <TableReactImplementation
-          avoidSearch
+        <TableReactImplementation 
           columns={tableMetadata.columns}
           data={reportData}
         />
