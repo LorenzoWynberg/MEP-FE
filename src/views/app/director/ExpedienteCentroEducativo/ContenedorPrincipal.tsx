@@ -19,14 +19,15 @@ const Infraestructura = React.lazy(() => import('./Infraestructura'))
 const OrganizacionAuxiliar = React.lazy(() => import('./OrganizacionAuxiliar'))
 const InformationCard = React.lazy(() => import('./_partials/InformationCard'))
 const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
+const ServicioComunalEstudiantil = React.lazy(() => import('./ServicioComunalEstudiantil'))
 
-const ContenedorPrincipal = (props) => {
+const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
 	centroBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
 		return item
 	})
-	const state = useSelector((store) => {
+	const state = useSelector(store => {
 		return {
 			currentInstitucion: store.authUser.currentInstitution
 		}
@@ -47,7 +48,7 @@ const ContenedorPrincipal = (props) => {
 	if (state.currentInstitucion?.id == -1) {
 		return (
 			<AppLayout items={directorItems}>
-				<div className="dashboard-wrapper">
+				<div className='dashboard-wrapper'>
 					<section>
 						<Container>
 							<Row>
@@ -72,17 +73,14 @@ const ContenedorPrincipal = (props) => {
 			<Helmet>
 				<title>Expediente de institución</title>
 			</Helmet>
-			<div className="dashboard-wrapper">
+			<div className='dashboard-wrapper'>
 				<Container>
 					<Row>
 						<InformationCard data={{}} />
 						{props.active !== 0 && (
-							<Col xs={12}>
+							<Col xs={12} className='mt-3'>
 								<Breadcrumb
-									header={t(
-										'expediente_ce>titulo',
-										'Expediente Centro educativo'
-									)}
+									header={t('expediente_ce>titulo', 'Expediente Centro educativo')}
 									data={centroBreadcrumb}
 								/>
 								<br />
@@ -100,7 +98,8 @@ const ContenedorPrincipal = (props) => {
 									6: <OrganizacionAuxiliar {...props} />,
 									7: <Estadistica {...props} />,
 									8: <Grupos {...props} />,
-									9: <NormativaInterna {...props} />
+									9: <NormativaInterna {...props} />,
+									10: <ServicioComunalEstudiantil {...props} />
 								}[props.active]
 							}
 						</Col>

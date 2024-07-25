@@ -8,7 +8,7 @@ import {
 	filterInstitutionsPaginated,
 	cleanInstitutions,
 	GetServicioComunalByInstitucionId
-} from '../../../../redux/configuracion/actions'
+} from 'Redux/configuracion/actions'
 import withRouter from 'react-router-dom/withRouter'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import { IoEyeSharp } from 'react-icons/io5'
@@ -17,11 +17,7 @@ import Tooltip from '@mui/material/Tooltip'
 import TouchAppIcon from '@material-ui/icons/TouchApp'
 import BuildIcon from '@mui/icons-material/Build'
 import styles from './ServicioComunal.css'
-import {
-	handleChangeInstitution,
-	updatePeriodosLectivos,
-	desactivarServicioComunal
-} from '../../../../redux/auth/actions'
+import { handleChangeInstitution, updatePeriodosLectivos, desactivarServicioComunal } from 'Redux/auth/actions'
 import BarLoader from 'Components/barLoader/barLoader'
 import { useHistory } from 'react-router-dom'
 import { CustomInput } from 'Components/CommonComponents'
@@ -29,9 +25,9 @@ import colors from 'assets/js/colors'
 import { useTranslation } from 'react-i18next'
 import { RemoveRedEyeRounded, Edit } from '@material-ui/icons'
 import SimpleModal from 'Components/Modal/simple'
-import ExpedienteEstudianteSEC from '../ExpedienteCentroEducativo/ModalSCE'
+import ExpedienteEstudianteSEC from './ModalSCE'
 
-const HistoricoExpediente = props => {
+const Historico = props => {
 	const [data, setData] = useState([])
 	const [publicos, setPublicos] = useState(true)
 	const [dropdownToggle, setDropdownToggle] = useState(false)
@@ -223,111 +219,104 @@ const HistoricoExpediente = props => {
 	}
 
 	return (
-		<AppLayout className={styles} items={directorItems}>
-			<div className='dashboard-wrapper'>
-				{loading && <BarLoader />}
-				{expediente && tienePermiso && tienePermiso.leer == 1 && (
-					<SimpleModal
-						title='Eliminar Registro'
-						onClose={() => setExpediente(null)}
-						onConfirm={() => {
-							setLoading(true)
-							actions.desactivarServicioComunal(expediente.id, history)
-							setExpediente(null)
-							const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
-							actions
-								.GetServicioComunalByInstitucionId(selectedInstitution.institucionId)
-								.then(data => {
-									setData(data.options)
-									setLoading(false)
-								})
-								.catch(error => {
-									console.log('error', error)
-									setLoading(false)
-								})
-						}}
-						openDialog={expediente}
-					>
-						Está seguro que desea eliminar este registro de Servicio Comunal Estudiantil?
-					</SimpleModal>
-				)}
-				{servicioComunalId && tienePermiso && tienePermiso.leer == 1 && (
-					<SimpleModal
-						btnCancel={false}
-						addMarginTitle
-						title='Detalle del Servicio Comunal'
-						onClose={() => setServicioComunalId(null)}
-						stylesContent={{}}
-						onConfirm={() => {
-							setServicioComunalId(null)
-						}}
-						openDialog={servicioComunalId}
-					>
-						<ExpedienteEstudianteSEC servicioComunalId={servicioComunalId} />
-					</SimpleModal>
-				)}
+		<div className={styles}>
+			{loading && <BarLoader />}
+			{expediente && tienePermiso && tienePermiso.leer == 1 && (
+				<SimpleModal
+					title='Eliminar Registro'
+					onClose={() => setExpediente(null)}
+					onConfirm={() => {
+						setLoading(true)
+						actions.desactivarServicioComunal(expediente.id, history)
+						setExpediente(null)
+						const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
+						actions
+							.GetServicioComunalByInstitucionId(selectedInstitution.institucionId)
+							.then(data => {
+								setData(data.options)
+								setLoading(false)
+							})
+							.catch(error => {
+								console.log('error', error)
+								setLoading(false)
+							})
+					}}
+					openDialog={expediente}
+				>
+					Está seguro que desea eliminar este registro de Servicio Comunal Estudiantil?
+				</SimpleModal>
+			)}
+			{servicioComunalId && tienePermiso && tienePermiso.leer == 1 && (
+				<SimpleModal
+					btnCancel={false}
+					addMarginTitle
+					title='Detalle del Servicio Comunal'
+					onClose={() => setServicioComunalId(null)}
+					stylesContent={{}}
+					onConfirm={() => {
+						setServicioComunalId(null)
+					}}
+					openDialog={servicioComunalId}
+				>
+					<ExpedienteEstudianteSEC servicioComunalId={servicioComunalId} />
+				</SimpleModal>
+			)}
 
-				<Container>
-					{!tienePermiso || tienePermiso.leer == 0 ? (
-						<Row>
-							<Col xs={12}>
-								<h5>No tiene permiso para visualizar esta pagina</h5>
-							</Col>
-						</Row>
-					) : (
-						<Row>
-							<Col xs={12}>
-								<h3>{t('expediente_ce>titulo', 'Expediente Centro Educativo')}</h3>
-							</Col>
-							<Col xs={12}>
-								<TableReactImplementation
-									data={data}
-									showAddButton
-									// avoidSearch
-									onSubmitAddButton={() => {
-										props.history.push('/director/expediente-centro/servicio-comunal/registro')
-									}}
-									handleGetData={async (searchValue, _, pageSize, page, column) => {
-										setPagination({
-											...pagination,
-											page,
-											pageSize,
-											column,
-											searchValue
-										})
+			{!tienePermiso || tienePermiso.leer == 0 ? (
+				<Row>
+					<Col xs={12}>
+						<h5>No tiene permiso para visualizar esta pagina</h5>
+					</Col>
+				</Row>
+			) : (
+				<Row>
+					<Col xs={12}>
+						<h3 className='mt-2 mb-3'>
+							{/* {t('expediente_ce>titulo', 'Expediente Centro Educativo')} */}
+							Histórico de servicio comunal
+						</h3>
+					</Col>
+					<Col xs={12}>
+						<TableReactImplementation
+							data={data}
+							showAddButton
+							// avoidSearch
+							onSubmitAddButton={() => {
+								props.history.push('/director/expediente-centro/servicio-comunal/registro')
+							}}
+							handleGetData={async (searchValue, _, pageSize, page, column) => {
+								setPagination({
+									...pagination,
+									page,
+									pageSize,
+									column,
+									searchValue
+								})
 
-										if (firstCalled) {
-											setLoading(true)
-											await actions.getInstitucionesFinder(
-												publicos,
-												searchValue,
-												1,
-												250,
-												state.accessRole.nivelAccesoId == 3
-													? state.accessRole.organizacionId
-													: null,
-												state.accessRole.nivelAccesoId == 2
-													? state.accessRole.organizacionId
-													: null,
-												state.accessRole.nivelAccesoId == 1
-													? state.accessRole.organizacionId
-													: null
-											)
-											setLoading(false)
-										}
-									}}
-									columns={columns}
-									orderOptions={[]}
-									pageSize={10}
-									backendSearch
-								/>
-							</Col>
-						</Row>
-					)}
-				</Container>
-			</div>
-		</AppLayout>
+								if (firstCalled) {
+									setLoading(true)
+									await actions.getInstitucionesFinder(
+										publicos,
+										searchValue,
+										1,
+										250,
+										state.accessRole.nivelAccesoId == 3 ? state.accessRole.organizacionId : null,
+										state.accessRole.nivelAccesoId == 2 ? state.accessRole.organizacionId : null,
+										state.accessRole.nivelAccesoId == 1 ? state.accessRole.organizacionId : null
+									)
+									setLoading(false)
+								}
+							}}
+							columns={columns}
+							orderOptions={[]}
+							pageSize={10}
+							backendSearch
+						/>
+					</Col>
+				</Row>
+			)}
+		</div>
 	)
 }
 
-export default withRouter(HistoricoExpediente)
+export default withRouter(Historico)

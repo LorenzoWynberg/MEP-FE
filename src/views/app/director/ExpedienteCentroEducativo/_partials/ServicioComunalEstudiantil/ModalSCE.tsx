@@ -4,30 +4,30 @@ import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
 import AppLayout from 'Layout/AppLayout'
 import directorItems from 'Constants/directorMenu'
-import Grupos from './_partials/GruposProyeccion/Grupos'
+import Grupos from '../GruposProyeccion/Grupos'
 import { Helmet } from 'react-helmet'
-import Horarios from './Horarios'
+import Horarios from '../../Horarios'
 import { useSelector } from 'react-redux'
 import colors from 'Assets/js/colors'
 import { useTranslation } from 'react-i18next'
-import TableStudents from '../MatricularEstudiantes/registro/new/tableStudentsSCE'
+import TableStudents from '../../../MatricularEstudiantes/registro/new/tableStudentsSCE'
 import { Button } from '@material-ui/core'
 import { useActions } from 'Hooks/useActions'
-import InformationCardDetalle from './_partials/InformationCardDetalle'
-import { GetServicioComunalInfoById } from '../../../../redux/formularioCentroResponse/actions'
+import InformationCardDetalle from '../InformationCardDetalle'
+import { GetServicioComunalInfoById } from '../../../../../../redux/formularioCentroResponse/actions'
 import styled from 'styled-components'
 import Loader from 'Components/LoaderContainer'
-const Inicio = React.lazy(() => import('./Inicio'))
-const General = React.lazy(() => import('./General'))
-const Estadistica = React.lazy(() => import('./Estadistica'))
-const Ofertas = React.lazy(() => import('./Ofertas'))
-const RecursoHumano = React.lazy(() => import('./RecursoHumano'))
-const Infraestructura = React.lazy(() => import('./Infraestructura'))
-const OrganizacionAuxiliar = React.lazy(() => import('./OrganizacionAuxiliar'))
-const InformationCardExpediente = React.lazy(() => import('./_partials/InformationCardExpediente'))
-const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
+const Inicio = React.lazy(() => import('../../Inicio'))
+const General = React.lazy(() => import('../../General'))
+const Estadistica = React.lazy(() => import('../../Estadistica'))
+const Ofertas = React.lazy(() => import('../../Ofertas'))
+const RecursoHumano = React.lazy(() => import('../../RecursoHumano'))
+const Infraestructura = React.lazy(() => import('../../Infraestructura'))
+const OrganizacionAuxiliar = React.lazy(() => import('../../OrganizacionAuxiliar'))
+const InformationCardExpediente = React.lazy(() => import('../InformationCardExpediente'))
+const NormativaInterna = React.lazy(() => import('../../NormativaInterna'))
 
-const ExpedienteEstudianteSEC = props => {
+const ModalSCE = props => {
 	const { t } = useTranslation()
 	const [sce, setSCE] = useState({})
 	const [caracteristicasString, setCaracteristicasString] = useState('')
@@ -281,4 +281,4 @@ const Columna = styled.div`
 	flex-direction: column;
 `
 
-export default ExpedienteEstudianteSEC
+export default ModalSCE
