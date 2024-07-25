@@ -43,19 +43,7 @@ const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
     accessor: 'nombreCircuito',
     label: '',
     column: ''
-  },
-  {
-    Header: 'Oferta',
-    accessor: 'nombreOferta',
-    label: '',
-    column: ''
-  },
-  {
-    Header: 'Área del proyecto',
-    accessor: 'nombreAreaProyecto',
-    label: '',
-    column: ''
-  },
+  }, 
   {
     Header: 'Oferta',
     accessor: 'nombreOferta',
