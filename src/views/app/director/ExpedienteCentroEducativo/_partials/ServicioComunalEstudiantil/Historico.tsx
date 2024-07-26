@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react'
 import { Col, Row } from 'reactstrap'
 import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
+import { formatoOracion } from 'utils/utils'
 import {
 	filterInstitutionsPaginated,
 	cleanInstitutions,
@@ -19,7 +20,7 @@ import colors from 'assets/js/colors'
 import { useTranslation } from 'react-i18next'
 import { RemoveRedEyeRounded, Edit } from '@material-ui/icons'
 import SimpleModal from 'Components/Modal/simple'
-import ExpedienteEstudianteSEC from './ModalSCE'
+import ModalSCE from './ModalSCE'
 
 const Historico = props => {
 	const [data, setData] = useState([])
@@ -40,6 +41,15 @@ const Historico = props => {
 	const { accessRole } = useSelector((state: any) => state?.authUser?.currentRoleOrganizacion)
 	const idInstitucion = localStorage.getItem('idInstitucion')
 
+	// TODO: mappear los strings
+	// const mapper = el => {
+	// 	console.log('el', el)
+	// 	return {
+	// 		...el,
+	// 		organizacionContraparte: formatoOracion(el.organizacionContraparte)
+	// 	}
+	// }
+
 	const state = useSelector((store: any) => {
 		return {
 			centros: store.configuracion.instituciones,
@@ -54,6 +64,8 @@ const Historico = props => {
 		actions
 			.GetServicioComunalByInstitucionId(idInstitucion)
 			.then(data => {
+				// const _data = mapper(data.options)
+				// console.log('data', _data)
 				setData(data.options)
 				setLoading(false)
 			})
@@ -232,6 +244,7 @@ const Historico = props => {
 					}}
 					openDialog={expediente}
 				>
+					{/* TODO: i18n */}
 					Está seguro que desea eliminar este registro de Servicio Comunal Estudiantil?
 				</SimpleModal>
 			)}
@@ -247,13 +260,14 @@ const Historico = props => {
 					}}
 					openDialog={servicioComunalId}
 				>
-					<ExpedienteEstudianteSEC servicioComunalId={servicioComunalId} />
+					<ModalSCE servicioComunalId={servicioComunalId} />
 				</SimpleModal>
 			)}
 
 			{!tienePermiso || tienePermiso.leer == 0 ? (
 				<Row>
 					<Col xs={12}>
+						{/* TODO: i18n */}
 						<h5>No tiene permiso para visualizar esta pagina</h5>
 					</Col>
 				</Row>
