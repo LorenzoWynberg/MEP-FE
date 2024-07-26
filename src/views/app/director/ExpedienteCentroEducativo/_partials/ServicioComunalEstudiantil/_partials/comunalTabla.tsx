@@ -143,31 +143,29 @@ const ComunalTabla: React.FC<IProps> = props => {
 				label: '',
 				Cell: ({ cell, row, data }) => {
 					return (
-						<p
+						<Button
 							style={{
 								background: colors.primary,
 								color: '#fff',
 								textAlign: 'center',
-								borderRadius: ' 20px'
+								borderRadius: ' 20px',
+								textTransform: 'none',
+								fontSize: '.8rem'
+							}}
+							onClick={() => {
+								const _row = data[row.index]
+								console.log('_row', _row)
+								let newEstudiantes = [...props.estudiantes]
+
+								newEstudiantes = newEstudiantes.filter(function (obj) {
+									return obj.idEstudiante !== _row.idEstudiante
+								})
+								console.log('newEstudiantes', newEstudiantes)
+								props.setEstudiantes(newEstudiantes)
 							}}
 						>
-							<Button
-								onClick={() => {
-									const _row = data[row.index]
-									console.log('_row', _row)
-									let newEstudiantes = [...props.estudiantes]
-
-									newEstudiantes = newEstudiantes.filter(function (obj) {
-										return obj.idEstudiante !== _row.idEstudiante
-									})
-									console.log('newEstudiantes', newEstudiantes)
-									props.setEstudiantes(newEstudiantes)
-								}}
-								style={{ color: 'white' }}
-							>
-								Eliminar
-							</Button>
-						</p>
+							Eliminar
+						</Button>
 					)
 				}
 			}

@@ -117,14 +117,18 @@ const BuscadorPersonasServicioComunal = props => {
 						<div className='d-flex justify-content-center align-items-center'>
 							<Button
 								onClick={() => {
-									console.log('arraasdasdyfullRow', fullRow)
 									let array = [...props.estudiantes]
 									array.push(fullRow)
-									console.log('arraasdasdyprops.estudiantes', props.estudiantes)
-									console.log('arraasdasdy', array)
 									props.setEstudiantes(array)
 								}}
-								style={{ backgroundColor: '#10426d', color: 'white' }}
+								style={{
+									background: colors.primary,
+									color: '#fff',
+									textAlign: 'center',
+									borderRadius: ' 20px',
+									textTransform: 'none',
+									fontSize: '.8rem'
+								}}
 								variant='contained'
 							>
 								Agregar estudiante
@@ -150,8 +154,6 @@ const BuscadorPersonasServicioComunal = props => {
 	})
 
 	useEffect(() => {
-		console.log('state', state.estudiantes)
-		console.log('yooo')
 		setData(
 			state.estudiantes.map(item => {
 				return {
@@ -183,8 +185,6 @@ const BuscadorPersonasServicioComunal = props => {
 	useEffect(() => {
 		setLoading(true)
 		let val = document.getElementById('servicioComunalSearch').value
-		console.log('the value is', document.getElementById('servicioComunalSearch'))
-		console.log('the value is', val)
 		if (val != '') {
 			const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
 			actions.getStudentsSCE(val, selectedInstitution.institucionId, 1, 30).then(() => setLoading(false))
