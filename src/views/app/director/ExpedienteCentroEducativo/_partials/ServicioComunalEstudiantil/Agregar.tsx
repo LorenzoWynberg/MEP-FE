@@ -408,7 +408,7 @@ export const Agregar: React.FC<IProps> = props => {
 			</h3>
 			<Row>
 				<Col sm={12}>
-					<Card className='bg-white__radius'>
+					<Card className='bg-white__radius mb-3'>
 						<CardTitle>{t('registro_servicio_comunal', 'Registro Servicio Comunal')}</CardTitle>
 						<Form>
 							<Row>
