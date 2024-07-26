@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { TableReactImplementationServicio } from 'Components/TableReactImplementationServicio'
-import ContextualMenu from 'Components/TableReactImplementation/ContextualMenu'
-import { getYearsOld } from 'Utils/years'
 import { Card, CardBody } from 'reactstrap'
 import { Colxx } from 'Components/common/CustomBootstrap'
 import colors from 'Assets/js/colors'
@@ -154,13 +152,12 @@ const ComunalTabla: React.FC<IProps> = props => {
 							}}
 							onClick={() => {
 								const _row = data[row.index]
-								console.log('_row', _row)
 								let newEstudiantes = [...props.estudiantes]
 
 								newEstudiantes = newEstudiantes.filter(function (obj) {
 									return obj.idEstudiante !== _row.idEstudiante
 								})
-								console.log('newEstudiantes', newEstudiantes)
+
 								props.setEstudiantes(newEstudiantes)
 							}}
 						>
