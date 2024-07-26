@@ -98,8 +98,8 @@ export const Agregar: React.FC<IProps> = props => {
 	})
 
 	useEffect(() => {
-		ObtenerInfoCatalogos().then(respone => {
-			setCatalogos(respone)
+		ObtenerInfoCatalogos().then(response => {
+			setCatalogos(response)
 		})
 	}, [])
 
