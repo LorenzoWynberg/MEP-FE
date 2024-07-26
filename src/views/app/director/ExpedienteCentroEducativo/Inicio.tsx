@@ -4,7 +4,7 @@ import axios from 'axios'
 import AssignmentIcon from '@material-ui/icons/Assignment'
 import NavigationCard from '../ExpedienteEstudiante/_partials/NavigationCard'
 import { Colxx } from 'Components/common/CustomBootstrap'
-import { Container, Row, Col } from 'reactstrap'
+import { Container, Row } from 'reactstrap'
 import StarIcon from '@material-ui/icons/Star'
 import Bookmark from 'Assets/icons/Bookmark'
 import SquareFoot from 'Assets/icons/SquareFoo'
@@ -16,13 +16,11 @@ import Normativa from 'Assets/icons/Normativa'
 import HouseIcon from '@material-ui/icons/House'
 import GroupWorkIcon from '@material-ui/icons/GroupWork'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
 const Inicio = props => {
 	const { t } = useTranslation()
 	const [aplicaSCE, setAplicaSCE] = useState(false)
 	const [loading, setLoading] = useState(true)
-	const [validarInstitucionDone, setValidarInstitucionDone] = useState(false)
 	const idInstitucion = localStorage.getItem('idInstitucion')
 
 	const validarInstitucionSCE = async () => {
