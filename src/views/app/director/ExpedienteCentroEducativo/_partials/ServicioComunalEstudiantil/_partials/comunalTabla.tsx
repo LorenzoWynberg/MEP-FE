@@ -99,14 +99,8 @@ const ComunalTabla: React.FC<IProps> = props => {
 				Cell: ({ cell, row, data }) => {
 					return (
 						<Button
-							style={{
-								background: colors.primary,
-								color: '#fff',
-								textAlign: 'center',
-								borderRadius: ' 20px',
-								textTransform: 'none',
-								fontSize: '.8rem'
-							}}
+							class='sc-iqcoie bQFwPO cursor-pointer'
+							primary
 							onClick={() => {
 								const _row = data[row.index]
 								let newEstudiantes = [...props.estudiantes]
@@ -118,6 +112,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 								props.setEstudiantes(newEstudiantes)
 							}}
 						>
+							{/* TODO: i18n */}
 							Eliminar
 						</Button>
 					)

@@ -117,22 +117,16 @@ const BuscadorPersonasServicioComunal = props => {
 					return (
 						<div className='d-flex justify-content-center align-items-center'>
 							<Button
+								class='sc-iqcoie bQFwPO cursor-pointer'
+								primary
 								onClick={() => {
 									let array = [...props.estudiantes]
 									array.push(fullRow)
 									props.setEstudiantes(array)
 								}}
-								style={{
-									background: colors.primary,
-									color: '#fff',
-									textAlign: 'center',
-									borderRadius: ' 20px',
-									textTransform: 'none',
-									fontSize: '.8rem'
-								}}
-								variant='contained'
 							>
-								Agregar estudiante
+								{/* TODO: i18n */}
+								Agregar
 							</Button>
 						</div>
 					)
