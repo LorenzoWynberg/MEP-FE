@@ -4,25 +4,18 @@ import { Card, CardBody } from 'reactstrap'
 import { Colxx } from 'Components/common/CustomBootstrap'
 import colors from 'Assets/js/colors'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 import { Button } from '@material-ui/core'
 
 interface IProps {
 	data: Array<any>
-	onSelectedStudent: Function
-	hasEditAccess: boolean
 	handleGetData?: Function
-	closeContextualMenu?: boolean
-	onlyViewModule: boolean
 }
 
 const ComunalTabla: React.FC<IProps> = props => {
 	const { t } = useTranslation()
-	const { data, onSelectedStudent, hasEditAccess, onlyViewModule, closeContextualMenu = false } = props
+	const { data } = props
 
 	const [students, setStudents] = useState([])
-
-	const roles = useSelector((store: any) => store.authUser?.authObject?.user?.rolesOrganizaciones)
 
 	useEffect(() => {
 		const _data = data.map(mapper)
@@ -43,20 +36,6 @@ const ComunalTabla: React.FC<IProps> = props => {
 	}
 
 	const columns = useMemo(() => {
-		// Si tiene permiso para des-matricular, se agrega la columna de acciones
-
-		// ID #2 -> Director
-		// ID #3 -> Gestor rectores
-		// ID #4 -> Gestor de apoyo
-		// ID #5 -> Supervisor de circuito
-		// ID #6 -> Director Regional
-		// ID #7 -> Gestor consultas
-		// ID #19 -> SA
-
-		const permisoDesMatricular = roles?.find(r => {
-			return r.rolId === 1 || r.rolId === 5 || r.rolId === 6 || r.rolId === 19
-		})
-
 		return [
 			{
 				Header: t(
@@ -114,27 +93,6 @@ const ComunalTabla: React.FC<IProps> = props => {
 				column: ''
 			},
 			{
-				Header: t('servicio_comunal>registro_servicio_comunal>Eliminar', 'Eliminar'),
-				accessor: 'Eliminar',
-				label: '',
-				column: '',
-				Cell: ({ cell, row, data }) => {
-					const _row = data[row.index]
-					return (
-						<p
-							style={{
-								background: colors.primary,
-								color: '#fff',
-								textAlign: 'center',
-								borderRadius: ' 20px'
-							}}
-						>
-							{_row.id}
-						</p>
-					)
-				}
-			},
-			{
 				Header: t('servicio_comunal>registro_servicio_comunal>acciones', 'Acciones'),
 				column: '',
 				accessor: '',
@@ -167,9 +125,8 @@ const ComunalTabla: React.FC<IProps> = props => {
 				}
 			}
 		]
-	}, [students, closeContextualMenu, t])
+	}, [students])
 
-	onlyViewModule && columns.splice(7, 1)
 	return (
 		<div style={{ paddingTop: '32px', margin: '-20px' }}>
 			<Colxx className='mb-5' sm='12' lg='12' xl='12'>
