@@ -137,7 +137,7 @@ const ComunalTabla: React.FC<IProps> = props => {
 				}
 			},
 			{
-				Header: t('servicio_comunal>registro_servicio_comunal>eliminar', 'Eliminar'),
+				Header: t('servicio_comunal>registro_servicio_comunal>acciones', 'Acciones'),
 				column: '',
 				accessor: '',
 				label: '',
