@@ -22,3 +22,26 @@
 .MuiFormLabel-root {
 	color: rgba(0, 0, 0, 0.87);
 }
+
+.react-datepicker__input-container input {
+	background-color: #fff;
+	color: black !important;
+}
+
+.MuiChip-root {
+	background-color: #145388;
+	margin-top: 4px;
+	margin-bottom: 4px;
+	color: #fff;
+}
+
+.MuiChip-root:last-child {
+	margin-top: 0px;
+}
+
+.caracteristicas {
+	border: 1px solid #d7d7d7;
+	padding-left: 4px;
+	padding-right: 4px;
+	background: '#fff';
+}

@@ -449,7 +449,7 @@ export const Editar: React.FC<IProps> = props => {
 					<Card className='bg-white__radius mb-3'>
 						<CardTitle>Editar Servicio Comunal</CardTitle>
 						<Form>
-							<Row>
+							<Row className='mb-2'>
 								<Col md={3}>
 									<FormGroup>
 										<Label>
@@ -490,7 +490,7 @@ export const Editar: React.FC<IProps> = props => {
 									</FormGroup>
 								</Col>
 							</Row>
-							<Row>
+							<Row className='mb-2'>
 								<Col sm={3}>
 									<Label>{t('registro_servicio_comunal>caracteristicas', 'Caracteristicas')}</Label>
 
@@ -506,8 +506,8 @@ export const Editar: React.FC<IProps> = props => {
 									)}
 									{caracteristicasSeleccionados.length > 0 && (
 										<div
+											className='caracteristicas'
 											onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
-											style={{ padding: 8, background: '#e9ecef' }}
 										>
 											{caracteristicasSeleccionados.map(n => (
 												<Chip label={n.nombre} />
@@ -679,10 +679,10 @@ const Input = styled(ReactstrapInput)`
 	padding: 10px;
 	width: 100%;
 	border: 1px solid #d7d7d7;
-	background-color: #e9ecef;
+	background-color: #fff !important;
 	outline: 0;
 	&:focus {
-		background: #fff;
+		background: #fff !important;
 	}
 `
 
