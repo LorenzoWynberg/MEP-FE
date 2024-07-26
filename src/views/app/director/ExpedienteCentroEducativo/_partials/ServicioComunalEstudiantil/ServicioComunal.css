@@ -31,17 +31,20 @@
 .MuiChip-root {
 	background-color: #145388;
 	margin-top: 4px;
-	margin-bottom: 4px;
+	margin-bottom: 8px;
 	color: #fff;
 }
 
+.MuiChip-root:first-child {
+	margin-top: 4px;
+}
 .MuiChip-root:last-child {
 	margin-top: 0px;
+	margin-bottom: 4px;
 }
 
 .caracteristicas {
 	border: 1px solid #d7d7d7;
-	padding-left: 4px;
-	padding-right: 4px;
+	padding: 8px 4px;
 	background: '#fff';
 }
