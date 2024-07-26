@@ -32,6 +32,7 @@ const BuscadorPersonasServicioComunal = props => {
 	const [fallecidos, setFallecidos] = useState<boolean>(false)
 	const [data, setData] = useState<object[]>([])
 	const [soloEstudiantes, setSoloEstudiantes] = useState<boolean>(false)
+	const idInstitucion = localStorage.getItem('idInstitucion')
 	const [firstCalled, setFirstCalled] = useState(false)
 	const [loading, setLoading] = useState(false)
 
@@ -186,8 +187,7 @@ const BuscadorPersonasServicioComunal = props => {
 		setLoading(true)
 		let val = document.getElementById('servicioComunalSearch').value
 		if (val != '') {
-			const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
-			actions.getStudentsSCE(val, selectedInstitution.institucionId, 1, 30).then(() => setLoading(false))
+			actions.getStudentsSCE(val, idInstitucion, 1, 30).then(() => setLoading(false))
 		} else {
 			setLoading(false)
 		}
@@ -226,8 +226,7 @@ const BuscadorPersonasServicioComunal = props => {
 								handleGetData={async (searchValue: string, column: string | undefined | null) => {
 									if (!searchValue) return
 									setLoading(true)
-									const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
-									await actions.getStudentsSCE(searchValue, selectedInstitution.institucionId, 1, 30)
+									await actions.getStudentsSCE(searchValue, idInstitucion, 1, 30)
 									setLoading(false)
 								}}
 								columns={columns}
