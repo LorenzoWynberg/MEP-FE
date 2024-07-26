@@ -611,38 +611,41 @@ export const Editar: React.FC<IProps> = props => {
 
 			<Row>
 				<Col sm={12}>
-					<Button
-						class='sc-iqcoie bQFwPO cursor-pointer'
-						primary
-						onClick={() => {
-							if (idInstitucion) {
-								actions
-									.actualizarServicioComunal({
-										id: parseInt(props.match.params.id),
-										sb_InstitucionesId: idInstitucion,
-										sb_areaProyectoId: value,
-										sb_nombreProyectoId: nombreId,
-										sb_modalidadId: modalidadId,
-										sb_tipoOrganizacionContraparteId: organizacionId,
-										docenteAcompanante: acompanante,
-										descripcion,
-										fechaConclusionSCE: date.toISOString(),
-										insertadoPor: localStorage.getItem('loggedUser'),
-										caracteristicas: caracteristicasSeleccionados.map(e => e.id),
-										estudiantes: estudiantes.map(e => e.idEstudiante)
-									})
-									.then(r => {
-										r.response == false
-											? alert('Error al editar')
-											: props.history.push('/director/expediente-centro/servicio-comunal')
-									})
-							} else {
-								alert('Seleccione una institución')
-							}
-						}}
-					>
-						Editar
-					</Button>
+					<p style={{ textAlign: 'center' }}>
+						<Button
+							class='sc-iqcoie bQFwPO cursor-pointer'
+							primary
+							onClick={() => {
+								if (idInstitucion) {
+									actions
+										.actualizarServicioComunal({
+											id: parseInt(props.match.params.id),
+											sb_InstitucionesId: idInstitucion,
+											sb_areaProyectoId: value,
+											sb_nombreProyectoId: nombreId,
+											sb_modalidadId: modalidadId,
+											sb_tipoOrganizacionContraparteId: organizacionId,
+											docenteAcompanante: acompanante,
+											descripcion,
+											fechaConclusionSCE: date.toISOString(),
+											insertadoPor: localStorage.getItem('loggedUser'),
+											caracteristicas: caracteristicasSeleccionados.map(e => e.id),
+											estudiantes: estudiantes.map(e => e.idEstudiante)
+										})
+										.then(r => {
+											r.response == false
+												? alert('Error al editar')
+												: props.history.push('/director/expediente-centro/servicio-comunal')
+										})
+								} else {
+									alert('Seleccione una institución')
+								}
+							}}
+						>
+							{/* TODO: i18n */}
+							Guardar
+						</Button>
+					</p>
 				</Col>
 			</Row>
 		</div>
