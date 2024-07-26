@@ -27,6 +27,7 @@ const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
 	const [aplicaSCE, setAplicaSCE] = useState(false)
 	const [loading, setLoading] = useState(true)
+	const [breadcrumbs, setBreadcrumbs] = useState([])
 	const idInstitucion = localStorage.getItem('idInstitucion')
 
 	centroBreadcrumb.map((item, idx) => {
@@ -51,15 +52,21 @@ const ContenedorPrincipal = props => {
 	}
 
 	useEffect(() => {
+		const newBreadcrumbs = centroBreadcrumb.map((item, idx) => ({
+			...item
+		}))
+
+		if (!aplicaSCE) {
+			newBreadcrumbs.splice(10, 1)
+		}
+
+		setBreadcrumbs(newBreadcrumbs)
+	}, [aplicaSCE])
+
+	useEffect(() => {
 		setLoading(true)
 		validarAcceso()
 	}, [])
-
-	useEffect(() => {
-		if (!aplicaSCE) {
-			centroBreadcrumb.splice(10, 1)
-		}
-	}, [aplicaSCE])
 
 	const currentInstitucion = useSelector(store => store.authUser.currentInstitution)
 
@@ -99,7 +106,7 @@ const ContenedorPrincipal = props => {
 							<Col xs={12} className='mt-3'>
 								<Breadcrumb
 									header={t('expediente_ce>titulo', 'Expediente Centro educativo')}
-									data={centroBreadcrumb}
+									data={breadcrumbs}
 								/>
 								<br />
 							</Col>
