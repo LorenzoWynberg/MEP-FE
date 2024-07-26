@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { TableReactImplementationServicio } from 'Components/TableReactImplementationServicio'
 import { Card, CardBody } from 'reactstrap'
-import { Colxx } from 'Components/common/CustomBootstrap'
 import colors from 'Assets/js/colors'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@material-ui/core'
@@ -128,25 +127,21 @@ const ComunalTabla: React.FC<IProps> = props => {
 	}, [students])
 
 	return (
-		<div style={{ paddingTop: '32px', margin: '-20px' }}>
-			<Colxx className='mb-5' sm='12' lg='12' xl='12'>
-				<Card>
-					<CardBody>
-						<h4>{t('servicio_comunal>registro_servicio_comunal>titulo', 'título')}</h4>
+		<Card className='my-3'>
+			<CardBody>
+				<h4>{t('servicio_comunal>registro_servicio_comunal>titulo', 'título')}</h4>
 
-						<TableReactImplementationServicio
-							avoidSearch={props.avoidSearch}
-							handleGetData={() => {
-								props.handleGetData()
-							}}
-							orderOptions={[]}
-							columns={columns}
-							data={students}
-						/>
-					</CardBody>
-				</Card>
-			</Colxx>
-		</div>
+				<TableReactImplementationServicio
+					avoidSearch={props.avoidSearch}
+					handleGetData={() => {
+						props.handleGetData()
+					}}
+					orderOptions={[]}
+					columns={columns}
+					data={students}
+				/>
+			</CardBody>
+		</Card>
 	)
 }
 
