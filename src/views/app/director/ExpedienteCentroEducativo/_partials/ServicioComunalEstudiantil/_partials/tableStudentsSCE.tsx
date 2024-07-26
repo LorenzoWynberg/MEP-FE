@@ -4,10 +4,11 @@ import { Colxx } from 'Components/common/CustomBootstrap'
 
 interface IProps {
 	data: Array<any>
+	columns: Array<any>
 }
 
 const TableStudentsSCE: React.FC<IProps> = props => {
-	const { data } = props
+	const { data, columns } = props
 	const [students, setStudents] = useState([])
 
 	useEffect(() => {
@@ -37,7 +38,7 @@ const TableStudentsSCE: React.FC<IProps> = props => {
 			<TableReactImplementation
 				avoidSearch={props.avoidSearch}
 				orderOptions={[]}
-				columns={props.columns}
+				columns={columns}
 				data={students}
 			/>
 		</Colxx>
