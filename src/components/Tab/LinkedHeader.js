@@ -3,20 +3,19 @@ import PropTypes from 'prop-types'
 import { Nav, NavItem, NavLink } from 'reactstrap'
 import classnames from 'classnames'
 import { useTranslation } from 'react-i18next'
-import { useHistory } from 'react-router-dom' // Import useHistory for navigation
+import { useHistory } from 'react-router-dom'
 
 const HeaderTab = props => {
-	const { activeTab, setActiveTab, options, disabled, setParentTab, style = {} } = props
+	const { activeTab, options, disabled, setParentTab, style = {} } = props
 	const { t } = useTranslation()
-	const history = useHistory() // Create history object for navigation
+	const history = useHistory()
 
 	const handleTabClick = (index, path) => {
 		if (index === 0 && setParentTab) {
 			setParentTab(index)
 		} else {
-			setActiveTab(index)
 			if (path) {
-				history.push(`/director/expediente-centro/servicio-comunal${path}`) // Navigate to the path specified in the tab object
+				history.push(`/director/expediente-centro/servicio-comunal${path}`)
 			}
 		}
 	}
@@ -45,7 +44,6 @@ HeaderTab.propTypes = {
 			path: PropTypes.string
 		})
 	),
-	setActiveTab: PropTypes.func,
 	activeTab: PropTypes.number,
 	marginTop: PropTypes.number
 }
@@ -53,7 +51,6 @@ HeaderTab.propTypes = {
 HeaderTab.defaultProps = {
 	activeTab: 0,
 	options: [],
-	setActiveTab: () => {},
 	marginTop: 1
 }
 
