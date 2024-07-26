@@ -1,16 +1,12 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import AppLayout from 'Layout/AppLayout'
-import { Row, Col, ModalBody, ModalHeader, Modal, Input as ReactstrapInput } from 'reactstrap'
-import colors from 'Assets/js/colors'
+import { Row, Col, Input as ReactstrapInput } from 'reactstrap'
 import withRouter from 'react-router-dom/withRouter'
-import Grid from '@material-ui/core/Grid'
 import {
 	actualizarServicioComunal,
 	getTablaEstudiantesServicioComunalById,
 	GetServicioComunalInfoById
 } from 'Redux/configuracion/actions'
-import { getYearsOld } from 'Utils/years'
 import styles from './ServicioComunal.css'
 import BuscadorServicioComunal from '../../../Buscadores/BuscadorServicioComunal'
 import {
@@ -24,14 +20,8 @@ import {
 	Button,
 	Typography
 } from '@material-ui/core'
-import StyledMultiSelect from 'Components/styles/StyledMultiSelect'
 import { ObtenerInfoCatalogos } from 'Redux/formularioCentroResponse/actions'
-import NavigationContainer from 'Components/NavigationContainer'
-import axios from 'axios'
-import { envVariables } from 'Constants/enviroment'
 import { useTranslation } from 'react-i18next'
-import Tooltip from '@mui/material/Tooltip'
-import { IoEyeSharp } from 'react-icons/io5'
 import BarLoader from 'Components/barLoader/barLoader'
 import TableStudents from './_partials/comunalTabla'
 import SimpleModal from 'Components/Modal/simple'
@@ -69,11 +59,11 @@ export const Editar: React.FC<IProps> = props => {
 	const [caracteristicaId, setCaracteristicaId] = React.useState()
 	const [caracteristica, setCaracteristica] = React.useState()
 
+	const idInstitucion = localStorage.getItem('idInstitucion')
 	const [institutionImage, setInstitutionImage] = React.useState(null)
 	const [loading, setLoading] = React.useState<boolean>(true)
 	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		// console.log('(event.target as HTMLInputElement).value', (event.target as HTMLInputElement).value)
 		setValue((event.target as HTMLInputElement).value)
 	}
 	const [Cdate, setCDate] = useState(new Date().toLocaleDateString('fr-FR'))
@@ -84,7 +74,6 @@ export const Editar: React.FC<IProps> = props => {
 	const [acompanante, setValueAcompanante] = React.useState('')
 	const [descripcion, setValueDescripcion] = React.useState('')
 	const [studentsSeleccionados, setStudentsSeleccionados] = React.useState([])
-
 	const [students, setStudents] = useState([])
 
 	const mapper = el => {
@@ -113,15 +102,14 @@ export const Editar: React.FC<IProps> = props => {
 	useEffect(() => {
 		ObtenerInfoCatalogos().then(respone => {
 			setCatalogos(respone)
-			console.log('respone', respone)
 		})
 	}, [])
+
 	useEffect(() => {
 		actions
 			.GetServicioComunalInfoById(props.match.params.id)
 			.then(res => {
 				let data = res.options[0]
-				console.log('GetServicioComunalInfoById', data)
 				setEstudiantes(data.listaEstudiantes.map(e => ({ ...e, idEstudiante: e.id })))
 				setAreaProyecto(data.nombreAreaProyecto)
 				setValue(data.areaProyectoId)
@@ -152,6 +140,7 @@ export const Editar: React.FC<IProps> = props => {
 				setLoading(false)
 			})
 	}, [props.match?.params?.id])
+
 	return (
 		<div className={styles}>
 			{loading && <BarLoader />}
@@ -313,7 +302,6 @@ export const Editar: React.FC<IProps> = props => {
 					}}
 					onClose={() => setShowModalidades(false)}
 				>
-					{catalogos && console.log('catalogos', catalogos)}
 					<Row>
 						<FormControl>
 							<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
@@ -613,28 +601,6 @@ export const Editar: React.FC<IProps> = props => {
 						onlyViewModule={true}
 						data={estudiantes}
 						avoidSearch={true}
-						// data={[
-						// 	{
-						// 		"idEstudiante": 1495875,
-						// 		"nombreEstudiante": "CASTILLO  NAVARRO AARON",
-						// 		"identificacion": "113420854",
-						// 		"fotografiaUrl": "",
-						// 		"conocidoComo": "",
-						// 		"nacionalidad": null,
-						// 		"idInstitucion": null,
-						// 		"idMatricula": null,
-						// 		"institucion": "",
-						// 		"codigoinstitucion": "",
-						// 		"modalidad": null,
-						// 		"grupo": "",
-						// 		"fallecido": false,
-						// 		"tipoInstitucion": null,
-						// 		"regional": "/",
-						// 		"fechaNacimiento": "1988-02-05T00:00:00",
-						// 		"nivel": null,
-						// 		"tipoIdentificacion": "CÉDULA"
-						// 	}
-						// ]}
 						hasEditAccess={true}
 						setEstudiantes={setEstudiantes}
 						estudiantes={estudiantes}
@@ -649,13 +615,11 @@ export const Editar: React.FC<IProps> = props => {
 						class='sc-iqcoie bQFwPO cursor-pointer'
 						primary
 						onClick={() => {
-							console.log(acompanante)
-							const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
-							if (selectedInstitution?.institucionId != null) {
+							if (idInstitucion) {
 								actions
 									.actualizarServicioComunal({
 										id: parseInt(props.match.params.id),
-										sb_InstitucionesId: selectedInstitution.institucionId,
+										sb_InstitucionesId: idInstitucion,
 										sb_areaProyectoId: value,
 										sb_nombreProyectoId: nombreId,
 										sb_modalidadId: modalidadId,
@@ -668,7 +632,6 @@ export const Editar: React.FC<IProps> = props => {
 										estudiantes: estudiantes.map(e => e.idEstudiante)
 									})
 									.then(r => {
-										console.log('responseEdit', r)
 										r.response == false
 											? alert('Error al editar')
 											: props.history.push('/director/expediente-centro/servicio-comunal')

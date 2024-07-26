@@ -1,27 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import centroBreadcrumb from 'Constants/centroBreadcrumb'
+import axios from 'axios'
 import AssignmentIcon from '@material-ui/icons/Assignment'
 import NavigationCard from '../ExpedienteEstudiante/_partials/NavigationCard'
 import { Colxx } from 'Components/common/CustomBootstrap'
-import { Container, Row } from 'reactstrap'
-// import { injectIntl } from 'react-intl';
+import { Container, Row, Col } from 'reactstrap'
 import StarIcon from '@material-ui/icons/Star'
-import Bookmark from '../../../../assets/icons/Bookmark'
-import SquareFoot from '../../../../assets/icons/SquareFoo'
-import TwoPeople from '../../../../assets/icons/TwoPeople'
-import Horarios from '../../../../assets/icons/Horarios'
-import Solidarity from '../../../../assets/icons/Solidarity'
-import Normativa from '../../../../assets/icons/Normativa'
+import Bookmark from 'Assets/icons/Bookmark'
+import SquareFoot from 'Assets/icons/SquareFoo'
+import TwoPeople from 'Assets/icons/TwoPeople'
+import Loader from 'Components/Loader'
+import Horarios from 'Assets/icons/Horarios'
+import Solidarity from 'Assets/icons/Solidarity'
+import Normativa from 'Assets/icons/Normativa'
 import HouseIcon from '@material-ui/icons/House'
 import GroupWorkIcon from '@material-ui/icons/GroupWork'
-import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
-
-// import { NavigationCard } from 'Components/CommonComponents'
+import { useSelector } from 'react-redux'
 
 const Inicio = props => {
-	// const { messages } = props.intl;
 	const { t } = useTranslation()
+	const [aplicaSCE, setAplicaSCE] = useState(false)
+	const [loading, setLoading] = useState(true)
+	const [validarInstitucionDone, setValidarInstitucionDone] = useState(false)
+	const idInstitucion = localStorage.getItem('idInstitucion')
+
+	const validarInstitucionSCE = async () => {
+		try {
+			const response = await axios.post(
+				`https://mep-saber.azurewebsites.net/api/ServicioComunal/VerificarInstitucionAplicaSCE?idInstitucion=${idInstitucion}`
+			)
+			setAplicaSCE(response.data)
+		} catch (error) {
+			console.error('API error:', error)
+		}
+	}
+
+	const validarAcceso = async () => {
+		await Promise.all([validarInstitucionSCE()])
+		setLoading(false)
+	}
+
+	useEffect(() => {
+		validarAcceso()
+	}, [])
+
 	const getIcon = idx => {
 		switch (idx) {
 			case 1:
@@ -46,30 +69,35 @@ const Inicio = props => {
 				return <Solidarity style={{ fontSize: 50 }} />
 		}
 	}
+
 	return (
 		<Container>
 			<Row>
-				<Colxx xxs='12' className='px-5'>
-					<Row>
-						{centroBreadcrumb.map((r, i) => {
-							if (r.active) return
-
-							return (
-								<NavigationCard icon='' title={t(r.label, `${r.label} not found`)} href={r.to} key={i}>
-									{getIcon(i)}
-								</NavigationCard>
-							)
-						})}
-					</Row>
-				</Colxx>
+				{loading ? (
+					<Loader />
+				) : (
+					<Colxx xxs='12' className='px-5'>
+						<Row>
+							{centroBreadcrumb.map((r, i) => {
+								if (r.active) return
+								if (i == 10 && !aplicaSCE) return
+								return (
+									<NavigationCard
+										icon=''
+										title={t(r.label, `${r.label} not found`)}
+										href={r.to}
+										key={i}
+									>
+										{getIcon(i)}
+									</NavigationCard>
+								)
+							})}
+						</Row>
+					</Colxx>
+				)}
 			</Row>
 		</Container>
 	)
-	// return <div></div>
 }
-
-/* const Container = styled.div`
-
-` */
 
 export default Inicio

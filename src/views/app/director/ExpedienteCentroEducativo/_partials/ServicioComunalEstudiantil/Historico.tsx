@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { Col, Row, Container } from 'reactstrap'
-import AppLayout from 'Layout/AppLayout'
-import directorItems from 'Constants/directorMenu'
+import { Col, Row } from 'reactstrap'
 import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import {
@@ -11,16 +9,12 @@ import {
 } from 'Redux/configuracion/actions'
 import withRouter from 'react-router-dom/withRouter'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
-import { IoEyeSharp } from 'react-icons/io5'
 import CancelIcon from '@mui/icons-material/RemoveCircle'
 import Tooltip from '@mui/material/Tooltip'
-import TouchAppIcon from '@material-ui/icons/TouchApp'
-import BuildIcon from '@mui/icons-material/Build'
 import styles from './ServicioComunal.css'
 import { handleChangeInstitution, updatePeriodosLectivos, desactivarServicioComunal } from 'Redux/auth/actions'
 import BarLoader from 'Components/barLoader/barLoader'
 import { useHistory } from 'react-router-dom'
-import { CustomInput } from 'Components/CommonComponents'
 import colors from 'assets/js/colors'
 import { useTranslation } from 'react-i18next'
 import { RemoveRedEyeRounded, Edit } from '@material-ui/icons'
@@ -33,11 +27,10 @@ const Historico = props => {
 	const [dropdownToggle, setDropdownToggle] = useState(false)
 	const [firstCalled, setFirstCalled] = useState(false)
 	const [servicioComunalId, setServicioComunalId] = useState()
-	const [loading, setLoading] = useState(false)
+	const [loading, setLoading] = useState(true)
 	const [expediente, setExpediente] = useState(null)
 	const { t } = useTranslation()
 	const history = useHistory()
-
 	const { hasAddAccess = true, hasEditAccess = true, hasDeleteAccess = true } = props
 
 	const toggle = () => {
@@ -45,10 +38,7 @@ const Historico = props => {
 	}
 	const { authUser } = useSelector(store => store.authUser)
 	const { accessRole } = useSelector((state: any) => state?.authUser?.currentRoleOrganizacion)
-	const { currentInstitution } = useSelector((store: any) => {
-		const currentInstitution = store.authUser.currentInstitution
-		return currentInstitution
-	})
+	const idInstitucion = localStorage.getItem('idInstitucion')
 
 	const state = useSelector((store: any) => {
 		return {
@@ -61,10 +51,8 @@ const Historico = props => {
 	})
 
 	useEffect(() => {
-		setLoading(true)
-		const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
 		actions
-			.GetServicioComunalByInstitucionId(selectedInstitution.institucionId)
+			.GetServicioComunalByInstitucionId(idInstitucion)
 			.then(data => {
 				setData(data.options)
 				setLoading(false)
@@ -73,9 +61,11 @@ const Historico = props => {
 				console.log('error', error)
 				setLoading(false)
 			})
-	}, [accessRole, currentInstitution])
+	}, [])
+
 	// TODO: Poner permiso correcto
 	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'configurarinstituciones')
+
 	const columns = useMemo(() => {
 		return [
 			{
@@ -229,9 +219,8 @@ const Historico = props => {
 						setLoading(true)
 						actions.desactivarServicioComunal(expediente.id, history)
 						setExpediente(null)
-						const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
 						actions
-							.GetServicioComunalByInstitucionId(selectedInstitution.institucionId)
+							.GetServicioComunalByInstitucionId(idInstitucion)
 							.then(data => {
 								setData(data.options)
 								setLoading(false)

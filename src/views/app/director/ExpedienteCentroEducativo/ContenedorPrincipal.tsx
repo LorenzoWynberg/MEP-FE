@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import centroBreadcrumb from 'Constants/centroBreadcrumb'
 import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
@@ -9,6 +10,7 @@ import { Helmet } from 'react-helmet'
 import Horarios from './Horarios'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { use } from 'i18next'
 
 const Inicio = React.lazy(() => import('./Inicio'))
 const General = React.lazy(() => import('./General'))
@@ -23,29 +25,45 @@ const ServicioComunalEstudiantil = React.lazy(() => import('./ServicioComunalEst
 
 const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
+	const [aplicaSCE, setAplicaSCE] = useState(false)
+	const [loading, setLoading] = useState(true)
+	const idInstitucion = localStorage.getItem('idInstitucion')
+
 	centroBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
 		return item
 	})
-	const state = useSelector(store => {
-		return {
-			currentInstitucion: store.authUser.currentInstitution
+
+	const validarInstitucionSCE = async () => {
+		try {
+			const response = await axios.post(
+				`https://mep-saber.azurewebsites.net/api/ServicioComunal/VerificarInstitucionAplicaSCE?idInstitucion=${idInstitucion}`
+			)
+			setAplicaSCE(response.data)
+		} catch (error) {
+			console.error('API error:', error)
 		}
-	})
-	/* centroBreadcrumb.map((item, idx) => {
-		let _label =
-			item.label === 'auxOrganization'
-				? state.currentInstitucion?.esPrivado
-					? 'auxinformacion'
-					: item.label
-				: item.label
+	}
 
-		item.active = props.active === idx
-		item.label = _label
-		return item
-	}) */
+	const validarAcceso = async () => {
+		await Promise.all([validarInstitucionSCE()])
+		setLoading(false)
+	}
 
-	if (state.currentInstitucion?.id == -1) {
+	useEffect(() => {
+		setLoading(true)
+		validarAcceso()
+	}, [])
+
+	useEffect(() => {
+		if (!aplicaSCE) {
+			centroBreadcrumb.splice(10, 1)
+		}
+	}, [aplicaSCE])
+
+	const currentInstitucion = useSelector(store => store.authUser.currentInstitution)
+
+	if (currentInstitucion?.id == -1) {
 		return (
 			<AppLayout items={directorItems}>
 				<div className='dashboard-wrapper'>
