@@ -301,7 +301,7 @@ export const Agregar: React.FC<IProps> = props => {
 			)}
 			{showTipoOrganizacion && (
 				<SimpleModal
-					title='Organizacion'
+					title='Organización'
 					openDialog={showTipoOrganizacion}
 					onConfirm={() => {
 						setShowTipoOrganizacion(false)
@@ -499,7 +499,7 @@ export const Agregar: React.FC<IProps> = props => {
 										<Label>
 											{t(
 												'registro_servicio_comunal>organizacion_contraparte',
-												'Tipo de organización contraparte'
+												'Organización contraparte'
 											)}
 										</Label>
 										<Input
