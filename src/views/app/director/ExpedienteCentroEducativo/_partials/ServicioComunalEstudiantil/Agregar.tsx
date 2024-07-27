@@ -28,6 +28,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import { Search } from 'Components/TableReactImplementationServicio/Header'
+import zIndex from '@material-ui/core/styles/zIndex'
 
 export const Agregar: React.FC<IProps> = props => {
 	const { t } = useTranslation()
@@ -108,7 +109,7 @@ export const Agregar: React.FC<IProps> = props => {
 			{loading && <BarLoader />}
 			{showAreaProyecto && catalogos.areasProyecto && (
 				<SimpleModal
-					title='Seleccion de Areas Proyecto'
+					title='Selección de áreas de proyecto'
 					openDialog={showAreaProyecto}
 					onConfirm={() => {
 						setShowAreaProyecto(false)
@@ -116,7 +117,7 @@ export const Agregar: React.FC<IProps> = props => {
 					onClose={() => setShowAreaProyecto(false)}
 				>
 					<FormControl>
-						<Row>
+			{/* 			<Row>
 							<Col
 								style={{
 									display: 'flex',
@@ -131,7 +132,7 @@ export const Agregar: React.FC<IProps> = props => {
 							<Col sm={9}>
 								<Typography variant='h6'>Descripcion</Typography>
 							</Col>
-						</Row>
+						</Row> */}
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
 							name='radio-buttons-group'
@@ -143,9 +144,9 @@ export const Agregar: React.FC<IProps> = props => {
 										<Col
 											style={{
 												display: 'flex',
-												textAlign: 'center',
-												justifyContent: 'center',
-												alignItems: 'center'
+												textAlign: 'left',
+												justifyContent: 'left',
+												alignItems: 'left'
 											}}
 											sm={3}
 										>
@@ -172,7 +173,7 @@ export const Agregar: React.FC<IProps> = props => {
 			)}
 			{showCaracteristicas && (
 				<SimpleModal
-					title='Seleccion de Caracteristicas'
+					title='Selección de caracteristicas'
 					openDialog={showCaracteristicas}
 					onConfirm={() => {
 						setShowCaracteristicas(false)
@@ -180,13 +181,13 @@ export const Agregar: React.FC<IProps> = props => {
 					onClose={() => setShowCaracteristicas(false)}
 				>
 					<FormControl>
-						<Row>
+					{/* 	<Row>
 							<Col
 								style={{
 									display: 'flex',
 									textAlign: 'center',
-									justifyContent: 'center',
-									alignItems: 'center'
+									justifyContent: 'left',
+									alignItems: 'left'
 								}}
 								sm={3}
 							>
@@ -195,15 +196,15 @@ export const Agregar: React.FC<IProps> = props => {
 							<Col sm={9}>
 								<Typography variant='h6'>Descripcion</Typography>
 							</Col>
-						</Row>
+						</Row> */}
 						{catalogos.caracteristicas.map((item, index) => (
 							<Row>
 								<Col
 									style={{
 										display: 'flex',
-										textAlign: 'center',
-										justifyContent: 'center',
-										alignItems: 'center'
+										textAlign: 'left',
+										justifyContent: 'left',
+										alignItems: 'left'
 									}}
 									sm={3}
 								>
@@ -256,7 +257,7 @@ export const Agregar: React.FC<IProps> = props => {
 			)}
 			{showModalidades && (
 				<SimpleModal
-					title='Modalidades'
+					title='Tipo de proyecto'
 					value={value}
 					openDialog={showModalidades}
 					onConfirm={() => {
@@ -273,7 +274,7 @@ export const Agregar: React.FC<IProps> = props => {
 											<Col
 												style={{
 													display: 'flex',
-													justifyContent: 'center',
+													justifyContent: 'left',
 													alignItems: 'left'
 												}}
 												sm={3}
@@ -308,7 +309,7 @@ export const Agregar: React.FC<IProps> = props => {
 					onClose={() => setShowTipoOrganizacion(false)}
 				>
 					<FormControl>
-						<Row>
+					{/* 	<Row>
 							<Col
 								style={{
 									display: 'flex',
@@ -319,7 +320,7 @@ export const Agregar: React.FC<IProps> = props => {
 							>
 								<Typography variant='h6'>Tipo</Typography>
 							</Col>
-						</Row>
+						</Row> */}
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
 							name='radio-buttons-group'
@@ -482,7 +483,7 @@ export const Agregar: React.FC<IProps> = props => {
 										<Label>
 											{t('registro_servicio_comunal>fecha_conclusion', 'Fecha de conclusión SCE')}
 										</Label>
-										<DatePicker
+										<DatePicker style={{zIndex:99999}}
 											dateFormat='dd/MM/yyyy'
 											value={Cdate}
 											onChange={date => {

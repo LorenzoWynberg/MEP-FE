@@ -55,22 +55,22 @@ const ServicioComunalEstudiantil = props => {
 						<hr />
 					</Col>
 					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>areaProyecto', 'Área de Proyecto')}:</strong>
+						<strong>{t('informationcarddetalle>areaProyecto', 'Área de proyecto')}:</strong>
 						<br />
 						<span>{servicioData?.areaProyecto}</span>
 					</Col>
 					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>nombreProyecto', 'Nombre del Proyecto')}: </strong>
+						<strong>{t('informationcarddetalle>nombreProyecto', 'Nombre del proyecto')}: </strong>
 						<br />
 						<span>{servicioData?.modalidadProyecto}</span>
 					</Col>
 					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>modalidad', 'Tipo de Proyecto')}:</strong>
+						<strong>{t('informationcarddetalle>modalidad', 'Tipo de proyecto')}:</strong>
 						<br />
 						<span>{servicioData?.modalidadProyecto}</span>
 					</Col>
 					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:</strong>
+						<strong>{t('informationcarddetalle>fechaConclusion', 'Fecha de conclusión')}:</strong>
 						<br />
 						<span>{servicioData?.fechaConclusionSCE}</span>
 					</Col>
@@ -82,7 +82,7 @@ const ServicioComunalEstudiantil = props => {
 						<span>{servicioData?.organizacionContraparte}</span>
 					</Col>
 					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>docenteAcompana', 'Acompañante de Proyecto')}:</strong>
+						<strong>{t('informationcarddetalle>docenteAcompana', 'Acompañante de proyecto')}:</strong>
 						<br />
 						<span>{servicioData?.docenteAcompanante}</span>
 					</Col>

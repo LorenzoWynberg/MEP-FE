@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next'
 import { RemoveRedEyeRounded, Edit } from '@material-ui/icons'
 import SimpleModal from 'Components/Modal/simple'
 import ModalSCE from './ModalSCE'
+import { Delete } from '@material-ui/icons'
 
 const Historico = props => {
 	const [data, setData] = useState([])
@@ -93,13 +94,13 @@ const Historico = props => {
 				label: ''
 			},
 			{
-				Header: t('expediente_estudiantil>modalidad', 'Modalidad'),
+				Header: t('expediente_estudiantil>modalidad', 'Tipo de proyecto'),
 				column: 'modalidadProyecto',
 				accessor: 'modalidadProyecto',
 				label: ''
 			},
 			{
-				Header: t('expediente_estudiantil>cantidadEstudiantes', 'Cantidad Estudiantes'),
+				Header: t('expediente_estudiantil>cantidadEstudiantes', 'Cantidad estudiantes'),
 				column: 'cantidadEstudiantes',
 				accessor: 'cantidadEstudiantes',
 				label: ''
@@ -171,7 +172,7 @@ const Historico = props => {
 								<></>
 							) : (
 								<Tooltip title={t('expediente_estudiantil>eliminar', 'Eliminar Expediente')}>
-									<CancelIcon
+									<Delete
 										onClick={() => {
 											setExpediente(fullRow)
 										}}
