@@ -5,11 +5,13 @@ import ReportBar from '../../_partials/ReportBar'
 import { envVariables } from 'Constants/enviroment'
 import axios from 'axios'
 import ReporteStyledTableCircuitos from '../../_partials/ReporteStyledTableCircuitos'
+import { GenerateExcelObject, SendWorkbookToDownload } from 'Utils/excel'
 
 const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
   const [state, setState] = React.useState(0)
   const printRef = React.useRef()
   const [reportData, setReportData] = React.useState<any>()
+  const title = 'Reporte Historico de SCE por Division Administrativa'
   const [reportParameters, setReportParameters] = React.useState<any>()
 
   const loadReportData = async (idRegion) => {
@@ -43,7 +45,7 @@ const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
     accessor: 'nombreCircuito',
     label: '',
     column: ''
-  }, 
+  },
   {
     Header: 'Oferta',
     accessor: 'nombreOferta',
@@ -141,16 +143,23 @@ const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
     column: ''
   }
   ]
+  const onExcelEvent = () => { 
+    const dataToPrint = [];
+    reportData.forEach(d => { d.datos.forEach(d2 => { dataToPrint.push(d2) }) });
+    console.log('dataToPrint', dataToPrint)
+    const workbook = GenerateExcelObject(dataToPrint)
+    SendWorkbookToDownload(workbook, `${title}.xlsx`)
+  }
   return (
     <div>
-      <ReportBar
+      <ReportBar onExcelBtnEvent={onExcelEvent}
         regresarEvent={() => {
           regresarEvent()
           setState(0)
         }} imprimirRef={printRef} showBtn={state === 1}
       />
       {state === 0 && <Parameters showReportEvent={onShowReportEvent} />}
-      {state === 1 && <ReporteStyledTableCircuitos innerRef={printRef} data={reportData} columns={columns} title={'Historico SCE Estudiantes Regional'} />}
+      {state === 1 && <ReporteStyledTableCircuitos innerRef={printRef} data={reportData} columns={columns} title={title} />}
     </div>
   )
 }

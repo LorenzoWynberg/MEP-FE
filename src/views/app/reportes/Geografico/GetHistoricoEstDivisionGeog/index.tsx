@@ -5,13 +5,14 @@ import ReportBar from '../../_partials/ReportBar'
 import { envVariables } from 'Constants/enviroment'
 import axios from 'axios'
 import ReporteStyledTable from '../../_partials/ReporteStyledTable'
+import { GenerateExcelObject, SendWorkbookToDownload } from 'Utils/excel'
 
 const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
   const [state, setState] = React.useState(0)
   const printRef = React.useRef()
   const [reportData, setReportData] = React.useState<any>()
   const [reportParameters, setReportParameters] = React.useState<any>()
-
+  const title = 'Historico SCE Estudiantes Geografico'
   const loadReportData = async (idProvincia, idCanton, idDistrito) => {
     try {
       const response = await axios.get(
@@ -22,33 +23,23 @@ const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
       console.log(e)
     }
   }
+  const columns = [
+    {
 
-  const onShowReportEvent = (parametros) => {
-    const { idProvincia, idCanton, idDistrito } = parametros
-    if (!idProvincia || !idCanton || !idDistrito) return
-
-    loadReportData(idProvincia.value, idCanton.value, idDistrito.value).then(() => {
-      setReportParameters(parametros)
-      setState(1)
-    }) 
-  }
-  const columns = [ 
-    { 
-      
       Header: 'Provincia',
       accessor: 'idProvincia',
       label: '',
       column: ''
     },
-    { 
-      
+    {
+
       Header: 'Canton',
       accessor: 'idCanton',
       label: '',
       column: ''
     },
-    { 
-      
+    {
+
       Header: 'Distrito',
       accessor: 'idDistrito',
       label: '',
@@ -151,16 +142,29 @@ const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
       column: ''
     }
   ]
+  const onShowReportEvent = (parametros) => {
+    const { idProvincia, idCanton, idDistrito } = parametros
+    if (!idProvincia || !idCanton || !idDistrito) return
+
+    loadReportData(idProvincia.value, idCanton.value, idDistrito.value).then(() => {
+      setReportParameters(parametros)
+      setState(1)
+    })
+  }
+  const onExcelEvent = () => { 
+    const workbook = GenerateExcelObject(reportData)
+    SendWorkbookToDownload(workbook, `${title}.xlsx`)
+  }
   return (
     <div>
-      <ReportBar
+      <ReportBar onExcelBtnEvent={onExcelEvent}
         regresarEvent={() => {
           regresarEvent()
           setState(0)
         }} imprimirRef={printRef} showBtn={state === 1}
       />
       {state === 0 && <Parameters showReportEvent={onShowReportEvent} />}
-      {state === 1 && <ReporteStyledTable innerRef={printRef} data={reportData} columns={columns} title={'Historico SCE Estudiantes Geografico'} />}
+      {state === 1 && <ReporteStyledTable innerRef={printRef} data={reportData} columns={columns} title={title} />}
     </div>
   )
 }

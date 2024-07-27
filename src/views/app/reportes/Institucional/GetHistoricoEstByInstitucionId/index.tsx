@@ -2,10 +2,11 @@ import React from 'react'
 import Parameters from './Parameters'
 import ReportBar from '../../_partials/ReportBar'
 import { envVariables } from 'Constants/enviroment'
-import axios from 'axios' 
+import axios from 'axios'
 import Loader from 'Components/Loader'
 import useFiltroReportes from '../../_partials/useFiltroReportes'
 import ReporteStyledTable from '../../_partials/ReporteStyledTable'
+import { GenerateExcelObject, SendWorkbookToDownload } from 'Utils/excel'
 
 const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
   const [state, setState] = React.useState(0)
@@ -13,6 +14,7 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
   const [reportData, setReportData] = React.useState<any>()
   const [reportParameters, setReportParameters] = React.useState<any>()
   const [loader, setLoader] = React.useState(true)
+  const title = 'Reporte Historico de SCE por Institucion'
 
   const {
     institucionId
@@ -27,7 +29,6 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
       console.log(e)
     }
   }
-
   const onShowReportEvent = () => {
 
     loadReportData(institucionId).then(() => {
@@ -137,8 +138,13 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
       column: ''
     }
   ]
+
+  const onExcelEvent = () => { 
+    const workbook = GenerateExcelObject(reportData)
+    SendWorkbookToDownload(workbook, `${title}.xlsx`)
+  }
   return (
-    <div><ReportBar
+    <div><ReportBar onExcelBtnEvent={onExcelEvent}
       regresarEvent={() => {
         regresarEvent()
         setState(0)
@@ -165,7 +171,7 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
             <Loader />
           </div>
         </div>
-      ) : <ReporteStyledTable innerRef={printRef} data={reportData} columns={columns} title={'Historico SCE Estudiantes Por Institucion'} />}
+      ) : <ReporteStyledTable innerRef={printRef} data={reportData} columns={columns} title={title} />}
 
     </div>
   )

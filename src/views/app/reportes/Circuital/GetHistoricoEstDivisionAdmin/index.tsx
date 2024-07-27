@@ -3,8 +3,9 @@ import Parameters from './Parameters'
 import Reporte from './Reporte'
 import ReportBar from '../../_partials/ReportBar'
 import { envVariables } from 'Constants/enviroment'
-import axios from 'axios' 
+import axios from 'axios'
 import ReporteStyledTableCircuitos from '../../_partials/ReporteStyledTableCircuitos'
+import { GenerateExcelObject, SendWorkbookToDownload } from 'Utils/excel'
 
 const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
   const [state, setState] = React.useState(0)
@@ -33,7 +34,7 @@ const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
     })
     console.log(parametros)
   }
-  const columns = [ 
+  const columns = [
     {
       Header: 'Region',
       accessor: 'nombreRegional',
@@ -143,9 +144,16 @@ const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
       column: ''
     }
   ]
+  const onExcelEvent = () => {
+    const dataToPrint = [];
+    reportData.forEach(d => { d.datos.forEach(d2 => { dataToPrint.push(d2) }) });
+    console.log('dataToPrint', dataToPrint)
+    const workbook = GenerateExcelObject(dataToPrint)
+    SendWorkbookToDownload(workbook, `Historico SCE Estudiantes Por Institucion.xlsx`)
+  }
   return (
     <div>
-      <ReportBar
+      <ReportBar onExcelBtnEvent={onExcelEvent}
         regresarEvent={() => {
           regresarEvent()
           setState(0)
