@@ -104,6 +104,11 @@ export const Agregar: React.FC<IProps> = props => {
 		})
 	}, [])
 
+	const [selectedDate, setSelectedDate] = useState(null);
+	const [formattedDate, setFormattedDate] = useState('');
+  
+	const today = new Date();
+
 	return (
 		<div className={styles}>
 			{loading && <BarLoader />}
@@ -483,15 +488,17 @@ export const Agregar: React.FC<IProps> = props => {
 										<Label>
 											{t('registro_servicio_comunal>fecha_conclusion', 'Fecha de conclusión SCE')}
 										</Label>
-										<DatePicker style={{zIndex:99999}}
-											dateFormat='dd/MM/yyyy'
-											value={Cdate}
-											onChange={date => {
-												const d = new Date(date)
-												setDate(d)
-												setCDate(d.toLocaleDateString('fr-FR'))
-											}}
-										/>
+										<DatePicker
+      style={{ zIndex: 99999 }}
+      dateFormat="dd/MM/yyyy"
+      selected={selectedDate}
+      onChange={(date) => {
+        const d = new Date(date);
+        setSelectedDate(d);
+        setFormattedDate(d.toLocaleDateString('fr-FR'));
+      }}
+      maxDate={today} // Set the maximum selectable date to today
+    />
 									</FormGroup>
 								</Col>
 								<Col sm={3}>
