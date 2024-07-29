@@ -70,7 +70,7 @@ const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
       column: ''
     },
     {
-      Header: 'Nombre de la modalidad',
+      Header: 'Tipo de proyecto',
       accessor: 'nombreModalidad',
       label: '',
       column: ''

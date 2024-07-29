@@ -8,25 +8,25 @@ import ReporteStyledTableCircuitos from '../../_partials/ReporteStyledTableCircu
 import { GenerateExcelObject, SendWorkbookToDownload } from 'Utils/excel'
 
 const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
-  const [state, setState] = React.useState(0)
-  const printRef = React.useRef()
-  const [reportData, setReportData] = React.useState<any>()
-  const [reportParameters, setReportParameters] = React.useState<any>()
+	const [state, setState] = React.useState(0)
+	const printRef = React.useRef()
+	const [reportData, setReportData] = React.useState<any>()
+	const [reportParameters, setReportParameters] = React.useState<any>()
 
-  const loadReportData = async (idRegion, idCircuito) => {
-    try {
-      const response = await axios.get(
-        `${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${idRegion}/${idCircuito}`
-      )
-      setReportData(response.data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
+	const loadReportData = async (idRegion, idCircuito) => {
+		try {
+			const response = await axios.get(
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${idRegion}/${idCircuito}`
+			)
+			setReportData(response.data)
+		} catch (e) {
+			console.log(e)
+		}
+	}
 
-  const onShowReportEvent = (parametros) => {
-    const { idRegion, idCircuito } = parametros
-    if (!idCircuito || !idRegion) return
+	const onShowReportEvent = parametros => {
+		const { idRegion, idCircuito } = parametros
+		if (!idCircuito || !idRegion) return
 
     loadReportData(idRegion.value, idCircuito.value).then(() => {
       setReportParameters(parametros)
@@ -60,7 +60,7 @@ const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
       column: ''
     },
     {
-      Header: 'Nombre de la modalidad',
+      Header: 'Tipo de proyecto',
       accessor: 'nombreModalidad',
       label: '',
       column: ''

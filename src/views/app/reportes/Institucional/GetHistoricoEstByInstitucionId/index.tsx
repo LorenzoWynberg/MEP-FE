@@ -9,36 +9,33 @@ import { GenerateExcelObject, SendWorkbookToDownload } from 'Utils/excel'
 import ReporteStyledTableAnno from '../../_partials/ReporteStyledTableAnno'
 
 const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
-  const [state, setState] = React.useState(0)
-  const printRef = React.useRef()
-  const [reportData, setReportData] = React.useState<any>()
-  const [reportParameters, setReportParameters] = React.useState<any>()
-  const [loader, setLoader] = React.useState(true)
-  const title = 'Reporte Historico de SCE por Institucion'
+	const [state, setState] = React.useState(0)
+	const printRef = React.useRef()
+	const [reportData, setReportData] = React.useState<any>()
+	const [reportParameters, setReportParameters] = React.useState<any>()
+	const [loader, setLoader] = React.useState(true)
+	const title = 'Reporte Historico de SCE por Institucion'
 
-  const {
-    institucionId
-  } = useFiltroReportes()
-  const loadReportData = async (institucionId) => {
-    try {
-      const response = await axios.get(
-        `${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstByInstitucionId/${institucionId}`
-      )
-      setReportData(response.data)
-    } catch (e) {
-      console.log(e)
-    }
-  }
-  const onShowReportEvent = () => {
+	const { institucionId } = useFiltroReportes()
+	const loadReportData = async institucionId => {
+		try {
+			const response = await axios.get(
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstByInstitucionId/${institucionId}`
+			)
+			setReportData(response.data)
+		} catch (e) {
+			console.log(e)
+		}
+	}
+	const onShowReportEvent = () => {
+		loadReportData(institucionId).then(() => {
+			setLoader(false)
+		})
+	}
 
-    loadReportData(institucionId).then(() => {
-      setLoader(false)
-    })
-  }
-
-  React.useEffect(() => {
-    onShowReportEvent()
-  }, [institucionId])
+	React.useEffect(() => {
+		onShowReportEvent()
+	}, [institucionId])
 
 
   /*
