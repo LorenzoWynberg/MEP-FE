@@ -16,7 +16,7 @@ const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
   const loadReportData = async (idProvincia, idCanton, idDistrito) => {
     try {
       const response = await axios.get(
-        `${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionGeog/${0}/${0}/${0}`
+        `${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionGeog/${idProvincia}/${idCanton}/${idDistrito}`
       )
       setReportData(response.data)
     } catch (e) {

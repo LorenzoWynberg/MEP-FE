@@ -5,8 +5,8 @@ import { envVariables } from 'Constants/enviroment'
 import axios from 'axios'
 import Loader from 'Components/Loader'
 import useFiltroReportes from '../../_partials/useFiltroReportes'
-import ReporteStyledTable from '../../_partials/ReporteStyledTable'
 import { GenerateExcelObject, SendWorkbookToDownload } from 'Utils/excel'
+import ReporteStyledTableAnno from '../../_partials/ReporteStyledTableAnno'
 
 const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
   const [state, setState] = React.useState(0)
@@ -40,15 +40,66 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
     onShowReportEvent()
   }, [institucionId])
 
+
+  /*
+  0
+: 
+"annoParticipacion"
+1
+: 
+"nombreAreaProyecto"
+2
+: 
+"descripcion"
+3
+: 
+"nombreProyecto"
+4
+: 
+"nombreModalidad"
+5
+: 
+"caracteristicas"
+6
+: 
+"nombreOrgContraparte"
+7
+: 
+"cedulaCount"
+8
+: 
+"dimexCount"
+9
+: 
+"yisRoCount"
+10
+: 
+"discapacidadCount"
+11
+: 
+"hombreCount"
+12
+: 
+"mujerCount"
+13
+: 
+"indigenaCount"
+14
+: 
+"refugiadoCount"
+15
+: 
+"totalEstudiantes"
+  */
   const columns = [
     {
-      Header: 'Año de participación',
+      Header: 'Año',
       accessor: 'annoParticipacion',
       label: '',
       column: ''
     },
     {
-      Header: 'Área del proyecto',
+      Header: 'Area de Proyecto',
       accessor: 'nombreAreaProyecto',
       label: '',
       column: ''
@@ -66,7 +117,7 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
       column: ''
     },
     {
-      Header: 'Nombre de la modalidad',
+      Header: 'Modalidad',
       accessor: 'nombreModalidad',
       label: '',
       column: ''
@@ -78,7 +129,7 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
       column: ''
     },
     {
-      Header: 'Nombre de la organización contraparte',
+      Header: 'Organización Contraparte',
       accessor: 'nombreOrgContraparte',
       label: '',
       column: ''
@@ -90,7 +141,7 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
       column: ''
     },
     {
-      Header: 'Cantidad de DIMEX',
+      Header: 'DIMEX',
       accessor: 'dimexCount',
       label: '',
       column: ''
@@ -102,29 +153,30 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
       column: ''
     },
     {
-      Header: 'Cantidad de discapacitados',
+      Header: 'Discapacitados',
       accessor: 'discapacidadCount',
       label: '',
       column: ''
     },
     {
-      Header: 'Cantidad de hombres',
+      Header: 'Hombres',
       accessor: 'hombreCount',
       label: '',
       column: ''
     },
     {
-      Header: 'Cantidad de mujeres',
+      Header: 'Mujeres',
       accessor: 'mujerCount',
       label: '',
       column: ''
     },
     {
-      Header: 'Cantidad de indígenas',
+      Header: 'Indígenas',
       accessor: 'indigenaCount',
       label: '',
       column: ''
     },
+
     {
       Header: 'Cantidad de refugiados',
       accessor: 'refugiadoCount',
@@ -136,20 +188,21 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
       accessor: 'totalEstudiantes',
       label: '',
       column: ''
-    }
+    },
   ]
 
-  const onExcelEvent = () => { 
+  const onExcelEvent = () => {
     const workbook = GenerateExcelObject(reportData)
     SendWorkbookToDownload(workbook, `${title}.xlsx`)
   }
   return (
-    <div><ReportBar onExcelBtnEvent={onExcelEvent}
-      regresarEvent={() => {
-        regresarEvent()
-        setState(0)
-      }} imprimirRef={printRef} showBtn={state === 1}
-    />
+    <div>
+      {!loader && <ReportBar onExcelBtnEvent={onExcelEvent}
+        regresarEvent={() => {
+          regresarEvent()
+          setState(0)
+        }} imprimirRef={printRef} showBtn={state === 0}
+      />}
       {loader ? (
         <div style={{
           height: '100%',
@@ -171,7 +224,7 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
             <Loader />
           </div>
         </div>
-      ) : <ReporteStyledTable innerRef={printRef} data={reportData} columns={columns} title={title} />}
+      ) : <ReporteStyledTableAnno innerRef={printRef} data={reportData} columns={columns} title={title} />}
 
     </div>
   )

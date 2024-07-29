@@ -16,7 +16,7 @@ const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
   const loadReportData = async (idRegion, idCircuito) => {
     try {
       const response = await axios.get(
-        `${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${0}/${0}`
+        `${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${idRegion}/${idCircuito}`
       )
       setReportData(response.data)
     } catch (e) {
@@ -34,19 +34,7 @@ const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
     })
     console.log(parametros)
   }
-  const columns = [
-    {
-      Header: 'Region',
-      accessor: 'nombreRegional',
-      label: '',
-      column: ''
-    },
-    {
-      Header: 'Circuito',
-      accessor: 'nombreCircuito',
-      label: '',
-      column: ''
-    },
+  const columns = [ 
     {
       Header: 'Oferta',
       accessor: 'nombreOferta',
