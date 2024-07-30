@@ -6,7 +6,7 @@ import { uniqWith } from 'lodash'
 import useFiltroReportes from '../../_partials/useFiltroReportes'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import data from './data'
+
 const Parameters = ({ showReportEvent, reportLoader = false }) => {
   // const [selects, setSelects] = React.useState(intialState)
   const { t } = useTranslation()
@@ -67,7 +67,7 @@ const Parameters = ({ showReportEvent, reportLoader = false }) => {
   return (
     <div>
       <ReportParameterCard
-        titulo={t("reportes>circuital>resumen_de_estudiantes_matriculados_por_centro_educativo", data.title)}
+        titulo={t("reportes>circuital>resumen_de_estudiantes_matriculados_por_centro_educativo", "Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil.")}
         texto={t('reportes>seleccionar_circuito','Seleccione el circuito')}
         selects={selects}
         loader={loader || reportLoader}
