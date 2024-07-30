@@ -56,7 +56,7 @@ const Parameters = ({ showReportEvent }) => {
     <div>
       <ReportParameterCard
 
-        titulo='Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil'
+        titulo='Resumen de proyectos de Servicio Comunal Estudiantil según división geográfica (Provincia, cantón, distrito)'
         texto='Seleccione la provincia, cantón y el distrito'
         selects={selects}
         onBtnGenerarEvent={(obj) => {
