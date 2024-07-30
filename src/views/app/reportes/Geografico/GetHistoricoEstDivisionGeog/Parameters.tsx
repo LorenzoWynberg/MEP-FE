@@ -1,7 +1,7 @@
 import React from 'react'
 import ReportParameterCard from '../../_partials/ReportParameterCard'
-import useFiltroReportes from '../../_partials/useFiltroReportes' 
-import { envVariables } from 'Constants/enviroment' 
+import useFiltroReportes from '../../_partials/useFiltroReportes'
+import { envVariables } from 'Constants/enviroment'
 import axios from 'axios'
 const initialState = [
   {
@@ -21,7 +21,7 @@ const initialState = [
   }
 ]
 const Parameters = ({ showReportEvent }) => {
- 
+
   const {
     setSelectInitialState,
     setSelectItems,
@@ -29,7 +29,6 @@ const Parameters = ({ showReportEvent }) => {
   } = useFiltroReportes()
 
   React.useEffect(() => {
- 
     setSelectInitialState(initialState)
     const fetch = async () => {
       const provArr = await axios.get(`${envVariables.BACKEND_URL}/api/Provincia`)
@@ -45,6 +44,7 @@ const Parameters = ({ showReportEvent }) => {
         axios.get(`${envVariables.BACKEND_URL}/api/Canton/GetByProvince/${obj.value}`).then((circuitosArr) => {
           setSelectItems(1, circuitosArr.data.map(mapeador), onChangeCanton)
         })
+        onChangeCanton({ value: 0 })
       }
       setSelectItems(0, provArr.data.map(mapeador), onChange)
     }
@@ -55,6 +55,7 @@ const Parameters = ({ showReportEvent }) => {
   return (
     <div>
       <ReportParameterCard
+
         titulo='Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil'
         texto='Seleccione la provincia, cantón y el distrito'
         selects={selects}

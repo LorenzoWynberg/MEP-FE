@@ -31,7 +31,7 @@ const ReporteStyledTable = ({ innerRef, data, columns,title }) => {
   return (
     <div ref={innerRef} style={{overflow:'auto'}}>
       <Card>
-        <ReportHeader  />
+        <ReportHeader mostrarContactoInstitucion  />
         <Seccion style={{ marginTop: '1rem' }}>
 
           <p>

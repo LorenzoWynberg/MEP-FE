@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import ReactSelect from 'react-select'
 import { Button } from 'reactstrap'
@@ -29,17 +29,17 @@ const ReportParameterCard: React.FC<IProp> = (props) => {
 	const onChangeEvent = (selected: any, key: any) => {
 		setState({ ...state, [key]: selected })
 	}
-	const anioEducativo = useSelector((store:any)=>(store.authUser.selectedActiveYear))
-	React.useEffect(()=>{
-		if(!anioEducativo) return
+	const anioEducativo = useSelector((store: any) => (store.authUser.selectedActiveYear))
+	React.useEffect(() => {
+		if (!anioEducativo) return
 		setState({})
-	},[anioEducativo])
+	}, [anioEducativo])
 	const onBtnGenerarReporteClick = () => {
 		if (!onBtnGenerarEvent) return
 
 		onBtnGenerarEvent(state)
 	}
-
+	useEffect(() => console.log('state', state), [state])
 	return (
 		<Contenedor>
 			<Card style={{ position: 'relative' }}>
@@ -69,6 +69,8 @@ const ReportParameterCard: React.FC<IProp> = (props) => {
 						</div>
 					</div>
 				)}
+				{console.log('selects', selects)}
+				{console.log('selects state', state)}
 				{selects.map((select) => {
 					return (
 						<SelectContainer key={select.key}>
@@ -81,7 +83,7 @@ const ReportParameterCard: React.FC<IProp> = (props) => {
 									t('general>no_opt', 'Sin opciones')
 								}
 								components={{ Input: CustomSelectInput }}
-								value={state.hasOwnProperty(select.key)
+								value={state.hasOwnProperty(select.key) && select.items.some(item => item.label == state[select.key].label )
 									? state[select.key]
 									: null}
 								options={select.items}
