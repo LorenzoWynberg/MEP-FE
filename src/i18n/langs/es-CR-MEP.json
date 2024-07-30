@@ -909,7 +909,7 @@
 	"estudiantes>expediente>buscador>col_nom_ape": "Nombre / Apellidos",
 	"estudiantes>expediente>buscador>col_reg_circ": "Regional / Circuito",
 	"estudiantes>expediente>buscador>col_tipo_ce": "Tipo de centro educativo",
-	"estudiantes>expediente>buscador>titulo": "Expediente estudiante",
+	"estudiantes>expediente>buscador>titulo": "Buscador de Expediente Estudiantil",
 	"estudiantes>expediente>contacto>historico_residencia>fecha_hora": "Fecha y hora",
 	"estudiantes>expediente>contacto>historico_residencia>tipo": "Tipo",
 	"estudiantes>expediente>contacto>historico_residencia>titulo": "Historico de Residencias",

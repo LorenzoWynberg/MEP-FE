@@ -912,7 +912,7 @@
 	"estudiantes>expediente>buscador>col_nom_ape": "Name / Surname",
 	"estudiantes>expediente>buscador>col_reg_circ": "Regional / Circuit",
 	"estudiantes>expediente>buscador>col_tipo_ce": "Type of school",
-	"estudiantes>expediente>buscador>titulo": "Student record",
+	"estudiantes>expediente>buscador>titulo": "Student record finder",
 	"estudiantes>expediente>contacto>historico_residencia>fecha_hora": "Date and time",
 	"estudiantes>expediente>contacto>historico_residencia>tipo": "Type",
 	"estudiantes>expediente>contacto>historico_residencia>titulo": "Residency History",
