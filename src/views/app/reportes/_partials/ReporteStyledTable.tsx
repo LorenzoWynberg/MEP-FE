@@ -31,7 +31,7 @@ const ReporteStyledTable = ({ innerRef, data, columns,title }) => {
   return (
     <div ref={innerRef} style={{overflow:'auto'}}>
       <Card>
-        <ReportHeader mostrarContactoInstitucion />
+        <ReportHeader  />
         <Seccion style={{ marginTop: '1rem' }}>
 
           <p>
@@ -39,7 +39,7 @@ const ReporteStyledTable = ({ innerRef, data, columns,title }) => {
           </p>
         </Seccion>
         <p>
-          <Table>
+          <Table >
             <thead>
               {columns && columns.map((item, index) => <th>{item.Header}</th>)}
             </thead>
@@ -63,8 +63,9 @@ const ReporteStyledTable = ({ innerRef, data, columns,title }) => {
   )
 }
 
-const Table = styled.div`
+const Table = styled.table`
   border-collapse: collapse;
+  width:100% ;
   thead {
     font-width: bold;
     text-align: center;
