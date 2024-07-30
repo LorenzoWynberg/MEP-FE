@@ -40,6 +40,18 @@ const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
   }
   const columns = [
     {
+      Header: 'Region',
+      accessor: 'nombreRegional',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Circuito',
+      accessor: 'nombreCircuito',
+      label: '',
+      column: ''
+    },
+    {
       Header: 'Oferta',
       accessor: 'nombreOferta',
       label: '',
