@@ -2,10 +2,7 @@ import React, { useEffect } from 'react'
 import studentBreadcrumb from 'Constants/studentBreadcrumb'
 import { useSelector } from 'react-redux'
 import { getIdentification } from 'Redux/identificacion/actions'
-import {
-	getStudentDataFilter,
-	loadStudent
-} from 'Redux/expedienteEstudiantil/actions'
+import { getStudentDataFilter, loadStudent } from 'Redux/expedienteEstudiantil/actions'
 import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
 import InformationCard from './_partials/InformationCard'
@@ -30,8 +27,9 @@ const Buscador = React.lazy(() => import('./Buscador'))
 const Sinirube = React.lazy(() => import('./Sinirube'))
 const CuentaCorreo = React.lazy(() => import('./CuentaCorreo'))
 const CuentaUsuarios = React.lazy(() => import('./CuentaUsuario'))
+const ServicioComunalEstudiantil = React.lazy(() => import('./ServicioComunalEstudiantil'))
 
-const ContenedorPrincipal = (props) => {
+const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
 	const { idEstudiante } = useParams()
 	const [active, setActive] = React.useState(0)
@@ -47,13 +45,14 @@ const ContenedorPrincipal = (props) => {
 		loadStudent
 	})
 
-	const state = useSelector((store) => {
+	const state = useSelector(store => {
 		return {
 			expedienteEstudiantil: store.expedienteEstudiantil,
 			identification: store.identification,
 			historialMatricula: store.identification.matriculaHistory
 		}
 	})
+
 	useEffect(() => {
 		setActive(props.active)
 	}, [props.active])
@@ -63,10 +62,7 @@ const ContenedorPrincipal = (props) => {
 			const _id = idEstudiante
 			idEstudiante && setActive(1)
 			setLoading(true)
-			const response = await actions.getStudentDataFilter(
-				_id,
-				'identificacion'
-			)
+			const response = await actions.getStudentDataFilter(_id, 'identificacion')
 			if (response.data) {
 				await actions.loadStudent(response.data[0])
 			}
@@ -91,21 +87,14 @@ const ContenedorPrincipal = (props) => {
 
 	return (
 		<AppLayout items={directorItems}>
-			<div className="dashboard-wrapper">
+			<div className='dashboard-wrapper'>
 				<Container>
-					{active !== 0 && (
-						<InformationCard
-							data={state.expedienteEstudiantil.currentStudent}
-						/>
-					)}
+					{active !== 0 && <InformationCard data={state.expedienteEstudiantil.currentStudent} />}
 					<Row>
 						{active !== 0 && (
 							<Col xs={12}>
 								<Breadcrumb
-									header={t(
-										'expediente_estudiantil>titulo',
-										'Expediente Estudiantil'
-									)}
+									header={t('expediente_estudiantil>titulo', 'Expediente Estudiantil')}
 									data={studentBreadcrumb}
 								/>
 								<br />
@@ -127,25 +116,16 @@ const ContenedorPrincipal = (props) => {
 											6: <Apoyo {...props} />,
 											7: <AreaCurricular {...props} />,
 											8: <Salud {...props} />,
-											9: (
-												<Oferta
-													{...props}
-													historialMatricula={
-														state.historialMatricula
-													}
-												/>
-											),
+											9: <Oferta {...props} historialMatricula={state.historialMatricula} />,
 											// 	10: <Sinirube {...props} />,
 											//10: <CuentaCorreo {...props} />,
 											10: (
 												<CuentaUsuarios
 													{...props}
-													expedienteEstudiantil={
-														state.expedienteEstudiantil
-													}
+													expedienteEstudiantil={state.expedienteEstudiantil}
 												/>
 											),
-											11: <ContenedorExpSCE   {...props} />,
+											11: <ServicioComunalEstudiantil {...props} />
 										}[active]
 									}
 								</>

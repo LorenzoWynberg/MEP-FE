@@ -1,9 +1,6 @@
 import React, { LazyExoticComponent } from 'react'
 
-
 const BuscadorCentros = React.lazy(() => import('../views/app/director/Buscadores/BuscadorCentros'))
-
-const HistoricoExpediente = React.lazy(() => import('../views/app/director/Historico/HistoricoExpediente'))
 
 const BuscadorPersonas = React.lazy(() => import('../views/app/director/Buscadores/BuscadorPersonas'))
 const BuscadorDirecciones = React.lazy(() => import('../views/app/director/Buscadores/BuscadorDirecciones'))
@@ -17,6 +14,11 @@ const FichaEstudiante = React.lazy(() => import('../views/app/director/Expedient
 const FichaCentro = React.lazy(() => import('../views/app/director/ExpedienteEstudiante/FichaCentro'))
 
 const ExpedienteCentro = React.lazy(() => import('../views/app/director/ExpedienteCentroEducativo/ContenedorPrincipal'))
+// const ServicioComunal = React.lazy(
+// 	() => import('../views/app/director/ExpedienteCentroEducativo/ServicioComunalEstudiantil')
+// )
+// const HistoricoExpediente = React.lazy(() => import('../views/app/director/Historico/HistoricoExpediente'))
+// const ServicioComunalEdit = React.lazy(() => import('../views/app/director/Historico/ServicioComunalEdit'))
 
 const MatricularEstudiantesBuscador = React.lazy(() => import('../views/app/director/MatricularEstudiantes/Buscador'))
 const MatricularEstudiantes = React.lazy(
@@ -55,12 +57,6 @@ const Configuracion = React.lazy(() => import('../views/app/director/Configuraci
 const Identidad = React.lazy(() => import('../views/app/configuracion/Identidad/main'))
 
 const Groups = React.lazy(() => import('../views/app/director/Grupos/main'))
-
-const ServicioComunal = React.lazy(() => import('../views/app/director/Historico/ServicioComunal'))
-
-const ServicioComunalEdit = React.lazy(() => import('../views/app/director/Historico/ServicioComunalEdit'))
-
-const ContenedorExpSCE = React.lazy(() => import('../views/app/director/ExpedienteEstudiante/ContenedorExpSCE')) 
 
 const GestorUsuarios = React.lazy(() => import('../views/app/director/GestorUsuarios/GestorUsuarios'))
 const GestorRoles = React.lazy(() => import('../views/app/director/GestorUsuarios/Roles/index'))
@@ -518,6 +514,15 @@ const routes: Route[] = [
 		}
 	},
 	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route: '/director/expediente-estudiante/servicio-comunal',
+		isAuthenticated: true,
+		routeProps: {
+			active: 11
+		}
+	},
+	{
 		component: AlertaTemprana,
 		exact: true,
 		route: '/director/alerta-estudiantes',
@@ -709,6 +714,39 @@ const routes: Route[] = [
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
 			active: 9
+		}
+	},
+	{
+		component: ExpedienteCentro,
+		exact: true,
+		route: '/director/expediente-centro/servicio-comunal',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 10,
+			activeTab: 0
+		}
+	},
+	{
+		component: ExpedienteCentro,
+		isAuthenticated: true,
+		route: '/director/expediente-centro/servicio-comunal/registro',
+		exact: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 10,
+			activeTab: 1
+		}
+	},
+	{
+		component: ExpedienteCentro,
+		isAuthenticated: true,
+		route: '/director/expediente-centro/servicio-comunal/editar/:id',
+		exact: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 10,
+			activeTab: 1
 		}
 	},
 	{
@@ -1138,7 +1176,7 @@ const routes: Route[] = [
 		},
 		exact: true
 	},
-	
+
 	{
 		component: AyudaDirector,
 		isAuthenticated: true,
@@ -1312,39 +1350,7 @@ const routes: Route[] = [
 		routeProps: {
 			active: 0
 		}
-	},
-	
-	{
-		component: HistoricoExpediente,
-		exact: true,
-		route: '/director/expediente-centro/servicio-comunal', 
-		isAuthenticated: true,
-		accessRoles: ['ADMIN', 'GESTOR'],
-		routeProps: {
-			active: 10
-		}
-	},
-
-	{
-		component: ContenedorExpSCE,
-		exact: true,
-		route: '/director/expediente-estudiante/servicio-comunal', 
-		isAuthenticated: true,
-	
-	},
-
-	{
-		component: ServicioComunal,
-		isAuthenticated: true,
-		route: '/director/expediente-centro/servicio-comunal/registro',
-		exact: true
-	},
-	{
-		component: ServicioComunalEdit,
-		isAuthenticated: true,
-		route: '/director/expediente-centro/servicio-comunal/editar/:id',
-		exact: true
-	},
+	}
 ]
 
 export { routes }

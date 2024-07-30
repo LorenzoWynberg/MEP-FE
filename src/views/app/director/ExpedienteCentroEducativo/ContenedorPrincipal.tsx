@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import centroBreadcrumb from 'Constants/centroBreadcrumb'
 import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
@@ -9,6 +10,8 @@ import { Helmet } from 'react-helmet'
 import Horarios from './Horarios'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import Loader from 'Components/Loader'
+import { use } from 'i18next'
 
 const Inicio = React.lazy(() => import('./Inicio'))
 const General = React.lazy(() => import('./General'))
@@ -19,35 +22,63 @@ const Infraestructura = React.lazy(() => import('./Infraestructura'))
 const OrganizacionAuxiliar = React.lazy(() => import('./OrganizacionAuxiliar'))
 const InformationCard = React.lazy(() => import('./_partials/InformationCard'))
 const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
+const ServicioComunalEstudiantil = React.lazy(() => import('./ServicioComunalEstudiantil'))
 
-const ContenedorPrincipal = (props) => {
+const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
+	const [aplicaSCE, setAplicaSCE] = useState(false)
+	const [loading, setLoading] = useState(true)
+	const [breadcrumbs, setBreadcrumbs] = useState([])
+	const idInstitucion = localStorage.getItem('idInstitucion')
+
 	centroBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
 		return item
 	})
-	const state = useSelector((store) => {
-		return {
-			currentInstitucion: store.authUser.currentInstitution
+
+	const validarInstitucionSCE = async () => {
+		try {
+			const response = await axios.post(
+				`https://mep-saber.azurewebsites.net/api/ServicioComunal/VerificarInstitucionAplicaSCE?idInstitucion=${idInstitucion}`
+			)
+			setAplicaSCE(response.data)
+		} catch (error) {
+			console.error('API error:', error)
 		}
-	})
-	/* centroBreadcrumb.map((item, idx) => {
-		let _label =
-			item.label === 'auxOrganization'
-				? state.currentInstitucion?.esPrivado
-					? 'auxinformacion'
-					: item.label
-				: item.label
+	}
 
-		item.active = props.active === idx
-		item.label = _label
-		return item
-	}) */
+	const validarAcceso = async () => {
+		await Promise.all([validarInstitucionSCE()])
+		setLoading(false)
+	}
 
-	if (state.currentInstitucion?.id == -1) {
+	useEffect(() => {
+		const newBreadcrumbs = centroBreadcrumb.map((item, idx) => ({
+			...item
+		}))
+
+		if (!aplicaSCE) {
+			newBreadcrumbs.splice(10, 1)
+		}
+
+		setBreadcrumbs(newBreadcrumbs)
+	}, [aplicaSCE])
+
+	useEffect(() => {
+		setLoading(true)
+		validarAcceso()
+	}, [])
+
+	const currentInstitucion = useSelector(store => store.authUser.currentInstitution)
+
+	if (loading) {
+		return <Loader />
+	}
+
+	if (currentInstitucion?.id == -1) {
 		return (
 			<AppLayout items={directorItems}>
-				<div className="dashboard-wrapper">
+				<div className='dashboard-wrapper'>
 					<section>
 						<Container>
 							<Row>
@@ -72,18 +103,15 @@ const ContenedorPrincipal = (props) => {
 			<Helmet>
 				<title>Expediente de institución</title>
 			</Helmet>
-			<div className="dashboard-wrapper">
+			<div className='dashboard-wrapper'>
 				<Container>
 					<Row>
 						<InformationCard data={{}} />
 						{props.active !== 0 && (
-							<Col xs={12}>
+							<Col xs={12} className='mt-3'>
 								<Breadcrumb
-									header={t(
-										'expediente_ce>titulo',
-										'Expediente Centro educativo'
-									)}
-									data={centroBreadcrumb}
+									header={t('expediente_ce>titulo', 'Expediente Centro educativo')}
+									data={breadcrumbs}
 								/>
 								<br />
 							</Col>
@@ -100,7 +128,8 @@ const ContenedorPrincipal = (props) => {
 									6: <OrganizacionAuxiliar {...props} />,
 									7: <Estadistica {...props} />,
 									8: <Grupos {...props} />,
-									9: <NormativaInterna {...props} />
+									9: <NormativaInterna {...props} />,
+									10: <ServicioComunalEstudiantil {...props} />
 								}[props.active]
 							}
 						</Col>

@@ -1,15 +1,12 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import AppLayout from 'Layout/AppLayout'
-import directorItems from 'Constants/directorMenu'
-import { Row, Col, ModalBody, ModalHeader, Modal, Input as ReactstrapInput } from 'reactstrap'
-import colors from '../../../../assets/js/colors'
+import { Row, Col, Input as ReactstrapInput } from 'reactstrap'
+import colors from 'Assets/js/colors'
 import withRouter from 'react-router-dom/withRouter'
 import Grid from '@material-ui/core/Grid'
-import { crearServicioComunal, getTablaEstudiantesServicioComunalById } from '../../../../redux/configuracion/actions'
-import { getYearsOld } from 'Utils/years'
+import { crearServicioComunal, getTablaEstudiantesServicioComunalById } from 'Redux/configuracion/actions'
 import styles from './ServicioComunal.css'
-import BuscadorServicioComunal from '../Buscadores/BuscadorServicioComunal'
+import BuscadorServicioComunal from '../../../Buscadores/BuscadorServicioComunal'
 import {
 	Checkbox,
 	FormControl,
@@ -21,24 +18,19 @@ import {
 	Button,
 	Typography
 } from '@material-ui/core'
-import StyledMultiSelect from '../../../../components/styles/StyledMultiSelect'
-import { ObtenerInfoCatalogos } from '../../../../redux/formularioCentroResponse/actions'
-import NavigationContainer from '../../../../components/NavigationContainer'
-import axios from 'axios'
-import { envVariables } from 'Constants/enviroment'
+import { ObtenerInfoCatalogos } from 'Redux/formularioCentroResponse/actions'
 import { useTranslation } from 'react-i18next'
-import Tooltip from '@mui/material/Tooltip'
-import { IoEyeSharp } from 'react-icons/io5'
 import BarLoader from 'Components/barLoader/barLoader'
-import TableStudents from '../MatricularEstudiantes/registro/new/comunalTabla'
+import TableStudents from './_partials/comunalTabla'
 import SimpleModal from 'Components/Modal/simple'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import { Search } from 'Components/TableReactImplementationServicio/Header'
+import zIndex from '@material-ui/core/styles/zIndex'
 
-export const ServicioComunal: React.FC<IProps> = props => {
+export const Agregar: React.FC<IProps> = props => {
 	const { t } = useTranslation()
 	const [catalogos, setCatalogos] = React.useState([])
 	const [areaProyecto, setAreaProyecto] = React.useState()
@@ -70,7 +62,6 @@ export const ServicioComunal: React.FC<IProps> = props => {
 	const [loading, setLoading] = React.useState<boolean>(false)
 	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		// console.log('(event.target as HTMLInputElement).value', (event.target as HTMLInputElement).value)
 		setValue((event.target as HTMLInputElement).value)
 	}
 	const [Cdate, setCDate] = useState(new Date().toLocaleDateString('fr-FR'))
@@ -81,7 +72,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 	const [acompanante, setValueAcompanante] = React.useState('')
 	const [descripcion, setValueDescripcion] = React.useState('')
 	const [studentsSeleccionados, setStudentsSeleccionados] = React.useState([])
-
+	const idInstitucion = localStorage.getItem('idInstitucion')
 	const [students, setStudents] = useState([])
 
 	const mapper = el => {
@@ -96,6 +87,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 			cuentaCorreoOffice: el.cuentaCorreoOffice ? 'Sí' : 'No'
 		}
 	}
+
 	useEffect(() => {
 		const _data = studentsSeleccionados.map(mapper)
 		setStudents(_data)
@@ -107,16 +99,22 @@ export const ServicioComunal: React.FC<IProps> = props => {
 	})
 
 	useEffect(() => {
-		ObtenerInfoCatalogos().then(respone => {
-			setCatalogos(respone)
+		ObtenerInfoCatalogos().then(response => {
+			setCatalogos(response)
 		})
 	}, [])
+
+	const [selectedDate, setSelectedDate] = useState(null)
+	const [formattedDate, setFormattedDate] = useState('')
+
+	const today = new Date()
+
 	return (
-		<AppLayout className={styles} items={directorItems}>
-			{loading && <BarLoader />} 
+		<div className={styles}>
+			{loading && <BarLoader />}
 			{showAreaProyecto && catalogos.areasProyecto && (
 				<SimpleModal
-					title='Seleccion de Areas Proyecto'
+					title='Selección de áreas de proyecto'
 					openDialog={showAreaProyecto}
 					onConfirm={() => {
 						setShowAreaProyecto(false)
@@ -124,7 +122,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					onClose={() => setShowAreaProyecto(false)}
 				>
 					<FormControl>
-						<Row>
+						{/* 			<Row>
 							<Col
 								style={{
 									display: 'flex',
@@ -139,7 +137,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 							<Col sm={9}>
 								<Typography variant='h6'>Descripcion</Typography>
 							</Col>
-						</Row>
+						</Row> */}
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
 							name='radio-buttons-group'
@@ -151,9 +149,9 @@ export const ServicioComunal: React.FC<IProps> = props => {
 										<Col
 											style={{
 												display: 'flex',
-												textAlign: 'center',
-												justifyContent: 'center',
-												alignItems: 'center'
+												textAlign: 'left',
+												justifyContent: 'left',
+												alignItems: 'left'
 											}}
 											sm={3}
 										>
@@ -162,7 +160,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 												onClick={(e, v) => {
 													e.persist()
 													setValue(e.target.value)
-													setAreaProyecto(item.nombre) 
+													setAreaProyecto(item.nombre)
 													setNombreSend(null)
 													setNombreId(null)
 												}}
@@ -180,7 +178,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 			)}
 			{showCaracteristicas && (
 				<SimpleModal
-					title='Seleccion de Caracteristicas'
+					title='Selección de caracteristicas'
 					openDialog={showCaracteristicas}
 					onConfirm={() => {
 						setShowCaracteristicas(false)
@@ -188,13 +186,13 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					onClose={() => setShowCaracteristicas(false)}
 				>
 					<FormControl>
-						<Row>
+						{/* 	<Row>
 							<Col
 								style={{
 									display: 'flex',
 									textAlign: 'center',
-									justifyContent: 'center',
-									alignItems: 'center'
+									justifyContent: 'left',
+									alignItems: 'left'
 								}}
 								sm={3}
 							>
@@ -203,15 +201,15 @@ export const ServicioComunal: React.FC<IProps> = props => {
 							<Col sm={9}>
 								<Typography variant='h6'>Descripcion</Typography>
 							</Col>
-						</Row>
+						</Row> */}
 						{catalogos.caracteristicas.map((item, index) => (
 							<Row>
 								<Col
 									style={{
 										display: 'flex',
-										textAlign: 'center',
-										justifyContent: 'center',
-										alignItems: 'center'
+										textAlign: 'left',
+										justifyContent: 'left',
+										alignItems: 'left'
 									}}
 									sm={3}
 								>
@@ -264,7 +262,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 			)}
 			{showModalidades && (
 				<SimpleModal
-					title='Modalidades'
+					title='Tipo de proyecto'
 					value={value}
 					openDialog={showModalidades}
 					onConfirm={() => {
@@ -272,7 +270,6 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					}}
 					onClose={() => setShowModalidades(false)}
 				>
-					{catalogos && console.log('catalogos', catalogos)}
 					<Row>
 						<FormControl>
 							<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
@@ -282,7 +279,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 											<Col
 												style={{
 													display: 'flex',
-													justifyContent: 'center',
+													justifyContent: 'left',
 													alignItems: 'left'
 												}}
 												sm={3}
@@ -309,7 +306,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 			)}
 			{showTipoOrganizacion && (
 				<SimpleModal
-					title='Organizacion'
+					title='Organización'
 					openDialog={showTipoOrganizacion}
 					onConfirm={() => {
 						setShowTipoOrganizacion(false)
@@ -317,7 +314,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					onClose={() => setShowTipoOrganizacion(false)}
 				>
 					<FormControl>
-						<Row>
+						{/* 	<Row>
 							<Col
 								style={{
 									display: 'flex',
@@ -328,7 +325,7 @@ export const ServicioComunal: React.FC<IProps> = props => {
 							>
 								<Typography variant='h6'>Tipo</Typography>
 							</Col>
-						</Row>
+						</Row> */}
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
 							name='radio-buttons-group'
@@ -410,221 +407,190 @@ export const ServicioComunal: React.FC<IProps> = props => {
 					</FormControl>
 				</SimpleModal>
 			)}
-			<NavigationContainer
-				goBack={() => {
-					props.history.push('/director/expediente-centro/servicio-comunal')
-				}}
-			/>
-			<Wrapper>
-				<Title>{t('servicio_comunal_title', 'Servicio Comunal')}</Title>
-				<Row>
-					<Col sm={12}>
-						<Card className='bg-white__radius'>
-							<CardTitle>{t('registro_servicio_comunal', 'Registro Servicio Comunal')}</CardTitle>
-							{nombresSeleccionados && console.log('nombresSeleccionados', nombresSeleccionados)}
-							<Form>
-								<Row>
-									<Col md={3}>
-										<FormGroup>
-											<Label>
-												{t('registro_servicio_comunal>area_proyecto', 'Area de proyecto')}
-											</Label>
-											<Input
-												key={areaProyecto}
-												name='i'
-												value={areaProyecto ? areaProyecto : ''}
-												readOnly
-												onClick={() => !showAreaProyecto && setShowAreaProyecto(true)}
-											/>
-										</FormGroup>
-									</Col>
-									<Col md={6}>
-										<FormGroup>
-											<Label>{t('registro_servicio_comunal>objetivonombre', 'objetivo')}</Label>
-											<Input
-												key={nombreSend}
-												name='i'
-												value={nombreSend ? nombreSend : ''}
-												readOnly
-												onClick={() => !showNombre && setShowNombre(true)}
-											/>
-										</FormGroup>
-									</Col>
-									<Col sm={3}>
-										<FormGroup>
-											<Label>{t('registro_servicio_comunal>modalidad', 'Modalidad')}</Label>
-											<Input
-												name='modalidad'
-												type='text'
-												value={modalidad}
-												readOnly
-												onClick={() => !showModalidades && setShowModalidades(true)}
-												autoFocus={true}
-											/>
-										</FormGroup>
-									</Col>
-								</Row>
-								<Row>
-									<Col sm={3}>
+			<h3 className='mt-2 mb-3'>
+				{/* TODO: i18n */}
+				{/* {t('servicio_comunal_title', 'Servicio Comunal')} */}
+				Agregar servicio comunal estudiantil
+			</h3>
+			<Row>
+				<Col sm={12}>
+					<Card className='bg-white__radius mb-3'>
+						<CardTitle>{t('registro_servicio_comunal', 'Registro Servicio Comunal')}</CardTitle>
+						<Form>
+							<Row className='mb-2'>
+								<Col md={3}>
+									<FormGroup>
 										<Label>
-											{t('registro_servicio_comunal>caracteristicas', 'Caracteristicas')}
+											{t('registro_servicio_comunal>area_proyecto', 'Area de proyecto')}
 										</Label>
+										<Input
+											key={areaProyecto}
+											name='i'
+											value={areaProyecto ? areaProyecto : ''}
+											readOnly
+											onClick={() => !showAreaProyecto && setShowAreaProyecto(true)}
+										/>
+									</FormGroup>
+								</Col>
+								<Col md={6}>
+									<FormGroup>
+										<Label>{t('registro_servicio_comunal>objetivonombre', 'objetivo')}</Label>
+										<Input
+											key={nombreSend}
+											name='i'
+											value={nombreSend ? nombreSend : ''}
+											readOnly
+											onClick={() => !showNombre && setShowNombre(true)}
+										/>
+									</FormGroup>
+								</Col>
+								<Col sm={3}>
+									<FormGroup>
+										<Label>{t('registro_servicio_comunal>modalidad', 'Modalidad')}</Label>
+										<Input
+											name='modalidad'
+											type='text'
+											value={modalidad}
+											readOnly
+											onClick={() => !showModalidades && setShowModalidades(true)}
+											autoFocus={true}
+										/>
+									</FormGroup>
+								</Col>
+							</Row>
+							<Row className='mb-2'>
+								<Col sm={3}>
+									<Label>{t('registro_servicio_comunal>caracteristicas', 'Caracteristicas')}</Label>
 
-										{caracteristicasSeleccionados.length == 0 && (
-											<FormGroup>
-												<Input
-													name='codigo'
-													value={''}
-													readOnly
-													onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
-												/>
-											</FormGroup>
-										)}
-										{caracteristicasSeleccionados.length > 0 && (
-											<div
-												onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
-												style={{ padding: 8, background: '#e9ecef' }}
-											>
-												{caracteristicasSeleccionados.map(n => (
-													<Chip label={n.nombre} />
-												))}
-											</div>
-										)}
-									</Col>
-									<Col sm={3}>
+									{caracteristicasSeleccionados.length == 0 && (
 										<FormGroup>
-											<Label>
-												{t(
-													'registro_servicio_comunal>fecha_conclusion',
-													'Fecha de conclusión SCE'
-												)}
-											</Label>
-											<DatePicker
-												dateFormat='dd/MM/yyyy'
-												value={Cdate}
-												onChange={date => {
-													const d = new Date(date)
-													setDate(d)
-													setCDate(d.toLocaleDateString('fr-FR'))
-												}}
-											/>
-										</FormGroup>
-									</Col>
-									<Col sm={3}>
-										<FormGroup>
-											<Label>
-												{t(
-													'registro_servicio_comunal>organizacion_contraparte',
-													'Tipo de organización contraparte'
-												)}
-											</Label>
 											<Input
-												name='tipo_centro'
-												type='text'
-												value={organizacion ? organizacion : ''}
+												name='codigo'
+												value={''}
 												readOnly
-												onClick={() => !showTipoOrganizacion && setShowTipoOrganizacion(true)}
-												autoFocus={true}
+												onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
 											/>
 										</FormGroup>
-										{valueOrg}
-									</Col>
-									<Col sm={3}>
-										<FormGroup>
-											<Label>
-												{t(
-													'registro_servicio_comunal>docente_acompaña',
-													'Acompañante de proyecto'
-												)}
-											</Label>
-											<Input
-												name='tipo_centro'
-												type='text'
-												value={acompanante}
-												onChange={e => {
-													setValueAcompanante(e.target.value)
-												}}
-												autoFocus={true}
-											/>
-										</FormGroup>
-									</Col>
-								</Row>
+									)}
+									{caracteristicasSeleccionados.length > 0 && (
+										<div
+											className='caracteristicas'
+											onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
+										>
+											{caracteristicasSeleccionados.map(n => (
+												<Chip label={n.nombre} />
+											))}
+										</div>
+									)}
+								</Col>
+								<Col sm={3}>
+									<FormGroup>
+										<Label>
+											{t('registro_servicio_comunal>fecha_conclusion', 'Fecha de conclusión SCE')}
+										</Label>
+										<DatePicker
+											style={{ zIndex: 99999 }}
+											dateFormat='dd/MM/yyyy'
+											selected={selectedDate}
+											onChange={date => {
+												const d = new Date(date)
+												setSelectedDate(d)
+												setFormattedDate(d.toLocaleDateString('fr-FR'))
+											}}
+											maxDate={today} // Set the maximum selectable date to today
+										/>
+									</FormGroup>
+								</Col>
+								<Col sm={3}>
+									<FormGroup>
+										<Label>
+											{t(
+												'registro_servicio_comunal>organizacion_contraparte',
+												'Organización contraparte'
+											)}
+										</Label>
+										<Input
+											name='tipo_centro'
+											type='text'
+											value={organizacion ? organizacion : ''}
+											readOnly
+											onClick={() => !showTipoOrganizacion && setShowTipoOrganizacion(true)}
+											autoFocus={true}
+										/>
+									</FormGroup>
+									{valueOrg}
+								</Col>
+								<Col sm={3}>
+									<FormGroup>
+										<Label>
+											{t('registro_servicio_comunal>docente_acompaña', 'Acompañante de proyecto')}
+										</Label>
+										<Input
+											name='tipo_centro'
+											type='text'
+											value={acompanante}
+											onChange={e => {
+												setValueAcompanante(e.target.value)
+											}}
+											autoFocus={true}
+										/>
+									</FormGroup>
+								</Col>
+							</Row>
 
-								<FormGroup>
-									<Label>{t('registro_servicio_comunal>descripcion', 'Descripción')}</Label>
+							<FormGroup>
+								<Label>{t('registro_servicio_comunal>descripcion', 'Descripción')}</Label>
 
-									<Input
-										style={{}}
-										name='tipo_centro'
-										type='text'
-										value={descripcion}
-										onChange={e => {
-											setValueDescripcion(e.target.value)
-										}}
-										autoFocus={true}
-									/>
-								</FormGroup>
-							</Form>
-						</Card>
-					</Col>
-				</Row>
+								<Input
+									style={{}}
+									name='tipo_centro'
+									type='text'
+									value={descripcion}
+									onChange={e => {
+										setValueDescripcion(e.target.value)
+									}}
+									autoFocus={true}
+								/>
+							</FormGroup>
+						</Form>
+					</Card>
+				</Col>
+			</Row>
 
-				<Row>
-					<Col sm={12}>
-						<div>
-							<Search
-								newId='servicioComunalSearch'
-								onSearch={() => {
-									showBuscador ? setShowBuscador(false) : setShowBuscador(true)
-								}}
-							/>
-						</div>
-						<TableStudents
-							onlyViewModule={true}
-							data={estudiantes}
-							avoidSearch={true}
-							// data={[
-							// 	{
-							// 		"idEstudiante": 1495875,
-							// 		"nombreEstudiante": "CASTILLO  NAVARRO AARON",
-							// 		"identificacion": "113420854",
-							// 		"fotografiaUrl": "",
-							// 		"conocidoComo": "",
-							// 		"nacionalidad": null,
-							// 		"idInstitucion": null,
-							// 		"idMatricula": null,
-							// 		"institucion": "",
-							// 		"codigoinstitucion": "",
-							// 		"modalidad": null,
-							// 		"grupo": "",
-							// 		"fallecido": false,
-							// 		"tipoInstitucion": null,
-							// 		"regional": "/",
-							// 		"fechaNacimiento": "1988-02-05T00:00:00",
-							// 		"nivel": null,
-							// 		"tipoIdentificacion": "CÉDULA"
-							// 	}
-							// ]}
-							hasEditAccess={true}
-							setEstudiantes={setEstudiantes}
-							estudiantes={estudiantes}
-							closeContextualMenu={false}
-						></TableStudents>
-					</Col>
-				</Row>
+			<Row>
+				<Col sm={12}>
+					<div>
+						<Search
+							newId='servicioComunalSearch'
+							onSearch={() => {
+								showBuscador ? setShowBuscador(false) : setShowBuscador(true)
+							}}
+						/>
+					</div>
+					<TableStudents
+						onlyViewModule={true}
+						data={estudiantes}
+						avoidSearch={true}
+						hasEditAccess={true}
+						setEstudiantes={setEstudiantes}
+						estudiantes={estudiantes}
+						closeContextualMenu={false}
+					></TableStudents>
+				</Col>
+			</Row>
 
-				<Row>
-					<Col sm={12}>
+			<Row>
+				<Col sm={12}>
+					<p style={{ textAlign: 'center' }}>
 						<Button
 							class='sc-iqcoie bQFwPO cursor-pointer'
 							primary
 							onClick={() => {
-								console.log(acompanante)
-								const selectedInstitution = JSON.parse(localStorage.getItem('selectedInstitution'))
-								if (selectedInstitution?.institucionId != null) {
+								setLoading(true)
+								if (idInstitucion) {
 									actions
 										.crearServicioComunal({
-											sb_InstitucionesId: selectedInstitution.institucionId,
+											sb_InstitucionesId: idInstitucion,
 											sb_areaProyectoId: value,
 											sb_nombreProyectoId: nombreId,
 											sb_modalidadId: modalidadId,
@@ -640,25 +606,19 @@ export const ServicioComunal: React.FC<IProps> = props => {
 											props.history.push('/director/expediente-centro/servicio-comunal')
 										})
 								} else {
+									setLoading(false)
 									alert('Seleccione una institución')
 								}
 							}}
 						>
 							Guardar
 						</Button>
-					</Col>
-				</Row>
-			</Wrapper>
-		</AppLayout>
+					</p>
+				</Col>
+			</Row>
+		</div>
 	)
 }
-
-const Wrapper = styled.div``
-
-const Title = styled.h3`
-	color: #000;
-	margin: 5px 3px 25px;
-`
 
 const StyledTable = styled.table`
 	border-spacing: 1.8rem;
@@ -684,7 +644,7 @@ const FormGroup = styled.div`
 `
 
 const Label = styled.label`
-	color: #000;
+	color: rgba(0, 0, 0, 0.87);
 	display: block;
 `
 
@@ -698,10 +658,10 @@ const Input = styled(ReactstrapInput)`
 	padding: 10px;
 	width: 100%;
 	border: 1px solid #d7d7d7;
-	background-color: #e9ecef;
+	background-color: #fff !important;
 	outline: 0;
 	&:focus {
-		background: #fff;
+		background: #fff !important;
 	}
 `
 
@@ -719,4 +679,4 @@ const SectionTable = styled.div`
 	margin-top: 20px;
 `
 
-export default withRouter(ServicioComunal)
+export default withRouter(Agregar)
