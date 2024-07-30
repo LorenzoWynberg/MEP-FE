@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash'
 import {
 	ESTUDIANTE_FILTER,
 	EXPEDIENTEESTUDIANTIL_LOADING,
@@ -10,7 +11,9 @@ import {
 
 export const INITIAL_STATE = {
 	estudiantes: [],
-	currentStudent: localStorage.getItem('currentStudent') ? JSON.parse(localStorage.getItem('currentStudent')) : {},
+	currentStudent: !isEmpty(localStorage.getItem('currentStudent'))
+		? JSON.parse(localStorage.getItem('currentStudent'))
+		: {},
 	error: '',
 	loading: false,
 	buscador: {

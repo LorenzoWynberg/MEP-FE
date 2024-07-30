@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import axios from 'axios'
 import studentBreadcrumb from 'Constants/studentBreadcrumb'
 import { useSelector } from 'react-redux'
 import { getIdentification } from 'Redux/identificacion/actions'
@@ -12,7 +13,6 @@ import AppLayout from 'Layout/AppLayout'
 import directorItems from 'Constants/directorMenu'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import ContenedorExpSCE from './ContenedorExpSCE'
 import { isEmpty } from 'lodash'
 
 const Navegacion = React.lazy(() => import('./Navegacion'))
@@ -35,6 +35,10 @@ const ContenedorPrincipal = props => {
 	const { idEstudiante } = useParams()
 	const [active, setActive] = React.useState(0)
 	const [loading, setLoading] = React.useState(false)
+	const [aplicaSCE, setAplicaSCE] = React.useState(false)
+	const [breadcrumbs, setBreadcrumbs] = React.useState([])
+	const idInstitucion = localStorage.getItem('idInstitucion')
+
 	studentBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
 		return item
@@ -55,7 +59,7 @@ const ContenedorPrincipal = props => {
 	})
 
 	const estudianteEnContexto = () => {
-		return !isEmpty(state.expedienteEstudiantil.currentStudent)
+		return localStorage.getItem('currentStudent') ? true : false
 	}
 
 	const blockeo = () => {
@@ -94,6 +98,39 @@ const ContenedorPrincipal = props => {
 		}
 	}, [state.expedienteEstudiantil.currentStudent])
 
+	const validarEstudianteSCE = async () => {
+		try {
+			const response = await axios.post(
+				`https://mep-saber.azurewebsites.net/api/ServicioComunal/VerificarEstudianteAplicaSCE?idInstitucion=${idInstitucion}&idEstudiante=${state.expedienteEstudiantil.currentStudent.idEstudiante}`
+			)
+			setAplicaSCE(response.data)
+		} catch (error) {
+			console.error('API error:', error)
+		}
+	}
+
+	const validarAcceso = async () => {
+		await Promise.all([validarEstudianteSCE()])
+		setLoading(false)
+	}
+
+	useEffect(() => {
+		const newBreadcrumbs = studentBreadcrumb.map((item, idx) => ({
+			...item
+		}))
+
+		if (!aplicaSCE) {
+			newBreadcrumbs.splice(11, 1)
+		}
+
+		setBreadcrumbs(newBreadcrumbs)
+	}, [aplicaSCE])
+
+	useEffect(() => {
+		setLoading(true)
+		validarAcceso()
+	}, [])
+
 	return (
 		<AppLayout items={directorItems}>
 			<div className='dashboard-wrapper'>
@@ -106,7 +143,7 @@ const ContenedorPrincipal = props => {
 							<Col xs={12}>
 								<Breadcrumb
 									header={t('expediente_estudiantil>titulo', 'Expediente Estudiantil')}
-									data={studentBreadcrumb}
+									data={breadcrumbs}
 								/>
 								<br />
 							</Col>
@@ -119,7 +156,11 @@ const ContenedorPrincipal = props => {
 									{
 										{
 											0: <Buscador {...props} />,
-											1: estudianteEnContexto() ? <Navegacion {...props} /> : blockeo(),
+											1: estudianteEnContexto() ? (
+												<Navegacion {...props} aplicaSCE={aplicaSCE} />
+											) : (
+												blockeo()
+											),
 											2: estudianteEnContexto() ? <General {...props} /> : blockeo(),
 											3: estudianteEnContexto() ? <Contacto {...props} /> : blockeo(),
 											4: estudianteEnContexto() ? <Hogar {...props} /> : blockeo(),
@@ -142,11 +183,12 @@ const ContenedorPrincipal = props => {
 											) : (
 												blockeo()
 											),
-											11: estudianteEnContexto() ? (
-												<ServicioComunalEstudiantil {...props} />
-											) : (
-												blockeo()
-											)
+											11:
+												estudianteEnContexto() && aplicaSCE ? (
+													<ServicioComunalEstudiantil {...props} />
+												) : (
+													blockeo()
+												)
 										}[active]
 									}
 								</>

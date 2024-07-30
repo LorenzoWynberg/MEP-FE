@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 
 const Navegacion = props => {
 	const { t } = useTranslation()
+	const { aplicaSCE } = props
 
 	return (
 		<Container>
@@ -103,13 +104,15 @@ const Navegacion = props => {
 								<EmailIcon style={{ fontSize: 50, color: 'white' }} />
 							</NavigationCard>
 						}
-						<NavigationCard
-							icon={''}
-							title={'Servicio comunal estudiantil'}
-							href={'/director/expediente-estudiante/servicio-comunal'}
-						>
-							<Solidarity style={{ fontSize: 50, color: 'white' }} />
-						</NavigationCard>
+						{aplicaSCE ? (
+							<NavigationCard
+								icon={''}
+								title={'Servicio comunal estudiantil'}
+								href={'/director/expediente-estudiante/servicio-comunal'}
+							>
+								<Solidarity style={{ fontSize: 50, color: 'white' }} />
+							</NavigationCard>
+						) : null}
 					</Row>
 				</Colxx>
 			</Row>

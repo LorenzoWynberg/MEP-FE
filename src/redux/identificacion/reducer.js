@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash'
 import {
 	IDENTIFICATION_LOAD,
 	IDENTIFICATION_ADD_CATALOGS,
@@ -12,8 +13,10 @@ import {
 } from './types'
 
 const INITIAL_STATE = {
-	data: localStorage.getItem('identificacion_load') ? JSON.parse(localStorage.getItem('identificacion_load')) : {},
-	dataFicha: localStorage.getItem('ficha_load') ? JSON.parse(localStorage.getItem('ficha_load')) : {},
+	data: !isEmpty(localStorage.getItem('identificacion_load'))
+		? JSON.parse(localStorage.getItem('identificacion_load'))
+		: {},
+	dataFicha: !isEmpty(localStorage.getItem('ficha_load')) ? JSON.parse(localStorage.getItem('ficha_load')) : {},
 	loaded: false,
 	loading: false,
 	error: false,
@@ -21,7 +24,7 @@ const INITIAL_STATE = {
 	errorMessages: {},
 	miembrosFicha: [],
 	datosEducativosFicha: [],
-	matriculaHistory: localStorage.getItem('matriculaHistory')
+	matriculaHistory: !isEmpty(localStorage.getItem('matriculaHistory'))
 		? JSON.parse(localStorage.getItem('matriculaHistory'))
 		: []
 }
