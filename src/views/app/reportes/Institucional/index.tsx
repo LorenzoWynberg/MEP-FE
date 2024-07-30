@@ -7,6 +7,7 @@ import ReporteConducta from './ReporteConducta'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import GetHistoricoEstByInstitucionId from './GetHistoricoEstByInstitucionId'
+import GetListaEstudSinReqSCEByInstitucionId from './GetListaEstudSinReqSCEByInstitucionId'
 
 const ReporteInstitucional = () => {
   const { t } = useTranslation()
@@ -49,6 +50,10 @@ const ReporteInstitucional = () => {
     {
       titulo: t('reportes>institucional>reporte_historicoSCE', 'Reporte Historico Servicio Comunitario'),
       descripcion: t('reportes>institucional>resumen_de_reporte_historicoSCE', 'Resumen de proyectos de Servicio Comunal Estudiantil en el centro educativo por año.')
+    },
+    {
+      titulo: t('reportes>institucional>reporte_historicoSCE', 'Reporte De Estudiantes Sin Requisito De SCE'),
+      descripcion: t('reportes>institucional>resumen_de_reporte_historicoSCE', 'Listado de estudiantes matriculado en el nivel menos los estudiantes que cumplieron requisito.')
     },
     // {
     //   titulo: t('reportes>institucional>reporte_conducta', 'REPORTE de conducta'),
@@ -103,6 +108,9 @@ const ReporteInstitucional = () => {
         )} 
         {state == 3 && (
           <GetHistoricoEstByInstitucionId regresarEvent={() => setState(0)} />
+        )}
+        {state == 4 && (
+          <GetListaEstudSinReqSCEByInstitucionId regresarEvent={() => setState(0)} />
         )}
       </>
     )
