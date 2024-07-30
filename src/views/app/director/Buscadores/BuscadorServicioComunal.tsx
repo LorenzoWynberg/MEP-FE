@@ -121,8 +121,14 @@ const BuscadorPersonasServicioComunal = props => {
 								primary
 								onClick={() => {
 									let array = [...props.estudiantes]
-									array.push(fullRow)
-									props.setEstudiantes(array)
+									const studentExists = array.some(
+										student => student.idEstudiante === fullRow.idEstudiante
+									)
+
+									if (!studentExists) {
+										array.push(fullRow)
+										props.setEstudiantes(array)
+									}
 								}}
 							>
 								{/* TODO: i18n */}
