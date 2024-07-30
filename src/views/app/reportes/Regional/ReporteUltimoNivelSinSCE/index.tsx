@@ -55,11 +55,11 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
 
   ]
 
-  const loadReportData = async (circuitoId, regionId) => {
+  const loadReportData = async ( regionId) => {
     try {
       setLoader(true)
       const response = await axios.get(
-        `${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetEstudiantesSinReqSCEUltNivel/${regionId}/${circuitoId}`
+        `${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetEstudiantesSinReqSCEUltNivel/${regionId}/0`
       )
       setLoader(false)
       setReportData(response.data)
@@ -71,9 +71,9 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
   const onShowReportEvent = (parametros) => {
     // setState(1)
     const { circuitoId, regionId } = parametros
-    if (!circuitoId || !regionId) return
+    if (  !regionId) return
 
-    loadReportData(circuitoId.value, regionId.value).then(() => {
+    loadReportData(  regionId.value).then(() => {
       setReportParameters(parametros)
       setState(1)
     })
