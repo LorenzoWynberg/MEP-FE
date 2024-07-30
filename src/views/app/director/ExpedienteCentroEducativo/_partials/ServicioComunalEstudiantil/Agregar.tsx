@@ -104,10 +104,10 @@ export const Agregar: React.FC<IProps> = props => {
 		})
 	}, [])
 
-	const [selectedDate, setSelectedDate] = useState(null);
-	const [formattedDate, setFormattedDate] = useState('');
-  
-	const today = new Date();
+	const [selectedDate, setSelectedDate] = useState(null)
+	const [formattedDate, setFormattedDate] = useState('')
+
+	const today = new Date()
 
 	return (
 		<div className={styles}>
@@ -122,7 +122,7 @@ export const Agregar: React.FC<IProps> = props => {
 					onClose={() => setShowAreaProyecto(false)}
 				>
 					<FormControl>
-			{/* 			<Row>
+						{/* 			<Row>
 							<Col
 								style={{
 									display: 'flex',
@@ -186,7 +186,7 @@ export const Agregar: React.FC<IProps> = props => {
 					onClose={() => setShowCaracteristicas(false)}
 				>
 					<FormControl>
-					{/* 	<Row>
+						{/* 	<Row>
 							<Col
 								style={{
 									display: 'flex',
@@ -314,7 +314,7 @@ export const Agregar: React.FC<IProps> = props => {
 					onClose={() => setShowTipoOrganizacion(false)}
 				>
 					<FormControl>
-					{/* 	<Row>
+						{/* 	<Row>
 							<Col
 								style={{
 									display: 'flex',
@@ -410,7 +410,7 @@ export const Agregar: React.FC<IProps> = props => {
 			<h3 className='mt-2 mb-3'>
 				{/* TODO: i18n */}
 				{/* {t('servicio_comunal_title', 'Servicio Comunal')} */}
-				Agregar servicio comunal
+				Agregar servicio comunal estudiantil
 			</h3>
 			<Row>
 				<Col sm={12}>
@@ -489,16 +489,16 @@ export const Agregar: React.FC<IProps> = props => {
 											{t('registro_servicio_comunal>fecha_conclusion', 'Fecha de conclusión SCE')}
 										</Label>
 										<DatePicker
-      style={{ zIndex: 99999 }}
-      dateFormat="dd/MM/yyyy"
-      selected={selectedDate}
-      onChange={(date) => {
-        const d = new Date(date);
-        setSelectedDate(d);
-        setFormattedDate(d.toLocaleDateString('fr-FR'));
-      }}
-      maxDate={today} // Set the maximum selectable date to today
-    />
+											style={{ zIndex: 99999 }}
+											dateFormat='dd/MM/yyyy'
+											selected={selectedDate}
+											onChange={date => {
+												const d = new Date(date)
+												setSelectedDate(d)
+												setFormattedDate(d.toLocaleDateString('fr-FR'))
+											}}
+											maxDate={today} // Set the maximum selectable date to today
+										/>
 									</FormGroup>
 								</Col>
 								<Col sm={3}>

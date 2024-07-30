@@ -442,7 +442,7 @@ export const Editar: React.FC<IProps> = props => {
 			<h3 className='mt-2 mb-3'>
 				{/* TODO: Translate */}
 				{/* {t('servicio_comunal_title', 'Editar Servicio Comunal')} */}
-				Editar Servicio Comunal
+				Editar servicio comunal estudiantil
 			</h3>
 			<Row>
 				<Col sm={12}>

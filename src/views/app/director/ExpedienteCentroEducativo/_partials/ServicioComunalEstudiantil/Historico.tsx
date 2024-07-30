@@ -277,7 +277,7 @@ const Historico = props => {
 					<Col xs={12}>
 						<h3 className='mt-2 mb-3'>
 							{/* {t('expediente_ce>titulo', 'Expediente Centro Educativo')} */}
-							Histórico de servicio comunal
+							Histórico de servicio comunal estudiantil
 						</h3>
 					</Col>
 					<Col xs={12}>
