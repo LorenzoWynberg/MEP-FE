@@ -4,11 +4,7 @@ import AppLayout from 'Layout/AppLayout'
 import directorItems from 'Constants/directorMenu'
 import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
-import {
-	filterInstitutionsPaginated,
-	cleanInstitutions,
-	getInstitucionesFinder
-} from '../../../../redux/configuracion/actions'
+import { filterInstitutionsPaginated, cleanInstitutions, getInstitucionesFinder } from 'Redux/configuracion/actions'
 import withRouter from 'react-router-dom/withRouter'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import { IoEyeSharp } from 'react-icons/io5'
@@ -49,6 +45,15 @@ const BuscadorCentros = props => {
 			permisos: store.authUser.rolPermisos
 		}
 	})
+
+	const handleLocalStorage = data => {
+		localStorage.setItem('selectedInstitution', JSON.stringify(data))
+		localStorage.setItem('idInstitucion', data.institucionId)
+		localStorage.removeItem('currentStudent')
+		localStorage.removeItem('matriculaHistory')
+		localStorage.removeItem('ficha_load')
+		localStorage.removeItem('identificacion_load')
+	}
 
 	useEffect(() => {
 		setLoading(true)
@@ -163,8 +168,7 @@ const BuscadorCentros = props => {
 							>
 								<TouchAppIcon
 									onClick={() => {
-										localStorage.setItem('selectedInstitution', JSON.stringify(fullRow))
-										localStorage.setItem('idInstitucion', fullRow.institucionId)
+										handleLocalStorage(fullRow)
 										setInstitution(fullRow.institucionId)
 									}}
 									style={{

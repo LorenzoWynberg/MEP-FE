@@ -13,6 +13,7 @@ import directorItems from 'Constants/directorMenu'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import ContenedorExpSCE from './ContenedorExpSCE'
+import { isEmpty } from 'lodash'
 
 const Navegacion = React.lazy(() => import('./Navegacion'))
 const Contacto = React.lazy(() => import('./Contacto'))
@@ -53,6 +54,14 @@ const ContenedorPrincipal = props => {
 		}
 	})
 
+	const estudianteEnContexto = () => {
+		return !isEmpty(state.expedienteEstudiantil.currentStudent)
+	}
+
+	const blockeo = () => {
+		return <h3>Debe seleccionar un estudiante en el buscador de estudiantes.</h3>
+	}
+
 	useEffect(() => {
 		setActive(props.active)
 	}, [props.active])
@@ -89,9 +98,11 @@ const ContenedorPrincipal = props => {
 		<AppLayout items={directorItems}>
 			<div className='dashboard-wrapper'>
 				<Container>
-					{active !== 0 && <InformationCard data={state.expedienteEstudiantil.currentStudent} />}
+					{active !== 0 && estudianteEnContexto() && (
+						<InformationCard data={state.expedienteEstudiantil.currentStudent} />
+					)}
 					<Row>
-						{active !== 0 && (
+						{active !== 0 && estudianteEnContexto() && (
 							<Col xs={12}>
 								<Breadcrumb
 									header={t('expediente_estudiantil>titulo', 'Expediente Estudiantil')}
@@ -108,24 +119,34 @@ const ContenedorPrincipal = props => {
 									{
 										{
 											0: <Buscador {...props} />,
-											1: <Navegacion {...props} />,
-											2: <General {...props} />,
-											3: <Contacto {...props} />,
-											4: <Hogar {...props} />,
-											5: <Beneficios {...props} />,
-											6: <Apoyo {...props} />,
-											7: <AreaCurricular {...props} />,
-											8: <Salud {...props} />,
-											9: <Oferta {...props} historialMatricula={state.historialMatricula} />,
+											1: estudianteEnContexto() ? <Navegacion {...props} /> : blockeo(),
+											2: estudianteEnContexto() ? <General {...props} /> : blockeo(),
+											3: estudianteEnContexto() ? <Contacto {...props} /> : blockeo(),
+											4: estudianteEnContexto() ? <Hogar {...props} /> : blockeo(),
+											5: estudianteEnContexto() ? <Beneficios {...props} /> : blockeo(),
+											6: estudianteEnContexto() ? <Apoyo {...props} /> : blockeo(),
+											7: estudianteEnContexto() ? <AreaCurricular {...props} /> : blockeo(),
+											8: estudianteEnContexto() ? <Salud {...props} /> : blockeo(),
+											9: estudianteEnContexto() ? (
+												<Oferta {...props} historialMatricula={state.historialMatricula} />
+											) : (
+												blockeo()
+											),
 											// 	10: <Sinirube {...props} />,
 											//10: <CuentaCorreo {...props} />,
-											10: (
+											10: estudianteEnContexto() ? (
 												<CuentaUsuarios
 													{...props}
 													expedienteEstudiantil={state.expedienteEstudiantil}
 												/>
+											) : (
+												blockeo()
 											),
-											11: <ServicioComunalEstudiantil {...props} />
+											11: estudianteEnContexto() ? (
+												<ServicioComunalEstudiantil {...props} />
+											) : (
+												blockeo()
+											)
 										}[active]
 									}
 								</>

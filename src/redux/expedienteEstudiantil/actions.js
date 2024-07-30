@@ -6,7 +6,8 @@ import {
 	EXPEDIENTEESTUDIANTIL_LOADING,
 	ESTUDIANTE_CLEAR,
 	CHANGE_COLUMN,
-	CHANGE_FILTER_OPTION
+	CHANGE_FILTER_OPTION,
+	FILTER_CLEAR
 } from './types'
 import { showProgress, hideProgress } from 'Utils/progress'
 
@@ -24,7 +25,7 @@ const setStudent = response => ({
 })
 
 const cleanStudentDataFilter = () => ({
-	type: ESTUDIANTE_CLEAR
+	type: FILTER_CLEAR
 })
 
 const changeColumnSearch = response => ({
