@@ -4,6 +4,7 @@ import ReportCardContainer from '../_partials/ReportCardContainer'
 import ReporteMatriculaPorCircuito from './ReporteMatriculaPorCircuito'
 import GetHistoricoEstDivisionAdmin from './GetHistoricoEstDivisionAdmin'
 import { useTranslation } from 'react-i18next'
+import ReporteUltimoNivelSinSCE from './ReporteUltimoNivelSinSCE'
 
 const ReporteCircuital = () => {
   const { t } = useTranslation()
@@ -27,6 +28,11 @@ const ReporteCircuital = () => {
     {
       titulo: t('reportes>circuital>reporte_de_sce_historico_division', 'Reporte de SCE Historico Division'),
       descripcion: t('reportes>circuital>resumen_de_sce_historico_division', 'Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)')
+    },
+
+    {
+      titulo: t('reportes>circuital>reporte_de_sce_historico_divisionnoSCE', 'Reporte de Estudiantes sin SCE'),
+      descripcion: t('reportes>circuital>resumen_de_sce_historico_divisionnoSCE', 'Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil')
     }
   ]
   const [state, setState] = React.useState(0)
@@ -49,6 +55,10 @@ const ReporteCircuital = () => {
 
       {state == 2 && (
         <GetHistoricoEstDivisionAdmin regresarEvent={() => setState(0)} />
+      )}
+
+      {state == 2 && (
+        <ReporteUltimoNivelSinSCE regresarEvent={() => setState(0)} />
       )}
     </>
   )

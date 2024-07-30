@@ -90,7 +90,7 @@ const GetListaEstudSinReqSCEByInstitucionId = ({ regresarEvent }) => {
             <Loader />
           </div>
         </div>
-      ) : <ReporteStyledTable innerRef={printRef} data={reportData} columns={columns} title={'Reporte De Estudiantes Sin Requisito De SCE.'} />}
+      ) : <ReporteStyledTable innerRef={printRef} data={reportData} columns={columns} title={'Listado de estudiantes del centro educativo, que tienen pendiente el cumplimiento del Servicio Comunal Estudiantil.'} />}
 
     </div>
   )

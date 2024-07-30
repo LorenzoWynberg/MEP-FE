@@ -53,7 +53,7 @@ const ReporteInstitucional = () => {
     },
     {
       titulo: t('reportes>institucional>reporte_historicoSCE', 'Reporte De Estudiantes Sin Requisito De SCE'),
-      descripcion: t('reportes>institucional>resumen_de_reporte_historicoSCE', 'Listado de estudiantes matriculado en el nivel menos los estudiantes que cumplieron requisito.')
+      descripcion: t('reportes>institucional>resumen_de_reporte_historicoSCE', 'Listado de estudiantes del centro educativo, que tienen pendiente el cumplimiento del Servicio Comunal Estudiantil.')
     },
     // {
     //   titulo: t('reportes>institucional>reporte_conducta', 'REPORTE de conducta'),
