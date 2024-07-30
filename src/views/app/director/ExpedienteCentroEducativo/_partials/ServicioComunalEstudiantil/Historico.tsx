@@ -61,12 +61,10 @@ const Historico = props => {
 		}
 	})
 
-	useEffect(() => {
+	const fetch = async => {
 		actions
 			.GetServicioComunalByInstitucionId(idInstitucion)
 			.then(data => {
-				// const _data = mapper(data.options)
-				// console.log('data', _data)
 				setData(data.options)
 				setLoading(false)
 			})
@@ -74,7 +72,15 @@ const Historico = props => {
 				console.log('error', error)
 				setLoading(false)
 			})
+	}
+
+	useEffect(() => {
+		fetch(idInstitucion)
 	}, [])
+
+	useEffect(() => {
+		fetch(idInstitucion)
+	}, [data])
 
 	// TODO: Poner permiso correcto
 	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'configurarinstituciones')
