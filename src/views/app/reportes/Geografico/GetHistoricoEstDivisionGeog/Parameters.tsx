@@ -54,7 +54,7 @@ const Parameters = ({ showReportEvent }) => {
   return (
     <div>
       <ReportParameterCard
-        titulo='Reporte de aulas del centro educativo'
+        titulo='Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil'
         texto='Seleccione la dirección regional y el circuito'
         selects={selects}
         onBtnGenerarEvent={(obj) => {

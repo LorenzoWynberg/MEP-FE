@@ -50,8 +50,12 @@ console.log('Parameters',selects)
   return (
     <div>
       <ReportParameterCard
-        titulo='Reporte Historico de SCE por Division Administrativa'
-        texto='Reporte Historico de SCE por Division Administrativa'
+        titulo='Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)
+
+'
+        texto='Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)
+
+'
         selects={selects}
         onBtnGenerarEvent={(obj) => {
           if (showReportEvent) showReportEvent(obj)

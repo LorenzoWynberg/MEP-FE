@@ -48,12 +48,16 @@ const Parameters = ({ showReportEvent }) => {
   return (
     <div>
       <ReportParameterCard
-        titulo='Reporte Historico de SCE por Division Administrativa'
-        texto='Reporte Historico de SCE por Division Administrativa'
+        titulo='Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)
+
+'
+        texto='Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)
+
+'
         selects={selects.filter((item) => item.key != 'idCircuito' ? item : false).filter(Boolean)}
-      onBtnGenerarEvent={(obj) => {
-        if (showReportEvent) showReportEvent(obj)
-      }}
+        onBtnGenerarEvent={(obj) => {
+          if (showReportEvent) showReportEvent(obj)
+        }}
       />
     </div>
   )

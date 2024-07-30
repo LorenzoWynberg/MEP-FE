@@ -157,9 +157,7 @@ const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
   }
 
   return (
-    <div>
-      {console.log('idCircuitoSent', idCircuitoSent)}
-      {console.log('idCircuitoSent idRegionSent', idRegionSent)}
+    <div> 
       <ReportBar onExcelBtnEvent={onExcelEvent}
         regresarEvent={() => {
           regresarEvent()
