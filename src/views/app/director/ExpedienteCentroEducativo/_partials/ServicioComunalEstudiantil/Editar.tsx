@@ -75,6 +75,7 @@ export const Editar: React.FC<IProps> = props => {
 	const [descripcion, setValueDescripcion] = React.useState('')
 	const [studentsSeleccionados, setStudentsSeleccionados] = React.useState([])
 	const [students, setStudents] = useState([])
+	const today = new Date()
 
 	const mapper = el => {
 		return {
@@ -528,6 +529,7 @@ export const Editar: React.FC<IProps> = props => {
 												setDate(d)
 												setCDate(d.toLocaleDateString('fr-FR'))
 											}}
+											maxDate={today} // Set the maximum selectable date to today
 										/>
 									</FormGroup>
 								</Col>
