@@ -20,7 +20,7 @@ import colors from 'assets/js/colors'
 import { useTranslation } from 'react-i18next'
 import { RemoveRedEyeRounded, Edit } from '@material-ui/icons'
 import SimpleModal from 'Components/Modal/simple'
-import ModalSCE from './ModalSCE'
+import ModalSCE from './_partials/ModalSCE'
 import { Delete } from '@material-ui/icons'
 
 const Historico = props => {

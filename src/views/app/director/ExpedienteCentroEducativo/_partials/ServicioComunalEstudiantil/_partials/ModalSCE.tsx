@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row, Container } from 'reactstrap'
 import { useTranslation } from 'react-i18next'
-import TableStudents from './_partials/tableStudentsSCE'
+import TableStudents from './tableStudentsSCE'
 import { useActions } from 'Hooks/useActions'
 import { GetServicioComunalInfoById } from 'Redux/formularioCentroResponse/actions'
 import styled from 'styled-components'
