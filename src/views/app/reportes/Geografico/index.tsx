@@ -20,12 +20,11 @@ const ReporteGeografico = () => {
     }, */
     {
       titulo: 'Historico SCE por Division Geografica',
-      descripcion: 'Historico SCE por Division Geografica'
+      descripcion: 'Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil'
     }
   ]
   const [state, setState] = React.useState(0)
-  const Cards = () => {
-    console.log('reportes', reportes)
+  const Cards = () => { 
     return reportes.map((reporte, index) => (
       <ReportCard
         onClick={() => setState(index + 1)}

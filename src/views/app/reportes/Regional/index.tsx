@@ -26,7 +26,7 @@ const ReporteRegional = () => {
 
     {
       titulo: t('reportes>circuital>reporte_de_sce_historico_division', 'Reporte de SCE Historico Division'),
-      descripcion: t('reportes>circuital>resumen_de_sce_historico_division', 'Reporte de SCE Historico Division')
+      descripcion: t('reportes>circuital>resumen_de_sce_historico_division', 'Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)')
     } 
   ]
   const [state, setState] = React.useState(0)

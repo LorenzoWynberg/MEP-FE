@@ -48,7 +48,7 @@ const ReporteInstitucional = () => {
     },
     {
       titulo: t('reportes>institucional>reporte_historicoSCE', 'Reporte Historico Servicio Comunitario'),
-      descripcion: t('reportes>institucional>resumen_de_reporte_historicoSCE', 'Historico Servicio Comunitario')
+      descripcion: t('reportes>institucional>resumen_de_reporte_historicoSCE', 'Resumen de proyectos de Servicio Comunal Estudiantil en el centro educativo por año.')
     },
     // {
     //   titulo: t('reportes>institucional>reporte_conducta', 'REPORTE de conducta'),
