@@ -7,7 +7,6 @@ import ReportBar from '../../_partials/ReportBar'
 import { GenerateExcelObject, SendWorkbookToDownload } from 'utils/excel'
 import { useSelector } from 'react-redux'
 import ReporteStyledTableCircuitos from '../../_partials/ReporteStyledTableCircuitos'
-import data from './data'
 
 const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
   const [state, setState] = React.useState(0)
@@ -102,9 +101,8 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
         />
       )}
       {state === 1 && (
-        <ReporteStyledTableCircuitos innerRef={printRef} data={reportData} idCircuito={idCircuitoSent} idRegion={idRegionSent} columns={columns} title={data.title}
-        />
-      )}
+        <ReporteStyledTableCircuitos innerRef={printRef} data={reportData} idCircuito={idCircuitoSent} idRegion={idRegionSent} columns={columns} title={'Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)'}
+        />)}
     </div>
   )
 }
