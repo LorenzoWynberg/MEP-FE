@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useMemo } from 'react'
 import Parameters from './Parameters'
 import Reporte from './Reporte'
 import ReportBar from '../../_partials/ReportBar'
@@ -8,33 +8,37 @@ import ReporteStyledTableCircuitos from '../../_partials/ReporteStyledTableCircu
 import { GenerateExcelObject, SendWorkbookToDownload } from 'Utils/excel'
 
 const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
-	const [state, setState] = React.useState(0)
-	const printRef = React.useRef()
-	const [reportData, setReportData] = React.useState<any>()
-	const [reportParameters, setReportParameters] = React.useState<any>()
+  const [state, setState] = React.useState(0)
+  const [idCircuitoSent, setIdCircuitoSent] = React.useState()
+  const [idRegionSent, setIdRegionSent] = React.useState()
 
-	const loadReportData = async (idRegion, idCircuito) => {
-		try {
-			const response = await axios.get(
-				`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${idRegion}/${idCircuito}`
-			)
-			setReportData(response.data)
-		} catch (e) {
-			console.log(e)
-		}
-	}
+  const printRef = React.useRef()
+  const [reportData, setReportData] = React.useState<any>()
+  const [reportParameters, setReportParameters] = React.useState<any>()
 
-	const onShowReportEvent = parametros => {
-		const { idRegion, idCircuito } = parametros
-		if (!idCircuito || !idRegion) return
+  const loadReportData = async (idRegion, idCircuito) => {
+    try {
 
+      setIdCircuitoSent(idCircuito)
+      setIdRegionSent(idRegion)
+      const response = await axios.get(
+        `${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${idRegion}/${idCircuito}`
+      )
+      setReportData(response.data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
+  const onShowReportEvent = parametros => {
+    const { idRegion, idCircuito } = parametros
+    if (!idCircuito || !idRegion) return
     loadReportData(idRegion.value, idCircuito.value).then(() => {
       setReportParameters(parametros)
       setState(1)
     })
-    console.log(parametros)
   }
-  const columns = [ 
+  const columns = [
     {
       Header: 'Oferta',
       accessor: 'nombreOferta',
@@ -139,8 +143,11 @@ const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
     const workbook = GenerateExcelObject(dataToPrint)
     SendWorkbookToDownload(workbook, `Historico SCE Estudiantes Por Institucion.xlsx`)
   }
+
   return (
     <div>
+      {console.log('idCircuitoSent', idCircuitoSent)}
+      {console.log('idCircuitoSent idRegionSent', idRegionSent)}
       <ReportBar onExcelBtnEvent={onExcelEvent}
         regresarEvent={() => {
           regresarEvent()
@@ -148,8 +155,9 @@ const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
         }} imprimirRef={printRef} showBtn={state === 1}
       />
       {state === 0 && <Parameters showReportEvent={onShowReportEvent} />}
-      {state === 1 && <ReporteStyledTableCircuitos innerRef={printRef} data={reportData} columns={columns} title={'Historico SCE Estudiantes Por Institucion'} />}
+      {state === 1 && <ReporteStyledTableCircuitos innerRef={printRef} data={reportData} idCircuito={idCircuitoSent} idRegion={idRegionSent} columns={columns} title={'Historico SCE Estudiantes Por Institucion'} />}
     </div>
+
   )
 }
 

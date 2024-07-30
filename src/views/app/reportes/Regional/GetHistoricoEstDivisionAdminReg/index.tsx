@@ -9,6 +9,7 @@ import { GenerateExcelObject, SendWorkbookToDownload } from 'Utils/excel'
 
 const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
 	const [state, setState] = React.useState(0)
+	const [idRegionSent, setIdRegionSent] = React.useState(0)
 	const printRef = React.useRef()
 	const [reportData, setReportData] = React.useState<any>()
 	const title = 'Reporte Historico de SCE por Division Administrativa'
@@ -17,7 +18,7 @@ const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
 	const loadReportData = async idRegion => {
 		try {
 			const response = await axios.get(
-				`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${0}/0`
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${idRegion}/0`
 			)
 			setReportData(response.data)
 		} catch (e) {
@@ -28,7 +29,7 @@ const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
 	const onShowReportEvent = parametros => {
 		const { idRegion } = parametros
 		if (!idRegion) return
-
+		idRegion && setIdRegionSent(idRegion.value)
 		loadReportData(idRegion.value).then(() => {
 			setReportParameters(parametros)
 			setState(1)
@@ -168,7 +169,7 @@ const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
 			/>
 			{state === 0 && <Parameters showReportEvent={onShowReportEvent} />}
 			{state === 1 && (
-				<ReporteStyledTableCircuitos innerRef={printRef} data={reportData} columns={columns} title={title} />
+				<ReporteStyledTableCircuitos innerRef={printRef} data={reportData} columns={columns} title={title} idRegion={idRegionSent} />
 			)}
 		</div>
 	)

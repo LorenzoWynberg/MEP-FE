@@ -8,6 +8,9 @@ interface IProps {
   mostrarContactoInstitucion?: boolean
   regionId?: number
   circuitoId?: number
+  estadoProp?: string
+  regionNombreProp?: string
+  geoValues?: object
 }
 
 const initialState = {
@@ -19,7 +22,7 @@ const ReportHeader: React.FC<IProps> = (
   props = { mostrarContactoInstitucion: true }
 ) => {
   const { t } = useTranslation()
-  const { mostrarContactoInstitucion, regionId, circuitoId } = props
+  const { mostrarContactoInstitucion, regionId, circuitoId, geoValues } = props
 
   const [estado, setEstado] = React.useState(initialState)
   const state = useSelector<any, any>((store) => {
@@ -33,32 +36,40 @@ const ReportHeader: React.FC<IProps> = (
     else return <></>
   }
 
-  const fetch = async () => {
-    const regionByCircuitoEndpoint = `${envVariables.BACKEND_URL}/api/Areas/Reportes/ReportesGenerales/GetRegionByCircuitoId?circuitoId=${circuitoId}`
-    const regionByIdEndpoint = `${envVariables.BACKEND_URL}/api/Admin/Regional/GetById/${regionId}`
-    const circuitoByIdEnpoint = `${envVariables.BACKEND_URL}/api/Admin/Circuito/GetById/${circuitoId}`
-    try {
-      const retorno: any = {}
-      if (circuitoId) {
-        const r1 = await axios.get(regionByCircuitoEndpoint)
-        retorno.regionByCircuitoData = r1.data
-        const r2 = await axios.get(circuitoByIdEnpoint)
-        retorno.circuitoByIdData = r2.data
-      }
-      if (regionId) {
-        const response = await axios.get(regionByIdEndpoint)
-        retorno.regionByIdData = response.data
-      }
 
-      return retorno
-    } catch (e) {}
-  }
 
   React.useMemo(() => {
+    const fetch = async () => {
+      const regionByCircuitoEndpoint = `${envVariables.BACKEND_URL}/api/Areas/Reportes/ReportesGenerales/GetRegionByCircuitoId?circuitoId=${circuitoId}`
+      const regionByIdEndpoint = `${envVariables.BACKEND_URL}/api/Admin/Regional/GetById/${regionId}`
+      const circuitoByIdEnpoint = `${envVariables.BACKEND_URL}/api/Admin/Circuito/GetById/${circuitoId}`
+      try {
+        const retorno: any = {}
+        if (circuitoId) {
+          const r1 = await axios.get(regionByCircuitoEndpoint)
+          retorno.regionByCircuitoData = r1.data
+          const r2 = await axios.get(circuitoByIdEnpoint)
+          retorno.circuitoByIdData = r2.data
+        }
+        if (regionId) {
+          const response = await axios.get(regionByIdEndpoint)
+          retorno.regionByIdData = response.data
+        }
+        console.log('retorno', retorno)
+        return retorno
+      } catch (e) { console.log('retorno error', e) }
+    }
+    console.log('regionId', { regionId, circuitoId })
     if (!regionId && !circuitoId) {
       setEstado({
         regionNombre: state.currentInstituion.regionNombre,
         circuitoNombre: state.currentInstituion.circuitoNombre
+      })
+    } if (geoValues?.idProvincia) {
+      console.log('geoValues', geoValues)
+      setEstado({
+        regionNombre: `${geoValues.idProvincia.label}, ${geoValues.idCanton.label}`,
+        circuitoNombre: `${geoValues.idDistrito.label}`
       })
     } else {
       fetch().then((data: any) => {
@@ -68,13 +79,17 @@ const ReportHeader: React.FC<IProps> = (
         const circuitoNombre = data?.circuitoByIdData
           ? data.circuitoByIdData.nombre
           : undefined
+        console.log('regionNombre', {
+          regionNombre,
+          circuitoNombre
+        })
         setEstado({
           regionNombre,
           circuitoNombre
         })
       })
     }
-  }, [])
+  }, [regionId, circuitoId, geoValues])
 
   return (
     <HeaderContainer>
@@ -83,7 +98,7 @@ const ReportHeader: React.FC<IProps> = (
       </HeaderSide>
       <HeaderCenter>
         <ParrafoMEP>
-          {t('reportes>institucional>ministro_educacion','MINISTERIO DE EDUCACIÓN PÚBLICA')}
+          {t('reportes>institucional>ministro_educacion', 'MINISTERIO DE EDUCACIÓN PÚBLICA')}
           <br />
           {estado.regionNombre}
           <br />
@@ -95,8 +110,8 @@ const ReportHeader: React.FC<IProps> = (
               <Linea />
               <Parrafo>
                 {state.currentInstituion?.codigo +
-                ' ' +
-                state.currentInstituion?.nombre}
+                  ' ' +
+                  state.currentInstituion?.nombre}
                 <br />
                 {isNull(
                   state.currentInstitution?.telefonoCentroEducativo,
@@ -108,10 +123,10 @@ const ReportHeader: React.FC<IProps> = (
                 )}
               </Parrafo>
             </>
-            )
+          )
           : (
-              ''
-            )}
+            ''
+          )}
       </HeaderCenter>
       <HeaderSide>
         <img

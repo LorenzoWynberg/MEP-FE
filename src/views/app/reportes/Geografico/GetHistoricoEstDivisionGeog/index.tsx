@@ -4,11 +4,12 @@ import Reporte from './Reporte'
 import ReportBar from '../../_partials/ReportBar'
 import { envVariables } from 'Constants/enviroment'
 import axios from 'axios'
-import ReporteStyledTable from '../../_partials/ReporteStyledTable'
+import ReporteStyledTableGeo from '../../_partials/ReporteStyledTableGeo'
 import { GenerateExcelObject, SendWorkbookToDownload } from 'Utils/excel'
 
 const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
-  const [state, setState] = React.useState(0)
+  const [state, setState] = React.useState(0)  
+  const [values, setValues] = React.useState(0)
   const printRef = React.useRef()
   const [reportData, setReportData] = React.useState<any>()
   const [reportParameters, setReportParameters] = React.useState<any>()
@@ -145,13 +146,13 @@ const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
   const onShowReportEvent = (parametros) => {
     const { idProvincia, idCanton, idDistrito } = parametros
     if (!idProvincia || !idCanton || !idDistrito) return
-
+    setValues({ idProvincia, idCanton, idDistrito })
     loadReportData(idProvincia.value, idCanton.value, idDistrito.value).then(() => {
       setReportParameters(parametros)
       setState(1)
     })
   }
-  const onExcelEvent = () => { 
+  const onExcelEvent = () => {
     const workbook = GenerateExcelObject(reportData)
     SendWorkbookToDownload(workbook, `${title}.xlsx`)
   }
@@ -164,7 +165,7 @@ const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
         }} imprimirRef={printRef} showBtn={state === 1}
       />
       {state === 0 && <Parameters showReportEvent={onShowReportEvent} />}
-      {state === 1 && <ReporteStyledTable innerRef={printRef} data={reportData} columns={columns} title={title} />}
+      {state === 1 && <ReporteStyledTableGeo innerRef={printRef} data={reportData} columns={columns} title={title} headerValues={values} />}
     </div>
   )
 }

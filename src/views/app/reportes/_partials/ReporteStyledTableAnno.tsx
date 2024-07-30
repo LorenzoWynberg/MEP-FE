@@ -18,8 +18,8 @@ const ReporteStyledTableAnno = ({ innerRef, data, columns, title }) => {
     }
   })
 
-  const Row = (item) => { 
-    console.log('row Object.keys(item)',Object.keys(item))
+  const Row = (item) => {
+    console.log('row Object.keys(item)', Object.keys(item))
     return (
 
       <tr >
@@ -31,21 +31,16 @@ const ReporteStyledTableAnno = ({ innerRef, data, columns, title }) => {
   return (
     <div ref={innerRef} style={{ overflow: 'auto' }}>
       <Card>
-        <ReportHeader mostrarContactoInstitucion />
-        <Seccion style={{ marginTop: '1rem' }}>
-
-          <p>
-            <b>{title}</b>
-          </p>
-        </Seccion>
+        <ReportHeader estadoProp={title} />
+     
         <p>
           <Table>
-            <thead> 
+            <thead>
               {columns && columns.map((item) => <th>{item.Header}</th>)}
             </thead>
             <tbody>
               {data && data.map((item) => {
-                return <><tr ><h6 style={{marginTop:16}}>Año: {item.annoParticipacion}</h6></tr>
+                return <><tr ><h6 style={{ marginTop: 16 }}>Año: {item.annoParticipacion}</h6></tr>
                   {item.datos.map(d => Row(d))}</>
               })}
             </tbody>

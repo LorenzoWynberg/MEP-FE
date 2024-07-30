@@ -1,6 +1,8 @@
 import React from 'react'
 import ReportParameterCard from '../../_partials/ReportParameterCard'
-import useFiltroReportes from '../../_partials/useFiltroReportes'
+import useFiltroReportes from '../../_partials/useFiltroReportes' 
+import { envVariables } from 'Constants/enviroment' 
+import axios from 'axios'
 const initialState = [
   {
     key: 'idProvincia',
@@ -19,34 +21,32 @@ const initialState = [
   }
 ]
 const Parameters = ({ showReportEvent }) => {
+ 
   const {
-    getInstitucionByCircuitoId,
-    getRegionales,
-    getCircuitosByRegionalId,
     setSelectInitialState,
     setSelectItems,
     selects
   } = useFiltroReportes()
 
   React.useEffect(() => {
+ 
     setSelectInitialState(initialState)
     const fetch = async () => {
-      const regionArr = await getRegionales()
-
+      const provArr = await axios.get(`${envVariables.BACKEND_URL}/api/Provincia`)
       const mapeador = (item) => {
         return { value: item.id, label: item.nombre }
       }
       const onChange = (obj) => {
-        const onChangeCircuito = (obj) => {
-          getInstitucionByCircuitoId(obj.value).then((institucionArr) => {
-            setSelectItems(2, institucionArr.map(mapeador), null)
+        const onChangeCanton = (obj) => {
+          axios.get(`${envVariables.BACKEND_URL}/api/Distrito/GetByCanton/${obj.value}`).then((institucionArr) => {
+            setSelectItems(2, institucionArr.data.map(mapeador), null)
           })
         }
-        getCircuitosByRegionalId(obj.value).then((circuitosArr) => {
-          setSelectItems(1, circuitosArr.map(mapeador), onChangeCircuito)
+        axios.get(`${envVariables.BACKEND_URL}/api/Canton/GetByProvince/${obj.value}`).then((circuitosArr) => {
+          setSelectItems(1, circuitosArr.data.map(mapeador), onChangeCanton)
         })
       }
-      setSelectItems(0, regionArr.map(mapeador), onChange)
+      setSelectItems(0, provArr.data.map(mapeador), onChange)
     }
     fetch()
   }, [])

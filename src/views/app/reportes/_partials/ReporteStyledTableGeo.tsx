@@ -11,7 +11,7 @@ const formatter = Intl.DateTimeFormat('es-ES', {
   timeStyle: 'short',
   hour12: true
 })
-const ReporteStyledTable = ({ innerRef, data, columns,title }) => {
+const ReporteStyledTableGeo = ({ innerRef, data, columns, title, headerValues }) => {
   const state = useSelector<any, any>((store) => {
     return {
       user: store.authUser.authObject.user,
@@ -19,7 +19,7 @@ const ReporteStyledTable = ({ innerRef, data, columns,title }) => {
     }
   })
 
-  const Row = (item, index) => { 
+  const Row = (item, index) => {
     return (
       <tr key={index}>
         {Object.keys(item).map((key, index) => <td>{item[key]}</td>)}
@@ -27,11 +27,11 @@ const ReporteStyledTable = ({ innerRef, data, columns,title }) => {
     )
   }
 
-  
+
   return (
-    <div ref={innerRef} style={{overflow:'auto'}}>
+    <div ref={innerRef} style={{ overflow: 'auto' }}>
       <Card>
-        <ReportHeader mostrarContactoInstitucion />
+        <ReportHeader geoValues={headerValues} />
         <Seccion style={{ marginTop: '1rem' }}>
 
           <p>
@@ -99,4 +99,4 @@ const Seccion = styled.section`
   text-align: center;
 `
 
-export default ReporteStyledTable
+export default ReporteStyledTableGeo

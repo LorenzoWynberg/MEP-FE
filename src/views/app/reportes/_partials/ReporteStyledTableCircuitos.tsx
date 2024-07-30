@@ -10,7 +10,8 @@ const formatter = Intl.DateTimeFormat('es-ES', {
   timeStyle: 'short',
   hour12: true
 })
-const ReporteStyledTableCircuitos = ({ innerRef, data, columns, title }) => {
+const ReporteStyledTableCircuitos = ({ innerRef, data, columns, title, idRegion , idCircuito  }) => {
+  console.log('idCircuitoSent ReporteStyledTableCircuitos', {idRegion , idCircuito})
   const state = useSelector<any, any>((store) => {
     return {
       user: store.authUser.authObject.user,
@@ -31,7 +32,7 @@ const ReporteStyledTableCircuitos = ({ innerRef, data, columns, title }) => {
   return (
     <div ref={innerRef} style={{ overflow: 'auto' }}>
       <Card>
-        <ReportHeader mostrarContactoInstitucion />
+        <ReportHeader regionId={idRegion} circuitoId={idCircuito} />
         <Seccion style={{ marginTop: '1rem' }}>
 
           <p>
@@ -45,10 +46,7 @@ const ReporteStyledTableCircuitos = ({ innerRef, data, columns, title }) => {
             </thead>
             <tbody>
               {data && data.map((item) => {
-
-
-
-                return <><tr ><h6 style={{marginTop:16}}>{item.circuitoNombre}</h6></tr>
+                return <><tr ><h6 style={{ marginTop: 16 }}>{item.circuitoNombre}</h6></tr>
                   {item.datos.map(d => Row(d))}</>
               })}
             </tbody>
