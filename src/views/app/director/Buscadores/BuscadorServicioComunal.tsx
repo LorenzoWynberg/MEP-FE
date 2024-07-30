@@ -224,9 +224,9 @@ const BuscadorPersonasServicioComunal = props => {
 							<TableReactImplementation
 								data={data}
 								handleGetData={async (searchValue: string, column: string | undefined | null) => {
-									if (!searchValue) return
+									// if (!searchValue) return
 									setLoading(true)
-									await actions.getStudentsSCE(searchValue, idInstitucion, 1, 30)
+									await actions.getStudentsSCE(searchValue, idInstitucion, 1, null)
 									setLoading(false)
 								}}
 								columns={columns}
