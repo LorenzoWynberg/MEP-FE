@@ -43,7 +43,7 @@ const TableStudents: React.FC<IProps> = props => {
 		}
 	}
 
-	const columns = props.columns ? props.columns : useMemo(() => {
+	const columns = useMemo(() => {
 		// Si tiene permiso para des-matricular, se agrega la columna de acciones
 
 		// ID #2 -> Director
@@ -270,9 +270,9 @@ const TableStudents: React.FC<IProps> = props => {
 
 	onlyViewModule && columns.splice(7, 1)
 	return (
-		<Colxx className={props.noMargin ? 'mb-0' : 'mb-5'} style={props.noMargin ? { margin: 0 , padding:0} : {}} sm='12' lg='12' xl='12' >
+		<Colxx className='mb-5' sm='12' lg='12' xl='12'>
 			<Card>
-				<CardBody style={props.noMargin ? { margin: 0 , padding:0} : {}} >
+				<CardBody>
 					<h4>
 						{t(
 							'estudiantes>registro_matricula>matricula_estudian>estudian_matriculados',
@@ -280,10 +280,10 @@ const TableStudents: React.FC<IProps> = props => {
 						)}
 					</h4>
 
-					<TableReactImplementation avoidSearch={props.avoidSearch} orderOptions={[]} columns={columns} data={students} />
+					<TableReactImplementation orderOptions={[]} columns={columns} data={students} />
 				</CardBody>
 			</Card>
-		</Colxx >
+		</Colxx>
 	)
 }
 
