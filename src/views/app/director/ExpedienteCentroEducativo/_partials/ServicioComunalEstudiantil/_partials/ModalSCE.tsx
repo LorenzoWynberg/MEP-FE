@@ -3,6 +3,7 @@ import { Col, Row, Container } from 'reactstrap'
 import { useTranslation } from 'react-i18next'
 import TableStudents from './tableStudentsSCE'
 import { useActions } from 'Hooks/useActions'
+import Loader from 'components/LoaderContainer'
 import { GetServicioComunalInfoById } from 'Redux/formularioCentroResponse/actions'
 import styled from 'styled-components'
 
@@ -99,6 +100,7 @@ const ModalSCE = props => {
 
 	return (
 		<Container>
+			{loading && <Loader />}
 			{showProyecto && (
 				<div>
 					<Row className='mt-2'>
