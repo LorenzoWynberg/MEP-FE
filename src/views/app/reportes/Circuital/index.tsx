@@ -57,7 +57,7 @@ const ReporteCircuital = () => {
         <GetHistoricoEstDivisionAdmin regresarEvent={() => setState(0)} />
       )}
 
-      {state == 2 && (
+      {state == 3 && (
         <ReporteUltimoNivelSinSCE regresarEvent={() => setState(0)} />
       )}
     </>

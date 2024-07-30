@@ -44,6 +44,12 @@ const GetListaEstudSinReqSCEByInstitucionId = ({ regresarEvent }) => {
       column: ''
     },
     {
+      Header: 'Tipo ID',
+      accessor: 'tipoIdentificacion',
+      label: '',
+      column: ''
+    },
+    {
       Header: 'Nombre',
       accessor: 'nombreEstudiante',
       label: '',
@@ -54,7 +60,13 @@ const GetListaEstudSinReqSCEByInstitucionId = ({ regresarEvent }) => {
       accessor: 'nombreNivel',
       label: '',
       column: ''
-    }
+    },
+    {
+      Header: 'Género',
+      accessor: 'genero',
+      label: '',
+      column: ''
+    },
   ]
 
   const onExcelEvent = () => {

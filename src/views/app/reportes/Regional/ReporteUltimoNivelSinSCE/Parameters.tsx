@@ -16,12 +16,6 @@ const Parameters = ({ showReportEvent, reportLoader = false }) => {
       label: t("gestion_usuario>usuarios>regional", "Regional"),
       items: [],
       onChange: null
-    },
-    {
-      key: 'circuitoId',
-      label: t("buscador_ce>ver_centro>ubicacion_administrativa>circuito", "Circuito"),
-      items: [],
-      onChange: null
     }
   ]
   const [loader, setLoader] = React.useState(false)
@@ -39,19 +33,14 @@ const Parameters = ({ showReportEvent, reportLoader = false }) => {
       const regionales = uniqWith(allData, function (a: any, b: any) {
         return a.idRegiondelCircuito == b.idRegiondelCircuito
       })
-      const onChangeRegion = (obj) => {
-        const filtrado = allData
-          .filter((item) => item.idRegiondelCircuito == obj.value)
-          .map(mapeador)
-        setSelectItems(1, filtrado, null)
-      }
+     
       setSelectItems(
         0,
         regionales.map((item) => ({
           value: item.idRegiondelCircuito,
           label: item.nombreRegiondelCircuito
         })),
-        onChangeRegion
+        null
       )
       return response.data
     } catch (e) {

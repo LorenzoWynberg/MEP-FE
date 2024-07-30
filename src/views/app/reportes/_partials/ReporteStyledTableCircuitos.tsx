@@ -10,8 +10,7 @@ const formatter = Intl.DateTimeFormat('es-ES', {
   timeStyle: 'short',
   hour12: true
 })
-const ReporteStyledTableCircuitos = ({ innerRef, data, columns, title, idRegion , idCircuito  }) => {
-  console.log('idCircuitoSent ReporteStyledTableCircuitos', {idRegion , idCircuito})
+const ReporteStyledTableCircuitos = ({ innerRef, data, columns, title, idRegion , idCircuito  }) => { 
   const state = useSelector<any, any>((store) => {
     return {
       user: store.authUser.authObject.user,
@@ -19,8 +18,7 @@ const ReporteStyledTableCircuitos = ({ innerRef, data, columns, title, idRegion 
     }
   })
 
-  const Row = (item) => {
-    console.log("itemtiemt", item)
+  const Row = (item) => { 
     return (
 
       <tr >
@@ -46,7 +44,7 @@ const ReporteStyledTableCircuitos = ({ innerRef, data, columns, title, idRegion 
             </thead>
             <tbody>
               {data && data.map((item) => {
-                return <><tr ><h6 style={{ marginTop: 16 }}>{item.circuitoNombre}</h6></tr>
+                return <><tr ><h6 style={{ marginTop: 16 }}>{item.nombreCircuito}</h6></tr>
                   {item.datos.map(d => Row(d))}</>
               })}
             </tbody>
@@ -66,8 +64,9 @@ const ReporteStyledTableCircuitos = ({ innerRef, data, columns, title, idRegion 
   )
 }
 
-const Table = styled.div`
+const Table = styled.table`
   border-collapse: collapse;
+  width:100%;
   thead {
     font-width: bold;
     text-align: center;
