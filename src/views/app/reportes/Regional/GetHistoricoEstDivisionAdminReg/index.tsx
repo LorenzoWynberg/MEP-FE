@@ -169,7 +169,7 @@ const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
 			/>
 			{state === 0 && <Parameters showReportEvent={onShowReportEvent} />}
 			{state === 1 && (
-				<ReporteStyledTableCircuitos innerRef={printRef} data={reportData} columns={columns} title={title} idRegion={idRegionSent} />
+				<ReporteStyledTableCircuitos innerRef={printRef} data={reportData} columns={columns} title={'Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)'} idRegion={idRegionSent} />
 			)}
 		</div>
 	)

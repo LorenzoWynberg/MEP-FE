@@ -9,85 +9,34 @@ import { GenerateExcelObject, SendWorkbookToDownload } from 'Utils/excel'
 import ReporteStyledTableAnno from '../../_partials/ReporteStyledTableAnno'
 
 const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
-	const [state, setState] = React.useState(0)
-	const printRef = React.useRef()
-	const [reportData, setReportData] = React.useState<any>()
-	const [reportParameters, setReportParameters] = React.useState<any>()
-	const [loader, setLoader] = React.useState(true)
-	const title = 'Reporte Historico de SCE por Institucion'
+  const [state, setState] = React.useState(0)
+  const printRef = React.useRef()
+  const [reportData, setReportData] = React.useState<any>()
+  const [reportParameters, setReportParameters] = React.useState<any>()
+  const [loader, setLoader] = React.useState(true)
+  const title = 'Reporte Historico de SCE por Institucion'
 
-	const { institucionId } = useFiltroReportes()
-	const loadReportData = async institucionId => {
-		try {
-			const response = await axios.get(
-				`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstByInstitucionId/${institucionId}`
-			)
-			setReportData(response.data)
-		} catch (e) {
-			console.log(e)
-		}
-	}
-	const onShowReportEvent = () => {
-		loadReportData(institucionId).then(() => {
-			setLoader(false)
-		})
-	}
+  const { institucionId } = useFiltroReportes()
+  const loadReportData = async institucionId => {
+    try {
+      const response = await axios.get(
+        `${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstByInstitucionId/${institucionId}`
+      )
+      setReportData(response.data)
+    } catch (e) {
+      console.log(e)
+    }
+  }
+  const onShowReportEvent = () => {
+    loadReportData(institucionId).then(() => {
+      setLoader(false)
+    })
+  }
 
-	React.useEffect(() => {
-		onShowReportEvent()
-	}, [institucionId])
+  React.useEffect(() => {
+    onShowReportEvent()
+  }, [institucionId])
 
-
-  /*
-  0
-: 
-"annoParticipacion"
-1
-: 
-"nombreAreaProyecto"
-2
-: 
-"descripcion"
-3
-: 
-"nombreProyecto"
-4
-: 
-"nombreModalidad"
-5
-: 
-"caracteristicas"
-6
-: 
-"nombreOrgContraparte"
-7
-: 
-"cedulaCount"
-8
-: 
-"dimexCount"
-9
-: 
-"yisRoCount"
-10
-: 
-"discapacidadCount"
-11
-: 
-"hombreCount"
-12
-: 
-"mujerCount"
-13
-: 
-"indigenaCount"
-14
-: 
-"refugiadoCount"
-15
-: 
-"totalEstudiantes"
-  */
   const columns = [
     {
       Header: 'Año',
@@ -221,7 +170,7 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
             <Loader />
           </div>
         </div>
-      ) : <ReporteStyledTableAnno innerRef={printRef} data={reportData} columns={columns} title={title} />}
+      ) : <ReporteStyledTableAnno innerRef={printRef} data={reportData} columns={columns} title={'Resumen de proyectos de Servicio Comunal Estudiantil en el centro educativo por año.'} />}
 
     </div>
   )

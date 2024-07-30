@@ -155,7 +155,7 @@ const GetHistoricoEstDivisionAdmin = ({ regresarEvent }) => {
         }} imprimirRef={printRef} showBtn={state === 1}
       />
       {state === 0 && <Parameters showReportEvent={onShowReportEvent} />}
-      {state === 1 && <ReporteStyledTableCircuitos innerRef={printRef} data={reportData} idCircuito={idCircuitoSent} idRegion={idRegionSent} columns={columns} title={'Historico SCE Estudiantes Por Institucion'} />}
+      {state === 1 && <ReporteStyledTableCircuitos innerRef={printRef} data={reportData} idCircuito={idCircuitoSent} idRegion={idRegionSent} columns={columns} title={'Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)'} />}
     </div>
 
   )

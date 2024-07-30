@@ -165,7 +165,7 @@ const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
         }} imprimirRef={printRef} showBtn={state === 1}
       />
       {state === 0 && <Parameters showReportEvent={onShowReportEvent} />}
-      {state === 1 && <ReporteStyledTableGeo innerRef={printRef} data={reportData} columns={columns} title={title} headerValues={values} />}
+      {state === 1 && <ReporteStyledTableGeo innerRef={printRef} data={reportData} columns={columns} title={'Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil'} headerValues={values} />}
     </div>
   )
 }
