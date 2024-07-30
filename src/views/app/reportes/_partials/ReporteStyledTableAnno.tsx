@@ -32,7 +32,12 @@ const ReporteStyledTableAnno = ({ innerRef, data, columns, title }) => {
     <div ref={innerRef} style={{ overflow: 'auto' }}>
       <Card>
         <ReportHeader estadoProp={title} />
-     
+        <Seccion style={{ marginTop: '1rem' }}>
+
+          <p>
+            <b>{title}</b>
+          </p>
+        </Seccion>
         <p>
           <Table>
             <thead>
