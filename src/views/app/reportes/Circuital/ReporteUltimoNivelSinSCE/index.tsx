@@ -19,38 +19,38 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
 
   const columns = [
     {
-      Header: 'Codigo Institucion',
+      Header: 'Codigo Institución',
       accessor: 'codigoInstitucion',
       label: '',
-      column: ''
+      column: 'codigoInstitucion'
     },
 
+    {
+      Header: 'Institución',
+      accessor: 'nombreInstitucion',
+      label: '',
+      column: 'nombreInstitucion'
+    },
     {
       Header: 'Hombres',
       accessor: 'hombreCount',
       label: '',
-      column: ''
+      column: 'hombreCount'
     },
 
     {
       Header: 'Mujeres',
       accessor: 'mujerCount',
       label: '',
-      column: ''
+      column: 'mujerCount'
     },
 
-    {
-      Header: 'Intitución',
-      accessor: 'nombreInstitucion',
-      label: '',
-      column: ''
-    },
 
     {
       Header: 'Total Estudiantes',
       accessor: 'totalEstudiantes',
       label: '',
-      column: ''
+      column: 'nombreInstitucion'
     },
 
   ]
@@ -74,6 +74,8 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
     if (!circuitoId || !regionId) return
 
     loadReportData(circuitoId.value, regionId.value).then(() => {
+      setIdCircuitoSent(circuitoId.value)
+      setIdRegionSent(regionId.value)
       setReportParameters(parametros)
       setState(1)
     })

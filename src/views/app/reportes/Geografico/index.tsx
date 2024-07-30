@@ -20,7 +20,7 @@ const ReporteGeografico = () => {
     }, */
     {
       titulo: 'Historico SCE por Division Geografica',
-      descripcion: 'Resumen de proyectos de Servicio Comunal Estudiantil según división geográfica (Provincia, cantón, distrito)'
+      descripcion: 'Resumen de proyectos de Servicio Comunal Estudiantil según división geografica (Provincia, cantón, distrito)'
     }
   ]
   const [state, setState] = React.useState(0)

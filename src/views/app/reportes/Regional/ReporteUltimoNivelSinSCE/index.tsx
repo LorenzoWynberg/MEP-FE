@@ -75,6 +75,7 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
 
     loadReportData(  regionId.value).then(() => {
       setReportParameters(parametros)
+      setIdRegionSent(regionId.value)
       setState(1)
     })
   }
@@ -101,7 +102,7 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
         />
       )}
       {state === 1 && (
-        <ReporteStyledTableCircuitos innerRef={printRef} data={reportData} idCircuito={idCircuitoSent} idRegion={idRegionSent} columns={columns} title={'Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil'}
+        <ReporteStyledTableCircuitos innerRef={printRef} data={reportData} idCircuito={null} idRegion={idRegionSent} columns={columns} title={'Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil'}
         />)}
     </div>
   )

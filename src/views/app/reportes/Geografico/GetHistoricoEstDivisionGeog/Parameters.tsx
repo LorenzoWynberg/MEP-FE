@@ -51,11 +51,12 @@ const Parameters = ({ showReportEvent }) => {
     fetch()
   }, [])
 
+
   return (
     <div>
       <ReportParameterCard
         titulo='Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil'
-        texto='Seleccione la dirección regional y el circuito'
+        texto='Seleccione la provincia, cantón y el distrito'
         selects={selects}
         onBtnGenerarEvent={(obj) => {
           if (showReportEvent) showReportEvent(obj)
