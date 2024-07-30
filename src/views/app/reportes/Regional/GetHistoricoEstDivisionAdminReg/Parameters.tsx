@@ -51,7 +51,7 @@ const Parameters = ({ showReportEvent }) => {
         titulo='Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)
 
 '
-        texto='Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)
+        texto='Seleccione la Region
 
 '
         selects={selects.filter((item) => item.key != 'idCircuito' ? item : false).filter(Boolean)}

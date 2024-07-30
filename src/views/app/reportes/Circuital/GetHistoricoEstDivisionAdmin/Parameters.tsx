@@ -53,7 +53,7 @@ console.log('Parameters',selects)
         titulo='Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)
 
 '
-        texto='Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)
+        texto='Seleccione la Region y el Circuito
 
 '
         selects={selects}

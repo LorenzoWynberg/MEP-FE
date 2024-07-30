@@ -67,7 +67,7 @@ const Parameters = ({ showReportEvent, reportLoader = false }) => {
     <div>
       <ReportParameterCard
         titulo={t("reportes>circuital>resumen_de_estudiantes_matriculados_por_centro_educativo", "Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil")}
-        texto={t('reportes>seleccionar_circuito','Seleccione el circuito')}
+        texto={'Seleccione la Region y el Circuito'}
         selects={selects}
         loader={loader || reportLoader}
         onBtnGenerarEvent={(obj) => {
