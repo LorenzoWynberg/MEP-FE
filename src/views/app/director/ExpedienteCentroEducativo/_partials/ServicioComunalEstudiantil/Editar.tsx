@@ -616,6 +616,7 @@ export const Editar: React.FC<IProps> = props => {
 							class='sc-iqcoie bQFwPO cursor-pointer'
 							primary
 							onClick={() => {
+								setLoading(true)
 								if (idInstitucion) {
 									actions
 										.actualizarServicioComunal({
@@ -638,6 +639,7 @@ export const Editar: React.FC<IProps> = props => {
 												: props.history.push('/director/expediente-centro/servicio-comunal')
 										})
 								} else {
+									setLoading(false)
 									alert('Seleccione una institución')
 								}
 							}}
