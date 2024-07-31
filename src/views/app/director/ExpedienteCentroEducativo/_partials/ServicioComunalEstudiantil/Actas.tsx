@@ -35,6 +35,8 @@ const Actas = props => {
 	const [data, setData] = useState([])
 	const [certData, setCertData] = useState({})
 	const [publicos, setPublicos] = useState(true)
+	const [institucionId, setInstitucionId] = useState(localStorage.getItem('idInstitucion'))
+	const [codSaber, setCodSaber] = useState()
 	const [dropdownToggle, setDropdownToggle] = useState(false)
 	const [firstCalled, setFirstCalled] = useState(false)
 	const [studentId, setStudentId] = useState()
@@ -47,10 +49,21 @@ const Actas = props => {
 	const toggle = () => {
 		setDropdownToggle(!dropdownToggle)
 	}
+
+	const storeState = useSelector((store) => {
+		return {
+			institution: store.authUser.currentInstitution,
+			info_general: store.VistasUsuarios.info_general
+		}
+	})
 	const { authUser } = useSelector(store => store.authUser)
 	const { accessRole } = useSelector((state: any) => state?.authUser?.currentRoleOrganizacion)
+
 	const idInstitucion = localStorage.getItem('idInstitucion')
 
+	const selectedInstitution = localStorage.getItem('selectedInstitution')
+	console.log('selectedInstitution', selectedInstitution)
+	console.log('storeState', storeState)
 	// TODO: mappear los strings
 	// const mapper = el => {
 	// 	console.log('el', el)
@@ -227,32 +240,43 @@ const Actas = props => {
 						<Col xs={12}>
 							<TableReactImplementation
 								data={data}
-								textButton="Generar Acta"
+								msjButton="Generar Acta"
 								showAddButton
 								avoidSearch
 								onSubmitAddButton={() => {
-									alert()
-								}}
-								handleGetData={async (searchValue, _, pageSize, page, column) => {
-									setPagination({
-										...pagination,
-										page,
-										pageSize,
-										column,
-										searchValue
+									axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteCentroEducativo/Institucion/GetById/${institucionId}`).then(response => {
+
+										const data = { institucionId, codSaber: response.data.codigo }	
+
+										axios.post(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`, data).then(r2 => {
+											
+											console.log('response', r2)
+											// setCertData(r2.data)
+									 
+										});
 									})
 
-									if (firstCalled) {
-										setLoading(true)
-										await actions.getCertificadosByInstitucionFiltered(
-
-											idInstitucion, searchValue,
-											1,
-											250
-										).then(data => console.log('dataiss', data))
-										setLoading(false)
-									}
 								}}
+								// handleGetData={async (searchValue, _, pageSize, page, column) => {
+								// 	setPagination({
+								// 		...pagination,
+								// 		page,
+								// 		pageSize,
+								// 		column,
+								// 		searchValue
+								// 	})
+
+								// 	if (firstCalled) {
+								// 		setLoading(true)
+								// 		await actions.getCertificadosByInstitucionFiltered(
+
+								// 			idInstitucion, searchValue,
+								// 			1,
+								// 			250
+								// 		).then(data => console.log('dataiss', data))
+								// 		setLoading(false)
+								// 	}
+								// }}
 								columns={columns}
 								orderOptions={[]}
 								pageSize={10}
@@ -269,17 +293,6 @@ const Actas = props => {
 export default withRouter(Actas)
 
 
-const stylesSheet = StyleSheet.create({
-	page: {
-		flexDirection: 'row',
-		backgroundColor: '#E4E4E4'
-	},
-	section: {
-		margin: 10,
-		padding: 10,
-		flexGrow: 1
-	}
-});
 const Table = styled.table`
   border-collapse: collapse;
   width:100%;

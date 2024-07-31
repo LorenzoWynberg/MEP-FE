@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useRef } from 'react'
 import { Col, Row } from 'reactstrap'
 import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
@@ -30,8 +30,11 @@ import ModalSCE from './_partials/ModalSCE'
 import { Delete } from '@material-ui/icons'
 import ReportHeader from 'Views/app/reportes/_partials/ReportHeader'
 import axios from 'axios'
+import { BiExport } from 'react-icons/bi'
+import { useReactToPrint } from 'react-to-print'
 
 const Certificados = props => {
+	const printRef = useRef()
 	const [data, setData] = useState([])
 	const [publicos, setPublicos] = useState(true)
 	const [dropdownToggle, setDropdownToggle] = useState(false)
@@ -206,42 +209,52 @@ const Certificados = props => {
 		await actions.handleChangeInstitution(id)
 		await actions.updatePeriodosLectivos(id)
 	}
-
+	const reactToPrintContent = React.useCallback(() => {
+		return printRef.current
+	  }, [printRef.current])
+	  const handlePrint = useReactToPrint({
+		content: reactToPrintContent
+	  })
 	return (
 		<div className={styles}>
 			{loading && <BarLoader />}
 
 			{studentId && (
 				<SimpleModal
-					btnCancel={false}
 					addMarginTitle
+					txtBtnCancel='Cerrar'
 					title='Certificado'
+					txtBtn="Imprimir"
 					onClose={() => setStudentId(null)}
 					stylesContent={{}}
-					onConfirm={() => {
-						setStudentId(null)
-					}}
+					onConfirm={handlePrint}
 					openDialog={studentId && true}
 				>
 					{/* <PDFDownloadLink document={<Document>
 					<Page size="A4" style={stylesSheet.page}>
 						<View> */}
-					<ReportHeader />
-					<Table>
-						<tr><td wrap={false}>Confieren el presente certificado a: {certData.nombreEstudiante}, {certData.tipoIdentificacion}, {certData.identificacion}.</td>
+					<Table ref={printRef}>
+						<tr>
+							<td>Confieren el presente certificado a: {certData.nombreEstudiante}, {certData.tipoIdentificacion}, {certData.identificacion}.</td>
 						</tr>
-						<tr><td wrap={false}>Desarrollo el proyecto del Servicio Comunal Estudiantil en el Área de proyecto: {certData.areaProyecto}, Nombre del proyecto:  {certData.nombreProyecto} , Tipo de proyecto:  {certData.tipoProyecto}, Características:  {certData.caracteristicas}, con una duración de 30 horas, en el Año: {certData.fechaActual}.</td>
+						<tr>
+							<td>Desarrollo el proyecto del Servicio Comunal Estudiantil en el Área de proyecto: {certData.areaProyecto}, Nombre del proyecto:  {certData.nombreProyecto} , Tipo de proyecto:  {certData.tipoProyecto}, Características:  {certData.caracteristicas}, con una duración de 30 horas, en el Año: {certData.anio}.</td>
 						</tr>
-						<tr>		<td wrap={false}>Fecha: {new Date(Date.now()).toLocaleString().split(',')[0]}</td>
+						<tr>
+							<td>Fecha: {new Date(Date.now()).toLocaleString().split(',')[0]}</td>
 						</tr>
+						<tr>
+							<td style={{ paddingTop: 60 }}>
+								<hr style={{
+									width: '380px',
+									borderColor: 'black',
+									display: 'flex'
+								}} />
+								Nombre Director, {certData.nombreDirector}
+							</td>
+						</tr>
+
 					</Table>
-					{/* </View>
-					</Page>
-				</Document>} fileName='pdf.pdf'>
-						{({ blob, url, loading, error }) =>
-							loading ? 'Loading document...' : 'Download now!'
-						}
-					</PDFDownloadLink > */}
 				</SimpleModal>
 			)}
 
@@ -302,20 +315,9 @@ const Certificados = props => {
 
 export default withRouter(Certificados)
 
-
-const stylesSheet = StyleSheet.create({
-	page: {
-		flexDirection: 'row',
-		backgroundColor: '#E4E4E4'
-	},
-	section: {
-		margin: 10,
-		padding: 10,
-		flexGrow: 1
-	}
-});
-const Table = styled.div`
+const Table = styled.table`
   border-collapse: collapse;
+  width:100%;
   thead {
     font-width: bold;
     text-align: center;
@@ -327,7 +329,7 @@ const Table = styled.div`
   td {
     text-align: center;
     border: solid 1px;
-    padding: 2px;
+    padding: 16px;
   }
 `
 
