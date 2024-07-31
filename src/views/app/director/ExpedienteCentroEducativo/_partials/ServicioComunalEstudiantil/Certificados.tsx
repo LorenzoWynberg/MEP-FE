@@ -10,8 +10,6 @@ import {
 	cleanInstitutions,
 	GetServicioComunalByInstitucionId,
 	getCertificadosByInstitucionFiltered
-
-
 } from 'Redux/configuracion/actions'
 // import { Page, Text, View, Document, StyleSheet, BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
 import withRouter from 'react-router-dom/withRouter'
@@ -168,11 +166,15 @@ const Certificados = props => {
 							<Tooltip title={t('buscador_ce>buscador>columna_acciones>ver', 'Ver')}>
 								<RemoveRedEyeRounded
 									onClick={() => {
-										axios.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetCertificadoByStudentId/${fullRow.idEstudiante}`).then(response => {
-											console.log('response', response)
-											setCertData(response.data)
-											setStudentId(fullRow.idEstudiante)
-										});
+										axios
+											.get(
+												`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetCertificadoByStudentId/${fullRow.idEstudiante}`
+											)
+											.then(response => {
+												console.log('response', response)
+												setCertData(response.data)
+												setStudentId(fullRow.idEstudiante)
+											})
 									}}
 									style={{
 										fontSize: 25,
@@ -181,7 +183,6 @@ const Certificados = props => {
 									}}
 								/>
 							</Tooltip>
-
 						</div>
 					)
 				}
@@ -211,10 +212,10 @@ const Certificados = props => {
 	}
 	const reactToPrintContent = React.useCallback(() => {
 		return printRef.current
-	  }, [printRef.current])
-	  const handlePrint = useReactToPrint({
+	}, [printRef.current])
+	const handlePrint = useReactToPrint({
 		content: reactToPrintContent
-	  })
+	})
 	return (
 		<div className={styles}>
 			{loading && <BarLoader />}
@@ -224,7 +225,7 @@ const Certificados = props => {
 					addMarginTitle
 					txtBtnCancel='Cerrar'
 					title='Certificado'
-					txtBtn="Imprimir"
+					txtBtn='Imprimir'
 					onClose={() => setStudentId(null)}
 					stylesContent={{}}
 					onConfirm={handlePrint}
@@ -235,25 +236,34 @@ const Certificados = props => {
 						<View> */}
 					<Table ref={printRef}>
 						<tr>
-							<td>Confieren el presente certificado a: {certData.nombreEstudiante}, {certData.tipoIdentificacion}, {certData.identificacion}.</td>
+							<td>
+								Confieren el presente certificado a: {certData.nombreEstudiante},{' '}
+								{certData.tipoIdentificacion}, {certData.identificacion}.
+							</td>
 						</tr>
 						<tr>
-							<td>Desarrollo el proyecto del Servicio Comunal Estudiantil en el Área de proyecto: {certData.areaProyecto}, Nombre del proyecto:  {certData.nombreProyecto} , Tipo de proyecto:  {certData.tipoProyecto}, Características:  {certData.caracteristicas}, con una duración de 30 horas, en el Año: {certData.anio}.</td>
+							<td>
+								Desarrollo el proyecto del Servicio Comunal Estudiantil en el Área de proyecto:{' '}
+								{certData.areaProyecto}, Nombre del proyecto: {certData.nombreProyecto} , Tipo de
+								proyecto: {certData.tipoProyecto}, Características: {certData.caracteristicas}, con una
+								duración de 30 horas, en el Año: {certData.anio}.
+							</td>
 						</tr>
 						<tr>
 							<td>Fecha: {new Date(Date.now()).toLocaleString().split(',')[0]}</td>
 						</tr>
 						<tr>
 							<td style={{ paddingTop: 60 }}>
-								<hr style={{
-									width: '380px',
-									borderColor: 'black',
-									display: 'flex'
-								}} />
+								<hr
+									style={{
+										width: '380px',
+										borderColor: 'black',
+										display: 'flex'
+									}}
+								/>
 								Nombre Director, {certData.nombreDirector}
 							</td>
 						</tr>
-
 					</Table>
 				</SimpleModal>
 			)}
@@ -292,12 +302,9 @@ const Certificados = props => {
 
 								if (firstCalled) {
 									setLoading(true)
-									await actions.getCertificadosByInstitucionFiltered(
-
-										idInstitucion, searchValue,
-										1,
-										250
-									).then(data => console.log('dataiss', data))
+									await actions
+										.getCertificadosByInstitucionFiltered(idInstitucion, searchValue, 1, 250)
+										.then(res => setData(res.options))
 									setLoading(false)
 								}
 							}}
@@ -316,38 +323,38 @@ const Certificados = props => {
 export default withRouter(Certificados)
 
 const Table = styled.table`
-  border-collapse: collapse;
-  width:100%;
-  thead {
-    font-width: bold;
-    text-align: center;
-  }
-  th {
-    border: solid 1px;
-    padding: 2px;
-  }
-  td {
-    text-align: center;
-    border: solid 1px;
-    padding: 16px;
-  }
+	border-collapse: collapse;
+	width: 100%;
+	thead {
+		font-width: bold;
+		text-align: center;
+	}
+	th {
+		border: solid 1px;
+		padding: 2px;
+	}
+	td {
+		text-align: center;
+		border: solid 1px;
+		padding: 16px;
+	}
 `
 
 const Card = styled.div`
-  border-radius: 15px;
-  min-width: 100%;
-  min-height: 100%;
-  border-color: gray;
-  background: white;
-  padding: 15px;
+	border-radius: 15px;
+	min-width: 100%;
+	min-height: 100%;
+	border-color: gray;
+	background: white;
+	padding: 15px;
 `
 const Linea = styled.hr`
-  width: 100%;
-  background-color: black;
-  height: 1px;
-  border: none;
-  margin: 0;
+	width: 100%;
+	background-color: black;
+	height: 1px;
+	border: none;
+	margin: 0;
 `
 const Seccion = styled.section`
-  text-align: center;
+	text-align: center;
 `
