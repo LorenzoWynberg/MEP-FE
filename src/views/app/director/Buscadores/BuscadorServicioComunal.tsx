@@ -226,7 +226,7 @@ const BuscadorPersonasServicioComunal = props => {
 								handleGetData={async (searchValue: string, column: string | undefined | null) => {
 									// if (!searchValue) return
 									setLoading(true)
-									await actions.getStudentsSCE(searchValue, idInstitucion, 1, null)
+									await actions.getStudentsSCE(searchValue, idInstitucion, 1, 50)
 									setLoading(false)
 								}}
 								columns={columns}
