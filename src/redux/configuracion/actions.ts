@@ -411,6 +411,32 @@ export const getInstitucionesFinder =
 			}
 		}
 
+export const getCertificadosByInstitucionFiltered =
+	(institucionId, filter = ' ', page = 1, size = 100) =>
+		async dispatch => {
+			try {
+				showProgress()
+				const response: any = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ServicioComunal/BuscadorCertificadoByStudent/${filter}/${institucionId}/${page}/${size}`
+
+				)
+				const result = {
+					entityList: response.data,
+					pageNumber: 1,
+					pageSize: 100,
+					totalCount: 1,
+					totalPages: 1
+				}
+				dispatch(loadInstitutions(result))
+
+				hideProgress()
+				return { error: false, options: response.data }
+			} catch (e) {
+				dispatch(configError(e.message))
+				hideProgress()
+				return { error: e.message }
+			}
+		}
 export const getAllInstitucionesFinder =
 	(filter = '', page = 1, size = 100, regionId, circuitoId, institucionId) =>
 		async dispatch => {
