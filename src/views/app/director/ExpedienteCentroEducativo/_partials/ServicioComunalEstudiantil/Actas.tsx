@@ -196,7 +196,8 @@ const Actas = props => {
 			{loading && <BarLoader />}
 
 
-			<SimpleModal 
+			<SimpleModal
+				btnCancel={false}
 				addMarginTitle
 				title='Acta'
 				onClose={() => setOpenDialog(false)}
