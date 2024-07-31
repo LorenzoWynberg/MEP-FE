@@ -750,6 +750,28 @@ const routes: Route[] = [
 		}
 	},
 	{
+		component: ExpedienteCentro,
+		isAuthenticated: true,
+		route: '/director/expediente-centro/servicio-comunal/actas',
+		exact: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 10,
+			activeTab: 2
+		}
+	},
+	{
+		component: ExpedienteCentro,
+		isAuthenticated: true,
+		route: '/director/expediente-centro/servicio-comunal/certificados',
+		exact: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 10,
+			activeTab: 3
+		}
+	},
+	{
 		component: Admin,
 		exact: true,
 		route: '/admin/',
