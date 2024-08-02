@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo, useRef } from 'react'
 import { Col, Row } from 'reactstrap'
 import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
@@ -247,7 +247,16 @@ const Actas = props => {
 									const data = { institucionId, codSaber: response.data.codigo }
 
 									axios.post(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`, data).then(r2 => {
-										setOpenDialog(true)
+										axios.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${idInstitucion}`)
+											.then(response => { 
+												console.log('data', response)
+												setData(response.data)
+												setLoading(false)
+											})
+											.catch(error => {
+												console.log('error', error)
+												setLoading(false)
+											})
 									});
 								}}
 

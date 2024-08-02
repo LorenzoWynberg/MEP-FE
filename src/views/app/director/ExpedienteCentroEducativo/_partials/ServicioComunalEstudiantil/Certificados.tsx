@@ -224,11 +224,11 @@ const Certificados = props => {
 				<SimpleModal
 					addMarginTitle
 					txtBtnCancel='Cerrar'
-					title='Certificado'
 					txtBtn='Imprimir'
+					onConfirm={handlePrint}
+					title='Certificado'
 					onClose={() => setStudentId(null)}
 					stylesContent={{}}
-					onConfirm={handlePrint}
 					openDialog={studentId && true}
 				>
 					{/* <PDFDownloadLink document={<Document>
