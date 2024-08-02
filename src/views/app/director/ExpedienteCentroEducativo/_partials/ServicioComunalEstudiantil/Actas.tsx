@@ -243,21 +243,26 @@ const Actas = props => {
 								showAddButton
 								avoidSearch
 								onSubmitAddButton={() => {
+									axios.get(
+										`${envVariables.BACKEND_URL}/api/ExpedienteCentroEducativo/Institucion/GetById/${idInstitucion}`
+									).then(res => {
+										const data = { institucionId, codSaber: res.data.codigo }
 
-									const data = { institucionId, codSaber: response.data.codigo }
+										axios.post(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`, data).then(r2 => {
 
-									axios.post(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`, data).then(r2 => {
-										axios.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${idInstitucion}`)
-											.then(response => { 
-												console.log('data', response)
-												setData(response.data)
-												setLoading(false)
-											})
-											.catch(error => {
-												console.log('error', error)
-												setLoading(false)
-											})
-									});
+											axios.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${idInstitucion}`)
+												.then(response => {
+													console.log('data', response)
+													setData(response.data)
+													setLoading(false)
+												})
+												.catch(error => {
+													console.log('error', error)
+													setLoading(false)
+												})
+										});
+									})
+
 								}}
 
 								columns={columns}
