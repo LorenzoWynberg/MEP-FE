@@ -101,7 +101,7 @@ const ModalSCE = props => {
 	return (
 		<Container>
 			{loading && <Loader />}
-			{showProyecto && (
+			{showProyecto && sce && (
 				<div>
 					<Row className='mt-2'>
 						<Col sm={4} className='mb-3'>
