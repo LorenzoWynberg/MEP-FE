@@ -29,6 +29,7 @@ import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import { Search } from 'Components/TableReactImplementationServicio/Header'
 import zIndex from '@material-ui/core/styles/zIndex'
+import { isEmpty } from 'lodash'
 
 export const Agregar: React.FC<IProps> = props => {
 	const { t } = useTranslation()
@@ -103,6 +104,25 @@ export const Agregar: React.FC<IProps> = props => {
 			setCatalogos(response)
 		})
 	}, [])
+
+	const isValid = () => {
+		if (
+			!idInstitucion ||
+			!value ||
+			!nombreId ||
+			!modalidadId ||
+			!organizacionId ||
+			!acompanante ||
+			!descripcion ||
+			!localStorage.getItem('loggedUser') ||
+			isEmpty(caracteristicasSeleccionados) ||
+			isEmpty(estudiantes)
+		) {
+			return false
+		} else {
+			return true
+		}
+	}
 
 	const [selectedDate, setSelectedDate] = useState(null)
 	const [formattedDate, setFormattedDate] = useState('')
@@ -583,8 +603,13 @@ export const Agregar: React.FC<IProps> = props => {
 				<Col sm={12}>
 					<p style={{ textAlign: 'center' }}>
 						<Button
-							class='sc-iqcoie bQFwPO cursor-pointer'
+							class={
+								isValid()
+									? 'sc-iqcoie bQFwPO cursor-pointer'
+									: 'sc-iqcoie bQFwPO cursor-pointer disabled'
+							}
 							primary
+							disabled={!isValid()}
 							onClick={() => {
 								setLoading(true)
 								if (idInstitucion) {
