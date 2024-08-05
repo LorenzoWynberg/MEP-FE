@@ -3,6 +3,8 @@ import { Col, Row } from 'reactstrap'
 import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import { formatoOracion } from 'utils/utils'
+import axios from 'axios'
+import { envVariables } from 'Constants/enviroment'
 import {
 	filterInstitutionsPaginated,
 	cleanInstitutions,
@@ -27,6 +29,8 @@ const Historico = props => {
 	const [data, setData] = useState([])
 	const [publicos, setPublicos] = useState(true)
 	const [dropdownToggle, setDropdownToggle] = useState(false)
+	const [filterText, setFilterText] = useState('')
+	const [idAreaProyecto, setIdAreaProyecto] = useState(0)
 	const [firstCalled, setFirstCalled] = useState(false)
 	const [servicioComunalId, setServicioComunalId] = useState()
 	const [loading, setLoading] = useState(true)
@@ -34,22 +38,13 @@ const Historico = props => {
 	const { t } = useTranslation()
 	const history = useHistory()
 	const { hasAddAccess = true, hasEditAccess = true, hasDeleteAccess = true } = props
-
-	const toggle = () => {
-		setDropdownToggle(!dropdownToggle)
-	}
 	const { authUser } = useSelector(store => store.authUser)
 	const { accessRole } = useSelector((state: any) => state?.authUser?.currentRoleOrganizacion)
 	const idInstitucion = localStorage.getItem('idInstitucion')
 
-	// TODO: mappear los strings
-	// const mapper = el => {
-	// 	console.log('el', el)
-	// 	return {
-	// 		...el,
-	// 		organizacionContraparte: formatoOracion(el.organizacionContraparte)
-	// 	}
-	// }
+	const toggle = () => {
+		setDropdownToggle(!dropdownToggle)
+	}
 
 	const state = useSelector((store: any) => {
 		return {
@@ -61,7 +56,40 @@ const Historico = props => {
 		}
 	})
 
-	const fetch = async => {
+	const [pagination, setPagination] = useState({
+		page: 1,
+		selectedPageSize: 6,
+		selectedColumn: '',
+		searchValue: '',
+		orderColumn: '',
+		orientation: ''
+	})
+
+	const actions = useActions({
+		filterInstitutionsPaginated,
+		cleanInstitutions,
+		GetServicioComunalByInstitucionId,
+		handleChangeInstitution,
+		updatePeriodosLectivos,
+		desactivarServicioComunal
+	})
+
+	const fetch = async (idInstitucion, filterText = null, idAreaProyecto = null) => {
+		try {
+			setLoading(true)
+			const response: any = await axios.get(
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter/${idInstitucion}/${filterText}/${idAreaProyecto}`
+			)
+			// console.log('response NEWWWW', response)
+			setData(response.data)
+			setLoading(false)
+			// return { error: false, options: response.data }
+		} catch (e) {
+			// return { error: e.message, options: [] }
+		}
+	}
+
+	const initialFetch = async idInstitucion => {
 		actions
 			.GetServicioComunalByInstitucionId(idInstitucion)
 			.then(data => {
@@ -75,12 +103,26 @@ const Historico = props => {
 	}
 
 	useEffect(() => {
-		fetch(idInstitucion)
+		// fetch(idInstitucion, filterText, idAreaProyecto)
+		initialFetch(idInstitucion)
+	}, [data])
+
+	useEffect(() => {
+		// fetch(idInstitucion, filterText, idAreaProyecto)
+		initialFetch(idInstitucion)
 	}, [])
 
 	useEffect(() => {
-		fetch(idInstitucion)
-	}, [data])
+		setFirstCalled(true)
+		return () => {
+			actions.cleanInstitutions()
+		}
+	}, [])
+
+	const setInstitution = async id => {
+		await actions.handleChangeInstitution(id)
+		await actions.updatePeriodosLectivos(id)
+	}
 
 	// TODO: Poner permiso correcto
 	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'configurarinstituciones')
@@ -197,36 +239,6 @@ const Historico = props => {
 		]
 	}, [t])
 
-	const [pagination, setPagination] = useState({
-		page: 1,
-		selectedPageSize: 6,
-		selectedColumn: '',
-		searchValue: '',
-		orderColumn: '',
-		orientation: ''
-	})
-
-	const actions = useActions({
-		filterInstitutionsPaginated,
-		cleanInstitutions,
-		GetServicioComunalByInstitucionId,
-		handleChangeInstitution,
-		updatePeriodosLectivos,
-		desactivarServicioComunal
-	})
-
-	useEffect(() => {
-		setFirstCalled(true)
-		return () => {
-			actions.cleanInstitutions()
-		}
-	}, [])
-
-	const setInstitution = async id => {
-		await actions.handleChangeInstitution(id)
-		await actions.updatePeriodosLectivos(id)
-	}
-
 	return (
 		<div className={styles}>
 			{loading && <BarLoader />}
@@ -243,6 +255,7 @@ const Historico = props => {
 							.then(data => {
 								setData(data.options)
 								setLoading(false)
+								props.history.push(`/director/expediente-centro/servicio-comunal`)
 							})
 							.catch(error => {
 								console.log('error', error)
@@ -302,18 +315,9 @@ const Historico = props => {
 									column,
 									searchValue
 								})
-
 								if (firstCalled) {
 									setLoading(true)
-									await actions.getInstitucionesFinder(
-										publicos,
-										searchValue,
-										1,
-										250,
-										state.accessRole.nivelAccesoId == 3 ? state.accessRole.organizacionId : null,
-										state.accessRole.nivelAccesoId == 2 ? state.accessRole.organizacionId : null,
-										state.accessRole.nivelAccesoId == 1 ? state.accessRole.organizacionId : null
-									)
+									await fetch(idInstitucion, searchValue, 0).then(res => setData(res.options))
 									setLoading(false)
 								}
 							}}
