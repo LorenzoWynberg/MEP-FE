@@ -161,9 +161,7 @@ export const setExpedienteSupervision = data => async dispatch => {
 
 export const getInstitutionsPaginated = (page, qnt) => async dispatch => {
 	try {
-		const response = await axios.get(
-			`${envVariables.BACKEND_URL}/api/Admin/Institucion/paginated/${page}/${qnt}`
-		)
+		const response = await axios.get(`${envVariables.BACKEND_URL}/api/Admin/Institucion/paginated/${page}/${qnt}`)
 		dispatch(loadInstitutions(response.data))
 		return { error: false }
 	} catch (e) {
@@ -202,295 +200,283 @@ export const updateLocation = data => async dispatch => {
 }
 
 export const filterInstitutionsPaginated =
-	(
-		publicos = false,
-		page,
-		qnt,
-		filterType = '',
-		filterText = '',
-		orderBy = 'id',
-		direction = 'ASC'
-	) =>
-		async dispatch => {
-			try {
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL
-					}/api/Admin/Institucion/paginated?Pagina=${page}&Cantidad=${qnt}&FiltrarPor=${filterType}&Filtro=${filterText || ''
-					}&OrdenarPor=${orderBy}&Direccion=${direction}${publicos ? '&TipoInstitucion=publico' : ''
-					}`
-				)
-				dispatch(loadInstitutions(response.data))
-				return { error: false, options: response.data.entityList }
-			} catch (e) {
-				dispatch(configError(e.message))
-				return { error: e.message }
-			}
-		}
-
-export const filterInBackendInstitutionsPaginated =
-	(publicos = false, page = 1, qnt = 30, filterText = 'NULL') =>
-		async dispatch => {
-			try {
-				const tipoInstitucion = publicos ? 'publico' : 'privado'
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/Admin/Institucion/paginated/${page}/${qnt}/${filterText || 'NULL'
-					}/${tipoInstitucion}`
-				)
-				dispatch(loadInstitutions(response.data))
-				return { error: false, options: response.data.entityList }
-			} catch (e) {
-				dispatch(configError(e.message))
-				return { error: e.message }
-			}
-		}
-
-export const getInstitutionsPaginatedWithFilter =
-	(page = '', size = '', filter = 'NULL') =>
-		async dispatch => {
-			try {
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/Admin/Institucion/paginated/${page}/${size}/${filter}`
-				)
-				dispatch(loadSearchInstitutions(response.data))
-				return { error: false, options: response.data.entityList }
-			} catch (e) {
-				dispatch(configError(e.message))
-				return { error: e.message }
-			}
-		}
-
-export const getInstitucion =
-	(id: number): ((any) => Promise<actionResponse>) =>
-		async (dispatch: any): Promise<actionResponse> => {
-			try {
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/Admin/Institucion/GetById/${id}`
-				)
-				dispatch(loadCurrentIntstitution(response.data))
-				return { error: false, options: response.data.entityList }
-			} catch (e) {
-				dispatch(configError(e.message))
-				return { error: e.message, options: [] }
-			}
-		}
-
-
-export const getTablaEstudiantesServicioComunalById =
-	(id: number): ((any) => Promise<actionResponse>) =>
-		async (dispatch: any): Promise<actionResponse> => {
-			try {
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServicioComunalByStudentId/${id}`
-				)
-				console.log('response getTablaEstudiantesServicioComunalById', response)
-				return { error: false, options: response.data }
-			} catch (e) {
-				dispatch(configError(e.message))
-				return { error: e.message, options: [] }
-			}
-		}
-
-export const GetServicioComunalInfoById =
-	(id: number): ((any) => Promise<actionResponse>) =>
-		async (dispatch: any): Promise<actionResponse> => {
-			try {
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServicioComunalInfoById/${id}`
-				)
-				console.log('response', response)
-				return { error: false, options: response.data }
-			} catch (e) {
-				dispatch(configError(e.message))
-				return { error: e.message, options: [] }
-			}
-		}
-export const GetServicioComunalByInstitucionId =
-	(id: number): ((any) => Promise<actionResponse>) =>
-		async (dispatch: any): Promise<actionResponse> => {
-			try {
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServicioComunalByInstitucionId/${id}`
-				)
-				console.log('response', response)
-				return { error: false, options: response.data }
-			} catch (e) {
-				dispatch(configError(e.message))
-				return { error: e.message, options: [] }
-			}
-		}
-export const GetActasByInstitucionId =
-	(id: number): ((any) => Promise<actionResponse>) =>
-		async (dispatch: any): Promise<actionResponse> => {
-			try {
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${id}`
-				)
-				console.log('response', response)
-				return { error: false, options: response.data }
-			} catch (e) {
-				dispatch(configError(e.message))
-				return { error: e.message, options: [] }
-			}
-		}
-export const GetHistoricoEstByInstitucionId =
-	(id: number): ((any) => Promise<actionResponse>) =>
-		async (dispatch: any): Promise<actionResponse> => {
-			try {
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstByInstitucionId/${id}`
-				)
-				console.log('response', response)
-				return { error: false, options: response.data }
-			} catch (e) {
-				dispatch(configError(e.message))
-				return { error: e.message, options: [] }
-			}
-		}
-export const GetHistoricoEstDivisionAdmin =
-	(idRegion: number, idCircuito: number): ((any) => Promise<actionResponse>) =>
-		async (dispatch: any): Promise<actionResponse> => {
-			try {
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${idRegion}/${idCircuito}`
-				)
-				console.log('response', response)
-				return { error: false, options: response.data }
-			} catch (e) {
-				dispatch(configError(e.message))
-				return { error: e.message, options: [] }
-			}
-		}
-export const GetHistoricoEstDivisionGeog =
-	(idProvincia: number, idCanton: number, idDistrito: number): ((any) => Promise<actionResponse>) =>
-		async (dispatch: any): Promise<actionResponse> => {
-			try {
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionGeog/${idProvincia}/${idCanton}/${idDistrito}`
-				)
-				console.log('response', response)
-				return { error: false, options: response.data }
-			} catch (e) {
-				dispatch(configError(e.message))
-				return { error: e.message, options: [] }
-			}
-		}
-export const getInstitucionesFinder =
-	(publicos = false, filter = '', page = 1, size = 100, regionId, circuitoId, institucionId) =>
-		async dispatch => {
-			try {
-				showProgress()
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/Areas/GestorCatalogos/UsuarioCatalogo/GetInstituciones/`,
-					{
-						params: {
-							publicos,
-							filtro: filter || 'NULL',
-							regionId,
-							circuitoId,
-							institucionId,
-							pageNum: page,
-							pageSize: size
-						}
-					}
-				)
-				const result = {
-					entityList: response.data,
-					pageNumber: 1,
-					pageSize: 100,
-					totalCount: 1,
-					totalPages: 1
-				}
-				dispatch(loadInstitutions(result))
-
-				hideProgress()
-				return { error: false, options: response.data }
-			} catch (e) {
-				dispatch(configError(e.message))
-				hideProgress()
-				return { error: e.message }
-			}
-		}
-
-export const getCertificadosByInstitucionFiltered =
-	(institucionId, filter = ' ', page = 1, size = 100) =>
-		async dispatch => {
-			try {
-				showProgress()
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/ServicioComunal/BuscadorCertificadoByStudent/${filter}/${institucionId}/${page}/${size}`
-
-				)
-				const result = {
-					entityList: response.data,
-					pageNumber: 1,
-					pageSize: 100,
-					totalCount: 1,
-					totalPages: 1
-				}
-				dispatch(loadInstitutions(result))
-
-				hideProgress()
-				return { error: false, options: response.data }
-			} catch (e) {
-				dispatch(configError(e.message))
-				hideProgress()
-				return { error: e.message }
-			}
-		}
-export const getAllInstitucionesFinder =
-	(filter = '', page = 1, size = 100, regionId, circuitoId, institucionId) =>
-		async dispatch => {
-			try {
-				showProgress()
-				const response: any = await axios.get(
-					`${envVariables.BACKEND_URL}/api/Areas/GestorCatalogos/UsuarioCatalogo/GetAllInstituciones/`,
-					{
-						params: {
-							filtro: filter || 'NULL',
-							regionId,
-							circuitoId,
-							institucionId,
-							pageNum: page,
-							pageSize: size
-						}
-					}
-				)
-				const result = {
-					entityList: response.data,
-					pageNumber: 1,
-					pageSize: 100,
-					totalCount: 1,
-					totalPages: 1
-				}
-				dispatch(loadInstitutions(result))
-
-				hideProgress()
-				return { error: false, options: response.data }
-			} catch (e) {
-				dispatch(configError(e.message))
-				hideProgress()
-				return { error: e.message }
-			}
-		}
-
-export const advancedFilterInstitutionsPaginated =
-	(page, qnt, filterType, filterText) => async dispatch => {
+	(publicos = false, page, qnt, filterType = '', filterText = '', orderBy = 'id', direction = 'ASC') =>
+	async dispatch => {
 		try {
-			const response = await axios.get(
-				`${envVariables.BACKEND_URL}/api/Admin/Institucion/paginated/${page}/${qnt}/${filterType}/${filterText}`
+			const response: any = await axios.get(
+				`${
+					envVariables.BACKEND_URL
+				}/api/Admin/Institucion/paginated?Pagina=${page}&Cantidad=${qnt}&FiltrarPor=${filterType}&Filtro=${
+					filterText || ''
+				}&OrdenarPor=${orderBy}&Direccion=${direction}${publicos ? '&TipoInstitucion=publico' : ''}`
 			)
 			dispatch(loadInstitutions(response.data))
-			return { error: false }
+			return { error: false, options: response.data.entityList }
 		} catch (e) {
 			dispatch(configError(e.message))
 			return { error: e.message }
 		}
 	}
 
-export const crearServicioComunal = (data) => async dispatch => {
+export const filterInBackendInstitutionsPaginated =
+	(publicos = false, page = 1, qnt = 30, filterText = 'NULL') =>
+	async dispatch => {
+		try {
+			const tipoInstitucion = publicos ? 'publico' : 'privado'
+			const response: any = await axios.get(
+				`${envVariables.BACKEND_URL}/api/Admin/Institucion/paginated/${page}/${qnt}/${
+					filterText || 'NULL'
+				}/${tipoInstitucion}`
+			)
+			dispatch(loadInstitutions(response.data))
+			return { error: false, options: response.data.entityList }
+		} catch (e) {
+			dispatch(configError(e.message))
+			return { error: e.message }
+		}
+	}
+
+export const getInstitutionsPaginatedWithFilter =
+	(page = '', size = '', filter = 'NULL') =>
+	async dispatch => {
+		try {
+			const response: any = await axios.get(
+				`${envVariables.BACKEND_URL}/api/Admin/Institucion/paginated/${page}/${size}/${filter}`
+			)
+			dispatch(loadSearchInstitutions(response.data))
+			return { error: false, options: response.data.entityList }
+		} catch (e) {
+			dispatch(configError(e.message))
+			return { error: e.message }
+		}
+	}
+
+export const getInstitucion =
+	(id: number): ((any) => Promise<actionResponse>) =>
+	async (dispatch: any): Promise<actionResponse> => {
+		try {
+			const response: any = await axios.get(`${envVariables.BACKEND_URL}/api/Admin/Institucion/GetById/${id}`)
+			dispatch(loadCurrentIntstitution(response.data))
+			return { error: false, options: response.data.entityList }
+		} catch (e) {
+			dispatch(configError(e.message))
+			return { error: e.message, options: [] }
+		}
+	}
+
+export const getTablaEstudiantesServicioComunalById =
+	(id: number): ((any) => Promise<actionResponse>) =>
+	async (dispatch: any): Promise<actionResponse> => {
+		try {
+			const response: any = await axios.get(
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServicioComunalByStudentId/${id}`
+			)
+			console.log('response getTablaEstudiantesServicioComunalById', response)
+			return { error: false, options: response.data }
+		} catch (e) {
+			dispatch(configError(e.message))
+			return { error: e.message, options: [] }
+		}
+	}
+
+export const GetServicioComunalInfoById =
+	(id: number, idInstitucion: number): ((any) => Promise<actionResponse>) =>
+	async (dispatch: any): Promise<actionResponse> => {
+		try {
+			const response: any = await axios.get(
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServicioComunalInfoById/${id}/${idInstitucion}`
+			)
+			console.log('response', response)
+			return { error: false, options: response.data }
+		} catch (e) {
+			dispatch(configError(e.message))
+			return { error: e.message, options: [] }
+		}
+	}
+export const GetServicioComunalByInstitucionId =
+	(id: number): ((any) => Promise<actionResponse>) =>
+	async (dispatch: any): Promise<actionResponse> => {
+		try {
+			const response: any = await axios.get(
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServicioComunalByInstitucionId/${id}`
+			)
+			console.log('response', response)
+			return { error: false, options: response.data }
+		} catch (e) {
+			dispatch(configError(e.message))
+			return { error: e.message, options: [] }
+		}
+	}
+export const GetActasByInstitucionId =
+	(id: number): ((any) => Promise<actionResponse>) =>
+	async (dispatch: any): Promise<actionResponse> => {
+		try {
+			const response: any = await axios.get(
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${id}`
+			)
+			console.log('response', response)
+			return { error: false, options: response.data }
+		} catch (e) {
+			dispatch(configError(e.message))
+			return { error: e.message, options: [] }
+		}
+	}
+export const GetHistoricoEstByInstitucionId =
+	(id: number): ((any) => Promise<actionResponse>) =>
+	async (dispatch: any): Promise<actionResponse> => {
+		try {
+			const response: any = await axios.get(
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstByInstitucionId/${id}`
+			)
+			console.log('response', response)
+			return { error: false, options: response.data }
+		} catch (e) {
+			dispatch(configError(e.message))
+			return { error: e.message, options: [] }
+		}
+	}
+export const GetHistoricoEstDivisionAdmin =
+	(idRegion: number, idCircuito: number): ((any) => Promise<actionResponse>) =>
+	async (dispatch: any): Promise<actionResponse> => {
+		try {
+			const response: any = await axios.get(
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${idRegion}/${idCircuito}`
+			)
+			console.log('response', response)
+			return { error: false, options: response.data }
+		} catch (e) {
+			dispatch(configError(e.message))
+			return { error: e.message, options: [] }
+		}
+	}
+export const GetHistoricoEstDivisionGeog =
+	(idProvincia: number, idCanton: number, idDistrito: number): ((any) => Promise<actionResponse>) =>
+	async (dispatch: any): Promise<actionResponse> => {
+		try {
+			const response: any = await axios.get(
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionGeog/${idProvincia}/${idCanton}/${idDistrito}`
+			)
+			console.log('response', response)
+			return { error: false, options: response.data }
+		} catch (e) {
+			dispatch(configError(e.message))
+			return { error: e.message, options: [] }
+		}
+	}
+export const getInstitucionesFinder =
+	(publicos = false, filter = '', page = 1, size = 100, regionId, circuitoId, institucionId) =>
+	async dispatch => {
+		try {
+			showProgress()
+			const response: any = await axios.get(
+				`${envVariables.BACKEND_URL}/api/Areas/GestorCatalogos/UsuarioCatalogo/GetInstituciones/`,
+				{
+					params: {
+						publicos,
+						filtro: filter || 'NULL',
+						regionId,
+						circuitoId,
+						institucionId,
+						pageNum: page,
+						pageSize: size
+					}
+				}
+			)
+			const result = {
+				entityList: response.data,
+				pageNumber: 1,
+				pageSize: 100,
+				totalCount: 1,
+				totalPages: 1
+			}
+			dispatch(loadInstitutions(result))
+
+			hideProgress()
+			return { error: false, options: response.data }
+		} catch (e) {
+			dispatch(configError(e.message))
+			hideProgress()
+			return { error: e.message }
+		}
+	}
+
+export const getCertificadosByInstitucionFiltered =
+	(institucionId, filter = ' ', page = 1, size = 100) =>
+	async dispatch => {
+		try {
+			showProgress()
+			const response: any = await axios.get(
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/BuscadorCertificadoByStudent/${filter}/${institucionId}/${page}/${size}`
+			)
+			const result = {
+				entityList: response.data,
+				pageNumber: 1,
+				pageSize: 100,
+				totalCount: 1,
+				totalPages: 1
+			}
+			dispatch(loadInstitutions(result))
+
+			hideProgress()
+			return { error: false, options: response.data }
+		} catch (e) {
+			dispatch(configError(e.message))
+			hideProgress()
+			return { error: e.message }
+		}
+	}
+export const getAllInstitucionesFinder =
+	(filter = '', page = 1, size = 100, regionId, circuitoId, institucionId) =>
+	async dispatch => {
+		try {
+			showProgress()
+			const response: any = await axios.get(
+				`${envVariables.BACKEND_URL}/api/Areas/GestorCatalogos/UsuarioCatalogo/GetAllInstituciones/`,
+				{
+					params: {
+						filtro: filter || 'NULL',
+						regionId,
+						circuitoId,
+						institucionId,
+						pageNum: page,
+						pageSize: size
+					}
+				}
+			)
+			const result = {
+				entityList: response.data,
+				pageNumber: 1,
+				pageSize: 100,
+				totalCount: 1,
+				totalPages: 1
+			}
+			dispatch(loadInstitutions(result))
+
+			hideProgress()
+			return { error: false, options: response.data }
+		} catch (e) {
+			dispatch(configError(e.message))
+			hideProgress()
+			return { error: e.message }
+		}
+	}
+
+export const advancedFilterInstitutionsPaginated = (page, qnt, filterType, filterText) => async dispatch => {
+	try {
+		const response = await axios.get(
+			`${envVariables.BACKEND_URL}/api/Admin/Institucion/paginated/${page}/${qnt}/${filterType}/${filterText}`
+		)
+		dispatch(loadInstitutions(response.data))
+		return { error: false }
+	} catch (e) {
+		dispatch(configError(e.message))
+		return { error: e.message }
+	}
+}
+
+export const crearServicioComunal = data => async dispatch => {
 	try {
 		const response = await axios.post(`${envVariables.BACKEND_URL}/api/ServicioComunal/CrearServicioComunal`, data)
-
 
 		return { error: false, response: response.data }
 	} catch (e) {
@@ -500,10 +486,12 @@ export const crearServicioComunal = (data) => async dispatch => {
 	}
 }
 
-export const actualizarServicioComunal = (data) => async dispatch => {
+export const actualizarServicioComunal = data => async dispatch => {
 	try {
-		const response = await axios.put(`${envVariables.BACKEND_URL}/api/ServicioComunal/ActualizarServicioComunal`, data)
-
+		const response = await axios.put(
+			`${envVariables.BACKEND_URL}/api/ServicioComunal/ActualizarServicioComunal`,
+			data
+		)
 
 		return { error: false, response: response.data }
 	} catch (e) {
@@ -668,10 +656,7 @@ export const getDirectores = data => async dispatch => {
 
 export const asignarDirector = data => async dispatch => {
 	try {
-		await axios.post(
-			`${envVariables.BACKEND_URL}/api/Admin/Institucion/Directores/Asignar`,
-			data
-		)
+		await axios.post(`${envVariables.BACKEND_URL}/api/Admin/Institucion/Directores/Asignar`, data)
 		return { error: false }
 	} catch (e) {
 		dispatch(configError(e.message))
@@ -785,9 +770,7 @@ export const createRegional = (data: CurrentRegional) => async dispatch => {
 
 export const getRegionalById = (regionalId: string | number) => async dispatch => {
 	try {
-		const response = await axios.get(
-			`${envVariables.BACKEND_URL}/api/Admin/Regional/GetById/${regionalId}`
-		)
+		const response = await axios.get(`${envVariables.BACKEND_URL}/api/Admin/Regional/GetById/${regionalId}`)
 		dispatch(loadRegional(response.data))
 		return { error: false }
 	} catch (e) {
@@ -798,9 +781,7 @@ export const getRegionalById = (regionalId: string | number) => async dispatch =
 
 export const getCircuitoById = (circuitoId: string | number) => async dispatch => {
 	try {
-		const response = await axios.get(
-			`${envVariables.BACKEND_URL}/api/Admin/Circuito/GetById/${circuitoId}`
-		)
+		const response = await axios.get(`${envVariables.BACKEND_URL}/api/Admin/Circuito/GetById/${circuitoId}`)
 		dispatch(loadCircuito(response.data))
 		return { error: false }
 	} catch (e) {
@@ -880,10 +861,7 @@ export const deleteCircuito = (circuitoId: number) => async dispatch => {
 
 export const saveRegionalDirector = data => async dispatch => {
 	try {
-		const response = await axios.post(
-			`${envVariables.BACKEND_URL}/api/Admin/Regional/Director`,
-			data
-		)
+		const response = await axios.post(`${envVariables.BACKEND_URL}/api/Admin/Regional/Director`, data)
 		dispatch(loadDirector(response.data))
 		return { error: false }
 	} catch (e) {
@@ -893,9 +871,7 @@ export const saveRegionalDirector = data => async dispatch => {
 
 export const getRegionalDirector = (regionalId: number) => async dispatch => {
 	try {
-		const response = await axios.get(
-			`${envVariables.BACKEND_URL}/api/Admin/Regional/Director/${regionalId}`
-		)
+		const response = await axios.get(`${envVariables.BACKEND_URL}/api/Admin/Regional/Director/${regionalId}`)
 		dispatch(loadDirector(response.data))
 		return { error: false, data: response.data }
 	} catch (e) {
@@ -905,10 +881,7 @@ export const getRegionalDirector = (regionalId: number) => async dispatch => {
 
 export const saveCircuitoDirector = data => async dispatch => {
 	try {
-		const response = await axios.post(
-			`${envVariables.BACKEND_URL}/api/Admin/Circuito/Director`,
-			data
-		)
+		const response = await axios.post(`${envVariables.BACKEND_URL}/api/Admin/Circuito/Director`, data)
 		dispatch(loadDirector(response.data))
 		return { error: false }
 	} catch (e) {
@@ -918,9 +891,7 @@ export const saveCircuitoDirector = data => async dispatch => {
 
 export const getCircuitoDirector = (circuitoId: number) => async dispatch => {
 	try {
-		const response = await axios.get(
-			`${envVariables.BACKEND_URL}/api/Admin/Circuito/Director/${circuitoId}`
-		)
+		const response = await axios.get(`${envVariables.BACKEND_URL}/api/Admin/Circuito/Director/${circuitoId}`)
 		dispatch(loadDirector(response.data))
 		return { error: false, data: response.data }
 	} catch (e) {
@@ -938,10 +909,7 @@ export const setCircuito = data => async dispatch => {
 
 export const saveFormularioLocalizacion = async data => {
 	try {
-		const response = await axios.post(
-			`${envVariables.BACKEND_URL}/api/Admin/FormularioLocalizacion`,
-			data
-		)
+		const response = await axios.post(`${envVariables.BACKEND_URL}/api/Admin/FormularioLocalizacion`, data)
 		return { error: false, data: response.data }
 	} catch (e) {
 		return { error: true }
@@ -950,10 +918,7 @@ export const saveFormularioLocalizacion = async data => {
 
 export const updateFormularioLocalizacion = async data => {
 	try {
-		const response = await axios.put(
-			`${envVariables.BACKEND_URL}/api/Admin/FormularioLocalizacion`,
-			data
-		)
+		const response = await axios.put(`${envVariables.BACKEND_URL}/api/Admin/FormularioLocalizacion`, data)
 		return { error: false, data: response.data }
 	} catch (e) {
 		return { error: true }
@@ -962,9 +927,7 @@ export const updateFormularioLocalizacion = async data => {
 
 export const getFormByResource = (id: number) => async dispatch => {
 	try {
-		const response = await axios.get(
-			`${envVariables.BACKEND_URL}/api/Admin/FormularioLocalizacion/GetById/${id}`
-		)
+		const response = await axios.get(`${envVariables.BACKEND_URL}/api/Admin/FormularioLocalizacion/GetById/${id}`)
 		return response.data
 	} catch (e) {
 		return { error: e.message }
@@ -994,10 +957,7 @@ export const getFormsByCircuito = async (circuitoId: number, formId: number) => 
 }
 
 export const DeleteFormResponses = async ids => {
-	const response = await axios.delete(
-		`${envVariables.BACKEND_URL}/api/Admin/FormularioLocalizacion`,
-		{ data: ids }
-	)
+	const response = await axios.delete(`${envVariables.BACKEND_URL}/api/Admin/FormularioLocalizacion`, { data: ids })
 	return response.data
 }
 

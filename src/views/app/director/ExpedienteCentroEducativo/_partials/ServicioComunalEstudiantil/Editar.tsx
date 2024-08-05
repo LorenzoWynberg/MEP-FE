@@ -128,7 +128,7 @@ export const Editar: React.FC<IProps> = props => {
 
 	useEffect(() => {
 		actions
-			.GetServicioComunalInfoById(props.match.params.id)
+			.GetServicioComunalInfoById(props.match.params.id, idInstitucion)
 			.then(res => {
 				let data = res.options[0]
 				setEstudiantes(data.listaEstudiantes.map(e => ({ ...e, idEstudiante: e.id })))

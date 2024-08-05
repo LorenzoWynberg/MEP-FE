@@ -10,13 +10,14 @@ import styled from 'styled-components'
 const ModalSCE = props => {
 	const { t } = useTranslation()
 	const [sce, setSCE] = useState({})
+	const idInstitucion = localStorage.getItem('idInstitucion')
 	const [caracteristicasString, setCaracteristicasString] = useState('')
 	const [showProyecto, setShowProyecto] = useState(false)
 	const [loading, setLoading] = useState(true)
 	const actions = useActions({ GetServicioComunalInfoById })
 
 	useEffect(() => {
-		actions.GetServicioComunalInfoById(parseInt(props.servicioComunalId)).then(res => {
+		actions.GetServicioComunalInfoById(parseInt(props.servicioComunalId), parseInt(idInstitucion)).then(res => {
 			if (res[0]?.caracteristicas) {
 				setCaracteristicasString(() => {
 					return res[0]?.caracteristicas
