@@ -234,15 +234,15 @@ const Certificados = props => {
 					{/* <PDFDownloadLink document={<Document>
 					<Page size="A4" style={stylesSheet.page}>
 						<View> */}
-					<Table ref={printRef}>
+					<Table ref={printRef} className='mt-4'>
 						<tr>
-							<td>
+							<td className='py-4'>
 								Confieren el presente certificado a: {certData.nombreEstudiante},{' '}
 								{certData.tipoIdentificacion}, {certData.identificacion}.
 							</td>
 						</tr>
 						<tr>
-							<td>
+							<td className='py-5'>
 								Desarrollo el proyecto del Servicio Comunal Estudiantil en el Área de proyecto:{' '}
 								{certData.areaProyecto}, Nombre del proyecto: {certData.nombreProyecto} , Tipo de
 								proyecto: {certData.tipoProyecto}, Características: {certData.caracteristicas}, con una
@@ -250,7 +250,7 @@ const Certificados = props => {
 							</td>
 						</tr>
 						<tr>
-							<td>Fecha: {new Date(Date.now()).toLocaleString().split(',')[0]}</td>
+							<td className='py-4'>Fecha: {new Date(Date.now()).toLocaleString().split(',')[0]}</td>
 						</tr>
 						<tr>
 							<td style={{ paddingTop: 60 }}>
