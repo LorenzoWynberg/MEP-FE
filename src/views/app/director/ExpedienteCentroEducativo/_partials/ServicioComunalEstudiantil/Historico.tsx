@@ -77,8 +77,14 @@ const Historico = props => {
 	const fetch = async (idInstitucion, filterText = null, idAreaProyecto = null) => {
 		try {
 			setLoading(true)
+			let url = ''
+			if (idAreaProyecto) {
+				url = `/${idInstitucion}/${filterText}/${idAreaProyecto}`
+			} else {
+				url = `/${idInstitucion}/${filterText}`
+			}
 			const response: any = await axios.get(
-				`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter/${idInstitucion}/${filterText}/${idAreaProyecto}`
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter${url}`
 			)
 			// console.log('response NEWWWW', response)
 			setData(response.data)
@@ -102,10 +108,10 @@ const Historico = props => {
 			})
 	}
 
-	useEffect(() => {
-		// fetch(idInstitucion, filterText, idAreaProyecto)
-		initialFetch(idInstitucion)
-	}, [data])
+	// useEffect(() => {
+	// 	// fetch(idInstitucion, filterText, idAreaProyecto)
+	// 	initialFetch(idInstitucion)
+	// }, [data])
 
 	useEffect(() => {
 		// fetch(idInstitucion, filterText, idAreaProyecto)
@@ -317,7 +323,10 @@ const Historico = props => {
 								})
 								if (firstCalled) {
 									setLoading(true)
-									await fetch(idInstitucion, searchValue, 0).then(res => setData(res.options))
+									await fetch(idInstitucion, searchValue, null).then(res => {
+										setData(res[0].data)
+										console.log('res', res)
+									})
 									setLoading(false)
 								}
 							}}
