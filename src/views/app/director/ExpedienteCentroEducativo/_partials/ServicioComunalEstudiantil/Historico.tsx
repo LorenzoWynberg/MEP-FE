@@ -3,8 +3,17 @@ import { Col, Row } from 'reactstrap'
 import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import { formatoOracion } from 'utils/utils'
+import { ObtenerInfoCatalogos } from 'Redux/formularioCentroResponse/actions'
 import axios from 'axios'
 import { envVariables } from 'Constants/enviroment'
+import {
+	FormControl,
+	FormControlLabel,
+	MenuItem,
+	Radio,
+	RadioGroup,
+	Select,
+} from '@material-ui/core'
 import {
 	filterInstitutionsPaginated,
 	cleanInstitutions,
@@ -30,7 +39,10 @@ const Historico = props => {
 	const [publicos, setPublicos] = useState(true)
 	const [dropdownToggle, setDropdownToggle] = useState(false)
 	const [filterText, setFilterText] = useState('')
-	const [idAreaProyecto, setIdAreaProyecto] = useState(0)
+	const [catalogos, setCatalogos] = React.useState([])
+	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
+	const [idAreaProyecto, setIdAreaProyecto] = useState(null);
+	const [areaProyecto, setAreaProyecto] = useState()
 	const [firstCalled, setFirstCalled] = useState(false)
 	const [servicioComunalId, setServicioComunalId] = useState()
 	const [loading, setLoading] = useState(true)
@@ -95,40 +107,27 @@ const Historico = props => {
 		}
 	}
 
-	const initialFetch = async idInstitucion => {
-		actions
-			.GetServicioComunalByInstitucionId(idInstitucion)
-			.then(data => {
-				setData(data.options)
-				setLoading(false)
-			})
-			.catch(error => {
-				console.log('error', error)
-				setLoading(false)
-			})
-	}
-
-	// useEffect(() => {
-	// 	// fetch(idInstitucion, filterText, idAreaProyecto)
-	// 	initialFetch(idInstitucion)
-	// }, [data])
-
 	useEffect(() => {
-		// fetch(idInstitucion, filterText, idAreaProyecto)
-		initialFetch(idInstitucion)
-	}, [])
-
-	useEffect(() => {
-		setFirstCalled(true)
 		return () => {
 			actions.cleanInstitutions()
 		}
 	}, [])
 
+	useEffect(() => {
+		fetch(idInstitucion, null, value)
+	}, [idInstitucion, value])
+
 	const setInstitution = async id => {
 		await actions.handleChangeInstitution(id)
 		await actions.updatePeriodosLectivos(id)
 	}
+
+
+	useEffect(() => {
+		ObtenerInfoCatalogos().then(response => {
+			setCatalogos(response)
+		})
+	}, [])
 
 	// TODO: Poner permiso correcto
 	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'configurarinstituciones')
@@ -306,6 +305,41 @@ const Historico = props => {
 						</h3>
 					</Col>
 					<Col xs={12}>
+						<FormControl>
+							{/* 			<Row>
+							<Col
+								style={{
+									display: 'flex',
+									textAlign: 'center',
+									justifyContent: 'center',
+									alignItems: 'center'
+								}}
+								sm={3}
+							>
+								<Typography variant='h6'>Area De Proyecto</Typography>
+							</Col>
+							<Col sm={9}>
+								<Typography variant='h6'>Descripcion</Typography>
+							</Col>
+						</Row> */}
+							<Select
+								labelId="demo-simple-select-label"
+								id="demo-simple-select"
+								value={value}
+								label="Age"
+								onChange={(e, v) => {
+									e.persist() 
+									setValue(e.target.value)
+								}}
+							>
+								{catalogos?.areasProyecto &&
+									catalogos.areasProyecto.map((item, i) => (
+
+										<MenuItem key={i} value={item.id}>{item.nombre}</MenuItem>
+
+									))}
+							</Select>
+						</FormControl >
 						<TableReactImplementation
 							data={data}
 							showAddButton
@@ -323,11 +357,18 @@ const Historico = props => {
 								})
 								if (firstCalled) {
 									setLoading(true)
+									//aqui tiene que mandarse el valor del select de area
 									await fetch(idInstitucion, searchValue, null).then(res => {
 										setData(res[0].data)
 										console.log('res', res)
+										setFirstCalled(false)
 									})
 									setLoading(false)
+								}else{
+									await fetch(idInstitucion, searchValue, value).then(res => {
+										setData(res[0].data)
+										console.log('res', res)
+									})
 								}
 							}}
 							columns={columns}
@@ -335,10 +376,11 @@ const Historico = props => {
 							pageSize={10}
 							backendSearch
 						/>
-					</Col>
-				</Row>
-			)}
-		</div>
+					</Col >
+				</Row >
+			)
+			}
+		</div >
 	)
 }
 
