@@ -30,6 +30,7 @@ import ReportHeader from 'Views/app/reportes/_partials/ReportHeader'
 import axios from 'axios'
 import { BiExport } from 'react-icons/bi'
 import { useReactToPrint } from 'react-to-print'
+import style from 'styled-components'
 
 const Certificados = props => {
 	const printRef = useRef()
@@ -235,11 +236,21 @@ const Certificados = props => {
 						<View> */}
 
 					<div ref={printRef} className='container'>
-						<div style={{ paddingTop: 75, paddingBottom: 50 }}>
+						<style>
+							{`
+								@media print {
+									@page {
+									size: landscape;
+									}
+								}
+							`}
+						</style>
+
+						<div style={{ paddingTop: 75 }}>
 							<ReportHeader mostrarContactoInstitucion={true} />
 						</div>
 
-						<Table className='mt-5 '>
+						<Table>
 							<tr>
 								<td className='py-4'>
 									Confieren el presente certificado a: {certData.nombreEstudiante},{' '}
@@ -247,7 +258,7 @@ const Certificados = props => {
 								</td>
 							</tr>
 							<tr>
-								<td className='py-5'>
+								<td style={{ paddingTop: 100, paddingBottom: 100 }}>
 									Desarrollo el proyecto del Servicio Comunal Estudiantil en el Área de proyecto:{' '}
 									{certData.areaProyecto}, Nombre del proyecto: {certData.nombreProyecto} , Tipo de
 									proyecto: {certData.tipoProyecto}, Características: {certData.caracteristicas}, con
