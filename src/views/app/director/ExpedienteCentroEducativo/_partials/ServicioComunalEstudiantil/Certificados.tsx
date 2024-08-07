@@ -240,7 +240,7 @@ const Certificados = props => {
 							{`
 								@media print {
 									@page {
-									size: landscape;
+									size: A4 landscape;
 									}
 								}
 							`}
