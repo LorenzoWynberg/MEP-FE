@@ -326,7 +326,8 @@ const Historico = props => {
 								labelId="demo-simple-select-label"
 								id="demo-simple-select"
 								value={value}
-								label="Age"
+								variant='outlined'
+								label="Area De Proyecto"
 								onChange={(e, v) => {
 									e.persist() 
 									setValue(e.target.value)
