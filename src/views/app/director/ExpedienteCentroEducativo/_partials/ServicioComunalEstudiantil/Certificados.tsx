@@ -30,6 +30,7 @@ import ReportHeader from 'Views/app/reportes/_partials/ReportHeader'
 import axios from 'axios'
 import { BiExport } from 'react-icons/bi'
 import { useReactToPrint } from 'react-to-print'
+import style from 'styled-components'
 
 const Certificados = props => {
 	const printRef = useRef()
@@ -171,7 +172,6 @@ const Certificados = props => {
 												`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetCertificadoByStudentId/${fullRow.idEstudiante}`
 											)
 											.then(response => {
-												console.log('response', response)
 												setCertData(response.data)
 												setStudentId(fullRow.idEstudiante)
 											})
@@ -234,37 +234,54 @@ const Certificados = props => {
 					{/* <PDFDownloadLink document={<Document>
 					<Page size="A4" style={stylesSheet.page}>
 						<View> */}
-					<Table ref={printRef} className='mt-4'>
-						<tr>
-							<td className='py-4'>
-								Confieren el presente certificado a: {certData.nombreEstudiante},{' '}
-								{certData.tipoIdentificacion}, {certData.identificacion}.
-							</td>
-						</tr>
-						<tr>
-							<td className='py-5'>
-								Desarrollo el proyecto del Servicio Comunal Estudiantil en el Área de proyecto:{' '}
-								{certData.areaProyecto}, Nombre del proyecto: {certData.nombreProyecto} , Tipo de
-								proyecto: {certData.tipoProyecto}, Características: {certData.caracteristicas}, con una
-								duración de 30 horas, en el Año: {certData.anio}.
-							</td>
-						</tr>
-						<tr>
-							<td className='py-4'>Fecha: {new Date(Date.now()).toLocaleString().split(',')[0]}</td>
-						</tr>
-						<tr>
-							<td style={{ paddingTop: 60 }}>
-								<hr
-									style={{
-										width: '380px',
-										borderColor: 'black',
-										display: 'flex'
-									}}
-								/>
-								Nombre Director, {certData.nombreDirector}
-							</td>
-						</tr>
-					</Table>
+
+					<div ref={printRef} className='container'>
+						<style>
+							{`
+								@media print {
+									@page {
+									size: A4 landscape;
+									}
+								}
+							`}
+						</style>
+
+						<div style={{ paddingTop: 75 }}>
+							<ReportHeader mostrarContactoInstitucion={true} />
+						</div>
+
+						<Table>
+							<tr>
+								<td className='py-4'>
+									Confieren el presente certificado a: {certData.nombreEstudiante},{' '}
+									{certData.tipoIdentificacion}, {certData.identificacion}.
+								</td>
+							</tr>
+							<tr>
+								<td style={{ paddingTop: 100, paddingBottom: 100 }}>
+									Desarrollo el proyecto del Servicio Comunal Estudiantil en el Área de proyecto:{' '}
+									{certData.areaProyecto}, Nombre del proyecto: {certData.nombreProyecto} , Tipo de
+									proyecto: {certData.tipoProyecto}, Características: {certData.caracteristicas}, con
+									una duración de 30 horas, en el Año: {certData.anio}.
+								</td>
+							</tr>
+							<tr>
+								<td className='py-4'>Fecha: {new Date(Date.now()).toLocaleString().split(',')[0]}</td>
+							</tr>
+							<tr>
+								<td style={{ paddingTop: 60 }}>
+									<hr
+										style={{
+											width: '420px',
+											borderColor: 'black',
+											display: 'flex'
+										}}
+									/>
+									Nombre Director, {certData.nombreDirector}
+								</td>
+							</tr>
+						</Table>
+					</div>
 				</SimpleModal>
 			)}
 

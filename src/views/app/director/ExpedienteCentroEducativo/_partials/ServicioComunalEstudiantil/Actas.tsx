@@ -10,10 +10,8 @@ import {
 	cleanInstitutions,
 	GetServicioComunalByInstitucionId,
 	getCertificadosByInstitucionFiltered
-
-
 } from 'Redux/configuracion/actions'
-import { Document } from '@react-pdf/renderer';
+import { Document } from '@react-pdf/renderer'
 import withRouter from 'react-router-dom/withRouter'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import CancelIcon from '@mui/icons-material/RemoveCircle'
@@ -61,7 +59,7 @@ const Actas = props => {
 	const handlePrint = useReactToPrint({
 		content: reactToPrintContent
 	})
-	const storeState = useSelector((store) => {
+	const storeState = useSelector(store => {
 		return {
 			institution: store.authUser.currentInstitution,
 			info_general: store.VistasUsuarios.info_general
@@ -73,16 +71,6 @@ const Actas = props => {
 	const idInstitucion = localStorage.getItem('idInstitucion')
 
 	const selectedInstitution = localStorage.getItem('selectedInstitution')
-	console.log('selectedInstitution', selectedInstitution)
-	console.log('storeState', storeState)
-	// TODO: mappear los strings
-	// const mapper = el => {
-	// 	console.log('el', el)
-	// 	return {
-	// 		...el,
-	// 		organizacionContraparte: formatoOracion(el.organizacionContraparte)
-	// 	}
-	// }
 
 	const state = useSelector((store: any) => {
 		return {
@@ -105,17 +93,13 @@ const Actas = props => {
 	})
 
 	useEffect(() => {
-		axios.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${idInstitucion}`)
+		axios
+			.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${idInstitucion}`)
 			.then(response => {
-				// const _data = mapper(data.options)
-				console.log('data', response)
 				setData(response.data)
-				setLoading(false)
 			})
-			.catch(error => {
-				console.log('error', error)
-				setLoading(false)
-			})
+			.catch(error => {})
+			.finally(() => setLoading(false))
 	}, [])
 
 	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'configurarinstituciones')
@@ -154,14 +138,15 @@ const Actas = props => {
 									onClick={() => {
 										console.log('fullRow', fullRow)
 
-
-										axios.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/ObtenerDocumentoActaById/${fullRow.id}`).then(response => {
-											// console.log('response', response)
-											setHtmlToShow(response.data)
-											setOpenDialog(true)
-										});
-
-
+										axios
+											.get(
+												`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/ObtenerDocumentoActaById/${fullRow.id}`
+											)
+											.then(response => {
+												// console.log('response', response)
+												setHtmlToShow(response.data)
+												setOpenDialog(true)
+											})
 									}}
 									style={{
 										fontSize: 25,
@@ -170,7 +155,6 @@ const Actas = props => {
 									}}
 								/>
 							</Tooltip>
-
 						</div>
 					)
 				}
@@ -203,117 +187,119 @@ const Actas = props => {
 		<div className={styles}>
 			{loading && <BarLoader />}
 
+			{htmlToShow && openDialog && (
+				<SimpleModal
+					addMarginTitle
+					txtBtnCancel='Cerrar'
+					txtBtn='Imprimir'
+					onConfirm={handlePrint}
+					title='Acta'
+					onClose={() => setOpenDialog(false)}
+					stylesContent={{}}
+					openDialog={openDialog}
+				>
+					{/* <object style={{ width: '50vw', height: '90vh' }} data={`data:application/pdf;base64,${base64}`} /> */}
+					<div ref={printRef} className='content' dangerouslySetInnerHTML={{ __html: htmlToShow }}></div>
+				</SimpleModal>
+			)}
 
-			{htmlToShow && openDialog && <SimpleModal
-				addMarginTitle
-				txtBtnCancel='Cerrar'
-				txtBtn='Imprimir'
-				onConfirm={handlePrint}
-				title='Acta'
-				onClose={() => setOpenDialog(false)}
-				stylesContent={{}}
-				openDialog={openDialog}
-			>
-
-				{/* <object style={{ width: '50vw', height: '90vh' }} data={`data:application/pdf;base64,${base64}`} /> */}
-				<div ref={printRef} className="content" dangerouslySetInnerHTML={{ __html: htmlToShow }}></div>
-			</SimpleModal>}
-
-
-			{
-				!tienePermiso || tienePermiso.leer == 0 ? (
-					<Row>
-						<Col xs={12}>
-							{/* TODO: i18n */}
-							<h5>No tiene permiso para visualizar esta pagina</h5>
-						</Col>
-					</Row>
-				) : (
-					<Row>
-						<Col xs={12}>
-							<h3 className='mt-2 mb-3'>
-								{/* {t('expediente_ce>titulo', 'Expediente Centro Educativo')} */}
-								Actas
-							</h3>
-						</Col>
-						<Col xs={12}>
-							<TableReactImplementation
-								data={data}
-								msjButton="Generar Acta"
-								showAddButton
-								avoidSearch
-								onSubmitAddButton={() => {
-									axios.get(
+			{!tienePermiso || tienePermiso.leer == 0 ? (
+				<Row>
+					<Col xs={12}>
+						{/* TODO: i18n */}
+						<h5>No tiene permiso para visualizar esta pagina</h5>
+					</Col>
+				</Row>
+			) : (
+				<Row>
+					<Col xs={12}>
+						<h3 className='mt-2 mb-3'>
+							{/* {t('expediente_ce>titulo', 'Expediente Centro Educativo')} */}
+							Actas
+						</h3>
+					</Col>
+					<Col xs={12}>
+						<TableReactImplementation
+							data={data}
+							msjButton='Generar Acta'
+							showAddButton
+							avoidSearch
+							onSubmitAddButton={() => {
+								setLoading(true)
+								axios
+									.get(
 										`${envVariables.BACKEND_URL}/api/ExpedienteCentroEducativo/Institucion/GetById/${idInstitucion}`
-									).then(res => {
+									)
+									.then(res => {
 										const data = { institucionId, codSaber: res.data.codigo }
 
-										axios.post(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`, data).then(r2 => {
-
-											axios.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${idInstitucion}`)
-												.then(response => {
-													console.log('data', response)
-													setData(response.data)
-													setLoading(false)
-												})
-												.catch(error => {
-													console.log('error', error)
-													setLoading(false)
-												})
-										});
+										axios
+											.post(
+												`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`,
+												data
+											)
+											.then(r2 => {
+												axios
+													.get(
+														`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${idInstitucion}`
+													)
+													.then(response => {
+														setData(response.data)
+													})
+													.catch(error => {
+														console.log('error', error)
+													})
+													.finally(() => setLoading(false))
+											})
 									})
-
-								}}
-
-								columns={columns}
-								orderOptions={[]}
-								pageSize={10}
-								backendSearch
-							/>
-						</Col>
-					</Row>
-				)
-			}
-		</div >
+							}}
+							columns={columns}
+							orderOptions={[]}
+							pageSize={10}
+							backendSearch
+						/>
+					</Col>
+				</Row>
+			)}
+		</div>
 	)
 }
 
 export default withRouter(Actas)
 
-
 const Table = styled.table`
-  border-collapse: collapse;
-  width:100%;
-  thead {
-    font-width: bold;
-    text-align: center;
-  }
-  th {
-    border: solid 1px;
-    padding: 2px;
-  }
-  td {
-    text-align: center;
-    border: solid 1px;
-    padding: 2px;
-  }
+	border-collapse: collapse;
+	width: 100%;
+	thead {
+		font-width: bold;
+		text-align: center;
+	}
+	th {
+		border: solid 1px;
+		padding: 2px;
+	}
+	td {
+		text-align: center;
+		border: solid 1px;
+		padding: 2px;
+	}
 `
 
 const Card = styled.div`
-  border-radius: 15px;
-  min-width: 100%;
-  min-height: 100%;
-  border-color: gray;
-  background: white;
-  padding: 15px;
+	border-radius: 15px;
+	min-width: 100%;
+	min-height: 100%;
+	border-color: gray;
+	background: white;
+	padding: 15px;
 `
 const Linea = styled.hr`
-  width: 100%;
-  background-color: black;
-  height: 1px;
-  border: none;
-  margin: 0;
+	width: 100%;
+	background-color: black;
+	height: 1px;
+	border: none;
+	margin: 0;
 `
 const Seccion = styled.section`
-  text-align: center;
+	text-align: center;
 `
