@@ -10,8 +10,8 @@ import {
   Col,
   Form
 } from 'reactstrap'
+import { envVariables } from 'Constants/enviroment'
 import Select from 'react-select'
-import _ from 'lodash'
 import AsyncSelect from 'react-select/async'
 import CustomSelectInput from 'Components/common/CustomSelectInput'
 import { connect } from 'react-redux'
@@ -23,6 +23,7 @@ import { catalogsEnumObj } from '../../../../../../utils/catalogsEnum'
 import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import { useTranslation } from 'react-i18next'
 import { AsyncPaginate } from 'react-select-async-paginate';
+import axios from 'axios'
 const OtrosDatos = props => {
   const { t } = useTranslation()
 
@@ -172,9 +173,15 @@ const OtrosDatos = props => {
 
 
 
-  const loadOptions = async (searchQuery, loadedOptions, { page }) => {
-    console.log('loadOptions', searchQuery, loadedOptions, page)
-    const response = await props.getCatalogs(12, page, 10)
+  const loadOptions = async (searchQuery, loadedOptions,{page}) => {
+    console.log('loadOptions', searchQuery, loadedOptions)
+    let response = {};
+    if (searchQuery && searchQuery != "") {
+      response = await axios.get(`${envVariables.BACKEND_URL}/api/Catalogo/GetAllByType/${12}/${searchQuery}/${page}/${10}`)
+    } else {
+      response = await axios.get(`${envVariables.BACKEND_URL}/api/Catalogo/GetAllByType/${12}/${page}/${10}`)
+    }
+    console.log('loadOptions response', response)
     let filteredResp = searchQuery && searchQuery != "" && response.data.filter(v => v.nombre.includes(searchQuery)).map(
       item => ({
         label: item.nombre,
@@ -241,7 +248,6 @@ const OtrosDatos = props => {
                     components={{
                       Input: CustomSelectInput
                     }}
-                    onInputChange={(v) => setFilterOcupacion(v)}
                     key='async-ocupaciones'
                     className='react-select'
                     classNamePrefix='react-select'
