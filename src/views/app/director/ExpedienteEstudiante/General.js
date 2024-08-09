@@ -219,6 +219,8 @@ const General = props => {
 			'estadoCivil',
 			'etnia'
 		])
+
+		console.log('datos parseados', datos)
 		const _data = {
 			id: identidadData.id,
 			identificacion: identidadData.identificacion,
