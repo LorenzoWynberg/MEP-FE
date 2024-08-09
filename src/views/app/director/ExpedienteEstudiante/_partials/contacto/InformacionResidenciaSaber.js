@@ -35,6 +35,7 @@ import Loader from '../../../../../../components/Loader'
 import { EditButton } from '../../../../../../components/EditButton'
 import RequiredLabel from '../../../../../../components/common/RequeredLabel'
 import { useForm } from 'react-hook-form'
+import _ from 'lodash'
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -73,7 +74,7 @@ const InformacionResidenciaSaber = (props) => {
 	const [razon, setRazon] = useState('')
 	const [snackbarMsg, setSnackbarMsg] = useState('')
 	const [snackbarVariant, setSnackbarVariant] = useState('')
-	const [location, setLocation] = useState(initialLocationCoordinates)
+	const [location, setLocation] = useState({latitude:0,longitude:0})
 	const [editDirection, setEditDirection] = useState({})
 	const [editable, setEditable] = useState(false)
 	const [loading, setLoading] = useState(true)
@@ -119,11 +120,10 @@ const InformacionResidenciaSaber = (props) => {
 				setDireccionArray(_direccionArray)
 				setLoadLocation(true)
 				const _province = props.provinces.provincias.find(
-					(provincia) =>
-						{
-							const stringCompare = provincia?.nombre.normalize("NFD").replace(/\p{Diacritic}/gu, "")
-							return stringCompare == _direccionArray[0].trim()
-						}
+					(provincia) => {
+						const stringCompare = provincia?.nombre.normalize("NFD").replace(/\p{Diacritic}/gu, "")
+						return stringCompare == _direccionArray[0].trim()
+					}
 				)
 				const provinceResponse = await props.getCantonesByProvincia(
 					_province?.id
@@ -276,6 +276,7 @@ const InformacionResidenciaSaber = (props) => {
 	}, [props.poblados.poblados])
 
 	useEffect(() => {
+		console.log('location useEffect', location)
 		if (
 			location.latitude !== 'No seleccionado' &&
 			location.longitude !== 'No seleccionado' &&
@@ -292,7 +293,7 @@ const InformacionResidenciaSaber = (props) => {
 							if (
 								!(
 									firstResultArray[
-										firstResultArray.length - 1
+									firstResultArray.length - 1
 									] === ' CRI'
 								)
 							) {
@@ -338,6 +339,7 @@ const InformacionResidenciaSaber = (props) => {
 	}
 
 	const handleSearchBySelects = (data, name) => {
+		console.log("location handleSearchBySelects data", data,name)
 		if (search) {
 			search.clear()
 		}
@@ -404,10 +406,10 @@ const InformacionResidenciaSaber = (props) => {
 		let error = _errors['poblado']
 			? true
 			: _errors['razon']
-			? true
-			: _errors['location']
-			? true
-			: false
+				? true
+				: _errors['location']
+					? true
+					: false
 		setErrors(_errors)
 
 		if (error) {
@@ -510,6 +512,7 @@ const InformacionResidenciaSaber = (props) => {
 	}
 
 	const setLocationIfEditable = (value) => {
+
 		if (editable) {
 			setLocation(value)
 		}
@@ -802,7 +805,11 @@ const InformacionResidenciaSaber = (props) => {
 														type="text"
 														name="latitud"
 														id="latitud"
-														disabled
+														onChange={(e) => { 
+															const locationActual = {...location, latitude: e.target.value}
+															_.debounce(setLocationIfEditable(locationActual), 1500)
+														}}
+														disabled={!editable}
 														value={
 															location.latitude
 														}
@@ -822,7 +829,11 @@ const InformacionResidenciaSaber = (props) => {
 														type="text"
 														name="longitud"
 														id="longitud"
-														disabled
+														onChange={(e) => { 
+															const locationActual = {...location, longitude: e.target.value}
+															_.debounce(setLocationIfEditable(locationActual), 1500)
+														}}
+														disabled={!editable}
 														value={
 															location.longitude
 														}
@@ -866,7 +877,7 @@ const InformacionResidenciaSaber = (props) => {
 								className={classes.control}
 							>
 								<WebMapView
-									setLocation={setLocationIfEditable}
+									setLocation={setLocation}
 									setSearch={setSearch}
 									setUbicacion={setUbicacion}
 									editable={editable}
