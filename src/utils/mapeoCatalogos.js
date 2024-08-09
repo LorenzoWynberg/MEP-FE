@@ -69,7 +69,6 @@ export const mapIdToOption = (list, selects, options) => {
 	return itemsList
 }
 
-//TODO aqui esta el error al generar los datos, retorna un arreglo con [79]
 // this function maps the items from an object to send the data
 export const parseOptions = (object, options) => {
 	console.log('parseOptions', object, options)
