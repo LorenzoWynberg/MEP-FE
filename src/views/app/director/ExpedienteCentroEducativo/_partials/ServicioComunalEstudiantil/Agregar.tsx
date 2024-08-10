@@ -40,17 +40,17 @@ export const Agregar: React.FC<IProps> = props => {
 	const [objetivoNombre, setObjetivoNombre] = React.useState([])
 	const [busqueda, setBusqueda] = React.useState()
 	const [estudiantes, setEstudiantes] = React.useState([])
-	const [caracteristicas, setCaracteristicas] = React.useState([])
+	const [caracteristicas, setCaracteristicas] = React.useState()
 	const [caracteristicasIdSeleccionados, setCaracteristicasIdSeleccionados] = React.useState([])
 	const [caracteristicasSeleccionados, setCaracteristicasSeleccionados] = React.useState([])
 	const [nombresSeleccionados, setNombresSeleccionados] = React.useState([])
-	const [nombreSend, setNombreSend] = React.useState([])
+	const [nombreSend, setNombreSend] = React.useState()
 	const [nombreId, setNombreId] = React.useState()
 	const [showBuscador, setShowBuscador] = React.useState(false)
 	const [showTipoOrganizacion, setShowTipoOrganizacion] = React.useState(false)
 	const [organizacionId, setOrganizacionId] = React.useState()
 	const [organizacion, setOrganizacion] = React.useState()
-
+	const [checkedValid, setCheckedValid] = React.useState(false)
 	const [showModalidades, setShowModalidades] = React.useState(false)
 	const [modalidadId, setModalidadId] = React.useState()
 	const [modalidad, setModalidad] = React.useState()
@@ -123,7 +123,6 @@ export const Agregar: React.FC<IProps> = props => {
 			return true
 		}
 	}
-
 	const [selectedDate, setSelectedDate] = useState(null)
 	const [formattedDate, setFormattedDate] = useState('')
 
@@ -193,20 +192,23 @@ export const Agregar: React.FC<IProps> = props => {
 									</Row>
 								))}
 						</RadioGroup>
+						{checkedValid && !value && <span style={{ color: 'red' }} >Campo requerido</span>}
 					</FormControl>
 				</SimpleModal>
-			)}
-			{showCaracteristicas && (
-				<SimpleModal
-					title='Selección de caracteristicas'
-					openDialog={showCaracteristicas}
-					onConfirm={() => {
-						setShowCaracteristicas(false)
-					}}
-					onClose={() => setShowCaracteristicas(false)}
-				>
-					<FormControl>
-						{/* 	<Row>
+			)
+			}
+			{
+				showCaracteristicas && (
+					<SimpleModal
+						title='Selección de caracteristicas'
+						openDialog={showCaracteristicas}
+						onConfirm={() => {
+							setShowCaracteristicas(false)
+						}}
+						onClose={() => setShowCaracteristicas(false)}
+					>
+						<FormControl>
+							{/* 	<Row>
 							<Col
 								style={{
 									display: 'flex',
@@ -222,119 +224,123 @@ export const Agregar: React.FC<IProps> = props => {
 								<Typography variant='h6'>Descripcion</Typography>
 							</Col>
 						</Row> */}
-						{catalogos.caracteristicas.map((item, index) => (
-							<Row>
-								<Col
-									style={{
-										display: 'flex',
-										textAlign: 'left',
-										justifyContent: 'left',
-										alignItems: 'left'
-									}}
-									sm={3}
-								>
-									<FormControlLabel
-										control={
-											<Checkbox
-												checked={caracteristicasSeleccionados.map(v => v.id).includes(item.id)}
-												value={item.id}
-											/>
-										}
-										label={
-											<div
-												onClick={async () => {
-													let caracteristicas = [...caracteristicasSeleccionados]
-													let caracteristicasId = [...caracteristicasIdSeleccionados]
-													if (!caracteristicasId.includes(item.id)) {
-														caracteristicas.push(item)
-														caracteristicasId.push(item.id)
-													} else {
-														caracteristicas = caracteristicas.filter(n => n.id != item.id)
-														caracteristicasId = caracteristicasId.filter(n => n != item.id)
-													}
-													setCaracteristicasSeleccionados(caracteristicas)
-													setCaracteristicasIdSeleccionados(caracteristicasId)
-												}}
-											>
-												{item.nombre}
-											</div>
-										}
-										onClick={async () => {
-											let caracteristicas = [...caracteristicasSeleccionados]
-											let caracteristicasId = [...caracteristicasIdSeleccionados]
-											if (!caracteristicasId.includes(item.id)) {
-												caracteristicas.push(item)
-												caracteristicasId.push(item.id)
-											} else {
-												caracteristicas = caracteristicas.filter(n => n.id != item.id)
-												caracteristicasId = caracteristicasId.filter(n => n != item.id)
-											}
-											setCaracteristicasSeleccionados(caracteristicas)
-											setCaracteristicasIdSeleccionados(caracteristicasId)
+							{catalogos.caracteristicas.map((item, index) => (
+								<Row>
+									<Col
+										style={{
+											display: 'flex',
+											textAlign: 'left',
+											justifyContent: 'left',
+											alignItems: 'left'
 										}}
-									/>
-								</Col>
-								<Col sm={9}>{item.descripcion}</Col>
-							</Row>
-						))}
-					</FormControl>
-				</SimpleModal>
-			)}
-			{showModalidades && (
-				<SimpleModal
-					title='Tipo de proyecto'
-					value={value}
-					openDialog={showModalidades}
-					onConfirm={() => {
-						setShowModalidades(false)
-					}}
-					onClose={() => setShowModalidades(false)}
-				>
-					<Row>
-						<FormControl>
-							<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
-								{catalogos.modalidades &&
-									catalogos.modalidades.map(item => (
-										<Row>
-											<Col
-												style={{
-													display: 'flex',
-													justifyContent: 'left',
-													alignItems: 'left'
-												}}
-												sm={3}
-											>
-												<FormControlLabel
+										sm={3}
+									>
+										<FormControlLabel
+											control={
+												<Checkbox
+													checked={caracteristicasSeleccionados.map(v => v.id).includes(item.id)}
 													value={item.id}
-													onClick={(e, v) => {
-														e.persist()
-														setModalidadId(e.target.value)
-														setModalidad(item.nombre)
-													}}
-													checked={modalidadId == item.id}
-													control={<Radio />}
-													label={item.nombre}
 												/>
-											</Col>
-											<Col sm={9}>{item.descripcion}</Col>
-										</Row>
-									))}
-							</RadioGroup>
+											}
+											label={
+												<div
+													onClick={async () => {
+														let caracteristicas = [...caracteristicasSeleccionados]
+														let caracteristicasId = [...caracteristicasIdSeleccionados]
+														if (!caracteristicasId.includes(item.id)) {
+															caracteristicas.push(item)
+															caracteristicasId.push(item.id)
+														} else {
+															caracteristicas = caracteristicas.filter(n => n.id != item.id)
+															caracteristicasId = caracteristicasId.filter(n => n != item.id)
+														}
+														setCaracteristicasSeleccionados(caracteristicas)
+														setCaracteristicasIdSeleccionados(caracteristicasId)
+													}}
+												>
+													{item.nombre}
+												</div>
+											}
+											onClick={async () => {
+												let caracteristicas = [...caracteristicasSeleccionados]
+												let caracteristicasId = [...caracteristicasIdSeleccionados]
+												if (!caracteristicasId.includes(item.id)) {
+													caracteristicas.push(item)
+													caracteristicasId.push(item.id)
+												} else {
+													caracteristicas = caracteristicas.filter(n => n.id != item.id)
+													caracteristicasId = caracteristicasId.filter(n => n != item.id)
+												}
+												setCaracteristicasSeleccionados(caracteristicas)
+												setCaracteristicasIdSeleccionados(caracteristicasId)
+											}}
+										/>
+									</Col>
+									<Col sm={9}>{item.descripcion}</Col>
+								</Row>
+							))}
 						</FormControl>
-					</Row>
-				</SimpleModal>
-			)}
-			{showTipoOrganizacion && (
-				<SimpleModal
-					title='Organización'
-					openDialog={showTipoOrganizacion}
-					onConfirm={() => {
-						setShowTipoOrganizacion(false)
-					}}
-					onClose={() => setShowTipoOrganizacion(false)}
-				>
-					<FormControl>
-						{/* 	<Row>
+					</SimpleModal>
+				)
+			}
+			{
+				showModalidades && (
+					<SimpleModal
+						title='Tipo de proyecto'
+						value={value}
+						openDialog={showModalidades}
+						onConfirm={() => {
+							setShowModalidades(false)
+						}}
+						onClose={() => setShowModalidades(false)}
+					>
+						<Row>
+							<FormControl>
+								<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
+									{catalogos.modalidades &&
+										catalogos.modalidades.map(item => (
+											<Row>
+												<Col
+													style={{
+														display: 'flex',
+														justifyContent: 'left',
+														alignItems: 'left'
+													}}
+													sm={3}
+												>
+													<FormControlLabel
+														value={item.id}
+														onClick={(e, v) => {
+															e.persist()
+															setModalidadId(e.target.value)
+															setModalidad(item.nombre)
+														}}
+														checked={modalidadId == item.id}
+														control={<Radio />}
+														label={item.nombre}
+													/>
+												</Col>
+												<Col sm={9}>{item.descripcion}</Col>
+											</Row>
+										))}
+								</RadioGroup>
+							</FormControl>
+						</Row>
+					</SimpleModal>
+				)
+			}
+			{
+				showTipoOrganizacion && (
+					<SimpleModal
+						title='Organización'
+						openDialog={showTipoOrganizacion}
+						onConfirm={() => {
+							setShowTipoOrganizacion(false)
+						}}
+						onClose={() => setShowTipoOrganizacion(false)}
+					>
+						<FormControl>
+							{/* 	<Row>
 							<Col
 								style={{
 									display: 'flex',
@@ -346,87 +352,92 @@ export const Agregar: React.FC<IProps> = props => {
 								<Typography variant='h6'>Tipo</Typography>
 							</Col>
 						</Row> */}
-						<RadioGroup
-							aria-labelledby='demo-radio-buttons-group-label'
-							name='radio-buttons-group'
-							value={value}
-						>
-							{catalogos.tipoOrganizacion.map(item => (
-								<Row>
-									<Col sm={12}>
-										<FormControlLabel
-											value={item.id}
-											onClick={(e, v) => {
-												e.persist()
-												setOrganizacionId(e.target.value)
-												setOrganizacion(item.nombre)
-											}}
-											checked={organizacionId == item.id}
-											control={<Radio />}
-											label={item.nombre}
-										/>
-									</Col>
-								</Row>
-							))}
-						</RadioGroup>
-					</FormControl>
-				</SimpleModal>
-			)}
-			{showBuscador && (
-				<SimpleModal
-					title='Estudiantes'
-					openDialog={showBuscador}
-					onConfirm={() => {
-						setShowBuscador(false)
-					}}
-					onClose={() => setShowBuscador(false)}
-				>
-					<BuscadorServicioComunal
-						busqueda={busqueda}
-						setEstudiantes={setEstudiantes}
-						estudiantes={estudiantes}
-					/>
-				</SimpleModal>
-			)}
-			{nombresSeleccionados && value && !showBuscador && showNombre && catalogos.nombresProyecto && (
-				<SimpleModal
-					title='Nombre Proyecto'
-					openDialog={showNombre}
-					onConfirm={() => {
-						setShowNombre(false)
-					}}
-					onClose={() => setShowNombre(false)}
-				>
-					<FormControl>
-						<FormLabel id='demo-radio-buttons-group-label'>Tipo Organizacion</FormLabel>
-						<RadioGroup
-							aria-labelledby='demo-radio-buttons-group-label'
-							name='radio-buttons-group'
-							value={value}
-						>
-							{catalogos.nombresProyecto
-								.filter(item => parseInt(item.codigo) == parseInt(value))
-								.map(item => (
+							<RadioGroup
+								aria-labelledby='demo-radio-buttons-group-label'
+								name='radio-buttons-group'
+								value={value}
+							>
+								{catalogos.tipoOrganizacion.map(item => (
 									<Row>
 										<Col sm={12}>
 											<FormControlLabel
 												value={item.id}
 												onClick={(e, v) => {
 													e.persist()
-													setNombreId(e.target.value)
-													setNombreSend(item.nombre)
+													setOrganizacionId(e.target.value)
+													setOrganizacion(item.nombre)
 												}}
-												checked={nombreId == item.id}
+												checked={organizacionId == item.id}
 												control={<Radio />}
 												label={item.nombre}
 											/>
 										</Col>
 									</Row>
 								))}
-						</RadioGroup>
-					</FormControl>
-				</SimpleModal>
-			)}
+							</RadioGroup>
+						</FormControl>
+					</SimpleModal>
+				)
+			}
+			{
+				showBuscador && (
+					<SimpleModal
+						title='Estudiantes'
+						openDialog={showBuscador}
+						onConfirm={() => {
+							setShowBuscador(false)
+						}}
+						onClose={() => setShowBuscador(false)}
+					>
+						<BuscadorServicioComunal
+							busqueda={busqueda}
+							setEstudiantes={setEstudiantes}
+							estudiantes={estudiantes}
+						/>
+					</SimpleModal>
+				)
+			}
+			{
+				nombresSeleccionados && value && !showBuscador && showNombre && catalogos.nombresProyecto && (
+					<SimpleModal
+						title='Nombre Proyecto'
+						openDialog={showNombre}
+						onConfirm={() => {
+							setShowNombre(false)
+						}}
+						onClose={() => setShowNombre(false)}
+					>
+						<FormControl>
+							<FormLabel id='demo-radio-buttons-group-label'>Tipo Organizacion</FormLabel>
+							<RadioGroup
+								aria-labelledby='demo-radio-buttons-group-label'
+								name='radio-buttons-group'
+								value={value}
+							>
+								{catalogos.nombresProyecto
+									.filter(item => parseInt(item.codigo) == parseInt(value))
+									.map(item => (
+										<Row>
+											<Col sm={12}>
+												<FormControlLabel
+													value={item.id}
+													onClick={(e, v) => {
+														e.persist()
+														setNombreId(e.target.value)
+														setNombreSend(item.nombre)
+													}}
+													checked={nombreId == item.id}
+													control={<Radio />}
+													label={item.nombre}
+												/>
+											</Col>
+										</Row>
+									))}
+							</RadioGroup>
+						</FormControl>
+					</SimpleModal>
+				)
+			}
 			<h3 className='mt-2 mb-3'>
 				{/* TODO: i18n */}
 				{/* {t('servicio_comunal_title', 'Servicio Comunal')} */}
@@ -443,38 +454,41 @@ export const Agregar: React.FC<IProps> = props => {
 										<Label>
 											{t('registro_servicio_comunal>area_proyecto', 'Area de proyecto')}
 										</Label>
-										<Input
+										<Input style={{ border: checkedValid && !areaProyecto ? '1px solid red' : '' }}
 											key={areaProyecto}
 											name='i'
 											value={areaProyecto ? areaProyecto : ''}
 											readOnly
 											onClick={() => !showAreaProyecto && setShowAreaProyecto(true)}
 										/>
+										{checkedValid && !areaProyecto && <span style={{ color: 'red' }} >Campo requerido</span>}
 									</FormGroup>
 								</Col>
 								<Col md={6}>
 									<FormGroup>
 										<Label>{t('registro_servicio_comunal>objetivonombre', 'objetivo')}</Label>
-										<Input
+										<Input style={{ border: checkedValid && !nombreSend ? '1px solid red' : '' }}
 											key={nombreSend}
 											name='i'
 											value={nombreSend ? nombreSend : ''}
 											readOnly
 											onClick={() => !showNombre && setShowNombre(true)}
-										/>
+										/>		{checkedValid && !nombreSend && <span style={{ color: 'red' }} >Campo requerido</span>}
+
 									</FormGroup>
 								</Col>
 								<Col sm={3}>
 									<FormGroup>
 										<Label>{t('registro_servicio_comunal>modalidad', 'Modalidad')}</Label>
-										<Input
+										<Input style={{ border: checkedValid && !modalidad ? '1px solid red' : '' }}
 											name='modalidad'
 											type='text'
 											value={modalidad}
 											readOnly
 											onClick={() => !showModalidades && setShowModalidades(true)}
 											autoFocus={true}
-										/>
+										/>{checkedValid && !modalidad && <span style={{ color: 'red' }} >Campo requerido</span>}
+
 									</FormGroup>
 								</Col>
 							</Row>
@@ -484,12 +498,12 @@ export const Agregar: React.FC<IProps> = props => {
 
 									{caracteristicasSeleccionados.length == 0 && (
 										<FormGroup>
-											<Input
+											<Input style={{ border: checkedValid && isEmpty(caracteristicasSeleccionados) ? '1px solid red' : '' }}
 												name='codigo'
 												value={''}
 												readOnly
 												onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
-											/>
+											/>{checkedValid && isEmpty(caracteristicasSeleccionados) && <span style={{ color: 'red' }} >Campo requerido</span>}
 										</FormGroup>
 									)}
 									{caracteristicasSeleccionados.length > 0 && (
@@ -529,14 +543,16 @@ export const Agregar: React.FC<IProps> = props => {
 												'Organización contraparte'
 											)}
 										</Label>
-										<Input
+										<Input style={{ border: checkedValid && !organizacion ? '1px solid red' : '' }}
+
 											name='tipo_centro'
 											type='text'
 											value={organizacion ? organizacion : ''}
 											readOnly
 											onClick={() => !showTipoOrganizacion && setShowTipoOrganizacion(true)}
 											autoFocus={true}
-										/>
+										/>{checkedValid && !organizacion && <span style={{ color: 'red' }} >Campo requerido</span>}
+
 									</FormGroup>
 									{valueOrg}
 								</Col>
@@ -545,7 +561,7 @@ export const Agregar: React.FC<IProps> = props => {
 										<Label>
 											{t('registro_servicio_comunal>docente_acompaña', 'Acompañante de proyecto')}
 										</Label>
-										<Input
+										<Input style={{ border: checkedValid && !acompanante ? '1px solid red' : '' }}
 											name='tipo_centro'
 											type='text'
 											value={acompanante}
@@ -554,6 +570,7 @@ export const Agregar: React.FC<IProps> = props => {
 											}}
 											autoFocus={true}
 										/>
+										{checkedValid && !acompanante && <span style={{ color: 'red' }} >Campo requerido</span>}
 									</FormGroup>
 								</Col>
 							</Row>
@@ -562,7 +579,7 @@ export const Agregar: React.FC<IProps> = props => {
 								<Label>{t('registro_servicio_comunal>descripcion', 'Descripción')}</Label>
 
 								<Input
-									style={{}}
+									style={{ border: checkedValid && !descripcion ? '1px solid red' : '' }}
 									name='tipo_centro'
 									type='text'
 									value={descripcion}
@@ -570,7 +587,7 @@ export const Agregar: React.FC<IProps> = props => {
 										setValueDescripcion(e.target.value)
 									}}
 									autoFocus={true}
-								/>
+								/>{checkedValid && !descripcion && <span style={{ color: 'red' }} >Campo requerido</span>}
 							</FormGroup>
 						</Form>
 					</Card>
@@ -587,6 +604,7 @@ export const Agregar: React.FC<IProps> = props => {
 							}}
 						/>
 					</div>
+					{checkedValid && isEmpty(estudiantes) && <span style={{ color: 'red' }} >Debe agregar estudiantes</span>}
 					<TableStudents
 						onlyViewModule={true}
 						data={estudiantes}
@@ -609,27 +627,31 @@ export const Agregar: React.FC<IProps> = props => {
 									: 'sc-iqcoie bQFwPO cursor-pointer disabled'
 							}
 							primary
-							disabled={!isValid()}
 							onClick={() => {
 								setLoading(true)
 								if (idInstitucion) {
-									actions
-										.crearServicioComunal({
+
+									if (!isValid()) {
+										setCheckedValid(true)
+										setLoading(false)
+									} else {
+										actions.crearServicioComunal({
 											sb_InstitucionesId: idInstitucion,
 											sb_areaProyectoId: value,
 											sb_nombreProyectoId: nombreId,
 											sb_modalidadId: modalidadId,
 											sb_tipoOrganizacionContraparteId: organizacionId,
 											docenteAcompanante: acompanante,
-											descripcion: descripcion,
+											descripcion,
 											fechaConclusionSCE: date.toISOString(),
 											insertadoPor: localStorage.getItem('loggedUser'),
 											caracteristicas: caracteristicasSeleccionados.map(e => e.id),
 											estudiantes: estudiantes.map(e => e.idEstudiante)
-										})
-										.then(() => {
+										}).then(() => {
 											props.history.push('/director/expediente-centro/servicio-comunal')
 										})
+									}
+
 								} else {
 									setLoading(false)
 									alert('Seleccione una institución')
@@ -641,7 +663,7 @@ export const Agregar: React.FC<IProps> = props => {
 					</p>
 				</Col>
 			</Row>
-		</div>
+		</div >
 	)
 }
 
