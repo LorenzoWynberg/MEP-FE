@@ -74,10 +74,13 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
 			setState(1)
 		})
 	}
+
 	const onExcelEvent = () => {
-		const workbook = GenerateExcelObject(reportData)
+		const dataToPrint = [];
+		reportData.forEach(d => { d.datos.forEach(d2 => { dataToPrint.push(d2) }) }); 
+		const workbook = GenerateExcelObject(dataToPrint)
 		SendWorkbookToDownload(workbook, `ReporteUltimoNivelSinSCE.xlsx`)
-	}
+	  }
 
 	return (
 		<div>
