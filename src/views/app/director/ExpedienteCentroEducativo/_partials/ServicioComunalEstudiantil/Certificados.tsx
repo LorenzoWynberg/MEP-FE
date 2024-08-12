@@ -53,15 +53,6 @@ const Certificados = props => {
 	const { accessRole } = useSelector((state: any) => state?.authUser?.currentRoleOrganizacion)
 	const idInstitucion = localStorage.getItem('idInstitucion')
 
-	// TODO: mappear los strings
-	// const mapper = el => {
-	// 	console.log('el', el)
-	// 	return {
-	// 		...el,
-	// 		organizacionContraparte: formatoOracion(el.organizacionContraparte)
-	// 	}
-	// }
-
 	const state = useSelector((store: any) => {
 		return {
 			centros: store.configuracion.instituciones,
@@ -86,8 +77,6 @@ const Certificados = props => {
 		actions
 			.getCertificadosByInstitucionFiltered(idInstitucion)
 			.then(data => {
-				// const _data = mapper(data.options)
-				// console.log('data', _data)
 				setData(data.options)
 				setLoading(false)
 			})
@@ -97,7 +86,7 @@ const Certificados = props => {
 			})
 	}, [])
 
-	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'configurarinstituciones')
+	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'certificadosSCE')
 
 	const columns = useMemo(() => {
 		return [
@@ -210,12 +199,19 @@ const Certificados = props => {
 		await actions.handleChangeInstitution(id)
 		await actions.updatePeriodosLectivos(id)
 	}
+
+	if (!tienePermiso || tienePermiso?.leer == 0) {
+		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
+	}
+
 	const reactToPrintContent = React.useCallback(() => {
 		return printRef.current
 	}, [printRef.current])
+
 	const handlePrint = useReactToPrint({
 		content: reactToPrintContent
 	})
+
 	return (
 		<div className={styles}>
 			{loading && <BarLoader />}
@@ -303,7 +299,7 @@ const Certificados = props => {
 					<Col xs={12}>
 						<TableReactImplementation
 							data={data}
-							showAddButton
+							showAddButton={false}
 							// avoidSearch
 							onSubmitAddButton={() => {
 								alert()

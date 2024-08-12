@@ -21,6 +21,15 @@ const ServicioComunalEstudiantil = props => {
 	const [activeTab, setActiveTab] = useState(0)
 	const idInstitucion = localStorage.getItem('idInstitucion')
 
+	const state = useSelector((store: any) => {
+		return {
+			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
+			permisos: store.authUser.rolPermisos
+		}
+	})
+
+	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
+
 	const validarInstitucionSCE = async () => {
 		try {
 			const response = await axios.post(
@@ -52,6 +61,10 @@ const ServicioComunalEstudiantil = props => {
 		{ title: 'Actas', path: '/actas' },
 		{ title: 'Certificados', path: '/certificados' }
 	]
+
+	if (!tienePermiso || tienePermiso?.leer == 0) {
+		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
+	}
 
 	return (
 		<Notification>

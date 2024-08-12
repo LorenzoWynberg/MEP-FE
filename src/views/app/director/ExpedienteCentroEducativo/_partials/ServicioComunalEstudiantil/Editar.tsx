@@ -52,15 +52,12 @@ export const Editar: React.FC<IProps> = props => {
 	const [showTipoOrganizacion, setShowTipoOrganizacion] = React.useState(false)
 	const [organizacionId, setOrganizacionId] = React.useState()
 	const [organizacion, setOrganizacion] = React.useState()
-
 	const [showModalidades, setShowModalidades] = React.useState(false)
 	const [modalidadId, setModalidadId] = React.useState()
 	const [modalidad, setModalidad] = React.useState()
-
 	const [showCaracteristicas, setShowCaracteristicas] = React.useState(false)
 	const [caracteristicaId, setCaracteristicaId] = React.useState()
 	const [caracteristica, setCaracteristica] = React.useState()
-
 	const idInstitucion = localStorage.getItem('idInstitucion')
 	const [institutionImage, setInstitutionImage] = React.useState(null)
 	const [loading, setLoading] = React.useState<boolean>(true)
@@ -101,6 +98,15 @@ export const Editar: React.FC<IProps> = props => {
 		GetServicioComunalInfoById,
 		getTablaEstudiantesServicioComunalById
 	})
+
+	const state = useSelector((store: any) => {
+		return {
+			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
+			permisos: store.authUser.rolPermisos
+		}
+	})
+
+	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
 
 	const isValid = () => {
 		if (
@@ -163,6 +169,10 @@ export const Editar: React.FC<IProps> = props => {
 				setLoading(false)
 			})
 	}, [props.match?.params?.id])
+
+	if (!tienePermiso || tienePermiso?.modificar == 0) {
+		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
+	}
 
 	return (
 		<div className={styles}>

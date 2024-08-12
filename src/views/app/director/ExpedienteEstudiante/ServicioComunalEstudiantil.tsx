@@ -20,9 +20,14 @@ const ServicioComunalEstudiantil = props => {
 		return {
 			expedienteEstudiantil: store.expedienteEstudiantil,
 			identification: store.identification,
-			historialMatricula: store.identification.matriculaHistory
+			historialMatricula: store.identification.matriculaHistory,
+			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
+			permisos: store.authUser.rolPermisos
 		}
 	})
+
+	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'servicioComunalEstudiantilSCE')
+
 	useEffect(() => {
 		let id = state.expedienteEstudiantil?.currentStudent?.idEstudiante
 			? state.expedienteEstudiantil?.currentStudent?.idEstudiante
@@ -30,7 +35,6 @@ const ServicioComunalEstudiantil = props => {
 		actions
 			.GetServicioComunalInfoByStudentId(id)
 			.then(res => {
-				console.log('res', res)
 				setServicioData(res)
 			})
 			.finally(() => setLoading(false))
@@ -42,6 +46,10 @@ const ServicioComunalEstudiantil = props => {
 				state.expedienteEstudiantil.currentStudent.idEstudiante
 			)
 	}, [state.expedienteEstudiantil.currentStudent.idEstudiante])
+
+	if (!tienePermiso || tienePermiso?.leer == 0) {
+		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
+	}
 
 	return (
 		<div>

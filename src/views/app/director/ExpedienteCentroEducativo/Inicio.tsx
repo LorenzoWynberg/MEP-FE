@@ -15,6 +15,7 @@ import Solidarity from 'Assets/icons/Solidarity'
 import Normativa from 'Assets/icons/Normativa'
 import HouseIcon from '@material-ui/icons/House'
 import GroupWorkIcon from '@material-ui/icons/GroupWork'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
 const Inicio = props => {
@@ -22,6 +23,15 @@ const Inicio = props => {
 	const [aplicaSCE, setAplicaSCE] = useState(false)
 	const [loading, setLoading] = useState(true)
 	const idInstitucion = localStorage.getItem('idInstitucion')
+
+	const state = useSelector((store: any) => {
+		return {
+			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
+			permisos: store.authUser.rolPermisos
+		}
+	})
+
+	const tienePermisoSCE = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
 
 	const validarInstitucionSCE = async () => {
 		try {
@@ -78,7 +88,7 @@ const Inicio = props => {
 						<Row>
 							{centroBreadcrumb.map((r, i) => {
 								if (r.active) return
-								if (i == 10 && !aplicaSCE) return
+								if (i == 10 && (!aplicaSCE || !tienePermisoSCE || tienePermisoSCE.leer == 0)) return
 								return (
 									<NavigationCard
 										icon=''

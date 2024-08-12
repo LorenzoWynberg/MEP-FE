@@ -86,12 +86,10 @@ const Historico = props => {
 			const response: any = await axios.get(
 				`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter${url}`
 			)
-			// console.log('response NEWWWW', response)
 			setData(response.data)
 			setLoading(false)
-			// return { error: false, options: response.data }
 		} catch (e) {
-			// return { error: e.message, options: [] }
+			return { error: e.message, options: [] }
 		}
 	}
 
@@ -108,13 +106,7 @@ const Historico = props => {
 			})
 	}
 
-	// useEffect(() => {
-	// 	// fetch(idInstitucion, filterText, idAreaProyecto)
-	// 	initialFetch(idInstitucion)
-	// }, [data])
-
 	useEffect(() => {
-		// fetch(idInstitucion, filterText, idAreaProyecto)
 		initialFetch(idInstitucion)
 	}, [])
 
@@ -131,7 +123,7 @@ const Historico = props => {
 	}
 
 	// TODO: Poner permiso correcto
-	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'configurarinstituciones')
+	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
 
 	const columns = useMemo(() => {
 		return [
@@ -198,7 +190,7 @@ const Historico = props => {
 									}}
 								/>
 							</Tooltip>
-							{fullRow.actaId || !tienePermiso || tienePermiso?.editar == 0 ? (
+							{fullRow.actaId || !tienePermiso || tienePermiso?.modificar == 0 ? (
 								<></>
 							) : (
 								<Tooltip
@@ -244,6 +236,10 @@ const Historico = props => {
 			}
 		]
 	}, [t])
+
+	if (!tienePermiso || tienePermiso?.leer == 0) {
+		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
+	}
 
 	return (
 		<div className={styles}>
@@ -308,7 +304,7 @@ const Historico = props => {
 					<Col xs={12}>
 						<TableReactImplementation
 							data={data}
-							showAddButton
+							showAddButton={tienePermiso && tienePermiso?.agregar == 1}
 							// avoidSearch
 							onSubmitAddButton={() => {
 								props.history.push('/director/expediente-centro/servicio-comunal/registro')
@@ -325,7 +321,6 @@ const Historico = props => {
 									setLoading(true)
 									await fetch(idInstitucion, searchValue, null).then(res => {
 										setData(res[0].data)
-										console.log('res', res)
 									})
 									setLoading(false)
 								}

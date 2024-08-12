@@ -54,11 +54,9 @@ export const Agregar: React.FC<IProps> = props => {
 	const [showModalidades, setShowModalidades] = React.useState(false)
 	const [modalidadId, setModalidadId] = React.useState()
 	const [modalidad, setModalidad] = React.useState()
-
 	const [showCaracteristicas, setShowCaracteristicas] = React.useState(false)
 	const [caracteristicaId, setCaracteristicaId] = React.useState()
 	const [caracteristica, setCaracteristica] = React.useState()
-
 	const [institutionImage, setInstitutionImage] = React.useState(null)
 	const [loading, setLoading] = React.useState<boolean>(false)
 	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
@@ -75,6 +73,38 @@ export const Agregar: React.FC<IProps> = props => {
 	const [studentsSeleccionados, setStudentsSeleccionados] = React.useState([])
 	const idInstitucion = localStorage.getItem('idInstitucion')
 	const [students, setStudents] = useState([])
+	const [selectedDate, setSelectedDate] = useState(null)
+	const [formattedDate, setFormattedDate] = useState('')
+	const today = new Date()
+
+	const state = useSelector((store: any) => {
+		return {
+			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
+			permisos: store.authUser.rolPermisos
+		}
+	})
+
+	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
+
+	const isValid = () => {
+		if (
+			!idInstitucion ||
+			!value ||
+			!nombreId ||
+			!modalidadId ||
+			!organizacionId ||
+			!acompanante ||
+			!formattedDate ||
+			!descripcion ||
+			!localStorage.getItem('loggedUser') ||
+			isEmpty(caracteristicasSeleccionados) ||
+			isEmpty(estudiantes)
+		) {
+			return false
+		} else {
+			return true
+		}
+	}
 
 	const mapper = el => {
 		return {
@@ -105,29 +135,9 @@ export const Agregar: React.FC<IProps> = props => {
 		})
 	}, [])
 
-	const isValid = () => {
-		if (
-			!idInstitucion ||
-			!value ||
-			!nombreId ||
-			!modalidadId ||
-			!organizacionId ||
-			!acompanante ||
-			!formattedDate ||
-			!descripcion ||
-			!localStorage.getItem('loggedUser') ||
-			isEmpty(caracteristicasSeleccionados) ||
-			isEmpty(estudiantes)
-		) {
-			return false
-		} else {
-			return true
-		}
+	if (!tienePermiso || tienePermiso?.agregar == 0) {
+		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
 	}
-	const [selectedDate, setSelectedDate] = useState(null)
-	const [formattedDate, setFormattedDate] = useState('')
-
-	const today = new Date()
 
 	return (
 		<div className={styles}>

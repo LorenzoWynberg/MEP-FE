@@ -102,7 +102,7 @@ const Actas = props => {
 			.finally(() => setLoading(false))
 	}, [])
 
-	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'configurarinstituciones')
+	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'actasSCE')
 
 	const columns = useMemo(() => {
 		return [
@@ -136,14 +136,11 @@ const Actas = props => {
 							<Tooltip title={t('buscador_ce>buscador>columna_acciones>ver', 'Ver')}>
 								<RemoveRedEyeRounded
 									onClick={() => {
-										console.log('fullRow', fullRow)
-
 										axios
 											.get(
 												`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/ObtenerDocumentoActaById/${fullRow.id}`
 											)
 											.then(response => {
-												// console.log('response', response)
 												setHtmlToShow(response.data)
 												setOpenDialog(true)
 											})
@@ -183,6 +180,10 @@ const Actas = props => {
 		await actions.updatePeriodosLectivos(id)
 	}
 
+	if (!tienePermiso || tienePermiso?.leer == 0) {
+		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
+	}
+
 	return (
 		<div className={styles}>
 			{loading && <BarLoader />}
@@ -203,64 +204,55 @@ const Actas = props => {
 				</SimpleModal>
 			)}
 
-			{!tienePermiso || tienePermiso.leer == 0 ? (
-				<Row>
-					<Col xs={12}>
-						{/* TODO: i18n */}
-						<h5>No tiene permiso para visualizar esta pagina</h5>
-					</Col>
-				</Row>
-			) : (
-				<Row>
-					<Col xs={12}>
-						<h3 className='mt-2 mb-3'>
-							{/* {t('expediente_ce>titulo', 'Expediente Centro Educativo')} */}
-							Actas
-						</h3>
-					</Col>
-					<Col xs={12}>
-						<TableReactImplementation
-							data={data}
-							msjButton='Generar Acta'
-							showAddButton
-							avoidSearch
-							onSubmitAddButton={() => {
-								setLoading(true)
-								axios
-									.get(
-										`${envVariables.BACKEND_URL}/api/ExpedienteCentroEducativo/Institucion/GetById/${idInstitucion}`
-									)
-									.then(res => {
-										const data = { institucionId, codSaber: res.data.codigo }
+			<Row>
+				<Col xs={12}>
+					<h3 className='mt-2 mb-3'>
+						{/* {t('expediente_ce>titulo', 'Expediente Centro Educativo')} */}
+						Actas
+					</h3>
+				</Col>
+				<Col xs={12}>
+					<TableReactImplementation
+						data={data}
+						msjButton='Generar Acta'
+						showAddButton={tienePermiso && tienePermiso?.agregar == 1}
+						avoidSearch
+						onSubmitAddButton={() => {
+							setLoading(true)
+							axios
+								.get(
+									`${envVariables.BACKEND_URL}/api/ExpedienteCentroEducativo/Institucion/GetById/${idInstitucion}`
+								)
+								.then(res => {
+									const data = { institucionId, codSaber: res.data.codigo }
 
-										axios
-											.post(
-												`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`,
-												data
-											)
-											.then(r2 => {
-												axios
-													.get(
-														`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${idInstitucion}`
-													)
-													.then(response => {
-														setData(response.data)
-													})
-													.catch(error => {
-														console.log('error', error)
-													})
-													.finally(() => setLoading(false))
-											})
-									})
-							}}
-							columns={columns}
-							orderOptions={[]}
-							pageSize={10}
-							backendSearch
-						/>
-					</Col>
-				</Row>
-			)}
+									axios
+										.post(
+											`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`,
+											data
+										)
+										.then(r2 => {
+											axios
+												.get(
+													`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${idInstitucion}`
+												)
+												.then(response => {
+													setData(response.data)
+												})
+												.catch(error => {
+													console.log('error', error)
+												})
+												.finally(() => setLoading(false))
+										})
+								})
+						}}
+						columns={columns}
+						orderOptions={[]}
+						pageSize={10}
+						backendSearch
+					/>
+				</Col>
+			</Row>
 		</div>
 	)
 }
