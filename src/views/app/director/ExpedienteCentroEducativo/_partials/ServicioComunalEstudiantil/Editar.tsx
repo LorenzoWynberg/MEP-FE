@@ -42,6 +42,7 @@ export const Editar: React.FC<IProps> = props => {
 	const [busqueda, setBusqueda] = React.useState()
 	const [estudiantes, setEstudiantes] = React.useState([])
 	const [caracteristicas, setCaracteristicas] = React.useState([])
+	const [checkedValid, setCheckedValid] = React.useState(false)
 	const [caracteristicasIdSeleccionados, setCaracteristicasIdSeleccionados] = React.useState([])
 	const [caracteristicasSeleccionados, setCaracteristicasSeleccionados] = React.useState([])
 	const [nombresSeleccionados, setNombresSeleccionados] = React.useState([])
@@ -109,6 +110,7 @@ export const Editar: React.FC<IProps> = props => {
 			!modalidadId ||
 			!organizacionId ||
 			!acompanante ||
+			!date ||
 			!descripcion ||
 			!localStorage.getItem('loggedUser') ||
 			isEmpty(caracteristicasSeleccionados) ||
@@ -226,6 +228,7 @@ export const Editar: React.FC<IProps> = props => {
 									</Row>
 								))}
 						</RadioGroup>
+						{checkedValid && !value && <span style={{ color: 'red' }}>Campo requerido</span>}
 					</FormControl>
 				</SimpleModal>
 			)}
@@ -518,11 +521,20 @@ export const Editar: React.FC<IProps> = props => {
 									{caracteristicasSeleccionados.length == 0 && (
 										<FormGroup>
 											<Input
+												style={{
+													border:
+														checkedValid && isEmpty(caracteristicasSeleccionados)
+															? '1px solid red'
+															: ''
+												}}
 												name='codigo'
 												value={''}
 												readOnly
 												onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
 											/>
+											{checkedValid && isEmpty(caracteristicasSeleccionados) && (
+												<span style={{ color: 'red' }}>Campo requerido</span>
+											)}
 										</FormGroup>
 									)}
 									{caracteristicasSeleccionados.length > 0 && (
@@ -578,6 +590,7 @@ export const Editar: React.FC<IProps> = props => {
 											{t('registro_servicio_comunal>docente_acompaña', 'Acompañante de proyecto')}
 										</Label>
 										<Input
+											style={{ border: checkedValid && !acompanante ? '1px solid red' : '' }}
 											name='tipo_centro'
 											type='text'
 											value={acompanante}
@@ -586,6 +599,9 @@ export const Editar: React.FC<IProps> = props => {
 											}}
 											autoFocus={true}
 										/>
+										{checkedValid && !acompanante && (
+											<span style={{ color: 'red' }}>Campo requerido</span>
+										)}
 									</FormGroup>
 								</Col>
 							</Row>
@@ -594,7 +610,7 @@ export const Editar: React.FC<IProps> = props => {
 								<Label>{t('registro_servicio_comunal>descripcion', 'Descripción')}</Label>
 
 								<Input
-									style={{}}
+									style={{ border: checkedValid && !descripcion ? '1px solid red' : '' }}
 									name='tipo_centro'
 									type='text'
 									value={descripcion}
@@ -603,6 +619,7 @@ export const Editar: React.FC<IProps> = props => {
 									}}
 									autoFocus={true}
 								/>
+								{checkedValid && !descripcion && <span style={{ color: 'red' }}>Campo requerido</span>}
 							</FormGroup>
 						</Form>
 					</Card>
@@ -619,6 +636,9 @@ export const Editar: React.FC<IProps> = props => {
 							}}
 						/>
 					</div>
+					{checkedValid && isEmpty(estudiantes) && (
+						<span style={{ color: 'red' }}>Debe agregar estudiantes</span>
+					)}
 					<TableStudents
 						onlyViewModule={true}
 						data={estudiantes}
@@ -641,30 +661,34 @@ export const Editar: React.FC<IProps> = props => {
 									: 'sc-iqcoie bQFwPO cursor-pointer disabled'
 							}
 							primary
-							disabled={!isValid()}
 							onClick={() => {
 								setLoading(true)
 								if (idInstitucion) {
-									actions
-										.actualizarServicioComunal({
-											id: parseInt(props.match.params.id),
-											sb_InstitucionesId: idInstitucion,
-											sb_areaProyectoId: value,
-											sb_nombreProyectoId: nombreId,
-											sb_modalidadId: modalidadId,
-											sb_tipoOrganizacionContraparteId: organizacionId,
-											docenteAcompanante: acompanante,
-											descripcion,
-											fechaConclusionSCE: date.toISOString(),
-											insertadoPor: localStorage.getItem('loggedUser'),
-											caracteristicas: caracteristicasSeleccionados.map(e => e.id),
-											estudiantes: estudiantes.map(e => e.idEstudiante)
-										})
-										.then(r => {
-											r.response == false
-												? alert('Error al editar')
-												: props.history.push('/director/expediente-centro/servicio-comunal')
-										})
+									if (!isValid()) {
+										setCheckedValid(true)
+										setLoading(false)
+									} else {
+										actions
+											.actualizarServicioComunal({
+												id: parseInt(props.match.params.id),
+												sb_InstitucionesId: idInstitucion,
+												sb_areaProyectoId: value,
+												sb_nombreProyectoId: nombreId,
+												sb_modalidadId: modalidadId,
+												sb_tipoOrganizacionContraparteId: organizacionId,
+												docenteAcompanante: acompanante,
+												descripcion,
+												fechaConclusionSCE: date.toISOString(),
+												insertadoPor: localStorage.getItem('loggedUser'),
+												caracteristicas: caracteristicasSeleccionados.map(e => e.id),
+												estudiantes: estudiantes.map(e => e.idEstudiante)
+											})
+											.then(r => {
+												r.response == false
+													? alert('Error al editar')
+													: props.history.push('/director/expediente-centro/servicio-comunal')
+											})
+									}
 								} else {
 									setLoading(false)
 									alert('Seleccione una institución')
