@@ -142,22 +142,6 @@ export const Agregar: React.FC<IProps> = props => {
 					onClose={() => setShowAreaProyecto(false)}
 				>
 					<FormControl>
-						{/* 			<Row>
-							<Col
-								style={{
-									display: 'flex',
-									textAlign: 'center',
-									justifyContent: 'center',
-									alignItems: 'center'
-								}}
-								sm={3}
-							>
-								<Typography variant='h6'>Area De Proyecto</Typography>
-							</Col>
-							<Col sm={9}>
-								<Typography variant='h6'>Descripcion</Typography>
-							</Col>
-						</Row> */}
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
 							name='radio-buttons-group'
@@ -207,22 +191,6 @@ export const Agregar: React.FC<IProps> = props => {
 					onClose={() => setShowCaracteristicas(false)}
 				>
 					<FormControl>
-						{/* 	<Row>
-							<Col
-								style={{
-									display: 'flex',
-									textAlign: 'center',
-									justifyContent: 'left',
-									alignItems: 'left'
-								}}
-								sm={3}
-							>
-								<Typography variant='h6'>Caracteristica</Typography>
-							</Col>
-							<Col sm={9}>
-								<Typography variant='h6'>Descripcion</Typography>
-							</Col>
-						</Row> */}
 						{catalogos.caracteristicas.map((item, index) => (
 							<Row>
 								<Col
@@ -335,18 +303,6 @@ export const Agregar: React.FC<IProps> = props => {
 					onClose={() => setShowTipoOrganizacion(false)}
 				>
 					<FormControl>
-						{/* 	<Row>
-							<Col
-								style={{
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center'
-								}}
-								sm={3}
-							>
-								<Typography variant='h6'>Tipo</Typography>
-							</Col>
-						</Row> */}
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
 							name='radio-buttons-group'
@@ -447,7 +403,7 @@ export const Agregar: React.FC<IProps> = props => {
 										<Input
 											style={{ border: checkedValid && !areaProyecto ? '1px solid red' : '' }}
 											key={areaProyecto}
-											name='i'
+											name='areaProyecto'
 											value={areaProyecto ? areaProyecto : ''}
 											readOnly
 											onClick={() => !showAreaProyecto && setShowAreaProyecto(true)}
@@ -463,7 +419,7 @@ export const Agregar: React.FC<IProps> = props => {
 										<Input
 											style={{ border: checkedValid && !nombreSend ? '1px solid red' : '' }}
 											key={nombreSend}
-											name='i'
+											name='objetivo'
 											value={nombreSend ? nombreSend : ''}
 											readOnly
 											onClick={() => !showNombre && setShowNombre(true)}
@@ -504,7 +460,7 @@ export const Agregar: React.FC<IProps> = props => {
 															? '1px solid red'
 															: ''
 												}}
-												name='codigo'
+												name='caracteristicas'
 												value={''}
 												readOnly
 												onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
@@ -562,7 +518,7 @@ export const Agregar: React.FC<IProps> = props => {
 										</Label>
 										<Input
 											style={{ border: checkedValid && !organizacion ? '1px solid red' : '' }}
-											name='tipo_centro'
+											name='organizacionContraparte'
 											type='text'
 											value={organizacion ? organizacion : ''}
 											readOnly
@@ -582,7 +538,7 @@ export const Agregar: React.FC<IProps> = props => {
 										</Label>
 										<Input
 											style={{ border: checkedValid && !acompanante ? '1px solid red' : '' }}
-											name='tipo_centro'
+											name='acompanante'
 											type='text'
 											value={acompanante}
 											onChange={e => {
@@ -602,7 +558,7 @@ export const Agregar: React.FC<IProps> = props => {
 
 								<Input
 									style={{ border: checkedValid && !descripcion ? '1px solid red' : '' }}
-									name='tipo_centro'
+									name='descripcion'
 									type='text'
 									value={descripcion}
 									onChange={e => {

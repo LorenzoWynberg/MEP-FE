@@ -481,7 +481,7 @@ export const Editar: React.FC<IProps> = props => {
 										</Label>
 										<Input
 											key={areaProyecto}
-											name='i'
+											name='areaProyecto'
 											value={areaProyecto ? areaProyecto : ''}
 											readOnly
 											onClick={() => !showAreaProyecto && setShowAreaProyecto(true)}
@@ -493,7 +493,7 @@ export const Editar: React.FC<IProps> = props => {
 										<Label>{t('registro_servicio_comunal>objetivonombre', 'objetivo')}</Label>
 										<Input
 											key={nombreSend}
-											name='i'
+											name='objetivo'
 											value={nombreSend ? nombreSend : ''}
 											readOnly
 											onClick={() => !showNombre && setShowNombre(true)}
@@ -527,7 +527,7 @@ export const Editar: React.FC<IProps> = props => {
 															? '1px solid red'
 															: ''
 												}}
-												name='codigo'
+												name='caracteristicas'
 												value={''}
 												readOnly
 												onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
@@ -574,7 +574,7 @@ export const Editar: React.FC<IProps> = props => {
 											)}
 										</Label>
 										<Input
-											name='tipo_centro'
+											name='organizacionContraparte'
 											type='text'
 											value={organizacion ? organizacion : ''}
 											readOnly
@@ -591,7 +591,7 @@ export const Editar: React.FC<IProps> = props => {
 										</Label>
 										<Input
 											style={{ border: checkedValid && !acompanante ? '1px solid red' : '' }}
-											name='tipo_centro'
+											name='acompanante'
 											type='text'
 											value={acompanante}
 											onChange={e => {
@@ -611,7 +611,7 @@ export const Editar: React.FC<IProps> = props => {
 
 								<Input
 									style={{ border: checkedValid && !descripcion ? '1px solid red' : '' }}
-									name='tipo_centro'
+									name='descripcion'
 									type='text'
 									value={descripcion}
 									onChange={e => {
