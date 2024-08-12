@@ -250,19 +250,20 @@ const Historico = props => {
 					onClose={() => setExpediente(null)}
 					onConfirm={() => {
 						setLoading(true)
-						actions.desactivarServicioComunal(expediente.id, history)
+						actions.desactivarServicioComunal(expediente.id, history).then(() => {
+							actions
+								.GetServicioComunalByInstitucionId(idInstitucion)
+								.then(data => {
+									setData(data.options)
+									setLoading(false)
+									// props.history.push(`/director/expediente-centro/servicio-comunal`)
+								})
+								.catch(error => {
+									console.log('error', error)
+									setLoading(false)
+								})
+						})
 						setExpediente(null)
-						actions
-							.GetServicioComunalByInstitucionId(idInstitucion)
-							.then(data => {
-								setData(data.options)
-								setLoading(false)
-								props.history.push(`/director/expediente-centro/servicio-comunal`)
-							})
-							.catch(error => {
-								console.log('error', error)
-								setLoading(false)
-							})
 					}}
 					openDialog={expediente}
 				>
