@@ -36,11 +36,9 @@ export const Agregar: React.FC<IProps> = props => {
 	const [catalogos, setCatalogos] = React.useState([])
 	const [areaProyecto, setAreaProyecto] = React.useState()
 	const [showAreaProyecto, setShowAreaProyecto] = React.useState(false)
-	const [showNombre, setShowNombre] = React.useState(false)
-	const [objetivoNombre, setObjetivoNombre] = React.useState([])
+	const [showNombre, setShowNombre] = React.useState(false) 
 	const [busqueda, setBusqueda] = React.useState()
-	const [estudiantes, setEstudiantes] = React.useState([])
-	const [caracteristicas, setCaracteristicas] = React.useState()
+	const [estudiantes, setEstudiantes] = React.useState([]) 
 	const [caracteristicasIdSeleccionados, setCaracteristicasIdSeleccionados] = React.useState([])
 	const [caracteristicasSeleccionados, setCaracteristicasSeleccionados] = React.useState([])
 	const [nombresSeleccionados, setNombresSeleccionados] = React.useState([])
@@ -54,19 +52,12 @@ export const Agregar: React.FC<IProps> = props => {
 	const [showModalidades, setShowModalidades] = React.useState(false)
 	const [modalidadId, setModalidadId] = React.useState()
 	const [modalidad, setModalidad] = React.useState()
-	const [showCaracteristicas, setShowCaracteristicas] = React.useState(false)
-	const [caracteristicaId, setCaracteristicaId] = React.useState()
-	const [caracteristica, setCaracteristica] = React.useState()
-	const [institutionImage, setInstitutionImage] = React.useState(null)
+	const [showCaracteristicas, setShowCaracteristicas] = React.useState(false) 
 	const [loading, setLoading] = React.useState<boolean>(false)
 	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setValue((event.target as HTMLInputElement).value)
-	}
-	const [Cdate, setCDate] = useState(new Date().toLocaleDateString('fr-FR'))
-	const [date, setDate] = useState(new Date())
-	const [valueModalidad, setValueModalidad] = React.useState('')
-	const [valueCaracteristicas, setValueCaracteristicas] = React.useState('')
+	}  
 	const [valueOrg, setValueOrg] = React.useState('')
 	const [acompanante, setValueAcompanante] = React.useState('')
 	const [descripcion, setValueDescripcion] = React.useState('')
@@ -634,7 +625,7 @@ export const Agregar: React.FC<IProps> = props => {
 												sb_tipoOrganizacionContraparteId: organizacionId,
 												docenteAcompanante: acompanante,
 												descripcion,
-												fechaConclusionSCE: date.toISOString(),
+												fechaConclusionSCE: selectedDate.toISOString(),
 												insertadoPor: localStorage.getItem('loggedUser'),
 												caracteristicas: caracteristicasSeleccionados.map(e => e.id),
 												estudiantes: estudiantes.map(e => e.idEstudiante)
