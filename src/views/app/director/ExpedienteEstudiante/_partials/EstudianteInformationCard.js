@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }))
 
-const EstudianteInformationCard = ({ data, style }) => {
+const EstudianteInformationCard = ({ data, fixed }) => {
 	console.log('JP Estudiante: ', data)
 	const { t } = useTranslation()
 
@@ -116,77 +116,75 @@ const EstudianteInformationCard = ({ data, style }) => {
 		}
 	}, [data])
 
-	console.log('Datos JP', datosCatalogo)
-
 	return (
-		<div style={style ? style : {}}>
-			<Row className={`${classes.informationCard} mb-4 p-1 `}>
-				<Col className='p-0 d-flex align-items-center pl-sm-2' xs='auto' sm='auto'>
-					{/*<InstImg width='56px' height='56px' viewBox='0 0 71 71' fill={colors.getColor()} />*/}
-					<Avatar
-						alt='Remy Sharp'
-						src={data.fotografiaUrl ? data.fotografiaUrl : '/assets/img/profile-pic-generic.png'}
-						className={classes.large}
-					/>
-				</Col>
-				<Col xs='8' sm='8' md='10'>
-					<Row>
-						<Col
-							xs='12'
-							sm='6'
-							lg='4'
-							className={`${classes.flexFlowColum} d-flex align-items-center justify-content-center`}
-						>
-							<span className={`${classes.information}`}>
-								{t('estudiantes>expediente>header>nombre', 'Nombre')}: {data.nombreEstudiante}
-							</span>
-							<span className={`${classes.information}`}>
-								{t('estudiantes>expediente>header>is', 'Identificación')}: {data.identificacion}
-							</span>
-							<span className={`${classes.information}`}>
-								{t('estudiantes>expediente>header>tipo_id', 'Tipo de Identificación')}:{' '}
-								{data.tipoIdentificacion}
-							</span>
-						</Col>
-						<Col
-							xs='12'
-							sm='6'
-							lg='4'
-							className={`${classes.flexFlowColum} d-flex align-items-center justify-content-center d-sm-max-none`}
-						>
-							<span className={`${classes.information}`}>
-								{hardCodedData.edadCumplida}:{' '}
-								{data.fechaNacimiento ? getYearsOld(data.fechaNacimiento).toUpperCase() : ''}
-							</span>
-							<span className={`${classes.information}`}>
-								{hardCodedData.identidadGenero}:{' '}
-								{!isEmpty(datosCatalogo.genero) ? datosCatalogo.genero.label : ''}
-							</span>
-							<span className={`${classes.information}`}>
-								{hardCodedData.nacionalidad}:{' '}
-								{!isEmpty(datosCatalogo.nacionalidad) ? datosCatalogo.nacionalidad.label : ''}
-							</span>
-						</Col>
-						<Col
-							xs='12'
-							sm='6'
-							lg='4'
-							className={`${classes.flexFlowColum} d-flex align-items-center justify-content-center d-md-max-none`}
-						>
-							<span className={`${classes.information}`}>
-								{hardCodedData.matriculaActiva}: {data.estadoMatricula === 'Regular' ? 'SI' : 'NO'}
-							</span>
-							<span className={`${classes.information}`}>
-								{hardCodedData.condicionDiscapacidad}:{''} {data.tieneDiscapacidades}
-							</span>
-							<span className={`${classes.information}`}>
-								{hardCodedData.indigena}: {data.esIndigena}
-							</span>
-						</Col>
-					</Row>
-				</Col>
-			</Row>
-		</div>
+		<Row className={`${classes.informationCard} mb-4 p-1 `} style={fixed ? {
+			position: 'fixed', borderBottom: '1px solid #ddd', paddingTop: '10px', zIndex: 10, width: '80vw'
+		} : {}}>
+			<Col className='p-0 d-flex align-items-center pl-sm-2' xs='auto' sm='auto'>
+				{/*<InstImg width='56px' height='56px' viewBox='0 0 71 71' fill={colors.getColor()} />*/}
+				<Avatar
+					alt='Remy Sharp'
+					src={data.fotografiaUrl ? data.fotografiaUrl : '/assets/img/profile-pic-generic.png'}
+					className={classes.large}
+				/>
+			</Col>
+			<Col xs='8' sm='8' md='10'>
+				<Row>
+					<Col
+						xs='12'
+						sm='6'
+						lg='4'
+						className={`${classes.flexFlowColum} d-flex align-items-center justify-content-center`}
+					>
+						<span className={`${classes.information}`}>
+							{t('estudiantes>expediente>header>nombre', 'Nombre')}: {data.nombreEstudiante}
+						</span>
+						<span className={`${classes.information}`}>
+							{t('estudiantes>expediente>header>is', 'Identificación')}: {data.identificacion}
+						</span>
+						<span className={`${classes.information}`}>
+							{t('estudiantes>expediente>header>tipo_id', 'Tipo de Identificación')}:{' '}
+							{data.tipoIdentificacion}
+						</span>
+					</Col>
+					<Col
+						xs='12'
+						sm='6'
+						lg='4'
+						className={`${classes.flexFlowColum} d-flex align-items-center justify-content-center d-sm-max-none`}
+					>
+						<span className={`${classes.information}`}>
+							{hardCodedData.edadCumplida}:{' '}
+							{data.fechaNacimiento ? getYearsOld(data.fechaNacimiento).toUpperCase() : ''}
+						</span>
+						<span className={`${classes.information}`}>
+							{hardCodedData.identidadGenero}:{' '}
+							{!isEmpty(datosCatalogo.genero) ? datosCatalogo.genero.label : ''}
+						</span>
+						<span className={`${classes.information}`}>
+							{hardCodedData.nacionalidad}:{' '}
+							{!isEmpty(datosCatalogo.nacionalidad) ? datosCatalogo.nacionalidad.label : ''}
+						</span>
+					</Col>
+					<Col
+						xs='12'
+						sm='6'
+						lg='4'
+						className={`${classes.flexFlowColum} d-flex align-items-center justify-content-center d-md-max-none`}
+					>
+						<span className={`${classes.information}`}>
+							{hardCodedData.matriculaActiva}: {data.estadoMatricula === 'Regular' ? 'SI' : 'NO'}
+						</span>
+						<span className={`${classes.information}`}>
+							{hardCodedData.condicionDiscapacidad}:{''} {data.tieneDiscapacidades}
+						</span>
+						<span className={`${classes.information}`}>
+							{hardCodedData.indigena}: {data.esIndigena}
+						</span>
+					</Col>
+				</Row>
+			</Col>
+		</Row>
 	)
 }
 export default EstudianteInformationCard

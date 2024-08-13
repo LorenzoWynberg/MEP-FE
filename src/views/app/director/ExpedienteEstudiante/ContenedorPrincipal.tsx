@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 import { isEmpty, rest } from 'lodash'
 import { envVariables } from 'Constants/enviroment'
 import style from 'styled-components'
+import { Navbar } from 'react-bootstrap'
 
 const Navegacion = React.lazy(() => import('./Navegacion'))
 const Contacto = React.lazy(() => import('./Contacto'))
@@ -151,7 +152,7 @@ const ContenedorPrincipal = props => {
 						estadoMatricula: datosAdicionales.data?.estadoMatricula
 					}
 				})
-			} catch (err) {}
+			} catch (err) { }
 		}
 
 		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
@@ -195,23 +196,11 @@ const ContenedorPrincipal = props => {
 	return (
 		<AppLayout items={directorItems}>
 			<div className='dashboard-wrapper'>
-				<Container>
-					<Row>
-						<Col
-							xs={12}
-							style={{
-								position: 'sticky',
-								top: 0,
-								zIndex: 50,
-								padding: '25px 16px 0',
-								backgroundColor: '#f8f8f8'
-								//transform: 'translateY(-50%)'
-							}}
-						>
-							{active !== 0 && estudianteEnContexto() && <EstudianteInformationCard data={infoCard} />}
-						</Col>
-					</Row>
-					<Row style={{ paddingTop: '160' }}>
+				<Container  >
+					{active !== 0 && estudianteEnContexto() && <EstudianteInformationCard fixed data={infoCard} />
+					}
+
+					<Row style={{paddingTop:100}} >
 						{active !== 0 && estudianteEnContexto() && (
 							<Col xs={12}>
 								<Breadcrumb
