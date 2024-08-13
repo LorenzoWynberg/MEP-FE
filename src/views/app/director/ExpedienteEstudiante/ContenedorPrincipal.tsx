@@ -4,16 +4,19 @@ import studentBreadcrumb from 'Constants/studentBreadcrumb'
 import { useSelector } from 'react-redux'
 import { getIdentification } from 'Redux/identificacion/actions'
 import { getStudentDataFilter, loadStudent } from 'Redux/expedienteEstudiantil/actions'
+import { getDiscapacidades } from '../../../../redux/apoyos/actions'
 import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
-import InformationCard from './_partials/InformationCard'
+import EstudianteInformationCard from './_partials/EstudianteInformationCard'
 import Loader from '../../../../components/Loader'
 import { useActions } from '../../../../hooks/useActions'
 import AppLayout from 'Layout/AppLayout'
 import directorItems from 'Constants/directorMenu'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { isEmpty } from 'lodash'
+import { isEmpty, rest } from 'lodash'
+import { envVariables } from 'Constants/enviroment'
+import style from 'styled-components'
 
 const Navegacion = React.lazy(() => import('./Navegacion'))
 const Contacto = React.lazy(() => import('./Contacto'))
@@ -38,6 +41,8 @@ const ContenedorPrincipal = props => {
 	const [aplicaSCE, setAplicaSCE] = React.useState(false)
 	const [breadcrumbs, setBreadcrumbs] = React.useState([])
 	const idInstitucion = localStorage.getItem('idInstitucion')
+	const [identidadData, setIdentidadData] = React.useState({})
+	const [infoCard, setInfoCard] = React.useState({})
 
 	studentBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
@@ -47,14 +52,16 @@ const ContenedorPrincipal = props => {
 	const actions = useActions({
 		getIdentification,
 		getStudentDataFilter,
-		loadStudent
+		loadStudent,
+		getDiscapacidades
 	})
 
 	const state = useSelector(store => {
 		return {
 			expedienteEstudiantil: store.expedienteEstudiantil,
 			identification: store.identification,
-			historialMatricula: store.identification.matriculaHistory
+			historialMatricula: store.identification.matriculaHistory,
+			apoyos: store.apoyos
 		}
 	})
 
@@ -76,6 +83,7 @@ const ContenedorPrincipal = props => {
 			idEstudiante && setActive(1)
 			setLoading(true)
 			const response = await actions.getStudentDataFilter(_id, 'identificacion')
+
 			if (response.data) {
 				await actions.loadStudent(response.data[0])
 			}
@@ -91,10 +99,63 @@ const ContenedorPrincipal = props => {
 			setLoading(true)
 			await actions.getIdentification(_id)
 			setLoading(false)
+
+			setInfoCard(prevState => {
+				return {
+					...prevState,
+					...state.expedienteEstudiantil.currentStudent,
+					datos: state.identification.data.datos
+				}
+			})
 		}
 
 		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
 			fetch()
+		}
+	}, [state.expedienteEstudiantil.currentStudent])
+
+	useEffect(() => {
+		const loadData = async () => {
+			setLoading(true)
+			const discapacidades = await actions.getDiscapacidades(
+				state.expedienteEstudiantil.currentStudent.idEstudiante
+			)
+			setLoading(false)
+
+			const tieneDiscapacidades = !isEmpty(discapacidades) ? 'SI' : 'NO'
+
+			setInfoCard(prevState => {
+				return {
+					...prevState,
+					tieneDiscapacidades: tieneDiscapacidades
+				}
+			})
+		}
+		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
+			loadData()
+		}
+	}, [state.expedienteEstudiantil.currentStudent])
+
+	useEffect(() => {
+		const loadData = async () => {
+			try {
+				const datosAdicionales = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Expediente/GetDatosAdicionalesMatricula/${state.expedienteEstudiantil.currentStudent.idEstudiante}`
+				)
+
+				const esIndigena = datosAdicionales.data?.esIndigena ? 'Si' : 'No'
+				setInfoCard(prevState => {
+					return {
+						...prevState,
+						esIndigena: esIndigena,
+						estadoMatricula: datosAdicionales.data?.estadoMatricula
+					}
+				})
+			} catch (err) {}
+		}
+
+		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
+			loadData()
 		}
 	}, [state.expedienteEstudiantil.currentStudent])
 
@@ -135,10 +196,22 @@ const ContenedorPrincipal = props => {
 		<AppLayout items={directorItems}>
 			<div className='dashboard-wrapper'>
 				<Container>
-					{active !== 0 && estudianteEnContexto() && (
-						<InformationCard data={state.expedienteEstudiantil.currentStudent} />
-					)}
 					<Row>
+						<Col
+							xs={12}
+							style={{
+								position: 'sticky',
+								top: 0,
+								zIndex: 50,
+								padding: '25px 16px 0',
+								backgroundColor: '#f8f8f8'
+								//transform: 'translateY(-50%)'
+							}}
+						>
+							{active !== 0 && estudianteEnContexto() && <EstudianteInformationCard data={infoCard} />}
+						</Col>
+					</Row>
+					<Row style={{ paddingTop: '160' }}>
 						{active !== 0 && estudianteEnContexto() && (
 							<Col xs={12}>
 								<Breadcrumb
