@@ -117,9 +117,19 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 	}, [data])
 
 	return (
-		<Row className={`${classes.informationCard} mb-4 p-1 `} style={fixed ? {
-			position: 'fixed', borderBottom: '1px solid #ddd', paddingTop: '10px', zIndex: 10, width: '80vw'
-		} : {}}>
+		<Row
+			className={`${classes.informationCard} mb-4 p-3 `}
+			style={
+				fixed
+					? {
+							position: 'fixed',
+							borderBottom: '1px solid #ddd',
+							zIndex: 10,
+							width: '80vw'
+					  }
+					: {}
+			}
+		>
 			<Col className='p-0 d-flex align-items-center pl-sm-2' xs='auto' sm='auto'>
 				{/*<InstImg width='56px' height='56px' viewBox='0 0 71 71' fill={colors.getColor()} />*/}
 				<Avatar
@@ -137,13 +147,15 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 						className={`${classes.flexFlowColum} d-flex align-items-center justify-content-center`}
 					>
 						<span className={`${classes.information}`}>
-							{t('estudiantes>expediente>header>nombre', 'Nombre')}: {data.nombreEstudiante}
+							<strong>{t('estudiantes>expediente>header>nombre', 'Nombre')}:</strong>{' '}
+							{data.nombreEstudiante}
 						</span>
 						<span className={`${classes.information}`}>
-							{t('estudiantes>expediente>header>is', 'Identificación')}: {data.identificacion}
+							<strong>{t('estudiantes>expediente>header>is', 'Identificación')}:</strong>{' '}
+							{data.identificacion}
 						</span>
 						<span className={`${classes.information}`}>
-							{t('estudiantes>expediente>header>tipo_id', 'Tipo de Identificación')}:{' '}
+							<strong>{t('estudiantes>expediente>header>tipo_id', 'Tipo de Identificación')}:</strong>{' '}
 							{data.tipoIdentificacion}
 						</span>
 					</Col>
@@ -154,15 +166,15 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 						className={`${classes.flexFlowColum} d-flex align-items-center justify-content-center d-sm-max-none`}
 					>
 						<span className={`${classes.information}`}>
-							{hardCodedData.edadCumplida}:{' '}
+							<strong>{hardCodedData.edadCumplida}:</strong>{' '}
 							{data.fechaNacimiento ? getYearsOld(data.fechaNacimiento).toUpperCase() : ''}
 						</span>
 						<span className={`${classes.information}`}>
-							{hardCodedData.identidadGenero}:{' '}
+							<strong>{hardCodedData.identidadGenero}:</strong>{' '}
 							{!isEmpty(datosCatalogo.genero) ? datosCatalogo.genero.label : ''}
 						</span>
 						<span className={`${classes.information}`}>
-							{hardCodedData.nacionalidad}:{' '}
+							<strong>{hardCodedData.nacionalidad}:</strong>{' '}
 							{!isEmpty(datosCatalogo.nacionalidad) ? datosCatalogo.nacionalidad.label : ''}
 						</span>
 					</Col>
@@ -173,13 +185,14 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 						className={`${classes.flexFlowColum} d-flex align-items-center justify-content-center d-md-max-none`}
 					>
 						<span className={`${classes.information}`}>
-							{hardCodedData.matriculaActiva}: {data.estadoMatricula === 'Regular' ? 'SI' : 'NO'}
+							<strong>{hardCodedData.matriculaActiva}:</strong>{' '}
+							{data.estadoMatricula === 'Regular' ? 'SI' : 'NO'}
 						</span>
 						<span className={`${classes.information}`}>
-							{hardCodedData.condicionDiscapacidad}:{''} {data.tieneDiscapacidades}
+							<strong>{hardCodedData.condicionDiscapacidad}:</strong> {data.tieneDiscapacidades}
 						</span>
 						<span className={`${classes.information}`}>
-							{hardCodedData.indigena}: {data.esIndigena}
+							<strong>{hardCodedData.indigena}:</strong> {data.esIndigena}
 						</span>
 					</Col>
 				</Row>

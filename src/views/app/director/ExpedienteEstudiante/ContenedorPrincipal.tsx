@@ -144,7 +144,7 @@ const ContenedorPrincipal = props => {
 					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Expediente/GetDatosAdicionalesMatricula/${state.expedienteEstudiantil.currentStudent.idEstudiante}`
 				)
 
-				const esIndigena = datosAdicionales.data?.esIndigena ? 'Si' : 'No'
+				const esIndigena = datosAdicionales.data?.esIndigena ? 'SI' : 'NO'
 				setInfoCard(prevState => {
 					return {
 						...prevState,
@@ -152,7 +152,7 @@ const ContenedorPrincipal = props => {
 						estadoMatricula: datosAdicionales.data?.estadoMatricula
 					}
 				})
-			} catch (err) { }
+			} catch (err) {}
 		}
 
 		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
@@ -196,11 +196,10 @@ const ContenedorPrincipal = props => {
 	return (
 		<AppLayout items={directorItems}>
 			<div className='dashboard-wrapper'>
-				<Container  >
-					{active !== 0 && estudianteEnContexto() && <EstudianteInformationCard fixed data={infoCard} />
-					}
+				<Container>
+					{active !== 0 && estudianteEnContexto() && <EstudianteInformationCard fixed data={infoCard} />}
 
-					<Row style={{paddingTop:100}} >
+					<Row style={{ paddingTop: 100 }}>
 						{active !== 0 && estudianteEnContexto() && (
 							<Col xs={12}>
 								<Breadcrumb
