@@ -5,19 +5,19 @@ import Select from 'react-select'
 import NavigationContainer from 'Components/NavigationContainer'
 import moment from 'moment'
 import {
-  Row,
-  Col,
-  Card,
-  CardBody,
-  Label,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  Button,
-  Container,
-  FormFeedback,
-  CardTitle,
-  CustomInput
+	Row,
+	Col,
+	Card,
+	CardBody,
+	Label,
+	Modal,
+	ModalBody,
+	ModalHeader,
+	Button,
+	Container,
+	FormFeedback,
+	CardTitle,
+	CustomInput
 } from 'reactstrap'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import colors from 'Assets/js/colors'
@@ -29,6 +29,7 @@ import CustomSelectInput from 'Components/common/CustomSelectInput'
 import { makeStyles } from '@material-ui/core/styles'
 import SimpleModal from 'Components/Modal/simple'
 import WizardRegisterIdentityModal from 'Views/app/configuracion/Identidad/_partials/wizardRegisterIdentityModal'
+import { clearWizardDataStore, clearWizardNavDataStore } from 'Redux/identidad/actions'
 import { Colxx } from 'Components/common/CustomBootstrap'
 import DatePicker from 'react-datepicker'
 import IntlMessages from 'Helpers/IntlMessages'
@@ -49,1044 +50,888 @@ import { useSelector } from 'react-redux'
 import Loader from 'Components/Loader'
 import swal from 'sweetalert'
 
-const RefactorMiembrosHogar = (props) => {
-  const [registrarModal, setRegistrarModal] = useState(false)
-  const [loadingRegistrarModal, setLoadingRegistrarModal] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [memberDetailOpen, setMemberDetailOpen] = useState(false)
-  const [showError, setShowError] = useState(false)
-  const [showDiscapacidadesModal, setShowDiscapacidadesModal] =
-    useState(false)
-  const [showRegisterModal, setShowRegisterModal] = useState(false)
-  const [snackbarContent, setSnackbarContent] = useState({
-    msg: 'welcome',
-    variant: 'info'
-  })
-  const [snackBar, handleClick] = useNotification()
-  const [data, setData] = useState([])
-  const idEstudiante = useSelector((store: any) => {
-    return store.expedienteEstudiantil.currentStudent.idEstudiante
-  })
-  const identification = useSelector((store) => store.identification)
-  const actions = useActions({
-    getFamilyMembers
-  })
-  const loadFamilyMembers = () => {
-    setLoading(true)
-    actions.getFamilyMembers(idEstudiante).then(response => {
-      const mapeador = (i) => {
-        return {
-          ...i,
-          encargadoLegal: i.encargadoLegal ? 'Sí' : 'No',
-          encargado: i.encargado ? 'Sí' : 'No'
-        }
-      }
-      setLoading(false)
-      if (!response.error) { setData(response.data.map(mapeador)) }
-    }).catch(() => setLoading(false))
-  }
+const RefactorMiembrosHogar = props => {
+	const [loadingRegistrarModal, setLoadingRegistrarModal] = useState(false)
+	const [loading, setLoading] = useState(false)
+	const [memberDetailOpen, setMemberDetailOpen] = useState(false)
+	const [showDiscapacidadesModal, setShowDiscapacidadesModal] = useState(false)
+	const [showRegisterModal, setShowRegisterModal] = useState(false)
+	const [snackbarContent, setSnackbarContent] = useState({
+		msg: 'welcome',
+		variant: 'info'
+	})
+	const [snackBar, handleClick] = useNotification()
 
-  const { formData, catalogs, events } = useMiembrosHogar({
-    setSnackbarContent,
-    handleClick
-  })
-  React.useEffect(() => {
-    if (!idEstudiante) return
-    loadFamilyMembers()
-  }, [])
-  const closeModalNoEncontrado = () => {
-    setShowError(false)
-  }
-  const { t } = useTranslation()
+	const [data, setData] = useState([])
 
-  const onAgregarEvent = () => {
-    events.clearForm()
-    events.toggleShowForm(true)
-    events.toggleEditable(true)
-    events.toggleNuevo(true)
-  }
-  const columns = useMemo(() => {
-    return [
-      {
-        Header: t(
-          'estudiantes>expediente>hogar>miembros_hogar>col_relacion_estudiante',
-          'Relación con el estudiante'
-        ),
-        column: 'parentesco',
-        accessor: 'parentesco',
-        label: ''
-      },
-      {
-        Header: t(
-          'estudiantes>expediente>hogar>miembros_hogar>col_nombre',
-          'Nombre'
-        ),
-        column: 'nombre',
-        accessor: 'nombre',
-        label: ''
-      },
-      {
-        Header: t(
-          'estudiantes>expediente>hogar>miembros_hogar>col_apellido_1',
-          'Primer apellido'
-        ),
-        column: 'primerApellido',
-        accessor: 'primerApellido',
-        label: ''
-      },
-      {
-        Header: t(
-          'estudiantes>expediente>hogar>miembros_hogar>col_apellido_2',
-          'Segundo apellido'
-        ),
-        column: 'segundoApellido',
-        accessor: 'segundoApellido',
-        label: ''
-      },
-      {
-        Header: t(
-          'estudiantes>expediente>hogar>miembros_hogar>col_rol',
-          'Rol'
-        ),
-        column: 'nombreRol',
-        accessor: 'nombreRol',
-        label: ''
-      },
-      {
-        Header: t(
-          'estudiantes>expediente>hogar>miembros_hogar>col_represen_legal',
-          'Representante legal'
-        ),
-        column: 'encargado',
-        accessor: 'encargado',
-        label: ''
-      },
-      {
-        Header: t('general>acciones', 'Acciones'),
-        column: '',
-        accessor: '',
-        label: '',
-        Cell: ({ _, row, data }) => {
-          const fullRow = data[row.index]
+	const idEstudiante = useSelector((store: any) => {
+		return store.expedienteEstudiantil.currentStudent.idEstudiante
+	})
+	const identification = useSelector(store => store.identification)
+	const actions = useActions({
+		getFamilyMembers,
+		clearWizardDataStore,
+		clearWizardNavDataStore
+	})
+	const loadFamilyMembers = () => {
+		setLoading(true)
+		actions
+			.getFamilyMembers(idEstudiante)
+			.then(response => {
+				const mapeador = i => {
+					return {
+						...i,
+						encargadoLegal: i.encargadoLegal ? 'Sí' : 'No',
+						encargado: i.encargado ? 'Sí' : 'No'
+					}
+				}
+				setLoading(false)
+				if (!response.error) {
+					setData(response.data.map(mapeador))
+				}
+			})
+			.catch(() => setLoading(false))
+	}
 
-          return (
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                alignContent: 'center'
-              }}
-            >
-              <button
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  color: 'grey'
-                }}
-                onClick={async () => {
-                  setLoading(true)
-                  await events.onEditarClick(fullRow.id)
-                  setLoading(false)
-                  // props.authHandler('modificar', () => {
-                  //   setMemberDetailOpen(true)
-                  // })
-                }}
-              >
-                <Tooltip title='Actualizar'>
-                  <IconButton>
-                    <HiPencil style={{ fontSize: 30 }} />
-                  </IconButton>
-                </Tooltip>
-              </button>
-              <button
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  color: 'grey'
-                }}
-                onClick={() => {
-                  swal({
-                    title: 'Eliminar Miembro',
-                    text: '¿Esta seguro de que desea eliminar el miembro del hogar?',
-                    icon: 'warning',
-                    className: 'text-alert-modal',
-                    buttons: {
-                      cancel: 'Cancelar',
-                      ok: {
-                        text: 'Eliminar',
-                        value: true,
-                        className: 'btn-alert-color'
-                      },
-                    },
-                  }).then(async (result) => {
-                    debugger
-                    if (result) {
-                      const age = identification.data
-                        ?.fechaNacimiento
-                        ? moment().diff(
-                          identification.data
-                            ?.fechaNacimiento,
-                          'years',
-                          false
-                        )
-                        : 0
-                      if (
-                        age < 18 &&
-                        fullRow.encargado &&
-                        data.filter((el) => el?.encargado)
-                          .length === 1
-                      ) {
-                        setSnackbarContent({
-                          msg: 'No se puede eliminar la relación de encargado con el estudiante, hasta que incluya un nuevo encargado',
-                          variant: 'error'
-                        })
-                        handleClick()
+	const closeRegistrarPersona = async () => {
+		await actions.clearWizardDataStore()
+		await actions.clearWizardNavDataStore()
+		setShowRegisterModal(false)
+	}
 
-                        return
-                      }
-                      if (
-                        (fullRow.encargadoLegal &&
-                          data.length < 1) ||
-                        !fullRow.encargadoLegal
-                      ) {
-                        setSnackbarContent({
-                          msg: 'No se puede eliminar la relación de encargado con el estudiante, hasta que incluya un nuevo encargado',
-                          variant: 'error'
-                        })
-                        handleClick()
-                      } else {
-                        // toggle(!modal.show, fullRow.id)
-                        setLoading(true)
-                        await events.onDeleteClick(fullRow.id)
-                        await loadFamilyMembers()
-                        setLoading(false)
-                      }
-                    }
-                  })
-                }}
-              >
-                <Tooltip title='Deshabilitar relación'>
-                  <IconButton>
-                    <IoMdTrash style={{ fontSize: 30 }} />
-                  </IconButton>
-                </Tooltip>
-              </button>
-            </div>
-          )
-        }
-      }
-    ]
-  }, [t])
+	const guardarNuevaPersona = async _student => {
+		try {
+			await actions.clearWizardDataStore()
+			await actions.clearWizardNavDataStore()
+			events.addMiembroFromModal(_student.identificacion)
+			events.toggleShowModalBusqueda(false)
+			setLoadingRegistrarModal(false)
+			closeRegistrarPersona()
+		} catch (error) {
+			events.toggleShowModalBusqueda(false)
+			setLoadingRegistrarModal(false)
+			closeRegistrarPersona()
+		}
+	}
 
-  const onRegresarEvent = () => {
-    events.clearForm()
-    events.toggleEditable(false)
-    events.toggleShowForm(false)
-    loadFamilyMembers()
-  }
+	const { formData, catalogs, events } = useMiembrosHogar({
+		setSnackbarContent,
+		handleClick
+	})
+	React.useEffect(() => {
+		if (!idEstudiante) return
+		loadFamilyMembers()
+	}, [])
+	const closeModalNoEncontrado = () => {
+		events.toggleShowModalBusqueda(false)
+	}
 
-  return (
-    <>
-          {
-        loading && (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%',
-              height: '100vh',
-              overflow: 'hidden',
-              pointerEvents: 'auto',
-              cursor: 'wait',
-              left: 0,
-              top: 0,
-              position: 'fixed',
-              zIndex: 1,
-            }}
-          >
-            <Loader />
-          </div>
-        )
-      }
-      {snackBar(snackbarContent.variant, snackbarContent.msg)}
-      {!formData.showForm && (
-        <>
-          <TableReactImplementation
-            showAddButton
-            msjButton
-            onSubmitAddButton={() => onAgregarEvent()}
-            data={data}
-            columns={columns}
-          />
-        </>
-      )}
-      {formData.showForm && (
-        <>
-          <NavigationContainer goBack={() => onRegresarEvent()} />
-          <h4>
-            {t(
-              'estudiantes>expediente>hogar>miembros_hogar>agregar>info_gen',
-              'Información general'
-            )}
-          </h4>
-          <br />
-          <Card>
-            <CardBody>
-              <Row>
-                <Col sm='12' md='4'>
-                  <h4>
-                    {t(
-                      'estudiantes>expediente>hogar>miembros_hogar>agregar>info_personal',
-                      'Información personal'
-                    )}
-                  </h4>
-                  <div className='container-center container-avatar-expediente'>
-                    <div
-                      className='content-avatar-expediente mb-3'
-                      id='image_form'
-                    >
-                      <UploadAvatar onChange={events.onImagenChange} value={formData.imagen} />
-                    </div>
-                  </div>
-                </Col>
-                <Col sm='12' md='8' className='mt-sm-2'>
-                  <Label>
-                    *
-                    {t(
-                      'estudiantes>expediente>info_gen>info_gen>tipo_id',
-                      'Tipo de identificación'
-                    )}
-                  </Label>
-                  <Select
-                    components={{
-                      Input: CustomSelectInput
-                    }}
-                    className='react-select'
-                    classNamePrefix='react-select'
-                    options={catalogs.tipoIdentificacionCatalog}
-                    value={formData.tipoIdentificacion}
-                    placeholder=''
-                    isDisabled
-                    onChange={events.onTipoIdentificacionChange}
-                  />
-                  <Label>
-                    *
-                    {t(
-                      'estudiantes>expediente>info_gen>info_gen>nacionalidad',
-                      'Nacionalidad'
-                    )}
-                  </Label>
-                  <Select
-                    components={{
-                      Input: CustomSelectInput
-                    }}
-                    className='react-select'
-                    classNamePrefix='react-select'
-                    options={catalogs.nacionalidadCatalog}
-                    placeholder=''
-                    value={formData.nacionalidad}
-                    isDisabled
-                    onChange={events.onNacionalidadChange}
-                  />
-                  <Label>
-                    *
-                    {t(
-                      'estudiantes>expediente>info_gen>info_gen>num_id',
-                      'Número de identificación'
-                    )}
-                  </Label>
-                  <InputContainer>
-                    <Input
-                      type='text'
-                      name='identificacion'
-                      value={formData.identificacion}
-                      disabled={formData.editable && formData.miembroId != null}
-                      onChange={events.onIdentificacionChange}
-                    />
-                  </InputContainer>
-                </Col>
-              </Row>
-            </CardBody>
-          </Card>
-          <Row>
-            <Colxx xxs='12' md='6' className='mt-5'>
-              <Card>
-                <CardBody>
-                  <CardTitle>
-                    {t(
-                      'estudiantes>expediente>hogar>miembros_hogar>agregar>titulo',
-                      'Información general'
-                    )}
-                  </CardTitle>
-                  <Row>
-                    <Col sm='12'>
-                      <Label>
-                        *
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>nombre',
-                          'Nombre'
-                        )}
-                      </Label>
+	const { t } = useTranslation()
 
-                      <Input
-                        type='text'
-                        name='nombre'
-                        value={formData.nombre}
-                        disabled
-                        onChange={events.onNombreChange}
-                      />
-                      <FormFeedback />
-                    </Col>
-                    <Col sm='12'>
-                      <Label>
-                        *
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>apellido_1',
-                          'Primer apellido'
-                        )}
-                      </Label>
-                      <Input
-                        type='text'
-                        name='primerApellido'
-                        value={formData.primerApellido}
-                        disabled
-                        onChange={events.onPrimerApellidoChange}
-                      />
-                      <FormFeedback />
-                    </Col>
-                    <Col sm='12'>
-                      <Label>
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>apellido_2',
-                          'Segundo apellido'
-                        )}
-                      </Label>
-                      <Input
-                        type='text'
-                        name='segundoApellido'
-                        value={formData.segundoApellido}
-                        disabled
-                        onChange={
-                          events.onSegundoApellidoChange
-                        }
-                      />
-                    </Col>
-                    <Col sm='12'>
-                      <Label>
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>sexo',
-                          'Sexo'
-                        )}
-                      </Label>
-                      <Select
-                        components={{
-                          Input: CustomSelectInput
-                        }}
-                        className='react-select'
-                        classNamePrefix='react-select'
-                        options={catalogs.sexoCatalog}
-                        placeholder=''
-                        value={formData.sexo}
-                        isDisabled
-                        onChange={events.onSexoChange}
-                      />
-                      <FormFeedback />
-                    </Col>
-                    <Col sm='12'>
-                      <Label>
-                        *
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>nacimiento',
-                          'Fecha de nacimiento'
-                        )}
-                      </Label>
-                      {
-                        <DatePicker
-                          dateFormat='dd/MM/yyyy'
-                          peekNextMonth
-                          showMonthDropdown
-                          showYearDropdown
-                          selectsStart
-                          maxDate={[]}
-                          disabled
-                          selected={
-                            /* props.memberData.fechaNacimiento
+	const onAgregarEvent = () => {
+		events.clearForm()
+		events.toggleShowForm(true)
+		events.toggleEditable(true)
+		events.toggleNuevo(true)
+	}
+	const columns = useMemo(() => {
+		return [
+			{
+				Header: t(
+					'estudiantes>expediente>hogar>miembros_hogar>col_relacion_estudiante',
+					'Relación con el estudiante'
+				),
+				column: 'parentesco',
+				accessor: 'parentesco',
+				label: ''
+			},
+			{
+				Header: t('estudiantes>expediente>hogar>miembros_hogar>col_nombre', 'Nombre'),
+				column: 'nombre',
+				accessor: 'nombre',
+				label: ''
+			},
+			{
+				Header: t('estudiantes>expediente>hogar>miembros_hogar>col_apellido_1', 'Primer apellido'),
+				column: 'primerApellido',
+				accessor: 'primerApellido',
+				label: ''
+			},
+			{
+				Header: t('estudiantes>expediente>hogar>miembros_hogar>col_apellido_2', 'Segundo apellido'),
+				column: 'segundoApellido',
+				accessor: 'segundoApellido',
+				label: ''
+			},
+			{
+				Header: t('estudiantes>expediente>hogar>miembros_hogar>col_rol', 'Rol'),
+				column: 'nombreRol',
+				accessor: 'nombreRol',
+				label: ''
+			},
+			{
+				Header: t('estudiantes>expediente>hogar>miembros_hogar>col_represen_legal', 'Representante legal'),
+				column: 'encargado',
+				accessor: 'encargado',
+				label: ''
+			},
+			{
+				Header: t('general>acciones', 'Acciones'),
+				column: '',
+				accessor: '',
+				label: '',
+				Cell: ({ _, row, data }) => {
+					const fullRow = data[row.index]
+
+					return (
+						<div
+							style={{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								alignContent: 'center'
+							}}
+						>
+							<button
+								style={{
+									border: 'none',
+									background: 'transparent',
+									cursor: 'pointer',
+									color: 'grey'
+								}}
+								onClick={async () => {
+									setLoading(true)
+									await events.onEditarClick(fullRow.id)
+									setLoading(false)
+									// props.authHandler('modificar', () => {
+									//   setMemberDetailOpen(true)
+									// })
+								}}
+							>
+								<Tooltip title='Actualizar'>
+									<IconButton>
+										<HiPencil style={{ fontSize: 30 }} />
+									</IconButton>
+								</Tooltip>
+							</button>
+							<button
+								style={{
+									border: 'none',
+									background: 'transparent',
+									cursor: 'pointer',
+									color: 'grey'
+								}}
+								onClick={() => {
+									swal({
+										title: 'Eliminar Miembro',
+										text: '¿Esta seguro de que desea eliminar el miembro del hogar?',
+										icon: 'warning',
+										className: 'text-alert-modal',
+										buttons: {
+											cancel: 'Cancelar',
+											ok: {
+												text: 'Eliminar',
+												value: true,
+												className: 'btn-alert-color'
+											}
+										}
+									}).then(async result => {
+										if (result) {
+											const age = identification.data?.fechaNacimiento
+												? moment().diff(identification.data?.fechaNacimiento, 'years', false)
+												: 0
+											if (
+												age < 18 &&
+												fullRow.encargado &&
+												data.filter(el => el?.encargado).length === 1
+											) {
+												setSnackbarContent({
+													msg: 'No se puede eliminar la relación de encargado con el estudiante, hasta que incluya un nuevo encargado',
+													variant: 'error'
+												})
+												handleClick()
+
+												return
+											}
+											if (
+												(fullRow.encargadoLegal && data.length < 1) ||
+												!fullRow.encargadoLegal
+											) {
+												setSnackbarContent({
+													msg: 'No se puede eliminar la relación de encargado con el estudiante, hasta que incluya un nuevo encargado',
+													variant: 'error'
+												})
+												handleClick()
+											} else {
+												// toggle(!modal.show, fullRow.id)
+												setLoading(true)
+												await events.onDeleteClick(fullRow.id)
+												await loadFamilyMembers()
+												setLoading(false)
+											}
+										}
+									})
+								}}
+							>
+								<Tooltip title='Deshabilitar relación'>
+									<IconButton>
+										<IoMdTrash style={{ fontSize: 30 }} />
+									</IconButton>
+								</Tooltip>
+							</button>
+						</div>
+					)
+				}
+			}
+		]
+	}, [t])
+
+	const onRegresarEvent = () => {
+		events.clearForm()
+		events.toggleEditable(false)
+		events.toggleShowForm(false)
+		loadFamilyMembers()
+	}
+
+	return (
+		<>
+			{loading && (
+				<div
+					style={{
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						width: '100%',
+						height: '100vh',
+						overflow: 'hidden',
+						pointerEvents: 'auto',
+						cursor: 'wait',
+						left: 0,
+						top: 0,
+						position: 'fixed',
+						zIndex: 1
+					}}
+				>
+					<Loader />
+				</div>
+			)}
+			{snackBar(snackbarContent.variant, snackbarContent.msg)}
+			{!formData.showForm && (
+				<>
+					<TableReactImplementation
+						showAddButton
+						msjButton='Agregar miembro'
+						onSubmitAddButton={() => onAgregarEvent()}
+						data={data}
+						columns={columns}
+					/>
+				</>
+			)}
+			{formData.showForm && (
+				<>
+					<NavigationContainer goBack={() => onRegresarEvent()} />
+					<h4>{t('estudiantes>expediente>hogar>miembros_hogar>agregar>info_gen', 'Información general')}</h4>
+					<br />
+					<Card>
+						<CardBody>
+							<Row>
+								<Col sm='12' md='4'>
+									<h4>
+										{t(
+											'estudiantes>expediente>hogar>miembros_hogar>agregar>info_personal',
+											'Información personal'
+										)}
+									</h4>
+									<div className='container-center container-avatar-expediente'>
+										<div className='content-avatar-expediente mb-3' id='image_form'>
+											<UploadAvatar onChange={events.onImagenChange} value={formData.imagen} />
+										</div>
+									</div>
+								</Col>
+								<Col sm='12' md='8' className='mt-sm-2'>
+									<Label>
+										*
+										{t(
+											'estudiantes>expediente>info_gen>info_gen>tipo_id',
+											'Tipo de identificación'
+										)}
+									</Label>
+									<Select
+										components={{
+											Input: CustomSelectInput
+										}}
+										className='react-select'
+										classNamePrefix='react-select'
+										options={catalogs.tipoIdentificacionCatalog}
+										value={formData.tipoIdentificacion}
+										placeholder=''
+										isDisabled
+										onChange={events.onTipoIdentificacionChange}
+									/>
+									<Label>
+										*{t('estudiantes>expediente>info_gen>info_gen>nacionalidad', 'Nacionalidad')}
+									</Label>
+									<Select
+										components={{
+											Input: CustomSelectInput
+										}}
+										className='react-select'
+										classNamePrefix='react-select'
+										options={catalogs.nacionalidadCatalog}
+										placeholder=''
+										value={formData.nacionalidad}
+										isDisabled
+										onChange={events.onNacionalidadChange}
+									/>
+									<Label>
+										*
+										{t(
+											'estudiantes>expediente>info_gen>info_gen>num_id',
+											'Número de identificación'
+										)}
+									</Label>
+									<InputContainer>
+										<Input
+											type='text'
+											name='identificacion'
+											value={formData.identificacion}
+											disabled={formData.editable && formData.miembroId != null}
+											onChange={events.onIdentificacionChange}
+										/>
+									</InputContainer>
+								</Col>
+							</Row>
+						</CardBody>
+					</Card>
+					<Row>
+						<Colxx xxs='12' md='6' className='mt-5'>
+							<Card>
+								<CardBody>
+									<CardTitle>
+										{t(
+											'estudiantes>expediente>hogar>miembros_hogar>agregar>titulo',
+											'Información general'
+										)}
+									</CardTitle>
+									<Row>
+										<Col sm='12'>
+											<Label>
+												*
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>nombre',
+													'Nombre'
+												)}
+											</Label>
+
+											<Input
+												type='text'
+												name='nombre'
+												value={formData.nombre}
+												disabled
+												onChange={events.onNombreChange}
+											/>
+											<FormFeedback />
+										</Col>
+										<Col sm='12'>
+											<Label>
+												*
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>apellido_1',
+													'Primer apellido'
+												)}
+											</Label>
+											<Input
+												type='text'
+												name='primerApellido'
+												value={formData.primerApellido}
+												disabled
+												onChange={events.onPrimerApellidoChange}
+											/>
+											<FormFeedback />
+										</Col>
+										<Col sm='12'>
+											<Label>
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>apellido_2',
+													'Segundo apellido'
+												)}
+											</Label>
+											<Input
+												type='text'
+												name='segundoApellido'
+												value={formData.segundoApellido}
+												disabled
+												onChange={events.onSegundoApellidoChange}
+											/>
+										</Col>
+										<Col sm='12'>
+											<Label>
+												{t('estudiantes>expediente>hogar>miembros_hogar>agregar>sexo', 'Sexo')}
+											</Label>
+											<Select
+												components={{
+													Input: CustomSelectInput
+												}}
+												className='react-select'
+												classNamePrefix='react-select'
+												options={catalogs.sexoCatalog}
+												placeholder=''
+												value={formData.sexo}
+												isDisabled
+												onChange={events.onSexoChange}
+											/>
+											<FormFeedback />
+										</Col>
+										<Col sm='12'>
+											<Label>
+												*
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>nacimiento',
+													'Fecha de nacimiento'
+												)}
+											</Label>
+											{
+												<DatePicker
+													dateFormat='dd/MM/yyyy'
+													peekNextMonth
+													showMonthDropdown
+													showYearDropdown
+													selectsStart
+													maxDate={[]}
+													disabled
+													selected={
+														/* props.memberData.fechaNacimiento
             ? moment(
                     props.memberData
                         .fechaNacimiento
             ).toDate()
             : null */
-                            formData.fechaNacimiento ? moment(formData.fechaNacimiento).toDate() : null
-                          }
-                          onChange={events.onFechaNacimientoChange}
-                        />
-                      }
-                      <FormFeedback />
-                    </Col>
-                    <Col sm='12'>
-                      <Label>
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>conocido',
-                          'Conocido como'
-                        )}
-                      </Label>
-                      <Input
-                        type='text'
-                        name='conocidoComo'
-                        value={formData.conocidoComo}
-                        disabled
-                        onChange={
-                          events.onConocidoComoChange
-                        }
-                      />
-                      <FormFeedback />
-                    </Col>
-                    <Col sm='12'>
-                      <Label>
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>identidad_gen',
-                          'Identidad de género'
-                        )}
-                      </Label>
-                      <Select
-                        components={{
-                          Input: CustomSelectInput
-                        }}
-                        className='react-select'
-                        classNamePrefix='react-select'
-                        options={
-                          catalogs.identidadGeneroCatalog
-                        }
-                        placeholder=''
-                        value={formData.identidadGenero}
-                        isDisabled
-                        onChange={
-                          events.onIdentidadGeneroChange
-                        }
-                      />
-                    </Col>
-                    <Col sm='12'>
-                      <Label>
-                        *
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>escolaridad',
-                          'Escolaridad'
-                        )}
-                      </Label>
-                      <Select
-                        components={{
-                          Input: CustomSelectInput
-                        }}
-                        className='react-select'
-                        classNamePrefix='react-select'
-                        options={
-                          catalogs.escolaridadCatalog
-                        }
-                        placeholder=''
-                        value={formData.escolaridad}
-                        onChange={
-                          events.onEscolaridadChange
-                        }
-                        isDisabled={!formData.editable}
-                      />
-                      <FormFeedback />
-                    </Col>
-                    <Col sm='12'>
-                      <Label>
-                        *
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>condicion_lab',
-                          'Condición laboral'
-                        )}
-                      </Label>
-                      <Select
-                        components={{
-                          Input: CustomSelectInput
-                        }}
-                        className='react-select'
-                        classNamePrefix='react-select'
-                        options={
-                          catalogs.condicionLaboralCatalog
-                        }
-                        placeholder=''
-                        value={
-                          formData.condicionLaboral
-                        }
-                        isDisabled={!formData.editable}
-                        onChange={
-                          events.onCondicionLaboralChange
-                        }
-                      />
-                      <FormFeedback />
-                    </Col>
-                    <Col sm='12'>
-                      <Label>
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>condicion_discap',
-                          'Condición de discapacidad'
-                        )}
-                      </Label>
-                      <StyledMultiSelect
-                        disabled={!formData.editable}
-                        onClick={() => {
-                          events.onDiscapacidadesClick()
-                          setShowDiscapacidadesModal(
-                            true
-                          )
-                        }}
-                      >
-                        {formData.condicionDiscapacidad?.map(
-                          (discapacidad) => {
-                            return (
-                              <ItemSpan>
-                                {
-                                  discapacidad.nombre
-                                }
-                              </ItemSpan>
-                            )
-                          }
-                        )}
-                      </StyledMultiSelect>
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-            </Colxx>
-            <Colxx xxs='12' md='6' className='mt-5'>
-              <Card>
-                <CardBody>
-                  <Row>
-                    <Col sm='12' md='12'>
-                      <h5>
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>asociacion',
-                          'Asociación'
-                        )}
-                      </h5>
-                    </Col>
-                    <Col sm='12' md='12'>
-                      <Label>
-                        *
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>relacion_est',
-                          'Relación con estudiante'
-                        )}
-                      </Label>
-                      <Select
-                        className='react-select'
-                        classNamePrefix='react-select'
-                        components={{
-                          Input: CustomSelectInput
-                        }}
-                        isDisabled={!formData.editable}
-                        placeholder={t(
-                          'general>seleccionar',
-                          'Seleccionar'
-                        )}
-                        value={
-                          formData.relacionConEstudiante
-                        }
-                        onChange={
-                          events.onRelacionConEstudianteChange
-                        }
-                        options={
-                          catalogs.relacionConEstudianteCatalog
-                        }
-                      />
-                      <span style={{ color: 'red' }}>
-                        {/* {props.fields["ParentescoId"] && props.errors["ParentescoId"]} */}
-                      </span>
-                      <Label>
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>encargado_est',
-                          '¿Es el encargado del estudiante?'
-                        )}
-                      </Label>
-                      <div>
-                        <CustomInput
-                          name='esEncargado'
-                          type='radio'
-                          disabled={
-                            !formData.editable
-                          }
-                          value
-                          inline
-                          label={t(
-                            'general>si',
-                            'Si'
-                          )}
-                          checked={
-                            formData.esEncargadoDelEstudiante
-                          }
-                          onClick={
-                            events.onEsEncargadoDelEstudianteChange
-                          }
-                        />
-                        <CustomInput
-                          name='esEncargado'
-                          type='radio'
-                          disabled={
-                            !formData.editable
-                          }
-                          value={false}
-                          inline
-                          label={t(
-                            'general>no',
-                            'No'
-                          )}
-                          checked={
-                            !formData.esEncargadoDelEstudiante
-                          }
-                          onClick={
-                            events.onEsEncargadoDelEstudianteChange
-                          }
-                        />
-                      </div>
-                      {formData.esEncargadoDelEstudiante && (
-                        <UploadComponent id='encargado' removeElement={events.onDocumentoEncargadoRemove} files={formData.documentosEncargado} addImage={events.onDocumentoEncargadoChange} />
-                      )}
-                    </Col>
-                    <Col sm='12' md='12'>
-                      <Label>
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>represen_legal_est',
-                          '¿Es el representante legal del estudiante?'
-                        )}
-                      </Label>
-                      <div>
-                        <CustomInput
-                          type='radio'
-                          disabled={
-                            !formData.editable
-                          }
-                          inline
-                          label={t(
-                            'general>si',
-                            'Si'
-                          )}
-                          value='true'
-                          checked={
-                            formData.esRepresentanteLegalEstudiante
-                          }
-                          onClick={
-                            events.onEsRepresentanteLegalEstudianteChange
-                          }
-                        />
-                        <CustomInput
-                          type='radio'
-                          disabled={
-                            !formData.editable
-                          }
-                          inline
-                          label={t(
-                            'general>no',
-                            'No'
-                          )}
-                          value='false'
-                          checked={
-                            !formData.esRepresentanteLegalEstudiante
-                          }
-                          onClick={
-                            events.onEsRepresentanteLegalEstudianteChange
-                          }
-                        />
-                      </div>
-                      {formData.esRepresentanteLegalEstudiante && (
-                        <UploadComponent id='representante' removeElement={events.onDocumentoRepresentanteLegalRemove} files={formData.documentosRepresentanteLegal} addImage={events.onDocumentoRepresentanteLegalChange} />
-                      )}
-                    </Col>
-                    <Col sm='12' md='12'>
-                      <Label>
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>autorizado',
-                          'Autorizado'
-                        )}
-                      </Label>
-                      <div>
-                        <CustomInput
-                          type='radio'
-                          disabled={
-                            !formData.editable
-                          }
-                          inline
-                          label={t(
-                            'general>si',
-                            'Si'
-                          )}
-                          value='true'
-                          checked={
-                            formData.esAutorizado
-                          }
-                          onClick={
-                            events.onEsAutorizadoChange
-                          }
-                        />
-                        <CustomInput
-                          type='radio'
-                          disabled={
-                            !formData.editable
-                          }
-                          inline
-                          label={t(
-                            'general>no',
-                            'No'
-                          )}
-                          value='false'
-                          checked={
-                            !formData.esAutorizado
-                          }
-                          onClick={
-                            events.onEsAutorizadoChange
-                          }
-                        />
-                      </div>
-                    </Col>
-                    <Col sm='12' md='12'>
-                      <Label>
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>vive_est',
-                          'Vive con estudiante'
-                        )}
-                      </Label>
-                      <div>
-                        <CustomInput
-                          type='radio'
-                          disabled={
-                            !formData.editable
-                          }
-                          inline
-                          label={t(
-                            'general>si',
-                            'Si'
-                          )}
-                          value='true'
-                          checked={
-                            formData.viveConEstudiante
-                          }
-                          onClick={
-                            events.onViveConEstudianteChange
-                          }
-                        />
-                        <CustomInput
-                          type='radio'
-                          disabled={
-                            !formData.editable
-                          }
-                          inline
-                          label={t(
-                            'general>no',
-                            'No'
-                          )}
-                          value='false'
-                          checked={
-                            !formData.viveConEstudiante
-                          }
-                          onClick={
-                            events.onViveConEstudianteChange
-                          }
-                        />
-                      </div>
-                    </Col>
-                    <Col sm='12' md='12'>
-                      <Label>
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>depende_econ_est',
-                          '¿Depende economicamente del estudiante?'
-                        )}
-                      </Label>
-                      <div>
-                        <CustomInput
-                          type='radio'
-                          disabled={
-                            !formData.editable
-                          }
-                          inline
-                          label={t(
-                            'general>si',
-                            'Si'
-                          )}
-                          value='true'
-                          checked={
-                            formData.dependeEconomicamente
-                          }
-                          onClick={
-                            events.onDependeEconomicamenteChange
-                          }
-                        />
-                        <CustomInput
-                          type='radio'
-                          disabled={
-                            !formData.editable
-                          }
-                          inline
-                          label={t(
-                            'general>no',
-                            'No'
-                          )}
-                          value='false'
-                          checked={
-                            !formData.dependeEconomicamente
-                          }
-                          onClick={
-                            events.onDependeEconomicamenteChange
-                          }
-                        />
-                      </div>
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-              <Card className='mt-5'>
-                <CardBody>
-                  <Row>
-                    <Col sm='12' md='12'>
-                      <IntlMessages id='menu.info-contacto' />
-                    </Col>
-                    <Col sm='12' md='12'>
-                      <Label>
-                        *
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>tel_prin',
-                          'Teléfono principal'
-                        )}
-                      </Label>
-                      <ReactInputMask
-                        mask='9999-9999'
-                        value={
-                          formData.telefonoPrincipal
-                        }
-                        disabled={!formData.editable}
-                        type='text'
-                        name='telefono'
-                        onChange={
-                          events.onTelefonoPrincipalChange
-                        }
-                      >
-                        {(inputProps) => (
-                          <Input
-                            {...inputProps}
-                            disabled={
-                              !formData.editable
-                            }
-                          />
-                        )}
-                      </ReactInputMask>
-                      <FormFeedback />
-                    </Col>
-                    <Col sm='12' md='12'>
-                      <Label>
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>tel_alt',
-                          'Teléfono alternativo'
-                        )}
-                      </Label>
-                      <ReactInputMask
-                        type='text'
-                        mask='9999-9999'
-                        name='telefonoSecundario'
-                        value={
-                          formData.telefonoAlternativo
-                        }
-                        disabled={!formData.editable}
-                        onChange={
-                          events.onTelefonoAlternativoChange
-                        }
-                      >
-                        {(inputProps) => (
-                          <Input
-                            {...inputProps}
-                            disabled={
-                              !formData.editable
-                            }
-                          />
-                        )}
-                      </ReactInputMask>
-                      <FormFeedback />
-                    </Col>
-                    <Col sm='12' md='12'>
-                      <Label>
-                        *
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>correo',
-                          'Correo electrónico'
-                        )}
-                      </Label>
-                      <Input
-                        type='email'
-                        name='email'
-                        value={formData.correo}
-                        disabled={!formData.editable}
-                        onChange={events.onCorreoChange}
-                      />
-                      <FormFeedback />
-                    </Col>
-                    <Col sm='12' md='12'>
-                      <Label>
-                        {t(
-                          'estudiantes>expediente>hogar>miembros_hogar>agregar>rol',
-                          'Rol'
-                        )}
-                      </Label>
-                      <Select
-                        className='react-select'
-                        classNamePrefix='react-select'
-                        components={{
-                          Input: CustomSelectInput
-                        }}
-                        options={catalogs.rolCatalog}
-                        defaultValue={null}
-                        isDisabled={!formData.editable}
-                        value={formData.rol}
-                        onChange={events.onRolChange}
-                        placeholder={t('general>placeholder>seleccione_rol','Seleccione un rol')}
-                      />
-                    </Col>
-                  </Row>
-                </CardBody>
-              </Card>
-            </Colxx>
-            <div className='container-center my-5 mb-3'>
-              {!formData.editable
-                ? (
-                  <Button
-                    color='primary'
-                    onClick={events.toggleEditable}
-                  >
-                    Editar
-                  </Button>
-                  )
-                : (
-                  <>
-                    <Button
-                      outline
-                      color='primary'
-                      onClick={onRegresarEvent}
-                    >
-                      Cancelar
-                    </Button>
-                    <Button
-                      color='primary'
-                      onClick={async () => {
-                        setLoading(true)
-                        await events.onGuardarClick()
-                        setLoading(false)
-                      }}
-                    >
-                      Guardar
-                    </Button>
-                  </>
-                  )}
-              {/* <EditButton
+														formData.fechaNacimiento
+															? moment(formData.fechaNacimiento).toDate()
+															: null
+													}
+													onChange={events.onFechaNacimientoChange}
+												/>
+											}
+											<FormFeedback />
+										</Col>
+										<Col sm='12'>
+											<Label>
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>conocido',
+													'Conocido como'
+												)}
+											</Label>
+											<Input
+												type='text'
+												name='conocidoComo'
+												value={formData.conocidoComo}
+												disabled
+												onChange={events.onConocidoComoChange}
+											/>
+											<FormFeedback />
+										</Col>
+										<Col sm='12'>
+											<Label>
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>identidad_gen',
+													'Identidad de género'
+												)}
+											</Label>
+											<Select
+												components={{
+													Input: CustomSelectInput
+												}}
+												className='react-select'
+												classNamePrefix='react-select'
+												options={catalogs.identidadGeneroCatalog}
+												placeholder=''
+												value={formData.identidadGenero}
+												isDisabled
+												onChange={events.onIdentidadGeneroChange}
+											/>
+										</Col>
+										<Col sm='12'>
+											<Label>
+												*
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>escolaridad',
+													'Escolaridad'
+												)}
+											</Label>
+											<Select
+												components={{
+													Input: CustomSelectInput
+												}}
+												className='react-select'
+												classNamePrefix='react-select'
+												options={catalogs.escolaridadCatalog}
+												placeholder=''
+												value={formData.escolaridad}
+												onChange={events.onEscolaridadChange}
+												isDisabled={!formData.editable}
+											/>
+											<FormFeedback />
+										</Col>
+										<Col sm='12'>
+											<Label>
+												*
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>condicion_lab',
+													'Condición laboral'
+												)}
+											</Label>
+											<Select
+												components={{
+													Input: CustomSelectInput
+												}}
+												className='react-select'
+												classNamePrefix='react-select'
+												options={catalogs.condicionLaboralCatalog}
+												placeholder=''
+												value={formData.condicionLaboral}
+												isDisabled={!formData.editable}
+												onChange={events.onCondicionLaboralChange}
+											/>
+											<FormFeedback />
+										</Col>
+										<Col sm='12'>
+											<Label>
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>condicion_discap',
+													'Condición de discapacidad'
+												)}
+											</Label>
+											<StyledMultiSelect
+												disabled={!formData.editable}
+												onClick={() => {
+													events.onDiscapacidadesClick()
+													setShowDiscapacidadesModal(true)
+												}}
+											>
+												{formData.condicionDiscapacidad?.map(discapacidad => {
+													return <ItemSpan>{discapacidad.nombre}</ItemSpan>
+												})}
+											</StyledMultiSelect>
+										</Col>
+									</Row>
+								</CardBody>
+							</Card>
+						</Colxx>
+						<Colxx xxs='12' md='6' className='mt-5'>
+							<Card>
+								<CardBody>
+									<Row>
+										<Col sm='12' md='12'>
+											<h5>
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>asociacion',
+													'Asociación'
+												)}
+											</h5>
+										</Col>
+										<Col sm='12' md='12'>
+											<Label>
+												*
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>relacion_est',
+													'Relación con estudiante'
+												)}
+											</Label>
+											<Select
+												className='react-select'
+												classNamePrefix='react-select'
+												components={{
+													Input: CustomSelectInput
+												}}
+												isDisabled={!formData.editable}
+												placeholder={t('general>seleccionar', 'Seleccionar')}
+												value={formData.relacionConEstudiante}
+												onChange={events.onRelacionConEstudianteChange}
+												options={catalogs.relacionConEstudianteCatalog}
+											/>
+											<span style={{ color: 'red' }}>
+												{/* {props.fields["ParentescoId"] && props.errors["ParentescoId"]} */}
+											</span>
+											<Label>
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>encargado_est',
+													'¿Es el encargado del estudiante?'
+												)}
+											</Label>
+											<div>
+												<CustomInput
+													name='esEncargado'
+													type='radio'
+													disabled={!formData.editable}
+													value
+													inline
+													label={t('general>si', 'Si')}
+													checked={formData.esEncargadoDelEstudiante}
+													onClick={events.onEsEncargadoDelEstudianteChange}
+												/>
+												<CustomInput
+													name='esEncargado'
+													type='radio'
+													disabled={!formData.editable}
+													value={false}
+													inline
+													label={t('general>no', 'No')}
+													checked={!formData.esEncargadoDelEstudiante}
+													onClick={events.onEsEncargadoDelEstudianteChange}
+												/>
+											</div>
+											{formData.esEncargadoDelEstudiante && (
+												<UploadComponent
+													id='encargado'
+													removeElement={events.onDocumentoEncargadoRemove}
+													files={formData.documentosEncargado}
+													addImage={events.onDocumentoEncargadoChange}
+												/>
+											)}
+										</Col>
+										<Col sm='12' md='12'>
+											<Label>
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>represen_legal_est',
+													'¿Es el representante legal del estudiante?'
+												)}
+											</Label>
+											<div>
+												<CustomInput
+													type='radio'
+													disabled={!formData.editable}
+													inline
+													label={t('general>si', 'Si')}
+													value='true'
+													checked={formData.esRepresentanteLegalEstudiante}
+													onClick={events.onEsRepresentanteLegalEstudianteChange}
+												/>
+												<CustomInput
+													type='radio'
+													disabled={!formData.editable}
+													inline
+													label={t('general>no', 'No')}
+													value='false'
+													checked={!formData.esRepresentanteLegalEstudiante}
+													onClick={events.onEsRepresentanteLegalEstudianteChange}
+												/>
+											</div>
+											{formData.esRepresentanteLegalEstudiante && (
+												<UploadComponent
+													id='representante'
+													removeElement={events.onDocumentoRepresentanteLegalRemove}
+													files={formData.documentosRepresentanteLegal}
+													addImage={events.onDocumentoRepresentanteLegalChange}
+												/>
+											)}
+										</Col>
+										{/*Todo es autorizado*/}
+										{/* 	<Col sm='12' md='12'>
+											<Label>
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>autorizado',
+													'Autorizado'
+												)}
+											</Label>
+											<div>
+												<CustomInput
+													type='radio'
+													disabled={!formData.editable}
+													inline
+													label={t('general>si', 'Si')}
+													value='true'
+													checked={formData.esAutorizado}
+													onClick={events.onEsAutorizadoChange}
+												/>
+												<CustomInput
+													type='radio'
+													disabled={!formData.editable}
+													inline
+													label={t('general>no', 'No')}
+													value='false'
+													checked={!formData.esAutorizado}
+													onClick={events.onEsAutorizadoChange}
+												/>
+											</div>
+										</Col> */}
+										{/*Todo es autorizado */}
+										<Col sm='12' md='12'>
+											<Label>
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>vive_est',
+													'Vive con estudiante'
+												)}
+											</Label>
+											<div>
+												<CustomInput
+													type='radio'
+													disabled={!formData.editable}
+													inline
+													label={t('general>si', 'Si')}
+													value='true'
+													checked={formData.viveConEstudiante}
+													onClick={events.onViveConEstudianteChange}
+												/>
+												<CustomInput
+													type='radio'
+													disabled={!formData.editable}
+													inline
+													label={t('general>no', 'No')}
+													value='false'
+													checked={!formData.viveConEstudiante}
+													onClick={events.onViveConEstudianteChange}
+												/>
+											</div>
+										</Col>
+										<Col sm='12' md='12'>
+											<Label>
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>depende_econ_est',
+													'¿Depende economicamente del estudiante?'
+												)}
+											</Label>
+											<div>
+												<CustomInput
+													type='radio'
+													disabled={!formData.editable}
+													inline
+													label={t('general>si', 'Si')}
+													value='true'
+													checked={formData.dependeEconomicamente}
+													onClick={events.onDependeEconomicamenteChange}
+												/>
+												<CustomInput
+													type='radio'
+													disabled={!formData.editable}
+													inline
+													label={t('general>no', 'No')}
+													value='false'
+													checked={!formData.dependeEconomicamente}
+													onClick={events.onDependeEconomicamenteChange}
+												/>
+											</div>
+										</Col>
+									</Row>
+								</CardBody>
+							</Card>
+							<Card className='mt-5'>
+								<CardBody>
+									<Row>
+										<Col sm='12' md='12'>
+											<IntlMessages id='menu.info-contacto' />
+										</Col>
+										<Col sm='12' md='12'>
+											<Label>
+												*
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>tel_prin',
+													'Teléfono principal'
+												)}
+											</Label>
+											<ReactInputMask
+												mask='9999-9999'
+												value={formData.telefonoPrincipal}
+												disabled={!formData.editable}
+												type='text'
+												name='telefono'
+												onChange={events.onTelefonoPrincipalChange}
+											>
+												{inputProps => <Input {...inputProps} disabled={!formData.editable} />}
+											</ReactInputMask>
+											<FormFeedback />
+										</Col>
+										<Col sm='12' md='12'>
+											<Label>
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>tel_alt',
+													'Teléfono alternativo'
+												)}
+											</Label>
+											<ReactInputMask
+												type='text'
+												mask='9999-9999'
+												name='telefonoSecundario'
+												value={formData.telefonoAlternativo}
+												disabled={!formData.editable}
+												onChange={events.onTelefonoAlternativoChange}
+											>
+												{inputProps => <Input {...inputProps} disabled={!formData.editable} />}
+											</ReactInputMask>
+											<FormFeedback />
+										</Col>
+										<Col sm='12' md='12'>
+											<Label>
+												*
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>correo',
+													'Correo electrónico'
+												)}
+											</Label>
+											<Input
+												type='email'
+												name='email'
+												value={formData.correo}
+												disabled={!formData.editable}
+												onChange={events.onCorreoChange}
+											/>
+											<FormFeedback />
+										</Col>
+
+										<Col sm='12' md='12'>
+											<Label>
+												{t('estudiantes>expediente>hogar>miembros_hogar>agregar>rol', 'Rol')}
+											</Label>
+											<Select
+												className='react-select'
+												classNamePrefix='react-select'
+												components={{
+													Input: CustomSelectInput
+												}}
+												options={catalogs.rolCatalog}
+												defaultValue={null}
+												isDisabled={!formData.editable}
+												value={formData.rol}
+												onChange={events.onRolChange}
+												placeholder={t(
+													'general>placeholder>seleccione_rol',
+													'Seleccione un rol'
+												)}
+											/>
+										</Col>
+									</Row>
+								</CardBody>
+							</Card>
+						</Colxx>
+						<div className='container-center my-5 mb-3'>
+							{!formData.editable ? (
+								<Button color='primary' onClick={events.toggleEditable}>
+									Editar
+								</Button>
+							) : (
+								<>
+									<Button outline color='primary' onClick={onRegresarEvent}>
+										Cancelar
+									</Button>
+									<Button
+										color='primary'
+										onClick={async () => {
+											setLoading(true)
+											await events.onGuardarClick()
+											setLoading(false)
+										}}
+									>
+										Guardar
+									</Button>
+								</>
+							)}
+							{/* <EditButton
                                 editable={editable}
                                 setEditable={setEditable}
                                 loading={loadingOnSave}
                             /> */}
-            </div>
-            {/* <Modal isOpen={openFilesModal}>
+						</div>
+						{/* <Modal isOpen={openFilesModal}>
                             <ModalHeader toggle={handleCloseFiles} />
                             <ModalBody>
                                 <div>
@@ -1133,222 +978,218 @@ const RefactorMiembrosHogar = (props) => {
                                 </div>
                             </ModalBody>
                         </Modal> */}
-          </Row>{' '}
-        </>
-      )}
-      <SimpleModal
-        openDialog={showError}
-        onClose={closeModalNoEncontrado}
-        onConfirm={() => {
-          closeModalNoEncontrado()
-          setRegistrarModal(true)
-        }}
-        txtBtn='Registrar'
-        title='Persona no encontrada'
-      >
-        <>
-          <p>
-            No se ha encontrado una persona con el número de
-            identificación ingresado
-          </p>
-          <p>Puede registrarlo haciendo click en "Registrar"</p>
-        </>
-      </SimpleModal>
-      <SimpleModal
-        openDialog={showRegisterModal}
-        onClose={() => setShowRegisterModal(false)}
-        actions={false}
-        title='Registrar persona'
-      >
-        <>
-          <WizardRegisterIdentityModal
-            onConfirm={(info) => {
-              debugger
-              console.log(info)
-            }}
-          />
-          {/* {loadingRegistrarModal && <Loader />} */}
-        </>
-      </SimpleModal>
-      <SimpleModal
-        openDialog={showDiscapacidadesModal}
-        onClose={() => setShowDiscapacidadesModal(false)}
-        title='Condición de discapacidad'
-        actions={false}
-      >
-        <Container className='modal-detalle-subsidio'>
-          <Row>
-            <Col xs={12}>
-              {catalogs.discapacidadesCatalog.map((item) => {
-                return (
-                  <Row
-                    style={{
-                      borderBottom: '1px solid',
-                      marginTop: '10px',
-                      paddingBottom: '10px'
-                    }}
-                    onClick={(_) =>
-                      events.onDiscapacidadesSeleccionadasClick(
-                        item
-                      )}
-                  >
-                    <Col
-                      xs={3}
-                      className='modal-detalle-subsidio-col'
-                    >
-                      <OnlyVert>
-                        <CustomInput
-                          type='checkbox'
-                          label={item.nombre}
-                          inline
-                          onClick={(_) =>
-                            events.onDiscapacidadesSeleccionadasClick(
-                              item
-                            )}
-                          checked={formData.condicionDiscapacidadSeleccionadas.find(
-                            (i) => i.id == item.id
-                          )}
-                        />
-                      </OnlyVert>
-                    </Col>
-                    <Col
-                      xs={9}
-                      className='modal-detalle-subsidio-col'
-                    >
-                      <OnlyVert>
-                        {item.descripcion
-                          ? item.descripcion
-                          : item.detalle
-                            ? item.detalle
-                            : 'Elemento sin detalle actualmente'}
-                      </OnlyVert>
-                    </Col>
-                  </Row>
-                )
-              })}
-            </Col>
-          </Row>
-          <Row>
-            <CenteredRow xs='12'>
-              <Button
-                onClick={() =>
-                  setShowDiscapacidadesModal(false)}
-                color='primary'
-                outline
-                className='mr-3'
-              >
-                Cancelar
-              </Button>
-              <Button
-                color='primary'
-                onClick={() => {
-                  events.onDiscapacidadesGuardarClick()
-                  setShowDiscapacidadesModal(false)
-                }}
-              >
-                Guardar
-              </Button>
-            </CenteredRow>
-          </Row>
-        </Container>
-      </SimpleModal>
-    </>
-  )
+					</Row>{' '}
+				</>
+			)}
+
+			<SimpleModal
+				openDialog={formData.showModalBusqueda}
+				onClose={closeModalNoEncontrado}
+				onConfirm={() => {
+					closeModalNoEncontrado()
+					setShowRegisterModal(true)
+				}}
+				txtBtn={t('boton>general>registrar', 'Registrar')}
+				title={t(
+					'estudiantes>registro_matricula>matricula_estudian>buscar>persona_no_encontrada',
+					'Persona no encontrada'
+				)}
+			>
+				<>
+					<p>
+						{t(
+							'estudiantes>registro_matricula>matricula_estudian>buscar>persona_no_encontrada>texto',
+							'No se ha encontrado una persona con el número de identificación ingresado'
+						)}
+					</p>
+					<p>
+						{t(
+							'estudiantes>registro_matricula>matricula_estudian>buscar>persona_no_encontrada>texto2',
+							'Puede registrarlo haciendo click en "Registrar"'
+						)}
+					</p>
+				</>
+			</SimpleModal>
+
+			<SimpleModal
+				openDialog={showRegisterModal}
+				onClose={() => closeRegistrarPersona()}
+				actions={false}
+				title={t(
+					'estudiantes>registro_matricula>matricula_estudian>buscar>registrar_persona',
+					'Registrar persona'
+				)}
+			>
+				<>
+					<WizardRegisterIdentityModal onConfirm={guardarNuevaPersona} />
+					{loadingRegistrarModal && <Loader />}
+				</>
+			</SimpleModal>
+			<SimpleModal
+				openDialog={showDiscapacidadesModal}
+				onClose={() => setShowDiscapacidadesModal(false)}
+				title='Condición de discapacidad'
+				actions={false}
+			>
+				<Container className='modal-detalle-subsidio'>
+					<Row>
+						<Col xs={12}>
+							{catalogs.discapacidadesCatalog.map(item => {
+								return (
+									<Row
+										style={{
+											borderBottom: '1px solid',
+											marginTop: '10px',
+											paddingBottom: '10px'
+										}}
+										onClick={_ => events.onDiscapacidadesSeleccionadasClick(item)}
+									>
+										<Col xs={3} className='modal-detalle-subsidio-col'>
+											<OnlyVert>
+												<CustomInput
+													type='checkbox'
+													label={item.nombre}
+													inline
+													onClick={_ => events.onDiscapacidadesSeleccionadasClick(item)}
+													checked={formData.condicionDiscapacidadSeleccionadas.find(
+														i => i.id == item.id
+													)}
+												/>
+											</OnlyVert>
+										</Col>
+										<Col xs={9} className='modal-detalle-subsidio-col'>
+											<OnlyVert>
+												{item.descripcion
+													? item.descripcion
+													: item.detalle
+													? item.detalle
+													: 'Elemento sin detalle actualmente'}
+											</OnlyVert>
+										</Col>
+									</Row>
+								)
+							})}
+						</Col>
+					</Row>
+					<Row>
+						<CenteredRow xs='12'>
+							<Button
+								onClick={() => setShowDiscapacidadesModal(false)}
+								color='primary'
+								outline
+								className='mr-3'
+							>
+								Cancelar
+							</Button>
+							<Button
+								color='primary'
+								onClick={() => {
+									events.onDiscapacidadesGuardarClick()
+									setShowDiscapacidadesModal(false)
+								}}
+							>
+								Guardar
+							</Button>
+						</CenteredRow>
+					</Row>
+				</Container>
+			</SimpleModal>
+		</>
+	)
 }
 
 export default RefactorMiembrosHogar
 
 const InputContainer = styled.div`
-    display: flex;
+	display: flex;
 `
 
 const Input = styled.input`
-    border-radius: 0.1rem;
-    outline: initial !important;
-    box-shadow: initial !important;
-    font-size: 0.8rem;
-    padding: 0.75rem;
-    line-height: 1;
-    border: 1px solid #d7d7d7;
-    background: ${(props) => (props.disabled == true ? '#e9ecef' : 'white')};
-    width: 100%;
-    color: #000;
+	border-radius: 0.1rem;
+	outline: initial !important;
+	box-shadow: initial !important;
+	font-size: 0.8rem;
+	padding: 0.75rem;
+	line-height: 1;
+	border: 1px solid #d7d7d7;
+	background: ${props => (props.disabled == true ? '#e9ecef' : 'white')};
+	width: 100%;
+	color: #000;
 `
 
 const StyledIconButton = styled(IconButton)`
-    cursor: ${(props) => (props.isDisabled ? 'auto' : 'pointer')} !important;
-    background: ${(props) => (props.isDisabled ? 'grey' : colors.primary)};
-    width: 150px;
-    height: 150px;
-    &:hover {
-        background-color: ${(props) => (props.isDisabled ? 'grey' : '#0c3253')};
-    }
+	cursor: ${props => (props.isDisabled ? 'auto' : 'pointer')} !important;
+	background: ${props => (props.isDisabled ? 'grey' : colors.primary)};
+	width: 150px;
+	height: 150px;
+	&:hover {
+		background-color: ${props => (props.isDisabled ? 'grey' : '#0c3253')};
+	}
 `
 
 const CenteredRow = styled(Col)`
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `
 
 const CenterDiv = styled.div`
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
 `
 
 const StyledMultiSelect = styled.div`
-    &[disabled] {
-        background-color: #eaeaea;
-    }
-    min-height: 8rem;
-    border: 1px solid #eaeaea;
-    padding: 0.25rem;
-    color: white;
-    word-break: break-all;
+	&[disabled] {
+		background-color: #eaeaea;
+	}
+	min-height: 8rem;
+	border: 1px solid #eaeaea;
+	padding: 0.25rem;
+	color: white;
+	word-break: break-all;
 `
 
 const OnlyVert = styled(CenterDiv)`
-    display: flex;
-    width: 100%;
-    justify-content: left !important;
-    align-items: center;
+	display: flex;
+	width: 100%;
+	justify-content: left !important;
+	align-items: center;
 `
 
 const ItemSpan = styled.span`
-    background-color: ${colors.primary};
-    margin-right: 8px;
-    margin-top: 0.25rem;
-    border-radius: 15px;
-    padding: 2px;
+	background-color: ${colors.primary};
+	margin-right: 8px;
+	margin-top: 0.25rem;
+	border-radius: 15px;
+	padding: 2px;
 `
 
 const ButtonsContainer = styled.div`
-    display: flex;
-    margin-top: 1rem;
-    justify-content: space-around;
-    align-items: center;
+	display: flex;
+	margin-top: 1rem;
+	justify-content: space-around;
+	align-items: center;
 `
 
 const FileLabel = styled.div`
-    background-color: white;
-    color: ${(props) => (props.disabled ? '#636363' : colors.primary)};
-    border: 1.5px solid
-        ${(props) => (props.disabled ? '#636363' : colors.primary)};
-    width: 7rem;
-    height: 2.7rem;
-    text-align: center;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    border-radius: 26px;
-    &:hover {
-        background-color: ${(props) => (props.disabled ? '' : colors.primary)};
-        color: ${(props) => (props.disabled ? '' : 'white')};
-    }
+	background-color: white;
+	color: ${props => (props.disabled ? '#636363' : colors.primary)};
+	border: 1.5px solid ${props => (props.disabled ? '#636363' : colors.primary)};
+	width: 7rem;
+	height: 2.7rem;
+	text-align: center;
+	justify-content: center;
+	align-items: center;
+	display: flex;
+	border-radius: 26px;
+	&:hover {
+		background-color: ${props => (props.disabled ? '' : colors.primary)};
+		color: ${props => (props.disabled ? '' : 'white')};
+	}
 `
 
 const DownloadIconContainer = styled.span`
-    font-size: 35px;
+	font-size: 35px;
 `
