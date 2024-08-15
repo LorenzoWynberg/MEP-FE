@@ -297,7 +297,7 @@ const General = props => {
 				<>
 					<br />
 					<Row>
-						<Colxx xxs='12' lg='12' className='mt-5'>
+						<Colxx>
 							<IdForm
 								{...props}
 								identification={state.identification}
@@ -313,7 +313,7 @@ const General = props => {
 						</Colxx>
 					</Row>
 					<Row>
-						<Colxx xxs='12' lg='12' className='mt-5'>
+						<Colxx xxs='12' lg='6' className='mt-5'>
 							<PersonalDataForm
 								personalData={identidadData}
 								disabled={
@@ -329,10 +329,7 @@ const General = props => {
 								label
 							/>
 						</Colxx>
-					</Row>
-
-					<Row>
-						<Colxx xxs='12' lg='12' className='mt-5'>
+						<Colxx xxs='12' lg='6' className='mt-5 '>
 							{snackBar(snackbarContent.variant, snackbarContent.msg)}
 							<Form onSubmit={handleSubmit(submitData)}>
 								<DataForm
