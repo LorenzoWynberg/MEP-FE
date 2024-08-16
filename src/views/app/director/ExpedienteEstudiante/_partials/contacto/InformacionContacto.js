@@ -23,6 +23,8 @@ import ReactInputMask from 'react-input-mask'
 import RequiredLabel from '../../../../../../components/common/RequeredLabel'
 import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import { useTranslation } from 'react-i18next'
+import axios from 'axios'
+import { envVariables } from '../../../../../../constants/enviroment'
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1
@@ -41,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
 
 const InformacionContacto = (props) => {
   const { t } = useTranslation()
+  console.log('props.informacionContacto', props.expedienteEstudiantil.currentStudent.idEstudiante)
 
   const classes = useStyles()
   const [snakbar, handleClick, handleClose] = useNotification()
@@ -54,78 +57,34 @@ const InformacionContacto = (props) => {
   const [errorMessages, setErrorMessages] = useState(
     props.informacionContacto.errorMessages
   )
+  const [redesTemp, setRedesTemp] = useState(
+    {
+      "telefono": null,
+      "telefonoSecundario": null,
+      "email": null,
+      "emailSecundario": null,
+      "facebook": null,
+      "instagram": null,
+      "whatsapp": null,
+      "twitter": null,
+      "tiktok": null
 
-  const updateRedes = useCallback((data, action) => {
-    const newRedes = redes.map((item) => {
-      item.text =
-				item.id === data.id ? (action ? data.textInput : '') : item.text
-      return item
     })
-    setRedes(newRedes)
-  })
 
-  const socialNetworks = [
-    {
-      id: 1,
-      name: 'facebook',
-      linkBase: 'https://facebook.com/',
-      text: ''
-    },
-    {
-      id: 2,
-      name: 'instagram',
-      linkBase: 'https://instagram.com/',
-      text: ''
-    },
-    {
-      id: 3,
-      name: 'whatsapp',
-      linkBase: 'https://whatsapp.com/',
-      text: ''
-    },
-    {
-      id: 4,
-      name: 'twitter',
-      linkBase: 'https://twitter.com/',
-      text: ''
-    }
-  ]
 
-  const getSocial = (social) => {
-    return (
-      <Fab disabled aria-label='like' className='social-button'>
-        {
-					{
-					  1: (
-  <FacebookIcon
-    fontSize='large'
-    className='social-icon'
-  />
-					  ),
-					  2: (
-  <InstagramIcon
-    fontSize='large'
-    className='social-icon'
-  />
-					  ),
-					  3: (
-  <WhatsAppIcon
-    fontSize='large'
-    className='social-icon'
-  />
-					  ),
-					  4: (
-  <TwitterIcon
-    fontSize='large'
-    className='social-icon'
-  />
-					  )
-					}[social.id]
-				}
-      </Fab>
-    )
-  }
-  const [redes, setRedes] = useState(socialNetworks)
+  const [redes, setRedes] = useState(
+    {
+      "telefono": null,
+      "telefonoSecundario": null,
+      "email": null,
+      "emailSecundario": null,
+      "facebook": null,
+      "instagram": null,
+      "whatsapp": null,
+      "twitter": null,
+      "tiktok": null
+
+    })
 
   useEffect(() => {
     const fetchData = async () => {
@@ -143,32 +102,6 @@ const InformacionContacto = (props) => {
   useEffect(() => {
     setFormState(props.informacionContacto.contactInformation)
 
-    const items = [
-      {
-        id: 1,
-        textInput:
-					props.informacionContacto.contactInformation.facebook || ''
-      },
-      {
-        id: 2,
-        textInput:
-					props.informacionContacto.contactInformation.instagram || ''
-      },
-      {
-        id: 3,
-        textInput:
-					props.informacionContacto.contactInformation.whatsapp || ''
-      },
-      {
-        id: 4,
-        textInput:
-					props.informacionContacto.contactInformation.twitter || ''
-      }
-    ]
-
-    items.forEach((element) => {
-      updateRedes(element, true)
-    })
 
     setErrorFields(props.informacionContacto.errorFields)
     setErrorMessages(props.informacionContacto.errorMessages)
@@ -189,19 +122,11 @@ const InformacionContacto = (props) => {
     e.preventDefault()
     const payload = {
       ...formState,
-      facebook:
-				redes.find((x) => x.id == 1).textInput ||
-				redes.find((x) => x.id == 1).text,
-      instagram:
-				redes.find((x) => x.id == 2).textInput ||
-				redes.find((x) => x.id == 2).text,
-      whatsapp:
-				redes.find((x) => x.id == 3).textInput ||
-				redes.find((x) => x.id == 3).text,
-      twitter:
-				redes.find((x) => x.id == 4).textInput ||
-				redes.find((x) => x.id == 4).text
     }
+    const redesSend = { ...redesTemp, telefono: formState.telefono }
+    axios.post(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Contacto/${props.expedienteEstudiantil.currentStudent.idEstudiante}`, redesSend).then(() => {
+      setRedes(redesSend)
+    })
 
     const rest = await props.updateInformationContactFromUser(
       props.expedienteEstudiantil.currentStudent.idEstudiante,
@@ -221,24 +146,6 @@ const InformacionContacto = (props) => {
     }
   }
 
-  const handleAdd = (data) => {
-    if (!data.text && !data.textInput) {
-      return
-    }
-
-    if (
-      data.text.trim().lenght === 0 &&
-			data.textInput.trim().lenght === 0
-    ) {
-      return
-    }
-
-    updateRedes(data, true)
-  }
-
-  const handleDelete = (data) => {
-    updateRedes(data, false)
-  }
 
   const handleInputChange = ({ target }) => {
     if (editable) {
@@ -246,12 +153,20 @@ const InformacionContacto = (props) => {
     }
   }
 
+  const setRedesValues = (red, valor) => {
+    setRedesTemp({ ...redes, [red]: valor })
+  }
+  useEffect(() => {
+    axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Contacto/${props.expedienteEstudiantil.currentStudent.idEstudiante}`).then(r => {
+      setRedes(r.data)
+    })
+  }, [])
   return (
     <Grid container className={classes.root} spacing={2}>
       {loading
         ? (
           <Loader />
-          )
+        )
         : (
           <>
             {snakbar(snackbarVariant, snackbarMsg)}
@@ -263,101 +178,101 @@ const InformacionContacto = (props) => {
                   </Grid>
                   <Grid item xs={12} className={classes.control}>
                     <FormGroup>
-                    <Label>
-                    * {t('estudiantes>expediente>contacto>info_cont>tel_prin', 'Teléfono principal')}
-                  </Label>
-                    <ReactInputMask
-                    mask='9999-9999'
-                    type='text'
-                    name='telefono'
-                    id='telefono'
-                    placeholder='8888-8888'
-                    value={formState.telefono}
-                    disabled={!editable}
-                    onChange={handleInputChange}
-                    invalid={errorFields.Telefono}
-                  >
-                    {(inputProps) => (
-                  <Input
-                    {...inputProps}
-                    disabled={!editable}
-                  />
-                )}
-                  </ReactInputMask>
-                    <FormFeedback>
-                    {errorMessages.Telefono}
-                  </FormFeedback>
-                  </FormGroup>
+                      <Label>
+                        * {t('estudiantes>expediente>contacto>info_cont>tel_prin', 'Teléfono principal')}
+                      </Label>
+                      <ReactInputMask
+                        mask='9999-9999'
+                        type='text'
+                        name='telefono'
+                        id='telefono'
+                        placeholder='8888-8888'
+                        value={redes.telefono}
+                        disabled={!editable}
+                        onChange={e=>setRedesValues('telefono',e.target.value)}
+                        invalid={errorFields.Telefono}
+                      >
+                        {(inputProps) => (
+                          <Input
+                            {...inputProps}
+                            disabled={!editable}
+                          />
+                        )}
+                      </ReactInputMask>
+                      <FormFeedback>
+                        {errorMessages.Telefono}
+                      </FormFeedback>
+                    </FormGroup>
 
                     <FormGroup>
-                    <Label>
-                    {t('estudiantes>expediente>contacto>info_cont>tel_alter', 'Teléfono alternativo')}
-                  </Label>
-                    <ReactInputMask
-                    mask='9999-9999'
-                    type='text'
-                    name='telefonoSecundario'
-                    id='telefonoSecundario'
-                    placeholder='8888-8888'
-                    value={formState.telefonoSecundario}
-                    disabled={!editable}
-                    onChange={handleInputChange}
-                    invalid={
-												errorFields.TelefonoSecundario
-											}
-                  >
-                    {(inputProps) => (
-                  <Input
-                    {...inputProps}
-                    disabled={!editable}
-                  />
-                )}
-                  </ReactInputMask>
-                    <FormFeedback>
-                    {
-												errorMessages.TelefonoSecundario
-											}
-                  </FormFeedback>
-                  </FormGroup>
+                      <Label>
+                        {t('estudiantes>expediente>contacto>info_cont>tel_alter', 'Teléfono alternativo')}
+                      </Label>
+                      <ReactInputMask
+                        mask='9999-9999'
+                        type='text'
+                        name='telefonoSecundario'
+                        id='telefonoSecundario'
+                        placeholder='8888-8888'
+                        value={formState.telefonoSecundario}
+                        disabled={!editable}
+                        onChange={handleInputChange}
+                        invalid={
+                          errorFields.TelefonoSecundario
+                        }
+                      >
+                        {(inputProps) => (
+                          <Input
+                            {...inputProps}
+                            disabled={!editable}
+                          />
+                        )}
+                      </ReactInputMask>
+                      <FormFeedback>
+                        {
+                          errorMessages.TelefonoSecundario
+                        }
+                      </FormFeedback>
+                    </FormGroup>
 
                     <FormGroup>
-                    <Label>
-                    *{t('estudiantes>expediente>contacto>info_cont>correo_per', 'Correo electrónico personal')}
-                  </Label>
-                    <Input
-                    type='email'
-                    name='email'
-                    id='email'
-                    placeholder='correo@gmail.com'
-                    onChange={handleInputChange}
-                    disabled={!editable}
-                    value={formState.email}
-                    invalid={errorFields.Email}
-                  />
-                    <FormFeedback>
-                    {errorMessages.Email}
-                  </FormFeedback>
-                  </FormGroup>
+                      <Label>
+                        *{t('estudiantes>expediente>contacto>info_cont>correo_per', 'Correo electrónico personal')}
+                      </Label>
+                      <Input
+                        type='email'
+                        name='email'
+                        id='email'
+                        placeholder='correo@gmail.com'
+                        onChange={handleInputChange}
+                        disabled={!editable}
+                        value={formState.email}
+                        invalid={errorFields.Email}
+                      />
+                      <FormFeedback>
+                        {errorMessages.Email}
+                      </FormFeedback>
+                    </FormGroup>
                     <FormGroup>
-                    <Label for='emailSecundario'>
-                    {t('estudiantes>expediente>contacto>info_cont>correo_inst', 'Correo electrónico institucional')}
-                  </Label>
-                    <Input
-                    type='email'
-                    name='emailSecundario'
-                    id='emailSecundario'
-                    placeholder='correo@gmail.com'
-                    onChange={handleInputChange}
-                    disabled={!editable}
-                    value={formState.emailSecundario}
-                    invalid={
-												errorFields.EmailSecundario
-											}
-                  />
-                    <FormFeedback>
-                    {errorMessages.EmailSecundario}
-                  </FormFeedback>
-                  </FormGroup>
+                      <Label for='emailSecundario'>
+                        {t('estudiantes>expediente>contacto>info_cont>correo_inst', 'Correo electrónico institucional')}
+                      </Label>
+                      <Input
+                        type='email'
+                        name='emailSecundario'
+                        id='emailSecundario'
+                        placeholder='correo@gmail.com'
+                        onChange={handleInputChange}
+                        disabled={!editable}
+                        value={formState.emailSecundario}
+                        invalid={
+                          errorFields.EmailSecundario
+                        }
+                      />
+                      <FormFeedback>
+                        {errorMessages.EmailSecundario}
+                      </FormFeedback>
+                    </FormGroup>
                   </Grid>
                 </Grid>
               </Paper>
@@ -371,11 +286,11 @@ const InformacionContacto = (props) => {
                   </Grid>
                   <Grid item xs={12} className={classes.control}>
                     <Redes
-                    hasEditable={editable}
-                    socialNetworks={redes}
-                    handleAdd={handleAdd}
-                    handleDelete={handleDelete}
-                  />
+                      hasEditable={editable}
+                      setRedesParent={setRedesValues}
+                      redes={redes}
+                      redesTemp={redesTemp}
+                    />
                   </Grid>
                 </Grid>
               </Paper>
@@ -394,56 +309,57 @@ const InformacionContacto = (props) => {
                 className={classes.control}
               >
                 {props.informacionContacto.contactInformation
-							  .loading
+                  .loading
                   ? (
                     <>
-                    <Loader formLoader />
-                  </>
-							    )
+                      <Loader formLoader />
+                    </>
+                  )
                   : (
                     <>
-                    {editable
-                    ? (
-                  <>
-                    <Button
-                    color='secundary'
-                    className='btn-shadow m-0'
-                    type='button'
-                    onClick={() => {
-												  setEditable(false)
-												  props.cleanFormErrors()
-                  }}
-                  >
-                    {t('general>cancelar', 'Cancelar')}
-                  </Button>
-                    <Button
-                    color='primary'
-                    className='btn-shadow m-0'
-                    type='button'
-                    onClick={onSubmit}
-                  >
-                    {t('general>guardar', 'Guardar')}
-                  </Button>
-                  </>
-                      )
-                    : (
-                  <Button
-                    color='primary'
-                    className='btn-shadow m-0'
-                    type='button'
-                    onClick={() => {
-											  setEditable(true)
-                  }}
-                  >
-                    {t('general>editar', 'Editar')}
-                  </Button>
-                      )}
-                  </>
-							    )}
+                      {editable
+                        ? (
+                          <>
+                            <Button
+                              color='secundary'
+                              className='btn-shadow m-0'
+                              type='button'
+                              onClick={() => {
+                                setEditable(false)
+                                setRedesTemp(redes)
+                                props.cleanFormErrors()
+                              }}
+                            >
+                              {t('general>cancelar', 'Cancelar')}
+                            </Button>
+                            <Button
+                              color='primary'
+                              className='btn-shadow m-0'
+                              type='button'
+                              onClick={onSubmit}
+                            >
+                              {t('general>guardar', 'Guardar')}
+                            </Button>
+                          </>
+                        )
+                        : (
+                          <Button
+                            color='primary'
+                            className='btn-shadow m-0'
+                            type='button'
+                            onClick={() => {
+                              setEditable(true)
+                            }}
+                          >
+                            {t('general>editar', 'Editar')}
+                          </Button>
+                        )}
+                    </>
+                  )}
               </Grid>
             </Grid>
           </>
-          )}
+        )}
     </Grid>
   )
 }
