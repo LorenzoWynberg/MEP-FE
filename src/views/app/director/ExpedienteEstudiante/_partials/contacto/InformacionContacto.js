@@ -154,11 +154,12 @@ const InformacionContacto = (props) => {
   }
 
   const setRedesValues = (red, valor) => {
-    setRedesTemp({ ...redes, [red]: valor })
+    setRedesTemp({ ...redesTemp, [red]: valor })
   }
   useEffect(() => {
     axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Contacto/${props.expedienteEstudiantil.currentStudent.idEstudiante}`).then(r => {
       setRedes(r.data)
+      setRedesTemp(r.data)
     })
   }, [])
   return (
