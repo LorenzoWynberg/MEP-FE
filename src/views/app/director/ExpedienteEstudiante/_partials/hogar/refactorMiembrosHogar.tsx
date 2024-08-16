@@ -163,12 +163,12 @@ const RefactorMiembrosHogar = props => {
 				accessor: 'segundoApellido',
 				label: ''
 			},
-			{
+			/* {
 				Header: t('estudiantes>expediente>hogar>miembros_hogar>col_rol', 'Rol'),
 				column: 'nombreRol',
 				accessor: 'nombreRol',
 				label: ''
-			},
+			}, */
 			{
 				Header: t('estudiantes>expediente>hogar>miembros_hogar>col_represen_legal', 'Representante legal'),
 				column: 'encargado',
@@ -726,36 +726,7 @@ const RefactorMiembrosHogar = props => {
 												/>
 											)}
 										</Col>
-										{/*Todo es autorizado*/}
-										{/* 	<Col sm='12' md='12'>
-											<Label>
-												{t(
-													'estudiantes>expediente>hogar>miembros_hogar>agregar>autorizado',
-													'Autorizado'
-												)}
-											</Label>
-											<div>
-												<CustomInput
-													type='radio'
-													disabled={!formData.editable}
-													inline
-													label={t('general>si', 'Si')}
-													value='true'
-													checked={formData.esAutorizado}
-													onClick={events.onEsAutorizadoChange}
-												/>
-												<CustomInput
-													type='radio'
-													disabled={!formData.editable}
-													inline
-													label={t('general>no', 'No')}
-													value='false'
-													checked={!formData.esAutorizado}
-													onClick={events.onEsAutorizadoChange}
-												/>
-											</div>
-										</Col> */}
-										{/*Todo es autorizado */}
+
 										<Col sm='12' md='12'>
 											<Label>
 												{t(
@@ -876,28 +847,6 @@ const RefactorMiembrosHogar = props => {
 												onChange={events.onCorreoChange}
 											/>
 											<FormFeedback />
-										</Col>
-
-										<Col sm='12' md='12'>
-											<Label>
-												{t('estudiantes>expediente>hogar>miembros_hogar>agregar>rol', 'Rol')}
-											</Label>
-											<Select
-												className='react-select'
-												classNamePrefix='react-select'
-												components={{
-													Input: CustomSelectInput
-												}}
-												options={catalogs.rolCatalog}
-												defaultValue={null}
-												isDisabled={!formData.editable}
-												value={formData.rol}
-												onChange={events.onRolChange}
-												placeholder={t(
-													'general>placeholder>seleccione_rol',
-													'Seleccione un rol'
-												)}
-											/>
 										</Col>
 									</Row>
 								</CardBody>

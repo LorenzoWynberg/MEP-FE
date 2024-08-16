@@ -40,14 +40,14 @@ enum TYPES {
 	SET_TELEFONO_PRINCIPAL,
 	SET_TELEFONO_ALTERNATIVO,
 	SET_EMAIL,
-	SET_ROL,
+	//SET_ROL,
 	SET_TIPOIDENTIFICACION_CATALOG,
 	SET_NACIONALIDAD_CATALOG,
 	SET_SEXO_CATALOG,
 	SET_ESCOLARIDAD_CATALOG,
 	SET_CONDICIONLABORAL_CATALOG,
 	SET_RELACIONCONESTUDIANTE_CATALOG,
-	SET_ROL_CATALOG,
+	//SET_ROL_CATALOG,
 	SET_DISCAPACIDADES_CATALOG,
 	SET_ALL_CATALOGS,
 	TOGGLE_LOADING,
@@ -111,7 +111,7 @@ const initialState = {
 	telefonoPrincipal: '',
 	telefonoAlternativo: '',
 	correo: '',
-	rol: null,
+	//rol: null,
 	tipoIdentificacionCatalog: [],
 	nacionalidadCatalog: [],
 	sexoCatalog: [],
@@ -120,7 +120,7 @@ const initialState = {
 	relacionConEstudianteCatalog: [],
 	identidadGeneroCatalog: [],
 	discapacidadesCatalog: [],
-	rolCatalog: [],
+	//rolCatalog: [],
 	loading: false,
 	editable: false,
 	showForm: false,
@@ -177,8 +177,8 @@ const reducer = (state = initialState, action): typeof initialState => {
 			return { ...state, telefonoAlternativo: payload }
 		case TYPES.SET_EMAIL:
 			return { ...state, correo: payload }
-		case TYPES.SET_ROL:
-			return { ...state, rol: payload }
+		/* case TYPES.SET_ROL:
+			return { ...state, rol: payload } */
 		case TYPES.SET_TIPOIDENTIFICACION_CATALOG:
 			return { ...state, tipoIdentificacionCatalog: payload }
 		case TYPES.SET_NACIONALIDAD_CATALOG:
@@ -191,8 +191,8 @@ const reducer = (state = initialState, action): typeof initialState => {
 			return { ...state, condicionLaboralCatalog: payload }
 		case TYPES.SET_RELACIONCONESTUDIANTE_CATALOG:
 			return { ...state, relacionConEstudianteCatalog: payload }
-		case TYPES.SET_ROL_CATALOG:
-			return { ...state, rolCatalog: payload }
+		/* case TYPES.SET_ROL_CATALOG:
+			return { ...state, rolCatalog: payload } */
 		case TYPES.SET_DISCAPACIDADES_CATALOG:
 			return { ...state, condicionDiscapacidadCatalog: payload }
 		case TYPES.SET_ALL_CATALOGS:
@@ -204,7 +204,7 @@ const reducer = (state = initialState, action): typeof initialState => {
 				escolaridadCatalog: payload.escolaridadCatalog,
 				condicionLaboralCatalog: payload.condicionLaboralCatalog,
 				relacionConEstudianteCatalog: payload.relacionConEstudianteCatalog,
-				rolCatalog: payload.rolCatalog,
+				//rolCatalog: payload.rolCatalog,
 				identidadGeneroCatalog: payload.identidadGeneroCatalog,
 				discapacidadesCatalog: payload.discapacidadesCatalog
 			}
@@ -300,8 +300,8 @@ const reducer = (state = initialState, action): typeof initialState => {
 				sexo: null,
 				condicionDiscapacidad: [],
 				escolaridad: null,
-				condicionLaboral: null,
-				rol: null
+				condicionLaboral: null
+				//rol: null
 			}
 		}
 		case TYPES.TOGGLE_NUEVO: {
@@ -376,7 +376,7 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			condicionLaboral: store.selects.condicionLaboral,
 			identidadGenero: store.selects.genderTypes,
 			discapacidades: store.selects.discapacidades,
-			roles: store.roles.roles,
+			//roles: store.roles.roles,
 			estudianteId: store.expedienteEstudiantil.currentStudent.idEstudiante
 		}
 	})
@@ -406,7 +406,7 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			relacionConEstudianteCatalog: reduxState.relacionEstudiante
 				? relacionConEstudiante.map(mapeador)
 				: reduxState.relacionEstudiante.map(mapeador),
-			rolCatalog: reduxState.roles.map(mapeador).filter(i => i.sB_TipoRolId === 2),
+			//rolCatalog: reduxState.roles.map(mapeador).filter(i => i.sB_TipoRolId === 2),
 			condicionDiscapacidadCatalog: reduxState.discapacidades,
 			identidadGeneroCatalog: reduxState.identidadGenero.map(mapeador),
 			discapacidadesCatalog: reduxState.discapacidades
@@ -429,7 +429,7 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		escolaridadCatalog,
 		condicionLaboralCatalog,
 		relacionConEstudianteCatalog,
-		rolCatalog,
+		//rolCatalog,
 		identidadGeneroCatalog,
 		discapacidadesCatalog,
 		condicionDiscapacidadSeleccionadas,
@@ -456,7 +456,7 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		telefonoPrincipal,
 		telefonoAlternativo,
 		correo,
-		rol,
+		//rol,
 		editable,
 		documentosEncargado,
 		documentosRepresentanteLegal,
@@ -677,9 +677,10 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 	const onCorreoChange = e => {
 		dispatch({ type: TYPES.SET_EMAIL, payload: e.target.value })
 	}
-	const onRolChange = e => {
+
+	/* const onRolChange = e => {
 		dispatch({ type: TYPES.SET_ROL, payload: e })
-	}
+	} */
 	const onDocumentoEncargadoChange = e => {
 		if (!e.target.files) return
 		const obj: FILE_TYPE = {
@@ -745,7 +746,6 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		formBody.append('condicionLaboralId', state.condicionLaboral?.id)
 		formBody.append('escolaridadId', state.escolaridad?.id)
 		formBody.append('parentescoId', state.relacionConEstudiante?.id)
-		formBody.append('roleId', state.rol?.id)
 		state.condicionDiscapacidad.forEach(i => {
 			formBody.append('discapacidadesId', i.id)
 		})
@@ -887,7 +887,7 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 
 			return catalog.find(i => i.value == datoAdicional?.elementoId)
 		}
-		const getRoleUsuario = (usuarioRoles, catalogoRoles) => {
+		/* const getRoleUsuario = (usuarioRoles, catalogoRoles) => {
 			if (!usuarioRoles) return
 
 			const rolesUsuario = JSON.parse(usuarioRoles)
@@ -895,7 +895,7 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 
 			return catalogoRoles.find(i => rolesUsuario.find(j => i.id == j.rolId))
 		}
-
+ */
 		const newState: typeof initialState = {
 			identidadId: identidad.identidad.id,
 			identificacion: identidad.identidad.identificacion,
@@ -925,8 +925,8 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			escolaridad: objDatoIdentidad(TIPO_CATALOGO_DATOS_ADICIONALES.Escolaridad, identidad.datos),
 			condicionLaboral: objDatoIdentidad(TIPO_CATALOGO_DATOS_ADICIONALES.CondicionLaboral, identidad.datos),
 			condicionDiscapacidad: discapacidades,
-			miembroId: miembro.id,
-			rol: getRoleUsuario(usuario.roles, catalogos.rolCatalog)
+			miembroId: miembro.id
+			//rol: getRoleUsuario(usuario.roles, catalogos.rolCatalog)
 		}
 		dispatch({ type: TYPES.SET_FULL_STATE, payload: newState })
 	}
@@ -970,7 +970,7 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			telefonoPrincipal,
 			telefonoAlternativo,
 			correo,
-			rol,
+			//rol,
 			editable,
 			condicionDiscapacidadSeleccionadas,
 			documentosEncargado: documentosEncargado.filter(i => i.action != 'remove'),
@@ -988,7 +988,7 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			escolaridadCatalog,
 			condicionLaboralCatalog,
 			relacionConEstudianteCatalog,
-			rolCatalog,
+			//rolCatalog,
 			identidadGeneroCatalog,
 			discapacidadesCatalog
 		},
@@ -1016,7 +1016,7 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			onTelefonoPrincipalChange,
 			onTelefonoAlternativoChange,
 			onCorreoChange,
-			onRolChange,
+			//onRolChange,
 			toggleEditable,
 			onGuardarClick,
 			onUpdateClick,
