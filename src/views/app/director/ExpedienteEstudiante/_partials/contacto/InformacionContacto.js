@@ -121,10 +121,9 @@ const InformacionContacto = (props) => {
   const onSubmit = async (e) => {
     e.preventDefault()
     const payload = {
-      ...formState, ...redesTemp
+      ...formState, ...redesTemp, telefono:formState.telefono
     }
-    const redesSend = { ...redesTemp }
- 
+    const redesSend = { ...redesTemp } 
 
     const rest = await props.updateInformationContactFromUser(
       props.expedienteEstudiantil.currentStudent.idEstudiante,
@@ -147,7 +146,7 @@ const InformacionContacto = (props) => {
   }
 
 
-  const handleInputChange = ({ target }) => {
+  const handleInputChange = ({ target }) => { 
     if (editable) {
       setFormState({ ...formState, [target.name]: target.value })
     }
@@ -188,9 +187,9 @@ const InformacionContacto = (props) => {
                         name='telefono'
                         id='telefono'
                         placeholder='8888-8888'
-                        value={redes.telefono}
+                        value={formState.telefono}
                         disabled={!editable}
-                        onChange={e => setRedesValues('telefono', e.target.value)}
+                        onChange={handleInputChange}
                         invalid={errorFields.Telefono}
                       >
                         {(inputProps) => (
