@@ -16,8 +16,6 @@ import { withRouter } from 'react-router-dom'
 import { catalogsEnumObj } from '../../../../utils/catalogsEnum'
 import { mapOption, parseOptions } from '../../../../utils/mapeoCatalogos'
 import { EditButton } from '../../../../components/EditButton'
-import HeaderTab from 'Components/Tab/Header'
-import ContentTab from 'Components/Tab/Content'
 import Loader from '../../../../components/Loader'
 import { validateSelectsData } from '../../../../utils/ValidateSelectsData'
 import { useForm } from 'react-hook-form'
@@ -32,21 +30,23 @@ const listSexo = [
 
 const General = props => {
 	const { t } = useTranslation()
-
 	const { authHandler } = props
-	const imageInitialState = { preview: '', raw: '', edited: false }
 	const [identidadData, setIdentidadData] = useState({})
+	const imageInitialState = { preview: '', raw: '', edited: false }
 	const [disableMigrationStatus, setDisableMigrationStatus] = useState(false)
+	const submitData = data => authHandler('modificar', sendData, toggleSnackbar)
 	const [loading, setLoading] = useState(true)
 	const [birthDate, setBirthDate] = useState('')
 	const [editable, setEditable] = useState(false)
 	const [image, setImage] = useState(imageInitialState)
+	const [snackBar, handleClick] = useNotification()
+	const { handleSubmit } = useForm()
+
 	const [snackbarContent, setSnacbarContent] = useState({
 		msg: 'welcome',
 		variant: 'info'
 	})
-	const [snackBar, handleClick] = useNotification()
-	const { handleSubmit } = useForm()
+
 	const toggleSnackbar = (variant, msg) => {
 		setSnacbarContent({
 			variant,
@@ -54,6 +54,7 @@ const General = props => {
 		})
 		handleClick()
 	}
+
 	const actions = useActions({
 		sendStudentData,
 		getCatalogs,
@@ -91,6 +92,7 @@ const General = props => {
 		}
 		loadData()
 	}, [])
+
 	useEffect(() => {
 		const catalogsNamesArray = [
 			catalogsEnumObj.IDENTIFICATION.name,
@@ -191,6 +193,7 @@ const General = props => {
 		props.selects,
 		editable
 	])
+
 	useEffect(() => {
 		const reg = /([0-9]{9})/g
 		let _item = {}
@@ -282,9 +285,6 @@ const General = props => {
 		setIdentidadData(_data)
 	}
 
-	const submitData = data => authHandler('modificar', sendData, toggleSnackbar)
-	const [activeTab, setActiveTab] = useState(0)
-
 	return (
 		<div>
 			<br />
@@ -312,26 +312,27 @@ const General = props => {
 							/>
 						</Colxx>
 					</Row>
-					<Row>
-						<Colxx xxs='12' lg='6' className='mt-5'>
-							<PersonalDataForm
-								personalData={identidadData}
-								disabled={
-									(state.identification.loaded &&
-										identidadData.idType &&
-										identidadData.idType.codigo === '01') ||
-									!editable
-								}
-								identification={state.identification}
-								handleChange={handleChange}
-								listSexo={listSexo}
-								selects={props.selects}
-								label
-							/>
-						</Colxx>
-						<Colxx xxs='12' lg='6' className='mt-5 '>
-							{snackBar(snackbarContent.variant, snackbarContent.msg)}
-							<Form onSubmit={handleSubmit(submitData)}>
+					{snackBar(snackbarContent.variant, snackbarContent.msg)}
+					<Form onSubmit={handleSubmit(submitData)}>
+						<Row>
+							<Colxx lg='6' className='mt-4'>
+								<PersonalDataForm
+									personalData={identidadData}
+									disabled={
+										(state.identification.loaded &&
+											identidadData.idType &&
+											identidadData.idType.codigo === '01') ||
+										!editable
+									}
+									identification={state.identification}
+									handleChange={handleChange}
+									listSexo={listSexo}
+									selects={props.selects}
+									label
+								/>
+							</Colxx>
+
+							<Colxx lg='6' className='mt-4'>
 								<DataForm
 									selects={props.selects}
 									identification={state.identification}
@@ -346,19 +347,19 @@ const General = props => {
 									editable={editable}
 									disableMigrationStatus={disableMigrationStatus}
 								/>
-								<div className='container-center my-5 mb-3'>
-									<EditButton
-										loading={state.identification.loading}
-										editable={editable}
-										setEditable={value => {
-											authHandler('modificar', () => setEditable(value), toggleSnackbar)
-										}}
-										sendData={sendData}
-									/>
-								</div>
-							</Form>
-						</Colxx>
-					</Row>
+							</Colxx>
+						</Row>
+						<div className='container-center my-3'>
+							<EditButton
+								loading={state.identification.loading}
+								editable={editable}
+								setEditable={value => {
+									authHandler('modificar', () => setEditable(value), toggleSnackbar)
+								}}
+								sendData={sendData}
+							/>
+						</div>
+					</Form>
 				</>
 			)}
 		</div>
