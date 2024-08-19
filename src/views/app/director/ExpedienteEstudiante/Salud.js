@@ -36,7 +36,8 @@ const Salud = props => {
 		}
 	})
 	const identificacion = state.identification.data.identificacion
-	const nacional = state.identification.data.datos[2].elementoId == 1
+	const nacionalItem = state.identification.data.datos.find(item => item.catalogoId === 1 && item.elementoId === 1)
+	const nacional = nacionalItem !== undefined
 
 	const {
 		salud,
@@ -62,6 +63,7 @@ const Salud = props => {
 	const [snackBar, handleClick] = useNotification()
 
 	useEffect(() => {
+		console.log('initialProps', state)
 		const fetchItems = async () => {
 			const response = await getSaludItems(identidadId)
 		}
@@ -75,7 +77,6 @@ const Salud = props => {
 
 	const clearSaludItem = () => {
 		setSaludItem({})
-		console.log('LORE STATE', state)
 	}
 
 	const columns = useMemo(
@@ -204,7 +205,7 @@ const Salud = props => {
 
 		setSaludItem({
 			...saludItemChanged,
-			seguroSocial: saludItemChanged.seguroSocial ? saludItemChanged.seguroSocial : identificacion,
+			seguroSocial: !nacional ? saludItemChanged.seguroSocial : identificacion,
 			imc: getIMC(saludItemChanged.peso, saludItemChanged.talla)
 		})
 	}

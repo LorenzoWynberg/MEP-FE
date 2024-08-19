@@ -36,11 +36,7 @@ const SaludForm = props => {
 											<Input
 												type='text'
 												name='seguroSocial'
-												value={
-													props.data.seguroSocial
-														? props.data.seguroSocial
-														: props.identificacion
-												}
+												value={props.nacional ? props.identificacion : props.data.seguroSocial}
 												disabled={!props.editable || props.nacional}
 												onChange={e => {
 													props.handleChange(e)
