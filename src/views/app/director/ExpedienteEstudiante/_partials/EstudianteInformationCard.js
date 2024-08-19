@@ -156,7 +156,9 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 						</span>
 						<span className={`${classes.information}`}>
 							<strong>{t('estudiantes>expediente>header>tipo_id', 'Tipo de Identificación')}:</strong>{' '}
-							{data.tipoIdentificacion}
+							{data.tipoIdentificacion == 'YÍS RÖ - IDENTIFICACIÓN MEP'
+								? 'YÍS RÖ'
+								: data.tipoIdentificacion}
 						</span>
 					</Col>
 					<Col
