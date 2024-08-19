@@ -121,22 +121,22 @@ const InformacionContacto = (props) => {
   const onSubmit = async (e) => {
     e.preventDefault()
     const payload = {
-      ...formState,
+      ...formState, ...redesTemp
     }
-    const redesSend = { ...redesTemp, telefono: formState.telefono }
-    axios.post(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Contacto/${props.expedienteEstudiantil.currentStudent.idEstudiante}`, redesSend).then(() => {
-      setRedes(redesSend)
-    })
+    const redesSend = { ...redesTemp }
+ 
 
     const rest = await props.updateInformationContactFromUser(
       props.expedienteEstudiantil.currentStudent.idEstudiante,
       payload
     )
+    
     if (rest.payload) {
       setSnackbarVariant('success')
       setSnackbarMsg(t('general>success_act', 'Se actualizo correctamente'))
       handleClick()
       setEditable(false)
+      setRedes(redesSend)
     }
 
     if (rest.data && rest.data.error) {
@@ -190,7 +190,7 @@ const InformacionContacto = (props) => {
                         placeholder='8888-8888'
                         value={redes.telefono}
                         disabled={!editable}
-                        onChange={e=>setRedesValues('telefono',e.target.value)}
+                        onChange={e => setRedesValues('telefono', e.target.value)}
                         invalid={errorFields.Telefono}
                       >
                         {(inputProps) => (
