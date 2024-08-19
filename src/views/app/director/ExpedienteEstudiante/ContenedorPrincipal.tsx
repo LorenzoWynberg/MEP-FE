@@ -199,7 +199,7 @@ const ContenedorPrincipal = props => {
 				<Container>
 					{active !== 0 && estudianteEnContexto() && <EstudianteInformationCard fixed data={infoCard} />}
 
-					<Row style={{ paddingTop: 100 }}>
+					<Row style={{ paddingTop: active !== 0 && estudianteEnContexto() ? 100 : 0 }}>
 						{active !== 0 && estudianteEnContexto() && (
 							<Col xs={12}>
 								<Breadcrumb

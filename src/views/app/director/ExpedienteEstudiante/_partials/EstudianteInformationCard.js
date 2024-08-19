@@ -124,7 +124,7 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 					? {
 							position: 'fixed',
 							borderBottom: '1px solid #ddd',
-							zIndex: 10,
+							zIndex: 3,
 							width: '80vw'
 					  }
 					: {}
