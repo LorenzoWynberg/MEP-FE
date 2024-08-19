@@ -113,7 +113,7 @@ const InformacionContacto = props => {
 			...formState,
 			telefono: formState.telefono,
 			telefonoSecundario: formState.telefonoSecundario,
-			email: formState.,
+			email: formState.email,
 			emailSecundario: formState.emailSecundario
 		}
 		const redesSend = { ...redesTemp }
