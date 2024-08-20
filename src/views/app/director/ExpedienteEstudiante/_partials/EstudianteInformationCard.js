@@ -46,7 +46,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const EstudianteInformationCard = ({ data, fixed }) => {
-	console.log('JP Estudiante: ', data)
 	const { t } = useTranslation()
 
 	const [datosCatalogo, setDatosCatalogo] = useState({})
@@ -77,8 +76,6 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 			selects: store.selects
 		}
 	})
-
-	console.log('JP selects', state.selects)
 
 	// useEffect(() => {
 	// 	const loadData = async () => {
