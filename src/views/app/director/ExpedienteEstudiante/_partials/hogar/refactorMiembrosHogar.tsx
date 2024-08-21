@@ -49,6 +49,7 @@ import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import Loader from 'Components/Loader'
 import swal from 'sweetalert'
+import Score from '../../../Grupos/_partials/SubjectDetails/Score/Index'
 
 const RefactorMiembrosHogar = props => {
 	const [loadingRegistrarModal, setLoadingRegistrarModal] = useState(false)
@@ -330,25 +331,50 @@ const RefactorMiembrosHogar = props => {
 			{formData.showForm && (
 				<>
 					<NavigationContainer goBack={() => onRegresarEvent()} />
-					<h4>{t('estudiantes>expediente>hogar>miembros_hogar>agregar>info_gen', 'Información general')}</h4>
+					<h4 className='mt-2'>
+						{t('estudiantes>expediente>hogar>miembros_hogar>agregar>info_gen', 'Información general')}
+					</h4>
 					<br />
 					<Card>
 						<CardBody>
 							<Row>
-								<Col sm='12' md='4'>
-									<h4>
-										{t(
-											'estudiantes>expediente>hogar>miembros_hogar>agregar>info_personal',
-											'Información personal'
-										)}
-									</h4>
-									<div className='container-center container-avatar-expediente'>
-										<div className='content-avatar-expediente mb-3' id='image_form'>
-											<UploadAvatar onChange={events.onImagenChange} value={formData.imagen} />
+								{formData.imagen !== null && formData.imagen.src !== '' && (
+									<Col sm='12' md='4'>
+										<h4>
+											{t(
+												'estudiantes>expediente>hogar>miembros_hogar>agregar>info_personal',
+												'Información personal'
+											)}
+										</h4>
+
+										<div className='container-center container-avatar-expediente'>
+											<div className='content-avatar-expediente mb-3' id='image_form'>
+												<UploadAvatar
+													onChange={events.onImagenChange}
+													value={formData.imagen}
+												/>
+											</div>
 										</div>
-									</div>
-								</Col>
+									</Col>
+								)}
+
 								<Col sm='12' md='8' className='mt-sm-2'>
+									<Label>
+										*
+										{t(
+											'estudiantes>expediente>info_gen>info_gen>num_id',
+											'Número de identificación'
+										)}
+									</Label>
+									<InputContainer>
+										<Input
+											type='text'
+											name='identificacion'
+											value={formData.identificacion}
+											disabled={formData.editable && formData.miembroId != null}
+											onChange={events.onIdentificacionChange}
+										/>
+									</InputContainer>
 									<Label>
 										*
 										{t(
@@ -383,22 +409,6 @@ const RefactorMiembrosHogar = props => {
 										isDisabled
 										onChange={events.onNacionalidadChange}
 									/>
-									<Label>
-										*
-										{t(
-											'estudiantes>expediente>info_gen>info_gen>num_id',
-											'Número de identificación'
-										)}
-									</Label>
-									<InputContainer>
-										<Input
-											type='text'
-											name='identificacion'
-											value={formData.identificacion}
-											disabled={formData.editable && formData.miembroId != null}
-											onChange={events.onIdentificacionChange}
-										/>
-									</InputContainer>
 								</Col>
 							</Row>
 						</CardBody>
