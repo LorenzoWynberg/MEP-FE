@@ -103,12 +103,10 @@ const HistoricoAlertaDetail: React.FC<IProps> = props => {
 
 	const data = useMemo(() => alertasPorEstudiante, [alertasPorEstudiante, t])
 
-	console.log('JP DATA: ', data)
-
 	return (
-		<Colxx className='mt-3 mb-5' sm='12'>
+		<div className='mb-5'>
 			<TableReactImplementation columns={columns} data={data} avoidSearch={true} />
-		</Colxx>
+		</div>
 	)
 }
 

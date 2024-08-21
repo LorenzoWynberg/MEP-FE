@@ -1,18 +1,11 @@
-import React, { useState } from 'react'
-import { Row, Container, Col } from 'reactstrap'
+import React from 'react'
+import { Row, Container } from 'reactstrap'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import Loader from '../../../../../../components/Loader'
-import AppLayout from '../../../../../../layout/AppLayout'
-import BuscarEstudiante from '../../../AlertaTemprana/AlertaPorEstudiante/BuscarEstudiante'
 import HistoricoAlertaDetail from './HistoricoAlertaDetail'
-
 import { getEstadosAlerta } from 'Redux/alertaTemprana/actionsAlerts'
-
-import HeaderPage from 'Components/common/Header'
 import ContentTab from 'Components/Tab/Content'
-
-import directorItems from '../../../../../../constants/directorMenu'
 import { useTranslation } from 'react-i18next'
 import { useActions } from 'Hooks/useActions'
 
@@ -81,17 +74,13 @@ const AlertaTempranaExpedienteEstudiantil: React.FC<AlertaProps> = props => {
 			<Title>
 				{t('estudiantes>expediente>bitacora>alerta_temprana>sub_titulo', 'Histórico de alertas tempranas')}
 			</Title>
-			<Container>
-				<Row>
-					{state.identification.loading ? (
-						<Loader />
-					) : (
-						<ContentTab activeTab={activeTab} numberId={activeTab}>
-							<HistoricoAlertaDetail studentId={state.identification.data.id} />
-						</ContentTab>
-					)}
-				</Row>
-			</Container>
+			{state.identification.loading ? (
+				<Loader />
+			) : (
+				<ContentTab activeTab={activeTab} numberId={activeTab}>
+					<HistoricoAlertaDetail studentId={state.identification.data.id} />
+				</ContentTab>
+			)}
 		</Wrapper>
 	)
 }
