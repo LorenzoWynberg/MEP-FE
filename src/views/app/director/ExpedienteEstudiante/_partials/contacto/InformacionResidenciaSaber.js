@@ -57,8 +57,8 @@ const InformacionResidenciaSaber = (props) => {
 		label: 'seleccionar'
 	}
 	const initialLocationCoordinates = {
-		latitude: 'No seleccionado',
-		longitude: 'No seleccionado'
+		latitude: null,
+		longitude: null
 	}
 	const [currentProvince, setCurrentProvince] = useState(initialSelectOption)
 	const [currentCanton, setCurrentCanton] = useState(initialSelectOption)
@@ -100,7 +100,7 @@ const InformacionResidenciaSaber = (props) => {
 		setCurrentPoblado(initialSelectOption)
 		setCurrentTerritory(initialSelectOption)
 		setDirection('')
-		setLocation(initialLocationCoordinates)
+		setLocation({latitude:null,longitude:null})
 	}
 
 	useEffect(() => {
@@ -278,9 +278,7 @@ const InformacionResidenciaSaber = (props) => {
 	useEffect(() => {
 		console.log('location useEffect', location)
 		if (
-			location.latitude !== 'No seleccionado' &&
-			location.longitude !== 'No seleccionado' &&
-			search
+			search && location.latitude !== '' && location.longitude !== '' 
 		) {
 			search.searchTerm = 'CRI'
 			search
@@ -395,13 +393,7 @@ const InformacionResidenciaSaber = (props) => {
 			_errors['razon'] =
 				'Debe tener una razón para su residencia temporal'
 		}
-		if (
-			data.latitud === 'No seleccionado' ||
-			data.longitud === 'No seleccionado'
-		) {
-			_errors['location'] =
-				'Debe seleccionar coordenadas para su ubicación'
-		}
+		
 
 		let error = _errors['poblado']
 			? true
@@ -798,9 +790,9 @@ const InformacionResidenciaSaber = (props) => {
 												style={{ paddingRight: 10 }}
 											>
 												<FormGroup>
-													<RequiredLabel for="latitud">
+													<Label for="latitud">
 														Latitud
-													</RequiredLabel>
+													</Label>
 													<Input
 														type="text"
 														name="latitud"
@@ -822,9 +814,9 @@ const InformacionResidenciaSaber = (props) => {
 												style={{ paddingLeft: 10 }}
 											>
 												<FormGroup>
-													<RequiredLabel for="longitud">
+													<Label for="longitud">
 														Longitud
-													</RequiredLabel>
+													</Label>
 													<Input
 														type="text"
 														name="longitud"
@@ -884,18 +876,6 @@ const InformacionResidenciaSaber = (props) => {
 								/>
 							</MapContainer>
 
-							{!props.temporal && (
-								<div style={{ paddingLeft: 40 }}>
-									<Input
-										type="checkbox"
-										onClick={() => {
-											props.toggleAddress()
-										}}
-										checked={props.tempAddress}
-									/>
-									<Label>Domicilio temporal</Label>
-								</div>
-							)}
 						</Grid>
 						<Grid
 							item

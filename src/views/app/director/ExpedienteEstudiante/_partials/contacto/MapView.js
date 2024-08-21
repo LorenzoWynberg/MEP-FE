@@ -25,6 +25,7 @@ export class WebMapView extends React.Component {
       }
     ).then(
       ([ArcGISMap, MapView, Search, FeatureLayer, esriConfig, EsriLocator]) => {
+
         esriConfig.request.interceptors.push({
           before(params) {
             if (params.url.includes('query')) {
@@ -193,6 +194,7 @@ export class WebMapView extends React.Component {
       provincia: attributes?.PROVINCIA,
       distrito: attributes?.NDISTRITO
     })
+    
   }
 
   showPopup = this.showPopup.bind(this)
