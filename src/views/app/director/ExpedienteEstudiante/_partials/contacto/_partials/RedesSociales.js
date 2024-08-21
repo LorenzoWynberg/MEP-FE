@@ -51,14 +51,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer'
   }
 }))
-const TikTokIcon = ({ color = "#000000" }) => {
-  return (
-    <i
-      className='fas fa-tiktok'
 
-    />
-  );
-};
 const Redes = (props) => {
   const { t } = useTranslation()
 
@@ -149,8 +142,7 @@ const Redes = (props) => {
       </ListItem>
       <ListItem>
         <ListItemIcon>
-          <Fab disabled aria-label='like' className={classes.social}>
-            <TwitterIcon fontSize='small' />
+          <Fab disabled aria-label='like' className={classes.social}><i class="fa-brands fa-x-twitter"></i>
           </Fab></ListItemIcon>
         {!hasEditable && <ListItemText id={1} primary={redes.twitter} />}
         {hasEditable && <Input value={redesTemp.twitter} onChange={e => setRedesParent('twitter', e.target.value)} />}
@@ -158,8 +150,8 @@ const Redes = (props) => {
       </ListItem>
       <ListItem>
         <ListItemIcon>
-          
-        <Fab disabled aria-label='like' className={classes.social}><i class="fab fa-tiktok"></i></Fab></ListItemIcon>
+
+          <Fab disabled aria-label='like' className={classes.social}><i class="fab fa-tiktok"></i></Fab></ListItemIcon>
         {!hasEditable && <ListItemText id={1} primary={redes.tiktok} />}
         {hasEditable && <Input value={redesTemp.tiktok} onChange={e => setRedesParent('tiktok', e.target.value)} />}
 
