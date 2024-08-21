@@ -5,8 +5,8 @@ import { getIdentification } from '../../../../redux/identificacion/actions'
 import { useActions } from '../../../../hooks/useActions'
 import HeaderTab from 'Components/Tab/Header'
 import ContentTab from 'Components/Tab/Content'
-import { AlertaTempranaExpedienteEstudiantil } from './_partials/bitacoraExpediente/AlertaTemprana'
-import { CambiosIdentidadExpedienteEstudiantil } from './_partials/bitacoraExpediente/CambiosIdentidad'
+import AlertaTempranaExpedienteEstudiantil from './_partials/bitacoraExpediente/AlertaTempranaExpedienteEstudiantil'
+import HistoricoCambiosIdentidadEstudiante from './_partials/bitacoraExpediente/HistoricoCambiosIdentidadEstudiante'
 
 const BitacoraExpediente = props => {
 	const [activeTab, setActiveTab] = useState(0)
@@ -35,7 +35,7 @@ const BitacoraExpediente = props => {
 			<HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
 			<ContentTab activeTab={activeTab} numberId={activeTab}>
 				{activeTab === 0 && <AlertaTempranaExpedienteEstudiantil />}
-				{activeTab === 1 && <CambiosIdentidadExpedienteEstudiantil />}
+				{activeTab === 1 && <HistoricoCambiosIdentidadEstudiante />}
 			</ContentTab>
 		</>
 	)
