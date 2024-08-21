@@ -114,7 +114,7 @@ const Navegacion = props => {
 						}
 						<NavigationCard
 							icon=''
-							title={t('estudiantes>expediente>nav>bitacora_expediente', 'Bitácora')}
+							title={t('estudiantes>expediente>nav>bitacora_expediente', 'Bitácoras')}
 							href='/director/expediente-estudiante/BitacoraExpediente'
 						>
 							<BookIcon style={{ fontSize: 50 }} />
