@@ -338,25 +338,24 @@ const RefactorMiembrosHogar = props => {
 					<Card>
 						<CardBody>
 							<Row>
-								{formData.imagen !== null && formData.imagen.src !== '' && (
-									<Col sm='12' md='4'>
-										<h4>
-											{t(
-												'estudiantes>expediente>hogar>miembros_hogar>agregar>info_personal',
-												'Información personal'
-											)}
-										</h4>
+								<Col sm='12' md='4'>
+									<h4>
+										{t(
+											'estudiantes>expediente>hogar>miembros_hogar>agregar>info_personal',
+											'Información personal'
+										)}
+									</h4>
 
-										<div className='container-center container-avatar-expediente'>
-											<div className='content-avatar-expediente mb-3' id='image_form'>
-												<UploadAvatar
-													onChange={events.onImagenChange}
-													value={formData.imagen}
-												/>
-											</div>
+									<div className='container-center container-avatar-expediente'>
+										<div className='content-avatar-expediente mb-3' id='image_form'>
+											<UploadAvatar
+												onChange={events.onImagenChange}
+												value={formData.imagen}
+												disabled={true}
+											/>
 										</div>
-									</Col>
-								)}
+									</div>
+								</Col>
 
 								<Col sm='12' md='8' className='mt-sm-2'>
 									<Label>
