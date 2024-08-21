@@ -95,10 +95,10 @@ export class WebMapView extends React.Component {
         })
         this.view.on('click', async function (evt) {
     
-         props.setLocation({
-            latitude: evt.mapPoint.latitude.toFixed(6),
-            longitude: evt.mapPoint.longitude.toFixed(6)
-          })
+        //  props.setLocation({
+        //     latitude: evt.mapPoint.latitude.toFixed(6),
+        //     longitude: evt.mapPoint.longitude.toFixed(6)
+        //   })
           self.disableMap(evt, async () => {
             self.search.clear()
             self.view.popup.clear()
