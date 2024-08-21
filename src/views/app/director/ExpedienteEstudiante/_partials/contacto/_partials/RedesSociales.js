@@ -56,7 +56,7 @@ const Redes = (props) => {
   const { t } = useTranslation()
 
   const classes = useStyles()
-  const { hasEditable, setRedesParent, redes, redesTemp } = props
+  const { hasEditable, handleInputChange, formState } = props
 
 
 
@@ -118,8 +118,8 @@ const Redes = (props) => {
             <FacebookIcon fontSize='small' />
           </Fab>
         </ListItemIcon>
-        {!hasEditable && <ListItemText id={1} primary={redes.facebook} />}
-        {hasEditable && <Input value={redesTemp.facebook} onChange={e => setRedesParent('facebook', e.target.value)} />}
+        {!hasEditable && <ListItemText id={1} primary={formState.facebook || ""} />}
+        {hasEditable && <Input value={formState.facebook || ""} name="facebook" onChange={handleInputChange} />}
       </ListItem>
       <ListItem>
         <ListItemIcon>
@@ -127,8 +127,8 @@ const Redes = (props) => {
             <InstagramIcon fontSize='small' />
           </Fab>
         </ListItemIcon>
-        {!hasEditable && <ListItemText id={1} primary={redes.instagram} />}
-        {hasEditable && <Input value={redesTemp.instagram} onChange={e => setRedesParent('instagram', e.target.value)} />}
+        {!hasEditable && <ListItemText id={1} primary={formState.instagram || ""} />}
+        {hasEditable && <Input value={formState.instagram || ""} name="instagram" onChange={handleInputChange} />}
 
       </ListItem>
       <ListItem>
@@ -136,24 +136,24 @@ const Redes = (props) => {
           <Fab disabled aria-label='like' className={classes.social}>
             <WhatsAppIcon fontSize='small' />
           </Fab></ListItemIcon>
-        {!hasEditable && <ListItemText id={1} primary={redes.whatsapp} />}
-        {hasEditable && <Input value={redesTemp.whatsapp} onChange={e => setRedesParent('whatsapp', e.target.value)} />}
+        {!hasEditable && <ListItemText id={1} primary={formState.whatsapp || ""} />}
+        {hasEditable && <Input value={formState.whatsapp || ""} name="whatsapp" onChange={handleInputChange} />}
 
       </ListItem>
       <ListItem>
         <ListItemIcon>
           <Fab disabled aria-label='like' className={classes.social}><i class="fa-brands fa-x-twitter"></i>
           </Fab></ListItemIcon>
-        {!hasEditable && <ListItemText id={1} primary={redes.twitter} />}
-        {hasEditable && <Input value={redesTemp.twitter} onChange={e => setRedesParent('twitter', e.target.value)} />}
+        {!hasEditable && <ListItemText id={1} primary={formState.twitter || ""} />}
+        {hasEditable && <Input value={formState.twitter || ""} name="twitter" onChange={handleInputChange} />}
 
       </ListItem>
       <ListItem>
         <ListItemIcon>
 
           <Fab disabled aria-label='like' className={classes.social}><i class="fab fa-tiktok"></i></Fab></ListItemIcon>
-        {!hasEditable && <ListItemText id={1} primary={redes.tiktok} />}
-        {hasEditable && <Input value={redesTemp.tiktok} onChange={e => setRedesParent('tiktok', e.target.value)} />}
+        {!hasEditable && <ListItemText id={1} primary={formState.tiktok || ""} />}
+        {hasEditable && <Input value={formState.tiktok || ""} name="tiktok" onChange={handleInputChange} />}
 
       </ListItem>
 
