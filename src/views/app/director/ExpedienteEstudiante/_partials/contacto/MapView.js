@@ -185,10 +185,10 @@ export class WebMapView extends React.Component {
       content: address,
       location: pt
     })
-    this.props.setLocation({
-      latitude: pt.latitude.toFixed(6),
-      longitude: pt.longitude.toFixed(6)
-    })
+    // this.props.setLocation({
+    //   latitude: pt.latitude.toFixed(6),
+    //   longitude: pt.longitude.toFixed(6)
+    // })
     this.props.setUbicacion({
       canton: attributes?.NCANTON,
       provincia: attributes?.PROVINCIA,
