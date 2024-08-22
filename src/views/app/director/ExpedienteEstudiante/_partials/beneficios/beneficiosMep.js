@@ -27,6 +27,7 @@ import useNotification from '../../../../../../hooks/useNotification'
 import RequiredLabel from '../../../../../../components/common/RequeredLabel'
 import BarLoader from 'Components/barLoader/barLoader'
 import { useParams } from 'react-router-dom'
+import { DatePicker } from '@material-ui/pickers'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -274,7 +275,8 @@ const BeneficiosMEP = props => {
 		}
 	}
 
-	console.log('Beneficios JP:', state.beneficios)
+	console.log('Beneficios JP:', state)
+	console.log('Beneficios JP:', register)
 
 	return (
 		<>
@@ -414,13 +416,14 @@ const BeneficiosMEP = props => {
 													<Label>*Fecha inicio</Label>
 													<Input
 														type='date'
-														name='dateFrom'
+
 														style={{
 															paddingRight: '12%'
 														}}
 														invalid={toDateInvalid || state.beneficios.fields.fechaInicio}
 														disabled={!editable}
-														innerRef={register}
+														value={moment(state.beneficios.dataMEP.entityList.fechaInicio).format('YYYY-MM-DD')}
+												 
 													/>
 												</FormGroup>
 												<FormFeedback>
@@ -446,15 +449,16 @@ const BeneficiosMEP = props => {
 											<Grid item xs={5} className={classes.control}>
 												<FormGroup>
 													<Label>*Fecha final</Label>
+												{console.log('state.beneficios.dataMEP.entityList.fechaFinal',state.beneficios.dataMEP.entityList.fechaFinal)}
 													<Input
 														type='date'
-														name='dateTo'
+														
+														value={moment(state.beneficios.dataMEP.entityList.fechaFinal).format('YYYY-MM-DD')}
 														style={{
 															paddingRight: '12%'
 														}}
 														invalid={toDateInvalid || state.beneficios.fields.fechaFinal}
-														disabled={!editable}
-														innerRef={register}
+														disabled={!editable} 
 													/>
 													<FormFeedback>
 														{toDateInvalid &&
@@ -482,7 +486,7 @@ const BeneficiosMEP = props => {
 														toggleSnackbar
 													)
 												}}
-												sendData={() => {}}
+												sendData={() => { }}
 												loading={state.beneficios.loading}
 											/>
 										</FormGroup>
