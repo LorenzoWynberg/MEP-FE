@@ -173,15 +173,13 @@ const OtrosDatos = props => {
 
 
 
-  const loadOptions = async (searchQuery, loadedOptions,{page}) => {
-    console.log('loadOptions', searchQuery, loadedOptions)
+  const loadOptions = async (searchQuery, loadedOptions, { page }) => {
     let response = {};
     if (searchQuery && searchQuery != "") {
-      response = await axios.get(`${envVariables.BACKEND_URL}/api/Catalogo/GetAllByType/${12}/${searchQuery}/${page}/${10}`)
+      response = await axios.get(`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyTypeByText/${12}/${searchQuery}/${page}/${10}`)
     } else {
       response = await axios.get(`${envVariables.BACKEND_URL}/api/Catalogo/GetAllByType/${12}/${page}/${10}`)
     }
-    console.log('loadOptions response', response)
     let filteredResp = searchQuery && searchQuery != "" && response.data.filter(v => v.nombre.includes(searchQuery)).map(
       item => ({
         label: item.nombre,
@@ -195,9 +193,9 @@ const OtrosDatos = props => {
           value: item.id
         })
       ) || [],
-      hasMore: response.data?.length >= 1,
+      hasMore: searchQuery && searchQuery != "" ? false : response.data?.length >= 1,
       additional: {
-        page: page + 1
+        page: searchQuery && searchQuery != "" ? page : page + 1
       }
     }
     return filteredOptions
