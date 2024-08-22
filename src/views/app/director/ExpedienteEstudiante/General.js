@@ -223,7 +223,6 @@ const General = props => {
 			'etnia'
 		])
 
-		console.log('datos parseados', datos)
 		const _data = {
 			id: identidadData.id,
 			identificacion: identidadData.identificacion,
@@ -308,7 +307,7 @@ const General = props => {
 								avoidSearch={props.avoidSearch}
 								image={image}
 								setImage={setImage}
-								editable
+								editable={false}
 							/>
 						</Colxx>
 					</Row>
