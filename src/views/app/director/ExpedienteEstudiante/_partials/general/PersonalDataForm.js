@@ -2,43 +2,33 @@ import React, { useState, useEffect } from 'react'
 import CustomSelectInput from 'Components/common/CustomSelectInput'
 import Select from 'react-select'
 
-import {
-  Input,
-  Label,
-  Form,
-  Row,
-  Col,
-  FormGroup,
-  Card,
-  CardBody,
-  CardTitle,
-  FormFeedback
-} from 'reactstrap'
+import { Input, Label, Form, Row, Col, FormGroup, Card, CardBody, CardTitle, FormFeedback } from 'reactstrap'
 import styled from 'styled-components'
 import RequiredLabel from '../../../../../../components/common/RequeredLabel'
 import { useTranslation } from 'react-i18next'
+import SelectCatalogo from 'Components/SelectCatalogo'
 
-const PersonalDataForm = (props) => {
-  const { t } = useTranslation()
-  const [errorFields, setErrorFields] = useState(
-    props.identification.errorFields
-  )
-  const [errorMessages, setErrorMessages] = useState(
-    props.identification.errorMessages
-  )
+const PersonalDataForm = props => {
+	const { t } = useTranslation()
+	const [errorFields, setErrorFields] = useState(props.identification.errorFields)
+	const [errorMessages, setErrorMessages] = useState(props.identification.errorMessages)
 
-  useEffect(() => {
-    setErrorFields(props.identification.errorFields)
-    setErrorMessages(props.identification.errorMessages)
-  }, [props.identification])
+	useEffect(() => {
+		setErrorFields(props.identification.errorFields)
+		setErrorMessages(props.identification.errorMessages)
+	}, [props.identification])
 
-  return (
-    <Card>
-      <CardBody>
-        <CardTitle>{t('estudiantes>expediente>info_gen>info_gen>datos_personales>titulo', 'Datos personales')}</CardTitle>
-        <Form>
-          <Row>
+	return (
+		<Card>
+			<CardBody>
+				<CardTitle>
+					{t('estudiantes>expediente>info_gen>info_gen>datos_personales>titulo', 'Datos personales')}
+				</CardTitle>
+				<Form>
+					<Row>
+						{/*
             <Col sm='12'>
+              
               <FormGroup>
                 {props.label
                   ? (
@@ -96,77 +86,122 @@ const PersonalDataForm = (props) => {
                 />
               </FormGroup>
             </Col>
-            <Col sm='12'>
-              <FormGroup>
-                <Label>{t('estudiantes>expediente>info_gen>info_gen>datos_personales>sexo', 'Sexo')}</Label>
-                <Select
-                  components={{ Input: CustomSelectInput }}
-                  className='react-select'
-                  classNamePrefix='react-select'
-                  options={props.selects.sexoTypes.map(
-									  (item) => ({
-									    ...item,
-									    label: item.nombre,
-									    value: item.id
-									  })
-                  )}
-                  placeholder=''
-                  value={props.personalData.sexo}
-                  onChange={(data) => {
-									  props.handleChange(data, 'sexo')
-                  }}
-                  isDisabled={props.disabled}
-                />
-                <FormFeedbackSpan>
-                  {errorMessages.SexoId}
-                </FormFeedbackSpan>
-              </FormGroup>
-            </Col>
-            <Col sm='12'>
-              <FormGroup>
-                {props.label
-                  ? (
-                    <Label>{t('estudiantes>expediente>info_gen>info_gen>datos_personales>nacimiento', 'Fecha de nacimiento')}</Label>
-                    )
-                  : (
-                    <RequiredLabel>
-                    {t('estudiantes>expediente>info_gen>info_gen>datos_personales>nacimiento', 'Fecha de nacimiento')}
-                  </RequiredLabel>
-                    )}
-                <Input
-                  type='text'
-                  name='fechaDeNacimiento'
-                  value={props.personalData.fechaDeNacimiento}
-                  disabled={props.disabled}
-                  onChange={(data) => {
-									  props.handleChange(data, 'sexo')
-                  }}
-                  invalid={errorFields.FechaDeNacimiento}
-                />
-                <FormFeedback>
-                  {errorMessages.FechaDeNacimiento}
-                </FormFeedback>
-              </FormGroup>
-            </Col>
-            <Col sm='12'>
-              <FormGroup>
-                <Label>{t('estudiantes>expediente>info_gen>info_gen>datos_personales>edad', 'Edad cumplida')}</Label>
-                <Input
-                  name='id'
-                  value={props.personalData.edad}
-                  disabled={props.disabled}
-                  invalid={errorFields.Edad}
-                />
-                <FormFeedback>
-                  {errorMessages.Edad}
-                </FormFeedback>
-              </FormGroup>
-            </Col>
-          </Row>
-        </Form>
-      </CardBody>
-    </Card>
-  )
+            */}
+						<Col sm='12'>
+							<FormGroup>
+								<Label>
+									{t('estudiantes>expediente>info_gen>datos_adicionales>conocido', 'Conocido como')}
+								</Label>
+								<Input
+									type='text'
+									name='conocidoComo'
+									value={props.personalData.conocidoComo}
+									onChange={props.handleChange}
+									disabled={props.disabled}
+								/>
+							</FormGroup>
+						</Col>
+						<Col sm='12'>
+							<FormGroup>
+								<Label>
+									{t(
+										'estudiantes>expediente>info_gen>datos_adicionales>genero',
+										'Identidad de género'
+									)}
+								</Label>
+								<SelectCatalogo
+									components={{ Input: CustomSelectInput }}
+									className='react-select'
+									classNamePrefix='react-select'
+									/* options={props.selects.genderTypes.map((item) => {
+                    return { ...item, label: item.nombre, value: item.id };
+                  })} */
+									catalogo='genderTypes'
+									placeholder=''
+									value={props.personalData.genero}
+									onChange={data => {
+										props.handleChange(data, 'genero')
+									}}
+									isDisabled={!props.editable}
+								/>
+							</FormGroup>
+						</Col>
+						<Col sm='12'>
+							<FormGroup>
+								<Label>
+									{t('estudiantes>expediente>info_gen>info_gen>datos_personales>sexo', 'Sexo')}
+								</Label>
+								<Select
+									components={{ Input: CustomSelectInput }}
+									className='react-select'
+									classNamePrefix='react-select'
+									options={props.selects.sexoTypes.map(item => ({
+										...item,
+										label: item.nombre,
+										value: item.id
+									}))}
+									placeholder=''
+									value={props.personalData.sexo}
+									onChange={data => {
+										props.handleChange(data, 'sexo')
+									}}
+									isDisabled={props.disabled}
+								/>
+								<FormFeedbackSpan>{errorMessages.SexoId}</FormFeedbackSpan>
+							</FormGroup>
+						</Col>
+						<Col sm='12'>
+							<FormGroup>
+								{props.label ? (
+									<Label>
+										{t(
+											'estudiantes>expediente>info_gen>info_gen>datos_personales>nacimiento',
+											'Fecha de nacimiento'
+										)}
+									</Label>
+								) : (
+									<RequiredLabel>
+										{t(
+											'estudiantes>expediente>info_gen>info_gen>datos_personales>nacimiento',
+											'Fecha de nacimiento'
+										)}
+									</RequiredLabel>
+								)}
+								<Input
+									type='text'
+									name='fechaDeNacimiento'
+									value={props.personalData.fechaDeNacimiento}
+									disabled={props.disabled}
+									onChange={data => {
+										props.handleChange(data, 'sexo')
+									}}
+									invalid={errorFields.FechaDeNacimiento}
+								/>
+								<FormFeedback>{errorMessages.FechaDeNacimiento}</FormFeedback>
+							</FormGroup>
+						</Col>
+						<Col sm='12'>
+							<FormGroup>
+								<Label>
+									{t(
+										'estudiantes>expediente>info_gen>info_gen>datos_personales>edad',
+										'Edad cumplida'
+									)}
+								</Label>
+								<Input
+									name='id'
+									value={props.personalData.edad}
+									disabled={props.disabled}
+									invalid={errorFields.Edad}
+								/>
+								<FormFeedback>{errorMessages.Edad}</FormFeedback>
+							</FormGroup>
+						</Col>
+					</Row>
+				</Form>
+			</CardBody>
+		</Card>
+	)
 }
 
 const FormFeedbackSpan = styled.span`
