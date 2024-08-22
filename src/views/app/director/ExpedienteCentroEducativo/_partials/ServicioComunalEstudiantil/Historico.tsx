@@ -9,6 +9,7 @@ import { envVariables } from 'Constants/enviroment'
 import {
 	FormControl,
 	FormControlLabel,
+	InputLabel,
 	MenuItem,
 	Radio,
 	RadioGroup,
@@ -305,31 +306,20 @@ const Historico = props => {
 						</h3>
 					</Col>
 					<Col xs={12}>
-						<FormControl>
-							{/* 			<Row>
-							<Col
-								style={{
-									display: 'flex',
-									textAlign: 'center',
-									justifyContent: 'center',
-									alignItems: 'center'
-								}}
-								sm={3}
-							>
-								<Typography variant='h6'>Area De Proyecto</Typography>
-							</Col>
-							<Col sm={9}>
-								<Typography variant='h6'>Descripcion</Typography>
-							</Col>
-						</Row> */}
+
+						<FormControl fullWidth>		<InputLabel style={{marginLeft:16}} id="demo-simple-select-label">Area de Proyecto</InputLabel>
+
 							<Select
+								placeholder='Area de Proyecto'
 								labelId="demo-simple-select-label"
+
 								id="demo-simple-select"
 								value={value}
 								variant='outlined'
+								style={{ marginBottom: 16 }}
 								label="Area De Proyecto"
 								onChange={(e, v) => {
-									e.persist() 
+									e.persist()
 									setValue(e.target.value)
 								}}
 							>
@@ -365,7 +355,7 @@ const Historico = props => {
 										setFirstCalled(false)
 									})
 									setLoading(false)
-								}else{
+								} else {
 									await fetch(idInstitucion, searchValue, value).then(res => {
 										setData(res[0].data)
 										console.log('res', res)
