@@ -176,9 +176,9 @@ const OtrosDatos = props => {
   const loadOptions = async (searchQuery, loadedOptions, { page }) => {
     let response = {};
     if (searchQuery && searchQuery != "") {
-      response = await axios.get(`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyTypeByText/${12}/${searchQuery}/${page}/${10}`)
+      response = await axios.get(`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyTypeByText/${12}/${searchQuery}/${page}/${20}`)
     } else {
-      response = await axios.get(`${envVariables.BACKEND_URL}/api/Catalogo/GetAllByType/${12}/${page}/${10}`)
+      response = await axios.get(`${envVariables.BACKEND_URL}/api/Catalogo/GetAllByType/${12}/${page}/${20}`)
     }
 
     let filteredOptions = {
