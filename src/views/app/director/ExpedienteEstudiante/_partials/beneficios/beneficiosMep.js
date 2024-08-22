@@ -27,7 +27,6 @@ import useNotification from '../../../../../../hooks/useNotification'
 import RequiredLabel from '../../../../../../components/common/RequeredLabel'
 import BarLoader from 'Components/barLoader/barLoader'
 import { useParams } from 'react-router-dom'
-import { DatePicker } from '@material-ui/pickers'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -217,21 +216,21 @@ const BeneficiosMEP = props => {
 	}
 
 	const handleViewSubsidio = async (e, show) => {
-		// var delay = 1000
+		var delay = 1500
 
-		// setTimeout(function () {
-		// 	setView(true)
-		// 	setDataTable(e)
-		// 	setDependencia({ label: e?.nombreDependecia, value: null })
-		// 	setValue('dateFrom', moment(e?.fechaInicio).format('YYYY-MM-DD'))
-		// 	setValue('dateTo', moment(e?.fechaFinal).format('YYYY-MM-DD'))
-		// 	setValue('detSubsidio', e?.detalle)
-		// 	setVerificated(e?.recepcionVerificada == 'Si')
-		// 	setPrevSubsidio(tipos.find(tipo => tipo?.nombre == e?.nombreTipoSubsidio))
-		// 	setShowButtons(show)
-		// }, delay)
+		setTimeout(function () {
+			setView(true)
+			setDataTable(e)
+			setDependencia({ label: e?.nombreDependecia, value: null })
+			setValue('dateFrom', moment(e?.fechaInicio).format('YYYY-MM-DD'))
+			setValue('dateTo', moment(e?.fechaFinal).format('YYYY-MM-DD'))
+			setValue('detSubsidio', e?.detalle)
+			setVerificated(e?.recepcionVerificada == 'Si')
+			setPrevSubsidio(tipos.find(tipo => tipo?.nombre == e?.nombreTipoSubsidio))
+			setShowButtons(show)
+		}, delay)
 
-		await setView(true)
+		setView(true)
 		setDataTable(e)
 		setDependencia({ label: e?.nombreDependecia, value: null })
 		setValue('dateFrom', moment(e?.fechaInicio).format('YYYY-MM-DD'))
@@ -275,8 +274,7 @@ const BeneficiosMEP = props => {
 		}
 	}
 
-	console.log('Beneficios JP:', state)
-	console.log('Beneficios JP:', register)
+	console.log('Beneficios JP:', state.beneficios)
 
 	return (
 		<>
@@ -416,14 +414,13 @@ const BeneficiosMEP = props => {
 													<Label>*Fecha inicio</Label>
 													<Input
 														type='date'
-
+														name='dateFrom'
 														style={{
 															paddingRight: '12%'
 														}}
 														invalid={toDateInvalid || state.beneficios.fields.fechaInicio}
 														disabled={!editable}
-														value={moment(state.beneficios.dataMEP.entityList.fechaInicio).format('YYYY-MM-DD')}
-												 
+														innerRef={register}
 													/>
 												</FormGroup>
 												<FormFeedback>
@@ -449,16 +446,15 @@ const BeneficiosMEP = props => {
 											<Grid item xs={5} className={classes.control}>
 												<FormGroup>
 													<Label>*Fecha final</Label>
-												{console.log('state.beneficios.dataMEP.entityList.fechaFinal',state.beneficios.dataMEP.entityList.fechaFinal)}
 													<Input
 														type='date'
-														
-														value={moment(state.beneficios.dataMEP.entityList.fechaFinal).format('YYYY-MM-DD')}
+														name='dateTo'
 														style={{
 															paddingRight: '12%'
 														}}
 														invalid={toDateInvalid || state.beneficios.fields.fechaFinal}
-														disabled={!editable} 
+														disabled={!editable}
+														innerRef={register}
 													/>
 													<FormFeedback>
 														{toDateInvalid &&
@@ -486,7 +482,7 @@ const BeneficiosMEP = props => {
 														toggleSnackbar
 													)
 												}}
-												sendData={() => { }}
+												sendData={() => {}}
 												loading={state.beneficios.loading}
 											/>
 										</FormGroup>
