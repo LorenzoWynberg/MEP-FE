@@ -180,7 +180,7 @@ const OtrosDatos = props => {
     } else {
       response = await axios.get(`${envVariables.BACKEND_URL}/api/Catalogo/GetAllByType/${12}/${page}/${10}`)
     }
-    let filteredResp = searchQuery && searchQuery != "" && response.data.filter(v => v.nombre.includes(searchQuery)).map(
+    let filteredResp = searchQuery && searchQuery != "" && response.data.map(
       item => ({
         label: item.nombre,
         value: item.id
