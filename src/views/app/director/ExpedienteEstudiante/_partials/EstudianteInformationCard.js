@@ -78,8 +78,6 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 		}
 	})
 
-	console.log('JP selects', state.selects)
-
 	// useEffect(() => {
 	// 	const loadData = async () => {
 	// 		const catalogsArray = [

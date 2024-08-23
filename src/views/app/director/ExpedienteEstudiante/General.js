@@ -82,6 +82,7 @@ const General = props => {
 				catalogsEnumObj.ESTADOCIVIL
 			]
 			const response = await actions.getCatalogsSet(catalogsArray)
+
 			if (response.error) {
 				setSnacbarContent({
 					variant: 'error',
