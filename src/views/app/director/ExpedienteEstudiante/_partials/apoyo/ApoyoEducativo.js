@@ -17,7 +17,8 @@ import {
   ModalHeader,
   ModalBody,
   Button,
-  Form
+  Form,
+  Card
 } from 'reactstrap'
 import styled from 'styled-components'
 import IntlMessages from '../../../../../../helpers/IntlMessages'
@@ -237,11 +238,11 @@ const ApoyoEducativo = (props) => {
     setLoading(false)
   }
   const optionsTab = [
-    { key: 'Condicion De Discapacidad' },
-    { key: 'Otras Condiciones' }
+    { title: 'Condicion De Discapacidad' },
+    { title: 'Otras Condiciones' }
   ]
   return (
-    <>
+    <Card style={{paddingLeft:36,paddingRight:36,}}>
       <Row>
         <HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
         <ContentTab activeTab={activeTab} numberId={activeTab}>
@@ -249,11 +250,7 @@ const ApoyoEducativo = (props) => {
           {activeTab === 0 && <CondicionDiscapacidad handleFileDiscapacidad={handleFileDiscapacidad} handleOpenOptions ={handleOpenOptions } setFiles={setFiles} setOpenFiles={setOpenFiles} setOpenOptions={setOpenOptions} discapacidades={props.discapacidades} apoyos={props.apoyos} editable={editable} />}
           {activeTab === 1 && <>HOla</>}
         </ContentTab>
-
-        {/* AQUI ES TAB*/}
-        {/* AQUI ES TAB*/}
-
-        {/* AQUI ES TAB*/}
+ 
         <Col xs={12}>
           <Form onSubmit={handleSubmit(sentData)}>
             <EditButton
@@ -353,7 +350,8 @@ const ApoyoEducativo = (props) => {
               })}
           </div>
         </ModalBody>
-      </Modal></>
+      </Modal>
+      </Card>
   )
 }
 
