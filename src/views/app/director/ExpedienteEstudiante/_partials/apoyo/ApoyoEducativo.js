@@ -4,12 +4,11 @@ import { makeStyles } from '@material-ui/core/styles'
 import { EditButton } from '../../../../../../components/EditButton'
 import SelectItem from './SelectItem'
 
+import HeaderTab from 'Components/Tab/Header'
+import ContentTab from 'Components/Tab/Content'
 import {
   Row,
   Col,
-  Card,
-  CardBody,
-  CardTitle,
   FormGroup,
   Label,
   Modal,
@@ -25,6 +24,7 @@ import IntlMessages from '../../../../../../helpers/IntlMessages'
 import colors from '../../../../../../assets/js/colors'
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import { useTranslation } from 'react-i18next'
+import CondicionDiscapacidad from './CondicionDiscapacidad'
 
 const useStyles = makeStyles((theme) => ({
   inputTags: {
@@ -50,6 +50,7 @@ const ApoyoEducativo = (props) => {
   const [openFiles, setOpenFiles] = useState({ open: false, type: null })
   const [modalOptions, setModalOptions] = useState([])
   const [files, setFiles] = useState([])
+  const [activeTab, setActiveTab] = useState(0)
   const [discapacidadesFiles, setDiscapacidadesFiles] = useState([])
   const [condicionesFiles, setCondicionesFiles] = useState([])
   const [discapacidadesToDelete, setDiscapacidadesToDelete] = useState([])
@@ -235,143 +236,34 @@ const ApoyoEducativo = (props) => {
     setEditable(false)
     setLoading(false)
   }
-
+  const optionsTab = [
+    { key: 'Condicion De Discapacidad' },
+    { key: 'Otras Condiciones' }
+  ]
   return (
-    <Card>
-      <CardBody>
-        <CardTitle>{t('estudiantes>expediente>apoyos_edu>apoyos_edu_est', 'Apoyos educativos del estudiante')}</CardTitle>
-        <Row>
-          <Col md='12'>
-            <Row>
-              <Col md='6'>
-                <FormGroup>
-                  <Label>{t('estudiantes>expediente>apoyos_edu>cond_discap', 'Condición de discapacidad')}</Label>
-                  <StyledMultiSelect
-                    className={classes.inputTags}
-                    disabled={!editable}
-                    onClick={() => {
-                      handleOpenOptions(props.discapacidades, 'discapacidades')
-                    }}
-                  >
-                    {discapacidades.map((discapacidad) => {
-                      return <SelectItem item={discapacidad} />
-                    })}
-                  </StyledMultiSelect>
-                </FormGroup>
-              </Col>
-              <Col md='6'>
-                <span>{t('estudiantes>expediente>apoyos_edu>detalle_condi_discap', 'Detalle de la condición de discapacidad')}</span>
-                <ButtonsContainer>
-                  <DownloadIconContainer>
-                    <i className='simple-icon-cloud-upload' />
-                  </DownloadIconContainer>
-                  <div style={{ paddingTop: '0.4rem' }}>
-                    {editable && (
-                      <input
-                        onChange={(e) => {
-                          handleFileDiscapacidad(e)
-                        }}
-                        className={classes.input}
-                        id='filesDiscapacidad-id'
-                        type='file'
-                        name='filesDiscapacidad'
-                      />
-                    )}
-                    <label htmlFor='filesDiscapacidad-id'>
-                      <FileLabel
-                        disabled={!editable}
-                      >
-                        {t('general>subir_archivo', 'Subir Archivo')}
-                      </FileLabel>
-                    </label>
-                  </div>
-                  {discapacidadesFiles.length > 0 && (
-                    <Button
-                      color='primary'
-                      onClick={() => {
-                        setOpenFiles({ open: true, type: 'discapacidad' })
-                        setFiles(discapacidadesFiles)
-                      }}
-                    >
-                      <IntlMessages id='family.uploadedFiles' />(
-                      {`${discapacidadesFiles.length} archivos`})
-                    </Button>
-                  )}
-                </ButtonsContainer>
-              </Col>
-            </Row>
-          </Col>
-          <Col md='12'>
-            <Row>
-              <Col md='6'>
-                <FormGroup>
-                  <Label>{t('estudiantes>expediente>apoyos_edu>otra_condicion', 'Otro tipo de condición')}</Label>
-                  <StyledMultiSelect
-                    className={classes.inputTags}
-                    disabled={!editable}
-                    onClick={() => {
-                      handleOpenOptions(props.otrasCondiciones, 'conditions')
-                    }}
-                  >
-                    {condiciones.map((discapacidad) => {
-                      return <SelectItem item={discapacidad} />
-                    })}
-                  </StyledMultiSelect>
-                </FormGroup>
-              </Col>
-              <Col md='6'>
-                <span>{t('estudiantes>expediente>apoyos_edu>reco_docentes', 'Recomendaciones a docentes')}</span>
-                <ButtonsContainer>
-                  <DownloadIconContainer>
-                    <i className='simple-icon-cloud-upload' />
-                  </DownloadIconContainer>
-                  <div style={{ paddingTop: '0.4rem' }}>
-                    {editable && (
-                      <input
-                        onChange={(e) => {
-                          handleFileCondition(e)
-                        }}
-                        className={classes.input}
-                        id='filesCondicion-id'
-                        type='file'
-                        name='filesCondicion'
-                      />
-                    )}
-                    <label htmlFor='filesCondicion-id'>
-                      <FileLabel
-                        disabled={!editable}
-                      >
-                        {t('general>subir_archivo', 'Subir Archivo')}
-                      </FileLabel>
-                    </label>
-                  </div>
-                  {condicionesFiles.length > 0 && (
-                    <Button
-                      color='primary'
-                      onClick={() => {
-                        setOpenFiles({ open: true, type: 'condicion' })
-                        setFiles(condicionesFiles)
-                      }}
-                    >
-                      <IntlMessages id='family.uploadedFiles' />(
-                      {`${condicionesFiles.length} archivos`})
-                    </Button>
-                  )}
-                </ButtonsContainer>
-              </Col>
-            </Row>
-          </Col>
-          <Col xs={12}>
-            <Form onSubmit={handleSubmit(sentData)}>
-              <EditButton
-                editable={editable}
-                setEditable={(value) => props.authHandler('modificar', () => setEditable(value), props.showsnackBar)}
-                loading={loading}
-              />
-            </Form>
-          </Col>
-        </Row>
-      </CardBody>
+    <>
+      <Row>
+        <HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
+        <ContentTab activeTab={activeTab} numberId={activeTab}>
+
+          {activeTab === 0 && <CondicionDiscapacidad handleFileDiscapacidad={handleFileDiscapacidad} handleOpenOptions ={handleOpenOptions } setFiles={setFiles} setOpenFiles={setOpenFiles} setOpenOptions={setOpenOptions} discapacidades={props.discapacidades} apoyos={props.apoyos} editable={editable} />}
+          {activeTab === 1 && <>HOla</>}
+        </ContentTab>
+
+        {/* AQUI ES TAB*/}
+        {/* AQUI ES TAB*/}
+
+        {/* AQUI ES TAB*/}
+        <Col xs={12}>
+          <Form onSubmit={handleSubmit(sentData)}>
+            <EditButton
+              editable={editable}
+              setEditable={(value) => props.authHandler('modificar', () => setEditable(value), props.showsnackBar)}
+              loading={loading}
+            />
+          </Form>
+        </Col>
+      </Row>
       <Modal isOpen={openOptions.open} size='lg'>
         <ModalHeader>{openOptions.type === 'discapacidades' ? t('estudiantes>expediente>apoyos_edu>modal>tipos', 'Tipos de discapacidades') : t('estudiantes>expediente>apoyos_edu>modal>otro', 'Otros tipos de condiciones')}</ModalHeader>
         <ModalBody>
@@ -453,7 +345,7 @@ const ApoyoEducativo = (props) => {
                       onClick={() => {
                         handleResourceDelete(item)
                       }}
-                                 >
+                    >
                       <HighlightOffIcon />
                     </span>}
                   </FileAnchorContainer>
@@ -461,61 +353,26 @@ const ApoyoEducativo = (props) => {
               })}
           </div>
         </ModalBody>
-      </Modal>
-    </Card>
+      </Modal></>
   )
 }
 
-const StyledMultiSelect = styled.div`
-  &[disabled] {
-    background-color: #eaeaea;
-  }
-`
-
-const ButtonsContainer = styled.div`
-  display: flex;
-  margin-top: 1rem;
-  align-items: center;
-`
-
-const FileLabel = styled.div`
-  background-color: white;
-  color: ${props => props.disabled ? '#636363' : colors.primary};
-  border: 1.5px solid ${props => props.disabled ? '#636363' : colors.primary};
-  width: 7rem;
-  height: 2.7rem;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  margin-left: 0.35rem;
-  margin-right: 0.35rem;
-  border-radius: 26px;
-  &:hover {
-    background-color: ${props => props.disabled ? '' : colors.primary};
-    color: ${props => props.disabled ? '' : 'white'};
-  }
-`
-
-const DownloadIconContainer = styled.span`
-  font-size: 35px;
-`
 
 const FileAnchorContainer = styled.div`
-  text-align: center;
-  margin: 1rem;
-  display: flex;
-  align-content: space-between;
+        text-align: center;
+        margin: 1rem;
+        display: flex;
+        align-content: space-between;
 
-  a {
-    padding-top: 1.35px;
+        a {
+          padding - top: 1.35px;
   }
-`
+        `
 
 const CenteredRow = styled(Col)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        `
 
 export default ApoyoEducativo
