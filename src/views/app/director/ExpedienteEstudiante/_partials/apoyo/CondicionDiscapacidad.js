@@ -1,35 +1,23 @@
 import React, { useEffect, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import { Button, Col, FormGroup, Label, Row } from 'reactstrap';
+import { Button, Col, FormGroup, Label, Row, Form } from 'reactstrap';
 import IntlMessages from '../../../../../../helpers/IntlMessages';
+import { EditButton } from '../../../../../../components/EditButton' 
+import colors from '../../../../../../assets/js/colors'
 
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next';
 import SelectItem from './SelectItem';
-function CondicionDiscapacidad(props) {
-    const [discapacidadesFiles, setDiscapacidadesFiles] = useState([])
+function CondicionDiscapacidad(props) { 
     const { t } = useTranslation()
-    const useStyles = makeStyles((theme) => ({
-        inputTags: {
-            minHeight: '8rem',
-            border: '1px solid #eaeaea',
-            padding: '0.35rem',
-            color: 'white'
-        },
-        input: {
-            display: 'none'
-        }
-    }))
-    const classes = useStyles()
 
 
     return <>
         <Row>
-            <Col md='6'>
+            <Col md='12'>
                 <FormGroup>
                     <Label>{t('estudiantes>expediente>apoyos_edu>cond_discap', 'Condición de discapacidad')}</Label>
                     <StyledMultiSelect
-                        className={classes.inputTags}
+                        className={props.classes.inputTags}
                         disabled={!props.editable}
                         onClick={() => {
                             props.handleOpenOptions(props.discapacidades, 'discapacidades')
@@ -41,7 +29,7 @@ function CondicionDiscapacidad(props) {
                     </StyledMultiSelect>
                 </FormGroup>
             </Col>
-            <Col md='6'>
+            {/* <Col md='6'>
                 <span>{t('estudiantes>expediente>apoyos_edu>detalle_condi_discap', 'Detalle de la condición de discapacidad')}</span>
                 <ButtonsContainer>
                     <DownloadIconContainer>
@@ -53,7 +41,7 @@ function CondicionDiscapacidad(props) {
                                 onChange={(e) => {
                                     props.handleFileDiscapacidad(e)
                                 }}
-                                className={classes.input}
+                                className={props.classes.input}
                                 id='filesDiscapacidad-id'
                                 type='file'
                                 name='filesDiscapacidad'
@@ -67,19 +55,28 @@ function CondicionDiscapacidad(props) {
                             </FileLabel>
                         </label>
                     </div>
-                    {discapacidadesFiles.length > 0 && (
+                    {props.discapacidadesFiles.length > 0 && (
                         <Button
                             color='primary'
                             onClick={() => {
                                 props.setOpenFiles({ open: true, type: 'discapacidad' })
-                                props.setFiles(discapacidadesFiles)
+                                props.setFiles(props.discapacidadesFiles)
                             }}
                         >
                             <IntlMessages id='family.uploadedFiles' />(
-                            {`${discapacidadesFiles.length} archivos`})
+                            {`${props.discapacidadesFiles.length} archivos`})
                         </Button>
                     )}
                 </ButtonsContainer>
+            </Col> */}
+            <Col xs={12}>
+                <Form onSubmit={props.handleSubmit(props.sentData)}>
+                    <EditButton
+                        editable={props.editable}
+                        setEditable={(value) => props.authHandler('modificar', () => props.setEditable(value), props.showsnackBar)}
+                        loading={props.loading}
+                    />
+                </Form>
             </Col>
 
         </Row>

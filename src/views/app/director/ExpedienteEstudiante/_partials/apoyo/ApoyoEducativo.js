@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import 'react-tagsinput/react-tagsinput.css'
 import { makeStyles } from '@material-ui/core/styles'
-import { EditButton } from '../../../../../../components/EditButton'
 import SelectItem from './SelectItem'
 
 import HeaderTab from 'Components/Tab/Header'
@@ -20,12 +19,11 @@ import {
   Form,
   Card
 } from 'reactstrap'
-import styled from 'styled-components'
-import IntlMessages from '../../../../../../helpers/IntlMessages'
-import colors from '../../../../../../assets/js/colors'
+import styled from 'styled-components' 
 import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import { useTranslation } from 'react-i18next'
 import CondicionDiscapacidad from './CondicionDiscapacidad'
+import OtraCondicion from './OtraCondicion'
 
 const useStyles = makeStyles((theme) => ({
   inputTags: {
@@ -242,24 +240,16 @@ const ApoyoEducativo = (props) => {
     { title: 'Otras Condiciones' }
   ]
   return (
-    <Card style={{paddingLeft:36,paddingRight:36,}}>
+    <Card style={{ paddingLeft: 36, paddingRight: 36, }}>
       <Row>
         <HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
         <ContentTab activeTab={activeTab} numberId={activeTab}>
 
-          {activeTab === 0 && <CondicionDiscapacidad handleFileDiscapacidad={handleFileDiscapacidad} handleOpenOptions ={handleOpenOptions } setFiles={setFiles} setOpenFiles={setOpenFiles} setOpenOptions={setOpenOptions} discapacidades={props.discapacidades} apoyos={props.apoyos} editable={editable} />}
-          {activeTab === 1 && <>HOla</>}
+          {activeTab === 0 && <CondicionDiscapacidad disabled={props.disabled} discapacidadesFiles={discapacidadesFiles} sentData={sentData} handleSubmit={handleSubmit} showsnackBar={props.showsnackBar} setEditable={setEditable} authHandler={props.authHandler} classes={classes} handleFileDiscapacidad={handleFileDiscapacidad} handleOpenOptions={handleOpenOptions} setFiles={setFiles} setOpenFiles={setOpenFiles} setOpenOptions={setOpenOptions} discapacidades={props.discapacidades} apoyos={props.apoyos} editable={editable} loading={loading} />}
+          {activeTab === 1 && <OtraCondicion disabled={props.disabled} sentData={sentData} handleSubmit={handleSubmit} showsnackBar={props.showsnackBar} setEditable={setEditable} authHandler={props.authHandler} handleFileDiscapacidad={handleFileDiscapacidad} classes={classes} setFiles={setFiles} setOpenFiles={setOpenFiles} handleFileCondition={handleFileCondition} condiciones={condiciones} condicionesFiles={condicionesFiles} handleOpenOptions={handleOpenOptions} editable={editable} loading={loading} />}
         </ContentTab>
- 
-        <Col xs={12}>
-          <Form onSubmit={handleSubmit(sentData)}>
-            <EditButton
-              editable={editable}
-              setEditable={(value) => props.authHandler('modificar', () => setEditable(value), props.showsnackBar)}
-              loading={loading}
-            />
-          </Form>
-        </Col>
+
+
       </Row>
       <Modal isOpen={openOptions.open} size='lg'>
         <ModalHeader>{openOptions.type === 'discapacidades' ? t('estudiantes>expediente>apoyos_edu>modal>tipos', 'Tipos de discapacidades') : t('estudiantes>expediente>apoyos_edu>modal>otro', 'Otros tipos de condiciones')}</ModalHeader>
@@ -351,7 +341,7 @@ const ApoyoEducativo = (props) => {
           </div>
         </ModalBody>
       </Modal>
-      </Card>
+    </Card>
   )
 }
 
