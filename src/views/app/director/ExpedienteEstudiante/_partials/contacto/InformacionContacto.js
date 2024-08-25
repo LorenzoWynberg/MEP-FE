@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
 
 const InformacionContacto = props => {
 	const { t } = useTranslation()
-	console.log('props.informacionContacto', props.expedienteEstudiantil.currentStudent.idEstudiante)
+	console.log('props.informacionContacto', props.expedienteEstudiantil.currentStudent)
 
 	const classes = useStyles()
 	const [snakbar, handleClick, handleClose] = useNotification()
@@ -230,13 +230,13 @@ const InformacionContacto = props => {
 										</Label>
 										<Input
 											type='email'
-											name='email'
-											id='email'
+											name='emailSecundario'
+											id='emailSecundario'
 											placeholder='correo@gmail.com'
 											onChange={handleInputChange}
 											disabled={!editable}
-											value={formState.email}
-											invalid={errorFields.Email}
+											value={formState.emailSecundario}
+											invalid={errorFields.EmailSecundario}
 										/>
 										<FormFeedback>{errorMessages.Email}</FormFeedback>
 									</FormGroup>
@@ -249,13 +249,13 @@ const InformacionContacto = props => {
 										</Label>
 										<Input
 											type='email'
-											name='emailSecundario'
-											id='emailSecundario'
+											name='email'
+											id='email'
 											placeholder='correo@gmail.com'
 											onChange={handleInputChange}
-											disabled={!editable}
-											value={formState.emailSecundario}
-											invalid={errorFields.EmailSecundario}
+											disabled
+											value={formState.email}
+											invalid={errorFields.Email}
 										/>
 										<FormFeedback>{errorMessages.EmailSecundario}</FormFeedback>
 									</FormGroup>
