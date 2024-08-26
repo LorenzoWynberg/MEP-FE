@@ -156,7 +156,7 @@ const PersonalDataForm = props => {
 									name='conocidoComo'
 									value={props.personalData.conocidoComo}
 									onChange={props.handleChange}
-									disabled={props.disabled}
+									disabled
 								/>
 							</FormGroup>
 						</Col>
@@ -204,7 +204,7 @@ const PersonalDataForm = props => {
 									onChange={data => {
 										props.handleChange(data, 'sexo')
 									}}
-									isDisabled={props.disabled}
+									isDisabled
 								/>
 								<FormFeedbackSpan>{errorMessages.SexoId}</FormFeedbackSpan>
 							</FormGroup>
@@ -230,7 +230,7 @@ const PersonalDataForm = props => {
 									type='text'
 									name='fechaDeNacimiento'
 									value={props.personalData.fechaDeNacimiento}
-									disabled={props.disabled}
+									disabled
 									onChange={data => {
 										props.handleChange(data, 'sexo')
 									}}
@@ -247,12 +247,7 @@ const PersonalDataForm = props => {
 										'Edad cumplida'
 									)}
 								</Label>
-								<Input
-									name='id'
-									value={props.personalData.edad}
-									disabled={props.disabled}
-									invalid={errorFields.Edad}
-								/>
+								<Input name='id' value={props.personalData.edad} disabled invalid={errorFields.Edad} />
 								<FormFeedback>{errorMessages.Edad}</FormFeedback>
 							</FormGroup>
 						</Col>
