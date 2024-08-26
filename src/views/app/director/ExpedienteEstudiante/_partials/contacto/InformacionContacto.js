@@ -42,8 +42,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const InformacionContacto = props => {
-  const { t } = useTranslation()
-  console.log('props.informacionContacto', props.expedienteEstudiantil.currentStudent.idEstudiante)
+	const { t } = useTranslation()
+	console.log('props.informacionContacto', props.expedienteEstudiantil.currentStudent)
 
   const classes = useStyles()
   const [snakbar, handleClick, handleClose] = useNotification()
@@ -179,50 +179,49 @@ const InformacionContacto = props => {
                     </ReactInputMask>
                     <FormFeedback>{errorMessages.TelefonoSecundario}</FormFeedback>
                   </FormGroup>
-
-                  <FormGroup>
-                    <Label>
-                      *
-                      {t(
-                        'estudiantes>expediente>contacto>info_cont>correo_per',
-                        'Correo electrónico personal'
-                      )}
-                    </Label>
-                    <Input
-                      type='email'
-                      name='email'
-                      id='email'
-                      placeholder='correo@gmail.com'
-                      onChange={handleInputChange}
-                      disabled={!editable}
-                      value={formState.email}
-                      invalid={errorFields.Email}
-                    />
-                    <FormFeedback>{errorMessages.Email}</FormFeedback>
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for='emailSecundario'>
-                      {t(
-                        'estudiantes>expediente>contacto>info_cont>correo_inst',
-                        'Correo electrónico institucional'
-                      )}
-                    </Label>
-                    <Input
-                      type='email'
-                      name='emailSecundario'
-                      id='emailSecundario'
-                      placeholder='correo@gmail.com'
-                      onChange={handleInputChange}
-                      disabled={!editable}
-                      value={formState.emailSecundario}
-                      invalid={errorFields.EmailSecundario}
-                    />
-                    <FormFeedback>{errorMessages.EmailSecundario}</FormFeedback>
-                  </FormGroup>
-                </Grid>
-              </Grid>
-            </Paper>
-          </Grid>
+									<FormGroup>
+										<Label>
+											*
+											{t(
+												'estudiantes>expediente>contacto>info_cont>correo_per',
+												'Correo electrónico personal'
+											)}
+										</Label>
+										<Input
+											type='email'
+											name='emailSecundario'
+											id='emailSecundario'
+											placeholder='correo@gmail.com'
+											onChange={handleInputChange}
+											disabled={!editable}
+											value={formState.emailSecundario}
+											invalid={errorFields.EmailSecundario}
+										/>
+										<FormFeedback>{errorMessages.Email}</FormFeedback>
+									</FormGroup>
+									<FormGroup>
+										<Label for='emailSecundario'>
+											{t(
+												'estudiantes>expediente>contacto>info_cont>correo_inst',
+												'Correo electrónico institucional'
+											)}
+										</Label>
+										<Input
+											type='email'
+											name='email'
+											id='email'
+											placeholder='correo@gmail.com'
+											onChange={handleInputChange}
+											disabled
+											value={formState.email}
+											invalid={errorFields.Email}
+										/>
+										<FormFeedback>{errorMessages.EmailSecundario}</FormFeedback>
+									</FormGroup>
+								</Grid>
+							</Grid>
+						</Paper>
+					</Grid>
 
           <Grid item md={6} xs={12}>
             <Paper className={classes.paper}>
