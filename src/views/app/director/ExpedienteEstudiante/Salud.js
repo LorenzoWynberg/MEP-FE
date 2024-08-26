@@ -271,7 +271,7 @@ const Salud = props => {
 					<br />
 					<div className='mb-5'>
 						<TableReactImplementation
-							showAddButton
+							showAddButton 
 							onSubmitAddButton={() => {
 								props.authHandler(
 									'agregar',
@@ -283,9 +283,9 @@ const Salud = props => {
 									showSnackbar
 								)
 							}}
-							msjButton
+							msjButton='Agregar'
 							columns={columns}
-							data={salud.items}
+							data={salud.items} 
 							avoidSearch
 						/>
 					</div>

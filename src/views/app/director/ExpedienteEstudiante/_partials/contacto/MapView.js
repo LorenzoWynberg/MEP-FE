@@ -3,12 +3,12 @@ import { loadModules } from 'esri-loader'
 import styled from 'styled-components'
 
 export class WebMapView extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.mapRef = React.createRef()
   }
 
-  componentDidMount () {
+  componentDidMount() {
     // lazy load the required ArcGIS API for JavaScript modules and CSS
     const self = this
     loadModules(
@@ -24,16 +24,10 @@ export class WebMapView extends React.Component {
         css: true
       }
     ).then(
-      ([
-        ArcGISMap,
-        MapView,
-        Search,
-        FeatureLayer,
-        esriConfig,
-        EsriLocator
-      ]) => {
+      ([ArcGISMap, MapView, Search, FeatureLayer, esriConfig, EsriLocator]) => {
+
         esriConfig.request.interceptors.push({
-          before (params) {
+          before(params) {
             if (params.url.includes('query')) {
               params.requestOptions.query.f = 'json'
             }
@@ -76,23 +70,6 @@ export class WebMapView extends React.Component {
         this.search = search
         this.props.setSearch(search)
 
-        const view = this.view
-        async function queryFeatureLayer (
-          point,
-          distance,
-          spatialRelationship,
-          featureL
-        ) {
-          const query = {
-            geometry: point,
-            distance,
-            spatialRelationship,
-            outFields: ['*'],
-            returnGeometry: true
-          }
-          const response = await featureL.queryFeatures(query)
-          return response.features
-        }
         const props = this.props
         this.view.on('mouse-wheel', function (event) {
           self.disableMap(event)
@@ -117,6 +94,11 @@ export class WebMapView extends React.Component {
           self.disableMap(event)
         })
         this.view.on('click', async function (evt) {
+    
+        //  props.setLocation({
+        //     latitude: evt.mapPoint.latitude.toFixed(6),
+        //     longitude: evt.mapPoint.longitude.toFixed(6)
+        //   })
           self.disableMap(evt, async () => {
             self.search.clear()
             self.view.popup.clear()
@@ -135,14 +117,13 @@ export class WebMapView extends React.Component {
                 location: evt.mapPoint
               }
               const locatorUrl =
-								'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer'
+                'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer'
               EsriLocator.locationToAddress(
                 locatorUrl,
                 params
               ).then(
                 function (response) {
                   // Show the address found
-                  
                   const address = response.address
                   self.showPopup(
                     address,
@@ -169,7 +150,7 @@ export class WebMapView extends React.Component {
     )
   }
 
-  async queryFeatureLayer (point, distance, spatialRelationship, featureL) {
+  async queryFeatureLayer(point, distance, spatialRelationship, featureL) {
     const query = {
       geometry: point,
       distance,
@@ -181,7 +162,7 @@ export class WebMapView extends React.Component {
     return response.features
   }
 
-  disableMap (event, cb = () => {}) {
+  disableMap(event, cb = () => { }) {
     if (!this.props.editable) {
       event.stopPropagation()
     } else {
@@ -192,7 +173,7 @@ export class WebMapView extends React.Component {
 
   disableMap = this.disableMap.bind(this)
 
-  showPopup (address, pt, attributes) {
+  showPopup(address, pt, attributes) {
     const test = {
       title: +pt.longitude + ',' + pt.latitude,
       content: address,
@@ -204,27 +185,28 @@ export class WebMapView extends React.Component {
       content: address,
       location: pt
     })
-    this.props.setLocation({
-      latitude: pt.latitude.toFixed(6),
-      longitude: pt.longitude.toFixed(6)
-    })
+    // this.props.setLocation({
+    //   latitude: pt.latitude.toFixed(6),
+    //   longitude: pt.longitude.toFixed(6)
+    // })
     this.props.setUbicacion({
       canton: attributes?.NCANTON,
       provincia: attributes?.PROVINCIA,
       distrito: attributes?.NDISTRITO
     })
+    
   }
 
   showPopup = this.showPopup.bind(this)
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     if (this.view) {
       // destroy the map view
       this.view.container = null
     }
   }
 
-  render () {
+  render() {
     return <Map className='webmap' ref={this.mapRef} />
   }
 }

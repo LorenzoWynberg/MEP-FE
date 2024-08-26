@@ -45,6 +45,7 @@ interface IProps {
 	actions?: []
 	checked?: boolean
 	onSearch?: () => void
+	msjButton?: string
 }
 
 interface IBackendPaginatedProps extends IProps {
@@ -69,20 +70,19 @@ function GlobalFilter({
 	cols = [],
 	hasData = false,
 	showAddButton = false,
-	onSubmitAddButton = () => {},
+	onSubmitAddButton = () => { },
 	avoidSearch = false,
 	RightAction = <></>,
 	selectAll,
 	actions = [],
 	selectedItemsId,
-	handleChangeSelectAll = (value: boolean) => {},
+	handleChangeSelectAll = (value: boolean) => { },
 	hideMultipleOptions = false,
 	checked = false,
-	msjButton = '',
+	msjButton,
 	textButton = ''
 }) {
 	const { t } = useTranslation()
-
 	const [dropdownOpen, setDropdownOpen] = React.useState<'preferences' | 'filter' | null>(null)
 	const toggleDropDown = (value: 'preferences' | 'filter') => {
 		if (dropdownOpen === value) {
@@ -107,7 +107,7 @@ function GlobalFilter({
 		<Row>
 			<Col className='container-nav d-flex justify-content-between aling-items-center'>
 				{!avoidSearch ? <Search onSearch={onChange} /> : <></>}
-				<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+				<div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
 					{showAddButton && (
 						<Button
 							style={{ cursor: 'pointer' }}
@@ -232,7 +232,7 @@ function BackendFilter({
 	selectedColumn,
 	hasData = false,
 	cols = [],
-	onSubmitAddButton = () => {}
+	onSubmitAddButton = () => { }
 }) {
 	const { t } = useTranslation()
 	const [value, setValue] = React.useState('')
@@ -417,7 +417,6 @@ export const TableDataFrontPaginated: React.FC<IProps> = props => {
 				actions={props.actions}
 				checked={props.checked}
 				msjButton={props.msjButton}
-				textButton={props.textButton}
 			/>
 			<Table className='mallasTable' {...getTableProps()} style={{ marginBottom: 15 }}>
 				<thead>

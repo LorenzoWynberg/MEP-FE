@@ -39,7 +39,7 @@ const Expediente = (props) => {
   const optionsTab = [
     { key: 'estudiantes>expediente>contacto>info_cont>titulo' },
     { key: 'estudiantes>expediente>contacto>info_residencia>titulo' },
-    tempAddress && { key: 'estudiantes>expediente>contacto>info_residencia>dom_temp' },
+     { key: 'estudiantes>expediente>contacto>info_residencia>dom_temp' },
     { key: 'estudiantes>expediente>contacto>historico_residencia>titulo' }
   ]
 
@@ -82,7 +82,7 @@ const Expediente = (props) => {
       <ContentTab activeTab={activeTab} numberId={activeTab}>
         {activeTab === 0 && <InformacionContacto />}
         {activeTab === 1 && <InformacionResidenciaFija tempAddress={tempAddress} toggleAddress={toggleAddress} identification={state.identification} />}
-        {tempAddress && activeTab === 2 && <InformacionResidenciaTemporal temporal identification={state.identification} />}
+        {activeTab === 2 && <InformacionResidenciaTemporal temporal identification={state.identification} />}
         {activeTab === 3 && <HistoricoResidencia identidadId={state.identification?.data?.id} />}
       </ContentTab>
     </>

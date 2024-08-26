@@ -46,7 +46,7 @@ const SaludForm = props => {
 									</Col>
 									<Col sm='12'>
 										<Row>
-											<Col sm='4'>
+											<Col sm='3'>
 												<FormGroup>
 													<Label>
 														{t('estudiantes>expediente>salud>peso', 'Peso (kg)')} *
@@ -73,7 +73,7 @@ const SaludForm = props => {
 													<FormFeedback>{props.messages.Peso}</FormFeedback>
 												</FormGroup>
 											</Col>
-											<Col sm='4'>
+											<Col sm='3'>
 												<FormGroup>
 													<Label>
 														{t('estudiantes>expediente>salud>talla', 'Talla (cm)')} *
@@ -106,7 +106,7 @@ const SaludForm = props => {
 													<FormFeedback>{props.messages.Talla}</FormFeedback>
 												</FormGroup>
 											</Col>
-											<Col sm='4'>
+											<Col sm='6'>
 												<FormGroup>
 													<Label>
 														{t(

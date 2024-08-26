@@ -2,18 +2,7 @@ import React from 'react'
 import CustomSelectInput from 'Components/common/CustomSelectInput'
 import Select from 'react-select'
 
-import {
-	Input,
-	Label,
-	Form,
-	Row,
-	Col,
-	FormGroup,
-	Card,
-	CardBody,
-	CardTitle,
-	CustomInput
-} from 'reactstrap'
+import { Input, Label, Form, Row, Col, FormGroup, Card, CardBody, CardTitle, CustomInput } from 'reactstrap'
 import { useTranslation } from 'react-i18next'
 import SelectCatalogo from 'Components/SelectCatalogo'
 
@@ -21,22 +10,19 @@ const listSexo = [
 	{ value: 1, label: 'Masculino', key: 1 },
 	{ value: 2, label: 'Femenino', key: 2 }
 ]
-const PersonalDataForm = (props) => {
+const PersonalDataForm = props => {
 	const { t } = useTranslation()
 	return (
 		<Card>
 			<CardBody>
 				<CardTitle>
-					{t(
-						'estudiantes>expediente>info_gen>datos_adicionales>titulo',
-						'Datos adicionales'
-					)}
+					{t('estudiantes>expediente>info_gen>datos_adicionales>titulo', 'Datos adicionales')}
 				</CardTitle>
 				<Form>
 					<Row>
 						{/* Este code se comenta hata que se resuelva el tema con los estados de los estudiantes */}
 						{false && (
-							<Col sm="12">
+							<Col sm='12'>
 								<FormGroup>
 									<Label>
 										{' '}
@@ -49,10 +35,10 @@ const PersonalDataForm = (props) => {
 										components={{
 											Input: CustomSelectInput
 										}}
-										className="react-select"
-										classNamePrefix="react-select"
+										className='react-select'
+										classNamePrefix='react-select'
 										options={listSexo}
-										placeholder=""
+										placeholder=''
 										value={{
 											value: 1,
 											label: 'Hombre',
@@ -63,49 +49,8 @@ const PersonalDataForm = (props) => {
 								</FormGroup>
 							</Col>
 						)}
-						<Col sm="12">
-							<FormGroup>
-								<Label>
-									{t(
-										'estudiantes>expediente>info_gen>datos_adicionales>conocido',
-										'Conocido como'
-									)}
-								</Label>
-								<Input
-									type="text"
-									name="conocidoComo"
-									value={props.personalData.conocidoComo}
-									onChange={props.handleChange}
-									disabled={props.disabled}
-								/>
-							</FormGroup>
-						</Col>
-						<Col sm="12">
-							<FormGroup>
-								<Label>
-									{t(
-										'estudiantes>expediente>info_gen>datos_adicionales>genero',
-										'Género'
-									)}
-								</Label>
-								<SelectCatalogo
-									components={{ Input: CustomSelectInput }}
-									className="react-select"
-									classNamePrefix="react-select"
-									/* options={props.selects.genderTypes.map((item) => {
-                    return { ...item, label: item.nombre, value: item.id };
-                  })} */
-									catalogo="genderTypes"
-									placeholder=""
-									value={props.personalData.genero}
-									onChange={(data) => {
-										props.handleChange(data, 'genero')
-									}}
-									isDisabled={!props.editable}
-								/>
-							</FormGroup>
-						</Col>
-						<Col sm="12">
+
+						<Col sm='12'>
 							<FormGroup>
 								<Label>
 									{t(
@@ -115,53 +60,44 @@ const PersonalDataForm = (props) => {
 								</Label>
 								<SelectCatalogo
 									components={{ Input: CustomSelectInput }}
-									className="react-select"
-									classNamePrefix="react-select"
+									className='react-select'
+									classNamePrefix='react-select'
 									/* options={props.selects.migrationTypes.map((item) => {
                     return { ...item, label: item.nombre, value: item.id };
                   })} */
-									catalogo="migrationTypes"
-									placeholder=""
+									catalogo='migrationTypes'
+									placeholder=''
 									value={props.personalData.migracionStatus}
-									onChange={(data) => {
-										props.handleChange(
-											data,
-											'migracionStatus'
-										)
+									onChange={data => {
+										props.handleChange(data, 'migracionStatus')
 									}}
-									isDisabled={
-										!props.editable ||
-										props.disableMigrationStatus
-									}
+									isDisabled={!props.editable || props.disableMigrationStatus}
 								/>
 							</FormGroup>
 						</Col>
-						<Col sm="12">
+						<Col sm='12'>
 							<FormGroup>
 								<Label>
-									{t(
-										'estudiantes>expediente>info_gen>datos_adicionales>etnia_ind',
-										'Etnia indígena'
-									)}
+									{t('estudiantes>expediente>info_gen>datos_adicionales>etnia_ind', 'Etnia indígena')}
 								</Label>
 								<SelectCatalogo
 									components={{ Input: CustomSelectInput }}
-									className="react-select"
-									classNamePrefix="react-select"
+									className='react-select'
+									classNamePrefix='react-select'
 									/* options={[{label: t('general>sin_select','Sin seleccionar'), value: null},...props.selects.etnias.map((item) => {
                     return { ...item, label: item.nombre, value: item.id };
                   })]} */
-									catalogo="etnias"
-									placeholder=""
+									catalogo='etnias'
+									placeholder=''
 									value={props.personalData.etnia}
-									onChange={(data) => {
+									onChange={data => {
 										props.handleChange(data, 'etnia')
 									}}
 									isDisabled={!props.editable}
 								/>
 							</FormGroup>
 						</Col>
-						<Col sm="12">
+						<Col sm='12'>
 							<FormGroup>
 								<Label>
 									{t(
@@ -171,26 +107,23 @@ const PersonalDataForm = (props) => {
 								</Label>
 								<SelectCatalogo
 									components={{ Input: CustomSelectInput }}
-									className="react-select"
-									classNamePrefix="react-select"
+									className='react-select'
+									classNamePrefix='react-select'
 									/* options={[{label: t('general>sin_select','Sin seleccionar'), value: null},...props.selects.lenguasIndigenas.map((item) => {
                     return { ...item, label: item.nombre, value: item.id };
                   })]} */
-									catalogo="lenguasIndigenas"
-									placeholder=""
+									catalogo='lenguasIndigenas'
+									placeholder=''
 									value={props.personalData.lenguaIndigena}
-									onChange={(data) => {
-										props.handleChange(
-											data,
-											'lenguaIndigena'
-										)
+									onChange={data => {
+										props.handleChange(data, 'lenguaIndigena')
 									}}
 									isDisabled={!props.editable}
 								/>
 							</FormGroup>
 						</Col>
 
-						<Col sm="12">
+						<Col sm='12'>
 							<FormGroup>
 								<Label>
 									{t(
@@ -200,8 +133,8 @@ const PersonalDataForm = (props) => {
 								</Label>
 								<div>
 									<CustomInput
-										type="radio"
-										id="exampleCustomInline"
+										type='radio'
+										id='exampleCustomInline'
 										inline
 										label={t('general>si', 'Si')}
 										checked={props.personalData.lesco}
@@ -217,8 +150,8 @@ const PersonalDataForm = (props) => {
 										}}
 									/>
 									<CustomInput
-										type="radio"
-										id="exampleCustomInline2"
+										type='radio'
+										id='exampleCustomInline2'
 										inline
 										label={t('general>no', 'No')}
 										checked={!props.personalData.lesco}
@@ -236,7 +169,7 @@ const PersonalDataForm = (props) => {
 								</div>
 							</FormGroup>
 						</Col>
-						<Col sm="12">
+						<Col sm='12'>
 							<FormGroup>
 								<Label>
 									{t(
@@ -246,25 +179,22 @@ const PersonalDataForm = (props) => {
 								</Label>
 								<SelectCatalogo
 									components={{ Input: CustomSelectInput }}
-									className="react-select"
-									classNamePrefix="react-select"
+									className='react-select'
+									classNamePrefix='react-select'
 									/* options={props.selects.lenguasMaternas.map((item) => {
                     return { ...item, label: item.nombre, value: item.id };
                   })} */
-									catalogo="lenguasMaternas"
-									placeholder=""
+									catalogo='lenguasMaternas'
+									placeholder=''
 									value={props.personalData.lenguaMaterna}
-									onChange={(data) => {
-										props.handleChange(
-											data,
-											'lenguaMaterna'
-										)
+									onChange={data => {
+										props.handleChange(data, 'lenguaMaterna')
 									}}
 									isDisabled={!props.editable}
 								/>
 							</FormGroup>
 						</Col>
-						<Col sm="12">
+						<Col sm='12'>
 							<FormGroup>
 								<Label>
 									{t(
@@ -274,15 +204,15 @@ const PersonalDataForm = (props) => {
 								</Label>
 								<SelectCatalogo
 									components={{ Input: CustomSelectInput }}
-									className="react-select"
-									classNamePrefix="react-select"
+									className='react-select'
+									classNamePrefix='react-select'
 									/* options={props.selects.estadosCiviles.map((item) => {
                     return { ...item, label: item.nombre, value: item.id };
                   })} */
-									catalogo="estadosCiviles"
-									placeholder=""
+									catalogo='estadosCiviles'
+									placeholder=''
 									value={props.personalData.estadoCivil}
-									onChange={(data) => {
+									onChange={data => {
 										props.handleChange(data, 'estadoCivil')
 									}}
 									isDisabled={!props.editable}
