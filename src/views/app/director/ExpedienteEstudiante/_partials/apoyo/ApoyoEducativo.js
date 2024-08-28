@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import 'react-tagsinput/react-tagsinput.css'
 import { makeStyles } from '@material-ui/core/styles'
 import SelectItem from './SelectItem'
@@ -44,16 +44,12 @@ const ApoyoEducativo = (props) => {
 
   const { handleSubmit } = props
   const classes = useStyles()
-  const [editable, setEditable] = useState(false)
+  const [editable, setEditable] = useState(true)
   const [discapacidades, setDiscapacidades] = useState([])
   const [condiciones, setCondiciones] = useState([])
   const [openOptions, setOpenOptions] = useState({ open: false, type: null })
-  const [openFiles, setOpenFiles] = useState({ open: false, type: null })
   const [modalOptions, setModalOptions] = useState([])
-  const [files, setFiles] = useState([])
   const [activeTab, setActiveTab] = useState(0)
-  const [discapacidadesFiles, setDiscapacidadesFiles] = useState([])
-  const [condicionesFiles, setCondicionesFiles] = useState([])
   const [discapacidadesToDelete, setDiscapacidadesToDelete] = useState([])
   const [condicionesToDelete, setCondicionesToDelete] = useState([])
   const [discapacidadesToUpload, setDiscapacidadesToUpload] = useState([])
@@ -70,7 +66,6 @@ const ApoyoEducativo = (props) => {
         _discapacidades.push(discapacidad)
       }
     })
-
     setDiscapacidades(_discapacidades)
   }, [props.discapacidadesIdentidad, editable])
 
@@ -88,16 +83,8 @@ const ApoyoEducativo = (props) => {
     setCondiciones(_condiciones)
   }, [props.condicionesIdentidad, editable])
 
-  useEffect(() => {
-    setDiscapacidadesFiles(props.apoyos.recursosDiscapacidadesIdentidad)
-  }, [props.apoyos.recursosDiscapacidadesIdentidad, editable])
-
-  useEffect(() => {
-    setCondicionesFiles(props.apoyos.recursosCondicionesIdentidad)
-  }, [props.apoyos.recursosCondicionesIdentidad, editable])
-
   const handleOpenOptions = (options, name) => {
-    if (!editable) return
+    // if (!editable) return
     let _options = []
     if (name === 'discapacidades') {
       const mappedDiscapacidades = discapacidades.map((item) => item.id)
@@ -122,17 +109,34 @@ const ApoyoEducativo = (props) => {
     setOpenOptions({ open: true, type: name })
   }
 
-  const toggleModal = (saveData = false) => {
+  const toggleModal = async (saveData = false) => {
     let options = []
     console.log('props.discapacidades openOptions', openOptions)
     console.log('props.discapacidades modalOptions', modalOptions)
+    console.log('props.discapacidades modalOptions', saveData)
     if (saveData) {
       if (openOptions.type === 'discapacidades') {
         options = []
         modalOptions.forEach((discapacidad) => {
           if (discapacidad.checked) options.push(discapacidad)
         })
+
+
         setDiscapacidades(options)
+        console.log('props.discapacidades options', options)
+
+        axios.post(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/CreateMultiple/${props.identidadId}`, options.map(d => {
+          return {
+            id: 0,
+            elementosCatalogoId: d.id,
+            identidadesId: props.identidadId,
+            estado: true
+          }
+        })).then(r => {
+          window.location.reload()
+
+        })
+
       } else {
         options = []
         modalOptions.forEach((condicion) => {
@@ -144,10 +148,6 @@ const ApoyoEducativo = (props) => {
     setOpenOptions({ open: false, type: null })
   }
 
-  const toggleModalFiles = () => {
-    setOpenFiles({ open: false, type: null })
-  }
-
   const handleChangeItem = (item) => {
     const newItems = modalOptions.map((element) => {
       if (element.id === item.id) { return { ...element, checked: !element.checked } }
@@ -156,48 +156,7 @@ const ApoyoEducativo = (props) => {
     setModalOptions(newItems)
   }
 
-  const handleFileDiscapacidad = (e) => {
-    if (!editable) return
-    setDiscapacidadesToUpload([...discapacidadesToUpload, e.target.files[0]])
-    setDiscapacidadesFiles([...discapacidadesFiles, e.target.files[0]])
-  }
 
-  const handleFileCondition = (e) => {
-    if (!editable) return
-    setCondicionesToUpload([...condicionesToUpload, e.target.files[0]])
-    setCondicionesFiles([...condicionesFiles, e.target.files[0]])
-  }
-
-  const handleResourceDelete = async (item) => {
-    let _options
-    if (openFiles.type === 'discapacidad') {
-      if (item.name) {
-        _options = discapacidadesFiles.filter(
-          (discapacidad) => discapacidad.name !== item.name
-        )
-      } else {
-        _options = discapacidadesFiles.filter(
-          (discapacidad) => discapacidad.id !== item.id
-        )
-        setDiscapacidadesToDelete([...discapacidadesToDelete, item])
-      }
-      setDiscapacidadesFiles(_options)
-    } else {
-      if (item.name) {
-        _options = condicionesFiles.filter(
-          (discapacidad) => discapacidad.name !== item.name
-        )
-      } else {
-        _options = condicionesFiles.filter(
-          (discapacidad) => discapacidad.id !== item.id
-        )
-        setCondicionesToDelete([...condicionesToDelete, item])
-      }
-      setCondicionesFiles(_options)
-    }
-
-    setFiles(_options)
-  }
 
   const sentData = async () => {
     setEditable(false)
@@ -219,6 +178,17 @@ const ApoyoEducativo = (props) => {
       }
     })
 
+    console.log('sentData discapacidades', discapacidades)
+    console.log('sentData props', props)
+    console.log('sentData data', {
+      discapacidadesData,
+      condicionesData,
+      discapacidadesToUpload,
+      condicionesToUpload,
+      discapacidadesToDelete,
+      condicionesToDelete,
+    })
+
     const response = await props.saveDiscapacidades(
       discapacidadesData,
       condicionesData,
@@ -229,13 +199,15 @@ const ApoyoEducativo = (props) => {
       props.identidadId
     )
 
-
+    console.log(
+      'sentData response', response
+    )
     if (!response.error) {
       setDiscapacidadesToUpload([])
       setCondicionesToUpload([])
       setCondicionesToDelete([])
       setDiscapacidadesToDelete([])
-      window.location.reload()
+      // window.location.reload()
 
       props.showsnackBar('success', 'Contenido enviado con éxito')
     } else {
@@ -254,8 +226,8 @@ const ApoyoEducativo = (props) => {
         <HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
         <ContentTab activeTab={activeTab} numberId={activeTab}>
 
-          {activeTab === 0 && <CondicionDiscapacidad discapacidadesSelected={discapacidades} discapacidadesIdentidad={props.discapacidadesIdentidad} disabled={props.disabled} discapacidadesFiles={discapacidadesFiles} sentData={sentData} handleSubmit={handleSubmit} showsnackBar={props.showsnackBar} setEditable={setEditable} authHandler={props.authHandler} classes={classes} handleOpenOptions={handleOpenOptions} setOpenOptions={setOpenOptions} discapacidades={props.discapacidades} apoyos={props.apoyos} editable={editable} loading={loading} />}
-          {activeTab === 1 && <OtraCondicion disabled={props.disabled} sentData={sentData} handleSubmit={handleSubmit} showsnackBar={props.showsnackBar} setEditable={setEditable} authHandler={props.authHandler} handleFileDiscapacidad={handleFileDiscapacidad} classes={classes} setFiles={setFiles} setOpenFiles={setOpenFiles} handleFileCondition={handleFileCondition} condiciones={condiciones} condicionesFiles={condicionesFiles} handleOpenOptions={handleOpenOptions} editable={editable} loading={loading} />}
+          {activeTab === 0 && <CondicionDiscapacidad discapacidadesSelected={discapacidades} discapacidadesIdentidad={props.discapacidadesIdentidad} disabled={props.disabled} sentData={sentData} handleSubmit={handleSubmit} showsnackBar={props.showsnackBar} setEditable={setEditable} authHandler={props.authHandler} classes={classes} handleOpenOptions={handleOpenOptions} setOpenOptions={setOpenOptions} discapacidades={props.discapacidades} apoyos={props.apoyos} editable={editable} loading={loading} />}
+          {activeTab === 1 && <OtraCondicion disabled={props.disabled} sentData={sentData} handleSubmit={handleSubmit} showsnackBar={props.showsnackBar} setEditable={setEditable} authHandler={props.authHandler} classes={classes} condiciones={condiciones} handleOpenOptions={handleOpenOptions} editable={editable} loading={loading} />}
         </ContentTab>
 
 
@@ -273,7 +245,7 @@ const ApoyoEducativo = (props) => {
                 {modalOptions.filter(d =>
                   !props.discapacidadesIdentidad?.some(di => di.id == d.id)
                 ).map((item) => {
-                  console.log('the item',item)
+                  console.log('the item', item)
                   return (
                     <Row>
                       <Col xs={3} className='modal-detalle-subsidio-col'>
@@ -310,7 +282,7 @@ const ApoyoEducativo = (props) => {
                   color='primary'
                   outline
                 >
-                  {t('general>cancelar', 'Cancelar')}
+                  {t('general>cancelaaaar', 'Cancaaelar')}
                 </Button>
                 <Button
                   color='primary'
@@ -318,7 +290,7 @@ const ApoyoEducativo = (props) => {
                     toggleModal(true)
                   }}
                 >
-                  {t('general>guardar', 'Guardar')}
+                  {t('general>guardar', 'Guaraadar')}
                 </Button>
 
               </CenteredRow>
@@ -327,51 +299,11 @@ const ApoyoEducativo = (props) => {
           </Container>
         </ModalBody>
       </Modal>
-      <Modal isOpen={openFiles.open} size='lg'>
-        <ModalHeader toggle={toggleModalFiles}>
-          {openFiles.type == 'discapacidad' ? 'Detalle de la condición' : 'Recomendaciones a docentes'}
-        </ModalHeader>
-        <ModalBody>
-          <div>
-            {files &&
-              files.map((item) => {
-                return (
-                  <FileAnchorContainer>
-                    <a
-                      href={item.url}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                    >
-                      {item.name || item.titulo}
-                    </a>
-                    {editable && <span
-                      onClick={() => {
-                        handleResourceDelete(item)
-                      }}
-                    >
-                      <HighlightOffIcon />
-                    </span>}
-                  </FileAnchorContainer>
-                )
-              })}
-          </div>
-        </ModalBody>
-      </Modal>
+
     </Card>
   )
 }
 
-
-const FileAnchorContainer = styled.div`
-        text-align: center;
-        margin: 1rem;
-        display: flex;
-        align-content: space-between;
-
-        a {
-          padding - top: 1.35px;
-  }
-        `
 
 const CenteredRow = styled(Col)`
         display: flex;
