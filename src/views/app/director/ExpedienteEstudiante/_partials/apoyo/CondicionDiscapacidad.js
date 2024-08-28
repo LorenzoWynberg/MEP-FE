@@ -38,8 +38,7 @@ function CondicionDiscapacidad(props) {
 
                     columns={columns}
                     orderOptions={[]}
-                    pageSize={10}
-                    backendSearch
+                    pageSize={10} 
                 />
             </Col>
         </Row>
