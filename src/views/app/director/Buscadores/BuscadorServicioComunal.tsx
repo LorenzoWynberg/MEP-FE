@@ -194,51 +194,44 @@ const BuscadorPersonasServicioComunal = props => {
 	}, [])
 
 	return (
-		<AppLayout items={directorItems}>
-			{loading && <BarLoader />}
-			<Helmet>
-				<title>Buscador de personas</title>
-			</Helmet>
-
-			<Container>
-				<Row>
-					<Col xs={12}>
-						<h3>
-							{t(
-								'servicio_comunal_table>registro_servicio_comunal>agregar_estudiante>titulo',
-								'Agregar estudiante'
-							)}
-						</h3>
-					</Col>
-					<Col
-						xs={12}
-						style={{
-							display: 'flex',
-							flexDirection: 'column',
-							alignItems: 'flex-end',
-							width: '100%'
-						}}
-					/>
-					<Col xs={12}>
-						<div>
-							<TableReactImplementation
-								data={data}
-								handleGetData={async (searchValue: string, column: string | undefined | null) => {
-									// if (!searchValue) return
-									setLoading(true)
-									await actions.getStudentsSCE(searchValue, idInstitucion, 1, 50)
-									setLoading(false)
-								}}
-								columns={columns}
-								orderOptions={[]}
-								pageSize={10}
-								backendSearch
-							/>
-						</div>
-					</Col>
-				</Row>
-			</Container>
-		</AppLayout>
+		<Container>
+			<Row>
+				<Col xs={12}>
+					<h3>
+						{t(
+							'servicio_comunal_table>registro_servicio_comunal>agregar_estudiante>titulo',
+							'Agregar estudiante'
+						)}
+					</h3>
+				</Col>
+				<Col
+					xs={12}
+					style={{
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'flex-end',
+						width: '100%'
+					}}
+				/>
+				<Col xs={12}>
+					<div>
+						<TableReactImplementation
+							data={data}
+							handleGetData={async (searchValue: string, column: string | undefined | null) => {
+								// if (!searchValue) return
+								setLoading(true)
+								await actions.getStudentsSCE(searchValue, idInstitucion, 1, 50)
+								setLoading(false)
+							}}
+							columns={columns}
+							orderOptions={[]}
+							pageSize={10}
+							backendSearch
+						/>
+					</div>
+				</Col>
+			</Row>
+		</Container>
 	)
 }
 

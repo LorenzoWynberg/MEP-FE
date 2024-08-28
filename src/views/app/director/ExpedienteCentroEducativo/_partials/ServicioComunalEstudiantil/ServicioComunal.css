@@ -48,3 +48,11 @@
 	padding: 8px 4px;
 	background: '#fff';
 }
+
+.react-datepicker__input-container input.invalid {
+	border: 1px solid red !important;
+}
+
+.invalid {
+	border: 1px solid red !important;
+}

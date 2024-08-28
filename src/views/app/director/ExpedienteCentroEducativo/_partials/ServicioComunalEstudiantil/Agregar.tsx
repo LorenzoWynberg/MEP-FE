@@ -40,25 +40,23 @@ export const Agregar: React.FC<IProps> = props => {
 	const [objetivoNombre, setObjetivoNombre] = React.useState([])
 	const [busqueda, setBusqueda] = React.useState()
 	const [estudiantes, setEstudiantes] = React.useState([])
-	const [caracteristicas, setCaracteristicas] = React.useState([])
+	const [caracteristicas, setCaracteristicas] = React.useState()
 	const [caracteristicasIdSeleccionados, setCaracteristicasIdSeleccionados] = React.useState([])
 	const [caracteristicasSeleccionados, setCaracteristicasSeleccionados] = React.useState([])
 	const [nombresSeleccionados, setNombresSeleccionados] = React.useState([])
-	const [nombreSend, setNombreSend] = React.useState([])
+	const [nombreSend, setNombreSend] = React.useState()
 	const [nombreId, setNombreId] = React.useState()
 	const [showBuscador, setShowBuscador] = React.useState(false)
 	const [showTipoOrganizacion, setShowTipoOrganizacion] = React.useState(false)
 	const [organizacionId, setOrganizacionId] = React.useState()
 	const [organizacion, setOrganizacion] = React.useState()
-
+	const [checkedValid, setCheckedValid] = React.useState(false)
 	const [showModalidades, setShowModalidades] = React.useState(false)
 	const [modalidadId, setModalidadId] = React.useState()
 	const [modalidad, setModalidad] = React.useState()
-
 	const [showCaracteristicas, setShowCaracteristicas] = React.useState(false)
 	const [caracteristicaId, setCaracteristicaId] = React.useState()
 	const [caracteristica, setCaracteristica] = React.useState()
-
 	const [institutionImage, setInstitutionImage] = React.useState(null)
 	const [loading, setLoading] = React.useState<boolean>(false)
 	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
@@ -75,6 +73,38 @@ export const Agregar: React.FC<IProps> = props => {
 	const [studentsSeleccionados, setStudentsSeleccionados] = React.useState([])
 	const idInstitucion = localStorage.getItem('idInstitucion')
 	const [students, setStudents] = useState([])
+	const [selectedDate, setSelectedDate] = useState(null)
+	const [formattedDate, setFormattedDate] = useState('')
+	const today = new Date()
+
+	const state = useSelector((store: any) => {
+		return {
+			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
+			permisos: store.authUser.rolPermisos
+		}
+	})
+
+	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
+
+	const isValid = () => {
+		if (
+			!idInstitucion ||
+			!value ||
+			!nombreId ||
+			!modalidadId ||
+			!organizacionId ||
+			!acompanante ||
+			!formattedDate ||
+			!descripcion ||
+			!localStorage.getItem('loggedUser') ||
+			isEmpty(caracteristicasSeleccionados) ||
+			isEmpty(estudiantes)
+		) {
+			return false
+		} else {
+			return true
+		}
+	}
 
 	const mapper = el => {
 		return {
@@ -105,29 +135,9 @@ export const Agregar: React.FC<IProps> = props => {
 		})
 	}, [])
 
-	const isValid = () => {
-		if (
-			!idInstitucion ||
-			!value ||
-			!nombreId ||
-			!modalidadId ||
-			!organizacionId ||
-			!acompanante ||
-			!descripcion ||
-			!localStorage.getItem('loggedUser') ||
-			isEmpty(caracteristicasSeleccionados) ||
-			isEmpty(estudiantes)
-		) {
-			return false
-		} else {
-			return true
-		}
+	if (!tienePermiso || tienePermiso?.agregar == 0) {
+		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
 	}
-
-	const [selectedDate, setSelectedDate] = useState(null)
-	const [formattedDate, setFormattedDate] = useState('')
-
-	const today = new Date()
 
 	return (
 		<div className={styles}>
@@ -142,22 +152,6 @@ export const Agregar: React.FC<IProps> = props => {
 					onClose={() => setShowAreaProyecto(false)}
 				>
 					<FormControl>
-						{/* 			<Row>
-							<Col
-								style={{
-									display: 'flex',
-									textAlign: 'center',
-									justifyContent: 'center',
-									alignItems: 'center'
-								}}
-								sm={3}
-							>
-								<Typography variant='h6'>Area De Proyecto</Typography>
-							</Col>
-							<Col sm={9}>
-								<Typography variant='h6'>Descripcion</Typography>
-							</Col>
-						</Row> */}
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
 							name='radio-buttons-group'
@@ -193,6 +187,7 @@ export const Agregar: React.FC<IProps> = props => {
 									</Row>
 								))}
 						</RadioGroup>
+						{checkedValid && !value && <span style={{ color: 'red' }}>Campo requerido</span>}
 					</FormControl>
 				</SimpleModal>
 			)}
@@ -206,22 +201,6 @@ export const Agregar: React.FC<IProps> = props => {
 					onClose={() => setShowCaracteristicas(false)}
 				>
 					<FormControl>
-						{/* 	<Row>
-							<Col
-								style={{
-									display: 'flex',
-									textAlign: 'center',
-									justifyContent: 'left',
-									alignItems: 'left'
-								}}
-								sm={3}
-							>
-								<Typography variant='h6'>Caracteristica</Typography>
-							</Col>
-							<Col sm={9}>
-								<Typography variant='h6'>Descripcion</Typography>
-							</Col>
-						</Row> */}
 						{catalogos.caracteristicas.map((item, index) => (
 							<Row>
 								<Col
@@ -334,18 +313,6 @@ export const Agregar: React.FC<IProps> = props => {
 					onClose={() => setShowTipoOrganizacion(false)}
 				>
 					<FormControl>
-						{/* 	<Row>
-							<Col
-								style={{
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center'
-								}}
-								sm={3}
-							>
-								<Typography variant='h6'>Tipo</Typography>
-							</Col>
-						</Row> */}
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
 							name='radio-buttons-group'
@@ -444,30 +411,39 @@ export const Agregar: React.FC<IProps> = props => {
 											{t('registro_servicio_comunal>area_proyecto', 'Area de proyecto')}
 										</Label>
 										<Input
+											style={{ border: checkedValid && !areaProyecto ? '1px solid red' : '' }}
 											key={areaProyecto}
-											name='i'
+											name='areaProyecto'
 											value={areaProyecto ? areaProyecto : ''}
 											readOnly
 											onClick={() => !showAreaProyecto && setShowAreaProyecto(true)}
 										/>
+										{checkedValid && !areaProyecto && (
+											<span style={{ color: 'red' }}>Campo requerido</span>
+										)}
 									</FormGroup>
 								</Col>
 								<Col md={6}>
 									<FormGroup>
 										<Label>{t('registro_servicio_comunal>objetivonombre', 'objetivo')}</Label>
 										<Input
+											style={{ border: checkedValid && !nombreSend ? '1px solid red' : '' }}
 											key={nombreSend}
-											name='i'
+											name='objetivo'
 											value={nombreSend ? nombreSend : ''}
 											readOnly
 											onClick={() => !showNombre && setShowNombre(true)}
-										/>
+										/>{' '}
+										{checkedValid && !nombreSend && (
+											<span style={{ color: 'red' }}>Campo requerido</span>
+										)}
 									</FormGroup>
 								</Col>
 								<Col sm={3}>
 									<FormGroup>
 										<Label>{t('registro_servicio_comunal>modalidad', 'Modalidad')}</Label>
 										<Input
+											style={{ border: checkedValid && !modalidad ? '1px solid red' : '' }}
 											name='modalidad'
 											type='text'
 											value={modalidad}
@@ -475,6 +451,9 @@ export const Agregar: React.FC<IProps> = props => {
 											onClick={() => !showModalidades && setShowModalidades(true)}
 											autoFocus={true}
 										/>
+										{checkedValid && !modalidad && (
+											<span style={{ color: 'red' }}>Campo requerido</span>
+										)}
 									</FormGroup>
 								</Col>
 							</Row>
@@ -485,11 +464,20 @@ export const Agregar: React.FC<IProps> = props => {
 									{caracteristicasSeleccionados.length == 0 && (
 										<FormGroup>
 											<Input
-												name='codigo'
+												style={{
+													border:
+														checkedValid && isEmpty(caracteristicasSeleccionados)
+															? '1px solid red'
+															: ''
+												}}
+												name='caracteristicas'
 												value={''}
 												readOnly
 												onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
 											/>
+											{checkedValid && isEmpty(caracteristicasSeleccionados) && (
+												<span style={{ color: 'red' }}>Campo requerido</span>
+											)}
 										</FormGroup>
 									)}
 									{caracteristicasSeleccionados.length > 0 && (
@@ -509,8 +497,14 @@ export const Agregar: React.FC<IProps> = props => {
 											{t('registro_servicio_comunal>fecha_conclusion', 'Fecha de conclusión SCE')}
 										</Label>
 										<DatePicker
-											style={{ zIndex: 99999 }}
+											style={{
+												zIndex: 99999
+											}}
+											popperPlacement={'right'}
 											dateFormat='dd/MM/yyyy'
+											customInput={
+												<input className={checkedValid && !formattedDate ? 'invalid' : ''} />
+											}
 											selected={selectedDate}
 											onChange={date => {
 												const d = new Date(date)
@@ -520,6 +514,9 @@ export const Agregar: React.FC<IProps> = props => {
 											maxDate={today} // Set the maximum selectable date to today
 										/>
 									</FormGroup>
+									{checkedValid && !formattedDate && (
+										<span style={{ color: 'red' }}>Campo requerido</span>
+									)}
 								</Col>
 								<Col sm={3}>
 									<FormGroup>
@@ -530,13 +527,17 @@ export const Agregar: React.FC<IProps> = props => {
 											)}
 										</Label>
 										<Input
-											name='tipo_centro'
+											style={{ border: checkedValid && !organizacion ? '1px solid red' : '' }}
+											name='organizacionContraparte'
 											type='text'
 											value={organizacion ? organizacion : ''}
 											readOnly
 											onClick={() => !showTipoOrganizacion && setShowTipoOrganizacion(true)}
 											autoFocus={true}
 										/>
+										{checkedValid && !organizacion && (
+											<span style={{ color: 'red' }}>Campo requerido</span>
+										)}
 									</FormGroup>
 									{valueOrg}
 								</Col>
@@ -546,7 +547,8 @@ export const Agregar: React.FC<IProps> = props => {
 											{t('registro_servicio_comunal>docente_acompaña', 'Acompañante de proyecto')}
 										</Label>
 										<Input
-											name='tipo_centro'
+											style={{ border: checkedValid && !acompanante ? '1px solid red' : '' }}
+											name='acompanante'
 											type='text'
 											value={acompanante}
 											onChange={e => {
@@ -554,6 +556,9 @@ export const Agregar: React.FC<IProps> = props => {
 											}}
 											autoFocus={true}
 										/>
+										{checkedValid && !acompanante && (
+											<span style={{ color: 'red' }}>Campo requerido</span>
+										)}
 									</FormGroup>
 								</Col>
 							</Row>
@@ -562,8 +567,8 @@ export const Agregar: React.FC<IProps> = props => {
 								<Label>{t('registro_servicio_comunal>descripcion', 'Descripción')}</Label>
 
 								<Input
-									style={{}}
-									name='tipo_centro'
+									style={{ border: checkedValid && !descripcion ? '1px solid red' : '' }}
+									name='descripcion'
 									type='text'
 									value={descripcion}
 									onChange={e => {
@@ -571,6 +576,7 @@ export const Agregar: React.FC<IProps> = props => {
 									}}
 									autoFocus={true}
 								/>
+								{checkedValid && !descripcion && <span style={{ color: 'red' }}>Campo requerido</span>}
 							</FormGroup>
 						</Form>
 					</Card>
@@ -587,6 +593,9 @@ export const Agregar: React.FC<IProps> = props => {
 							}}
 						/>
 					</div>
+					{checkedValid && isEmpty(estudiantes) && (
+						<span style={{ color: 'red' }}>Debe agregar estudiantes</span>
+					)}
 					<TableStudents
 						onlyViewModule={true}
 						data={estudiantes}
@@ -609,27 +618,31 @@ export const Agregar: React.FC<IProps> = props => {
 									: 'sc-iqcoie bQFwPO cursor-pointer disabled'
 							}
 							primary
-							disabled={!isValid()}
 							onClick={() => {
 								setLoading(true)
 								if (idInstitucion) {
-									actions
-										.crearServicioComunal({
-											sb_InstitucionesId: idInstitucion,
-											sb_areaProyectoId: value,
-											sb_nombreProyectoId: nombreId,
-											sb_modalidadId: modalidadId,
-											sb_tipoOrganizacionContraparteId: organizacionId,
-											docenteAcompanante: acompanante,
-											descripcion: descripcion,
-											fechaConclusionSCE: date.toISOString(),
-											insertadoPor: localStorage.getItem('loggedUser'),
-											caracteristicas: caracteristicasSeleccionados.map(e => e.id),
-											estudiantes: estudiantes.map(e => e.idEstudiante)
-										})
-										.then(() => {
-											props.history.push('/director/expediente-centro/servicio-comunal')
-										})
+									if (!isValid()) {
+										setCheckedValid(true)
+										setLoading(false)
+									} else {
+										actions
+											.crearServicioComunal({
+												sb_InstitucionesId: idInstitucion,
+												sb_areaProyectoId: value,
+												sb_nombreProyectoId: nombreId,
+												sb_modalidadId: modalidadId,
+												sb_tipoOrganizacionContraparteId: organizacionId,
+												docenteAcompanante: acompanante,
+												descripcion,
+												fechaConclusionSCE: date.toISOString(),
+												insertadoPor: localStorage.getItem('loggedUser'),
+												caracteristicas: caracteristicasSeleccionados.map(e => e.id),
+												estudiantes: estudiantes.map(e => e.idEstudiante)
+											})
+											.then(() => {
+												props.history.push('/director/expediente-centro/servicio-comunal')
+											})
+									}
 								} else {
 									setLoading(false)
 									alert('Seleccione una institución')

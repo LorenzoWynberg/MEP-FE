@@ -99,12 +99,10 @@ const Historico = props => {
 			const response: any = await axios.get(
 				`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter${url}`
 			)
-			// console.log('response NEWWWW', response)
 			setData(response.data)
 			setLoading(false)
-			// return { error: false, options: response.data }
 		} catch (e) {
-			// return { error: e.message, options: [] }
+			return { error: e.message, options: [] }
 		}
 	}
 
@@ -131,7 +129,7 @@ const Historico = props => {
 	}, [])
 
 	// TODO: Poner permiso correcto
-	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'configurarinstituciones')
+	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
 
 	const columns = useMemo(() => {
 		return [
@@ -198,7 +196,7 @@ const Historico = props => {
 									}}
 								/>
 							</Tooltip>
-							{fullRow.actaId || !tienePermiso || tienePermiso?.editar == 0 ? (
+							{fullRow.actaId || !tienePermiso || tienePermiso?.modificar == 0 ? (
 								<></>
 							) : (
 								<Tooltip
@@ -245,6 +243,10 @@ const Historico = props => {
 		]
 	}, [t])
 
+	if (!tienePermiso || tienePermiso?.leer == 0) {
+		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
+	}
+
 	return (
 		<div className={styles}>
 			{loading && <BarLoader />}
@@ -254,19 +256,20 @@ const Historico = props => {
 					onClose={() => setExpediente(null)}
 					onConfirm={() => {
 						setLoading(true)
-						actions.desactivarServicioComunal(expediente.id, history)
+						actions.desactivarServicioComunal(expediente.id, history).then(() => {
+							actions
+								.GetServicioComunalByInstitucionId(idInstitucion)
+								.then(data => {
+									setData(data.options)
+									setLoading(false)
+									// props.history.push(`/director/expediente-centro/servicio-comunal`)
+								})
+								.catch(error => {
+									console.log('error', error)
+									setLoading(false)
+								})
+						})
 						setExpediente(null)
-						actions
-							.GetServicioComunalByInstitucionId(idInstitucion)
-							.then(data => {
-								setData(data.options)
-								setLoading(false)
-								props.history.push(`/director/expediente-centro/servicio-comunal`)
-							})
-							.catch(error => {
-								console.log('error', error)
-								setLoading(false)
-							})
 					}}
 					openDialog={expediente}
 				>
@@ -333,7 +336,7 @@ const Historico = props => {
 						</FormControl >
 						<TableReactImplementation
 							data={data}
-							showAddButton
+							showAddButton={tienePermiso && tienePermiso?.agregar == 1}
 							// avoidSearch
 							onSubmitAddButton={() => {
 								props.history.push('/director/expediente-centro/servicio-comunal/registro')

@@ -12,14 +12,22 @@ import LocalHospital from '@material-ui/icons/LocalHospital'
 import EmailIcon from '@mui/icons-material/Email'
 import { Row, Container } from 'reactstrap'
 import { useTranslation } from 'react-i18next'
+import { useSelector } from 'react-redux'
 
 const Navegacion = props => {
 	const { t } = useTranslation()
 	const { aplicaSCE } = props
 
+	const state = useSelector(store => {
+		return {
+			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
+			permisos: store.authUser.rolPermisos
+		}
+	})
+	const tienePermisoSCE = state.permisos.find(permiso => permiso.codigoSeccion == 'servicioComunalEstudiantilSCE')
 	return (
 		<Container>
-			<Row>
+			<Row className='mb-5'>
 				<Colxx xxs='12' className='px-5'>
 					<Row>
 						<NavigationCard
@@ -43,15 +51,13 @@ const Navegacion = props => {
 						>
 							<House style={{ fontSize: 50 }} />
 						</NavigationCard>
-						{
-							<NavigationCard
-								icon={''}
-								title={t('estudiantes>expediente>nav>beneficios', 'Beneficios')}
-								href={'/director/expediente-estudiante/beneficios'}
-							>
-								<Star style={{ fontSize: 50 }} />
-							</NavigationCard>
-						}
+						<NavigationCard
+							icon={''}
+							title={t('estudiantes>expediente>nav>beneficios', 'Beneficios')}
+							href={'/director/expediente-estudiante/beneficios'}
+						>
+							<Star style={{ fontSize: 50 }} />
+						</NavigationCard>
 						<NavigationCard
 							icon=''
 							title={t('estudiantes>expediente>nav>apoyos_edu', 'Apoyo Educativos')}
@@ -104,7 +110,7 @@ const Navegacion = props => {
 								<EmailIcon style={{ fontSize: 50, color: 'white' }} />
 							</NavigationCard>
 						}
-						{aplicaSCE ? (
+						{aplicaSCE && tienePermisoSCE && tienePermisoSCE?.leer == 1 ? (
 							<NavigationCard
 								icon={''}
 								title={'Servicio comunal estudiantil'}

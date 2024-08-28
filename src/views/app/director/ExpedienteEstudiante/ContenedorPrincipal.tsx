@@ -183,12 +183,11 @@ const ContenedorPrincipal = props => {
 											) : (
 												blockeo()
 											),
-											11:
-												estudianteEnContexto() && aplicaSCE ? (
-													<ServicioComunalEstudiantil {...props} />
-												) : (
-													blockeo()
-												)
+											11: estudianteEnContexto() ? (
+												<ServicioComunalEstudiantil {...props} />
+											) : (
+												blockeo()
+											)
 										}[active]
 									}
 								</>

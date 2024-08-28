@@ -121,7 +121,7 @@ const ModalSCE = props => {
 							<span>{sce.nombreModalidad && sce.nombreModalidad}</span>
 						</Col>
 						<Col sm={4} className='mb-3'>
-							<strong>{t('informationcarddetalle>caracteristicas', 'Caracteristicas')}:</strong>
+							<strong>{t('informationcarddetalle>caracteristicas', 'Características')}:</strong>
 							<br />
 							{<span>{sce.caracteristicas && caracteristicasString}</span>}
 						</Col>

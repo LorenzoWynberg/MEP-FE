@@ -7,7 +7,6 @@ import Institucional from '../Institucional'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-// const options = ["Nacional", "Regional", "Circuital", "Institucional"]
 
 const removeFromArray = (arr, str) => {
 	const index = arr.findIndex(el => el === str)
@@ -20,17 +19,25 @@ const Reportes = props => {
 	const { t } = useTranslation()
 	const [activeTab, setActiveTab] = useState<number>(0)
 	const { accessRole } = useSelector((state: any) => state.authUser?.currentRoleOrganizacion)
-	const options = [t("gestion_usuario>usuarios>regional", "Regional"), t('reportes>circuital', 'Circuital'), t('reportes>institucional', 'Institucional'), t('reportes>geografico', 'Geográfico')]
+	const options = [
+		t('reportes>geografico', 'Geográfico'),
+		t('gestion_usuario>usuarios>regional', 'Regional'),
+		t('reportes>circuital', 'Circuital'),
+		t('reportes>institucional', 'Institucional')
+	]
 
 	switch (accessRole.nivelAccesoId) {
 		case 1: // Institucion
 			removeFromArray(options, 'Regional')
 			removeFromArray(options, 'Circuital')
+			removeFromArray(options, 'Geografico')
 			break
 		case 2: // Circuito
+			removeFromArray(options, 'Geografico')
 			removeFromArray(options, 'Regional')
 			break
 		case 3: // Regional
+			removeFromArray(options, 'Geografico')
 			break
 		case 4: // Global
 			break
@@ -47,14 +54,25 @@ const Reportes = props => {
 				<HeaderTab options={options} activeTab={activeTab} setActiveTab={setActiveTab} />
 				<div>
 					{/* activeTab === 0 && <Nacional/> */}
-					{accessRole?.nivelAccesoId !== 2 && accessRole?.nivelAccesoId !== 1 && (
+					{accessRole?.nivelAccesoId === 4 && (
 						<>
 							{
 								{
-									0: <Regional />,
-									1: <Circuital />,
-									2: <Institucional />,
-									3: <ReporteGeografico />
+									0: <ReporteGeografico />,
+									1: <Regional />,
+									2: <Circuital />,
+									3: <Institucional />
+								}[activeTab]
+							}
+						</>
+					)}
+					{accessRole?.nivelAccesoId === 3 && (
+						<>
+							{
+								{
+									1: <Regional />,
+									2: <Circuital />,
+									3: <Institucional />
 								}[activeTab]
 							}
 						</>
