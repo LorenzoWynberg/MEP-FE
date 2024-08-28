@@ -45,6 +45,7 @@ const ApoyoEducativo = (props) => {
   const { handleSubmit } = props
   const classes = useStyles()
   const [editable, setEditable] = useState(true)
+  const [discapacidadesHistorico, setDiscapacidadesHistorico] = useState()
   const [discapacidades, setDiscapacidades] = useState([])
   const [condiciones, setCondiciones] = useState([])
   const [openOptions, setOpenOptions] = useState({ open: false, type: null })
@@ -68,6 +69,9 @@ const ApoyoEducativo = (props) => {
     })
     setDiscapacidades(_discapacidades)
   }, [props.discapacidadesIdentidad, editable])
+  useEffect(() => {
+    axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/GetByIdentityIdHist/${props.identidadId}`).then(r => {console.log('discapacidadesHistorico',r.data);setDiscapacidadesHistorico(r.data)}, [])
+  }, [])
 
   useEffect(() => {
     const _condiciones = []
@@ -123,8 +127,6 @@ const ApoyoEducativo = (props) => {
 
 
         setDiscapacidades(options)
-        console.log('props.discapacidades options', options)
-
         axios.post(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/CreateMultiple/${props.identidadId}`, options.map(d => {
           return {
             id: 0,
@@ -133,6 +135,7 @@ const ApoyoEducativo = (props) => {
             estado: true
           }
         })).then(r => {
+          // setDiscapacidadesHistorico(response.data)
           window.location.reload()
 
         })
@@ -208,7 +211,6 @@ const ApoyoEducativo = (props) => {
       setCondicionesToDelete([])
       setDiscapacidadesToDelete([])
       // window.location.reload()
-
       props.showsnackBar('success', 'Contenido enviado con éxito')
     } else {
       props.showsnackBar('error', response.message)
@@ -226,7 +228,7 @@ const ApoyoEducativo = (props) => {
         <HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
         <ContentTab activeTab={activeTab} numberId={activeTab}>
 
-          {activeTab === 0 && <CondicionDiscapacidad discapacidadesSelected={discapacidades} discapacidadesIdentidad={props.discapacidadesIdentidad} disabled={props.disabled} sentData={sentData} handleSubmit={handleSubmit} showsnackBar={props.showsnackBar} setEditable={setEditable} authHandler={props.authHandler} classes={classes} handleOpenOptions={handleOpenOptions} setOpenOptions={setOpenOptions} discapacidades={props.discapacidades} apoyos={props.apoyos} editable={editable} loading={loading} />}
+          {activeTab === 0 && <CondicionDiscapacidad discapacidadesSelected={discapacidades} discapacidadesHistorico={discapacidadesHistorico} discapacidadesIdentidad={props.discapacidadesIdentidad} disabled={props.disabled} sentData={sentData} handleSubmit={handleSubmit} showsnackBar={props.showsnackBar} setEditable={setEditable} authHandler={props.authHandler} classes={classes} handleOpenOptions={handleOpenOptions} setOpenOptions={setOpenOptions} discapacidades={props.discapacidades} apoyos={props.apoyos} editable={editable} loading={loading} />}
           {activeTab === 1 && <OtraCondicion disabled={props.disabled} sentData={sentData} handleSubmit={handleSubmit} showsnackBar={props.showsnackBar} setEditable={setEditable} authHandler={props.authHandler} classes={classes} condiciones={condiciones} handleOpenOptions={handleOpenOptions} editable={editable} loading={loading} />}
         </ContentTab>
 
