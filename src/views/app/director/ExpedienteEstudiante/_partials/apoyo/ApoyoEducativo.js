@@ -1,43 +1,24 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import 'react-tagsinput/react-tagsinput.css'
-import { makeStyles } from '@material-ui/core/styles'
-import SelectItem from './SelectItem'
-
 import HeaderTab from 'Components/Tab/Header'
 import ContentTab from 'Components/Tab/Content'
 import {
   Row,
   Col,
-  FormGroup,
-  Label,
   Modal,
   CustomInput,
   Container,
   ModalHeader,
   ModalBody,
   Button,
-  Form,
   Card
 } from 'reactstrap'
 import styled from 'styled-components'
-import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import { useTranslation } from 'react-i18next'
 import CondicionDiscapacidad from './CondicionDiscapacidad'
 import OtraCondicion from './OtraCondicion'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
-
-const useStyles = makeStyles((theme) => ({
-  inputTags: {
-    minHeight: '8rem',
-    border: '1px solid #eaeaea',
-    padding: '0.35rem',
-    color: 'white'
-  },
-  input: {
-    display: 'none'
-  }
-}))
 
 const ApoyoEducativo = (props) => {
   const { t } = useTranslation()
@@ -49,11 +30,6 @@ const ApoyoEducativo = (props) => {
   const [openOptions, setOpenOptions] = useState({ open: false, type: null })
   const [modalOptions, setModalOptions] = useState([])
   const [activeTab, setActiveTab] = useState(0)
-  const [discapacidadesToDelete, setDiscapacidadesToDelete] = useState([])
-  const [condicionesToDelete, setCondicionesToDelete] = useState([])
-  const [discapacidadesToUpload, setDiscapacidadesToUpload] = useState([])
-  const [condicionesToUpload, setCondicionesToUpload] = useState([])
-  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const _discapacidades = []
@@ -70,14 +46,27 @@ const ApoyoEducativo = (props) => {
   useEffect(() => {
     getHistoricos()
   }, [])
+
   const getHistoricos = useCallback(
     () => {
       axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/GetByIdentityIdHist/${props.identidadId}`).then(r => { setDiscapacidadesHistorico(r.data) }, [])
       // axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/GetByIdentityIdHist/${props.identidadId}`).then(r => { setCondicionesHistorico(r.data) }, [])
-      axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/GetByIdentidad/${props.identidadId}`).then(r => { setCondicionesHistorico(r.data) }, [])
-
+      axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/GetByIdentidad/${props.identidadId}`).then(r => {
+        var ids = r.data.map(v => v.elementosCatalogosId);
+        var condicionesHistoric = []
+        console.log('idsids r.data', r.data)
+        console.log('idsids', ids)
+        console.log('idsids props.condiciones', props.condiciones)
+        props.condiciones.forEach((condicion) => {
+          if (ids.includes(condicion.id)) {
+            condicionesHistoric.push(condicion)
+          }
+        })
+        console.log('idsids condicionesHistoric', condicionesHistoric)
+        setCondicionesHistorico(condicionesHistoric)
+      })
     },
-    [props.identidadId],
+    [props.identidadId]
   )
 
   useEffect(() => {
@@ -97,25 +86,14 @@ const ApoyoEducativo = (props) => {
   const handleOpenOptions = (options, name) => {
     let _options = []
 
-    if (name === 'discapacidades') {
-      const mappedDiscapacidades = discapacidades.map((item) => item.id)
-      _options = options.map((discapacidad) => {
-        if (mappedDiscapacidades.includes(discapacidad.id)) {
-          return { ...discapacidad, checked: true }
-        } else {
-          return { ...discapacidad, checked: false }
-        }
-      })
-    } else {
-      const mappedCondiciones = condiciones.map((item) => item.id)
-      _options = options.map((condicion) => {
-        if (mappedCondiciones.includes(condicion.id)) {
-          return { ...condicion, checked: true }
-        } else {
-          return { ...condicion, checked: false }
-        }
-      })
-    }
+    const map = name === 'discapacidades' && discapacidades.map((item) => item.id) || condiciones.map((item) => item.id)
+    _options = options.map((elem) => {
+      if (map.includes(elem.id)) {
+        return { ...elem, checked: true }
+      } else {
+        return { ...elem, checked: false }
+      }
+    })
     setModalOptions(_options)
     setOpenOptions({ open: true, type: name })
   }
@@ -128,7 +106,7 @@ const ApoyoEducativo = (props) => {
       modalOptions.forEach((el) => {
         if (el.checked) options.push(el)
       })
-      setCondiciones(options)
+    
       axios.post(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${openOptions.type === 'discapacidades' ? 'DiscapacidadesPorUsuario' : 'CondicionesPorUsuario'}/CreateMultiple/${props.identidadId}`, options.map(d => {
         return {
           id: 0,
@@ -137,7 +115,7 @@ const ApoyoEducativo = (props) => {
           estado: true
         }
       })).then(
-        getHistoricos()
+        window.location.reload()
       )
 
     }
@@ -176,9 +154,11 @@ const ApoyoEducativo = (props) => {
             <Row>
               <Col xs={12}>
                 {modalOptions.filter(d =>
-                  !props.discapacidadesIdentidad?.some(di => di.id == d.id)
+                  openOptions.type === 'discapacidades' ? !discapacidadesHistorico?.some(di => di.id == d.id) : !condicionesHistorico?.some(di => di.id == d.id)
                 ).map((item) => {
                   console.log('the item', item)
+                  console.log('the item props.condicionesHistorico', condicionesHistorico)
+                  console.log('the item props.discapacidadesHistorico', discapacidadesHistorico)
                   return (
                     <Row>
                       <Col xs={3} className='modal-detalle-subsidio-col'>
