@@ -32,6 +32,7 @@ function CondicionDiscapacidad(props) {
                     data={props.discapacidadesHistorico || []}
                     showAddButton
                     // avoidSearch
+                    key={props.discapacidadesHistorico}
                     onSubmitAddButton={() => {
                         props.handleOpenOptions(props.discapacidades, 'discapacidades')
                     }}

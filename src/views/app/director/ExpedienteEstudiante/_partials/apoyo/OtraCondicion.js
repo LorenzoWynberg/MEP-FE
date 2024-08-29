@@ -31,6 +31,7 @@ function OtraCondicion(props) {
                 <TableReactImplementation
                     data={props.condicionesHistorico || []}
                     showAddButton
+                    key={props.condicionesHistorico}
                     // avoidSearch
                     onSubmitAddButton={() => {
                         props.handleOpenOptions(props.condiciones, 'condiciones')

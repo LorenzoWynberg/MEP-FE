@@ -2,57 +2,39 @@ import React, { useState, useEffect, useCallback } from 'react'
 import 'react-tagsinput/react-tagsinput.css'
 import HeaderTab from 'Components/Tab/Header'
 import ContentTab from 'Components/Tab/Content'
+import { envVariables } from '../../../../../../constants/enviroment'
 import {
-	Row,
-	Col,
-	FormGroup,
-	Label,
-	Modal,
-	CustomInput,
-	Container,
-	ModalHeader,
-	ModalBody,
-	Button,
-	Form,
-	Card
+  Row,
+  Col,
+  FormGroup,
+  Label,
+  Modal,
+  CustomInput,
+  Container,
+  ModalHeader,
+  ModalBody,
+  Button,
+  Form,
+  Card
 } from 'reactstrap'
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import CondicionDiscapacidad from './CondicionDiscapacidad'
-import { ApoyosCurriculares } from './ApoyosCurriculares'
-
-const useStyles = makeStyles(theme => ({
-	inputTags: {
-		minHeight: '8rem',
-		border: '1px solid #eaeaea',
-		padding: '0.35rem',
-		color: 'white'
-	},
-	input: {
-		display: 'none'
-	}
-}))
+import OtraCondicion from './OtraCondicion'
+import axios from 'axios'
 
 const ApoyoEducativo = props => {
-	const { t } = useTranslation()
+  const { t } = useTranslation()
 
-	const { handleSubmit } = props
-	const classes = useStyles()
-	const [editable, setEditable] = useState(false)
-	const [discapacidades, setDiscapacidades] = useState([])
-	const [condiciones, setCondiciones] = useState([])
-	const [openOptions, setOpenOptions] = useState({ open: false, type: null })
-	const [openFiles, setOpenFiles] = useState({ open: false, type: null })
-	const [modalOptions, setModalOptions] = useState([])
-	const [files, setFiles] = useState([])
-	const [activeTab, setActiveTab] = useState(0)
-	const [discapacidadesFiles, setDiscapacidadesFiles] = useState([])
-	const [condicionesFiles, setCondicionesFiles] = useState([])
-	const [discapacidadesToDelete, setDiscapacidadesToDelete] = useState([])
-	const [condicionesToDelete, setCondicionesToDelete] = useState([])
-	const [discapacidadesToUpload, setDiscapacidadesToUpload] = useState([])
-	const [condicionesToUpload, setCondicionesToUpload] = useState([])
-	const [loading, setLoading] = useState(false)
+  const [discapacidadesHistorico, setDiscapacidadesHistorico] = useState()
+  const [condicionesHistorico, setCondicionesHistorico] = useState()
+
+
+  const [discapacidades, setDiscapacidades] = useState([])
+  const [condiciones, setCondiciones] = useState([])
+  const [openOptions, setOpenOptions] = useState({ open: false, type: null })
+  const [modalOptions, setModalOptions] = useState([])
+  const [activeTab, setActiveTab] = useState(0)
 
   useEffect(() => {
     const _discapacidades = []
@@ -77,29 +59,25 @@ const ApoyoEducativo = props => {
       axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/GetByIdentidad/${props.identidadId}`).then(r => {
         var ids = r.data.map(v => v.elementosCatalogosId);
         var condicionesHistoric = []
-        console.log('idsids r.data', r.data)
-        console.log('idsids', ids)
-        console.log('idsids props.condiciones', props.condiciones)
         props.condiciones.forEach((condicion) => {
           if (ids.includes(condicion.id)) {
             condicionesHistoric.push(condicion)
           }
         })
-        console.log('idsids condicionesHistoric', condicionesHistoric)
         setCondicionesHistorico(condicionesHistoric)
       })
     },
     [props.identidadId]
   )
 
-	useEffect(() => {
-		const _condiciones = []
-		const _condicionesIdentidad = props.condicionesIdentidad.map(condicion => condicion.elementosCatalogosId)
-		props.condiciones.forEach(condicion => {
-			if (_condicionesIdentidad.includes(condicion.id)) {
-				_condiciones.push(condicion)
-			}
-		})
+  useEffect(() => {
+    const _condiciones = []
+    const _condicionesIdentidad = props.condicionesIdentidad.map(condicion => condicion.elementosCatalogosId)
+    props.condiciones.forEach(condicion => {
+      if (_condicionesIdentidad.includes(condicion.id)) {
+        _condiciones.push(condicion)
+      }
+    })
 
     setCondiciones(_condiciones)
   }, [props.condicionesIdentidad])
@@ -127,31 +105,38 @@ const ApoyoEducativo = props => {
       modalOptions.forEach((el) => {
         if (el.checked) options.push(el)
       })
-    
-      axios.post(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${openOptions.type === 'discapacidades' ? 'DiscapacidadesPorUsuario' : 'CondicionesPorUsuario'}/CreateMultiple/${props.identidadId}`, options.map(d => {
+      console.log('modalOptions', modalOptions)
+      console.log('modalOptions openOptions', openOptions)
+      const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${openOptions.type === 'discapacidades' ? 'DiscapacidadesPorUsuario' : 'CondicionesPorUsuario'}/CreateMultiple/${props.identidadId}`
+      const optionsMap = options.map(d => {
         return {
           id: 0,
           elementosCatalogoId: d.id,
           identidadesId: props.identidadId,
           estado: true
         }
-      })).then(
-        window.location.reload()
+      });
+      axios.post(url, optionsMap).then(r => {
+        r.data && setTimeout(() => { getHistoricos(); props.showsnackBar('success', 'Contenido enviado; con éxito') }, 6000);
+        r.error && props.showsnackBar('error', 'Error agregando condición')
+      }
+
+
       )
 
     }
     setOpenOptions({ open: false, type: null })
   }
 
-	const handleChangeItem = item => {
-		const newItems = modalOptions.map(element => {
-			if (element.id === item.id) {
-				return { ...element, checked: !element.checked }
-			}
-			return element
-		})
-		setModalOptions(newItems)
-	}
+  const handleChangeItem = item => {
+    const newItems = modalOptions.map(element => {
+      if (element.id === item.id) {
+        return { ...element, checked: !element.checked }
+      }
+      return element
+    })
+    setModalOptions(newItems)
+  }
 
 
   const optionsTab = [
@@ -242,9 +227,9 @@ const ApoyoEducativo = props => {
 
 
 const CenteredRow = styled(Col)`
-	display: flex;
-	justify-content: center;
-	align-items: center;
-`
+      display: flex;
+      justify - content: center;
+      align - items: center;
+      `
 
 export default ApoyoEducativo
