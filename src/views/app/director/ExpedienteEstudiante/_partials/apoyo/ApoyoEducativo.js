@@ -42,10 +42,8 @@ const useStyles = makeStyles((theme) => ({
 const ApoyoEducativo = (props) => {
   const { t } = useTranslation()
 
-  const { handleSubmit } = props
-  const classes = useStyles()
-  const [editable, setEditable] = useState(true)
   const [discapacidadesHistorico, setDiscapacidadesHistorico] = useState()
+  const [condicionesHistorico, setCondicionesHistorico] = useState()
   const [discapacidades, setDiscapacidades] = useState([])
   const [condiciones, setCondiciones] = useState([])
   const [openOptions, setOpenOptions] = useState({ open: false, type: null })
@@ -68,10 +66,19 @@ const ApoyoEducativo = (props) => {
       }
     })
     setDiscapacidades(_discapacidades)
-  }, [props.discapacidadesIdentidad, editable])
+  }, [props.discapacidadesIdentidad])
   useEffect(() => {
-    axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/GetByIdentityIdHist/${props.identidadId}`).then(r => {console.log('discapacidadesHistorico',r.data);setDiscapacidadesHistorico(r.data)}, [])
+    getHistoricos()
   }, [])
+  const getHistoricos = useCallback(
+    () => {
+      axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/GetByIdentityIdHist/${props.identidadId}`).then(r => { setDiscapacidadesHistorico(r.data) }, [])
+      // axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/GetByIdentityIdHist/${props.identidadId}`).then(r => { setCondicionesHistorico(r.data) }, [])
+      axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/GetByIdentidad/${props.identidadId}`).then(r => { setCondicionesHistorico(r.data) }, [])
+
+    },
+    [props.identidadId],
+  )
 
   useEffect(() => {
     const _condiciones = []
@@ -85,11 +92,11 @@ const ApoyoEducativo = (props) => {
     })
 
     setCondiciones(_condiciones)
-  }, [props.condicionesIdentidad, editable])
+  }, [props.condicionesIdentidad])
 
   const handleOpenOptions = (options, name) => {
-    // if (!editable) return
     let _options = []
+
     if (name === 'discapacidades') {
       const mappedDiscapacidades = discapacidades.map((item) => item.id)
       _options = options.map((discapacidad) => {
@@ -115,38 +122,24 @@ const ApoyoEducativo = (props) => {
 
   const toggleModal = async (saveData = false) => {
     let options = []
-    console.log('props.discapacidades openOptions', openOptions)
-    console.log('props.discapacidades modalOptions', modalOptions)
-    console.log('props.discapacidades modalOptions', saveData)
     if (saveData) {
-      if (openOptions.type === 'discapacidades') {
-        options = []
-        modalOptions.forEach((discapacidad) => {
-          if (discapacidad.checked) options.push(discapacidad)
-        })
 
+      options = []
+      modalOptions.forEach((el) => {
+        if (el.checked) options.push(el)
+      })
+      setCondiciones(options)
+      axios.post(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${openOptions.type === 'discapacidades' ? 'DiscapacidadesPorUsuario' : 'CondicionesPorUsuario'}/CreateMultiple/${props.identidadId}`, options.map(d => {
+        return {
+          id: 0,
+          elementosCatalogoId: d.id,
+          identidadesId: props.identidadId,
+          estado: true
+        }
+      })).then(
+        getHistoricos()
+      )
 
-        setDiscapacidades(options)
-        axios.post(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/CreateMultiple/${props.identidadId}`, options.map(d => {
-          return {
-            id: 0,
-            elementosCatalogoId: d.id,
-            identidadesId: props.identidadId,
-            estado: true
-          }
-        })).then(r => {
-          // setDiscapacidadesHistorico(response.data)
-          window.location.reload()
-
-        })
-
-      } else {
-        options = []
-        modalOptions.forEach((condicion) => {
-          if (condicion.checked) options.push(condicion)
-        })
-        setCondiciones(options)
-      }
     }
     setOpenOptions({ open: false, type: null })
   }
@@ -160,64 +153,6 @@ const ApoyoEducativo = (props) => {
   }
 
 
-
-  const sentData = async () => {
-    setEditable(false)
-    setLoading(true)
-    const discapacidadesData = discapacidades.map((discapacidad) => {
-      return {
-        id: 0,
-        elementosCatalogoId: discapacidad.id,
-        identidadesId: props.identidadId,
-        estado: true
-      }
-    })
-    const condicionesData = condiciones.map((condicion) => {
-      return {
-        id: 0,
-        elementosCatalogoId: condicion.id,
-        identidadesId: props.identidadId,
-        estado: true
-      }
-    })
-
-    console.log('sentData discapacidades', discapacidades)
-    console.log('sentData props', props)
-    console.log('sentData data', {
-      discapacidadesData,
-      condicionesData,
-      discapacidadesToUpload,
-      condicionesToUpload,
-      discapacidadesToDelete,
-      condicionesToDelete,
-    })
-
-    const response = await props.saveDiscapacidades(
-      discapacidadesData,
-      condicionesData,
-      discapacidadesToUpload,
-      condicionesToUpload,
-      discapacidadesToDelete,
-      condicionesToDelete,
-      props.identidadId
-    )
-
-    console.log(
-      'sentData response', response
-    )
-    if (!response.error) {
-      setDiscapacidadesToUpload([])
-      setCondicionesToUpload([])
-      setCondicionesToDelete([])
-      setDiscapacidadesToDelete([])
-      // window.location.reload()
-      props.showsnackBar('success', 'Contenido enviado con éxito')
-    } else {
-      props.showsnackBar('error', response.message)
-    }
-    setEditable(false)
-    setLoading(false)
-  }
   const optionsTab = [
     { title: 'Condicion De Discapacidad' },
     { title: 'Otras Condiciones' }
@@ -228,8 +163,8 @@ const ApoyoEducativo = (props) => {
         <HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
         <ContentTab activeTab={activeTab} numberId={activeTab}>
 
-          {activeTab === 0 && <CondicionDiscapacidad discapacidadesSelected={discapacidades} discapacidadesHistorico={discapacidadesHistorico} discapacidadesIdentidad={props.discapacidadesIdentidad} disabled={props.disabled} sentData={sentData} handleSubmit={handleSubmit} showsnackBar={props.showsnackBar} setEditable={setEditable} authHandler={props.authHandler} classes={classes} handleOpenOptions={handleOpenOptions} setOpenOptions={setOpenOptions} discapacidades={props.discapacidades} apoyos={props.apoyos} editable={editable} loading={loading} />}
-          {activeTab === 1 && <OtraCondicion disabled={props.disabled} sentData={sentData} handleSubmit={handleSubmit} showsnackBar={props.showsnackBar} setEditable={setEditable} authHandler={props.authHandler} classes={classes} condiciones={condiciones} handleOpenOptions={handleOpenOptions} editable={editable} loading={loading} />}
+          {activeTab === 0 && <CondicionDiscapacidad discapacidadesHistorico={discapacidadesHistorico} handleOpenOptions={handleOpenOptions} discapacidades={props.discapacidades} />}
+          {activeTab === 1 && <OtraCondicion condicionesHistorico={condicionesHistorico} handleOpenOptions={handleOpenOptions} condiciones={props.condiciones} />}
         </ContentTab>
 
 
@@ -239,10 +174,6 @@ const ApoyoEducativo = (props) => {
         <ModalBody>
           <Container className='modal-detalle-subsidio'>
             <Row>
-              {console.log('modalOptions', modalOptions)}
-              {console.log('modalOptions props.discapacidadesIdentidad', props.discapacidadesIdentidad)}
-              {console.log('modalOptions props.discapacidadesIdentidad', modalOptions.filter(d =>
-                !props.discapacidadesIdentidad?.some(di => di.id == d.id)))}
               <Col xs={12}>
                 {modalOptions.filter(d =>
                   !props.discapacidadesIdentidad?.some(di => di.id == d.id)
