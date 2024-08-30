@@ -16,10 +16,11 @@ import {
 	FormLabel,
 	Radio,
 	RadioGroup,
-	Chip,
-	Button,
+	Chip, 
 	Typography
 } from '@material-ui/core'
+import { Button } from 'Components/CommonComponents'
+
 import { ObtenerInfoCatalogos } from 'Redux/formularioCentroResponse/actions'
 import { useTranslation } from 'react-i18next'
 import BarLoader from 'Components/barLoader/barLoader'
@@ -502,12 +503,17 @@ export const Editar: React.FC<IProps> = props => {
 			<Row>
 				<Col sm={12}>
 					<div>
-						<Search
-							newId='servicioComunalSearch'
-							onSearch={() => {
+				
+					<Button
+							onClick={() => {
 								showBuscador ? setShowBuscador(false) : setShowBuscador(true)
 							}}
-						/>
+							color='primary'
+
+							style={{ cursor: 'pointer' }}
+						>
+							Agregar
+						</Button>
 					</div>
 					{checkedValid && isEmpty(estudiantes) && (
 						<span style={{ color: 'red' }}>Debe agregar estudiantes</span>
@@ -533,7 +539,7 @@ export const Editar: React.FC<IProps> = props => {
 									? 'sc-iqcoie bQFwPO cursor-pointer'
 									: 'sc-iqcoie bQFwPO cursor-pointer disabled'
 							}
-							primary
+							color='primary'
 							onClick={() => {
 								setLoading(true)
 								if (idInstitucion) {
