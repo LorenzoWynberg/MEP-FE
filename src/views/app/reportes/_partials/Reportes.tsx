@@ -23,27 +23,27 @@ const Reportes = props => {
 		t('gestion_usuario>usuarios>regional', 'Regional'),
 		t('reportes>circuital', 'Circuital'),
 		t('reportes>institucional', 'Institucional'),
-		t('reportes>geografico', 'Geográfico'),
+		t('reportes>geografico', 'Geografico'),
 	]
 
 	switch (accessRole.nivelAccesoId) {
 		case 1: // Institucion
 			removeFromArray(options, 'Regional')
 			removeFromArray(options, 'Circuital')
-			removeFromArray(options, 'Geográfico')
+			removeFromArray(options, 'Geografico')
 			break
 		case 2: // Circuito
-			removeFromArray(options, 'Geográfico')
+			removeFromArray(options, 'Geografico')
 			removeFromArray(options, 'Regional')
 			break
 		case 3: // Regional
-			removeFromArray(options, 'Geográfico')
+			removeFromArray(options, 'Geografico')
 			break
 		case 4: // Global
 			break
 	}
 
-	props.props.tipo == 'matricula' && removeFromArray(options, 'Geográfico')
+	props.props.tipo == 'matricula' && removeFromArray(options, 'Geografico')
 	console.log('props.props', props.props)
 	if (accessRole.rolId === 11) {
 		// Si el rol es Docente(11)  se oculta la seccion
@@ -63,7 +63,7 @@ const Reportes = props => {
 									0: <Regional props={props.props} />,
 									1: <Circuital props={props.props} />,
 									2: <Institucional props={props.props} />,
-									3: props.props.tipo != 'matricula' || <ReporteGeografico props={props.props} />
+									3: <ReporteGeografico props={props.props} />
 								}[activeTab]
 							}
 						</>

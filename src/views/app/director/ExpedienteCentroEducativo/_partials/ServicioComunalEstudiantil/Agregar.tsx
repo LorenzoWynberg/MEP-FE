@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid'
 import { crearServicioComunal, getTablaEstudiantesServicioComunalById } from 'Redux/configuracion/actions'
 import styles from './ServicioComunal.css'
 import BuscadorServicioComunal from '../../../Buscadores/BuscadorServicioComunal'
+import { Button } from 'Components/CommonComponents'
 import {
 	Checkbox,
 	FormControl,
@@ -14,8 +15,7 @@ import {
 	FormLabel,
 	Radio,
 	RadioGroup,
-	Chip,
-	Button,
+	Chip, 
 	Typography
 } from '@material-ui/core'
 import { ObtenerInfoCatalogos } from 'Redux/formularioCentroResponse/actions'
@@ -586,12 +586,18 @@ export const Agregar: React.FC<IProps> = props => {
 			<Row>
 				<Col sm={12}>
 					<div>
-						<Search
-							newId='servicioComunalSearch'
-							onSearch={() => {
-								showBuscador ? setShowBuscador(false) : setShowBuscador(true)
-							}}
-						/>
+						
+					<Button
+                       	onClick={() => {
+							showBuscador ? setShowBuscador(false) : setShowBuscador(true)
+						}}
+                        color='primary'
+
+						style={{ cursor: 'pointer' }}
+                      >
+						Agregar
+                      </Button>
+						 
 					</div>
 					{checkedValid && isEmpty(estudiantes) && (
 						<span style={{ color: 'red' }}>Debe agregar estudiantes</span>
