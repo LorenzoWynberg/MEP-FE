@@ -183,15 +183,6 @@ const BuscadorPersonasServicioComunal = props => {
 		}
 	}, [state.estudiantes])
 
-	useEffect(() => {
-		setLoading(true)
-		let val = document.getElementById('servicioComunalSearch').value
-		if (val != '') {
-			actions.getStudentsSCE(val, idInstitucion, 1, 30).then(() => setLoading(false))
-		} else {
-			setLoading(false)
-		}
-	}, [])
 
 	return (
 		<Container>
