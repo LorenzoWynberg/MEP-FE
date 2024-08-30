@@ -15,7 +15,7 @@ import {
 	FormLabel,
 	Radio,
 	RadioGroup,
-	Chip, 
+	Chip,
 	Typography
 } from '@material-ui/core'
 import { ObtenerInfoCatalogos } from 'Redux/formularioCentroResponse/actions'
@@ -40,9 +40,6 @@ export const Agregar: React.FC<IProps> = props => {
 	const [objetivoNombre, setObjetivoNombre] = React.useState([])
 	const [busqueda, setBusqueda] = React.useState()
 	const [estudiantes, setEstudiantes] = React.useState([])
-	const [caracteristicas, setCaracteristicas] = React.useState()
-	const [caracteristicasIdSeleccionados, setCaracteristicasIdSeleccionados] = React.useState([])
-	const [caracteristicasSeleccionados, setCaracteristicasSeleccionados] = React.useState([])
 	const [nombresSeleccionados, setNombresSeleccionados] = React.useState([])
 	const [nombreSend, setNombreSend] = React.useState()
 	const [nombreId, setNombreId] = React.useState()
@@ -54,9 +51,6 @@ export const Agregar: React.FC<IProps> = props => {
 	const [showModalidades, setShowModalidades] = React.useState(false)
 	const [modalidadId, setModalidadId] = React.useState()
 	const [modalidad, setModalidad] = React.useState()
-	const [showCaracteristicas, setShowCaracteristicas] = React.useState(false)
-	const [caracteristicaId, setCaracteristicaId] = React.useState()
-	const [caracteristica, setCaracteristica] = React.useState()
 	const [institutionImage, setInstitutionImage] = React.useState(null)
 	const [loading, setLoading] = React.useState<boolean>(false)
 	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
@@ -66,7 +60,6 @@ export const Agregar: React.FC<IProps> = props => {
 	const [Cdate, setCDate] = useState(new Date().toLocaleDateString('fr-FR'))
 	const [date, setDate] = useState(new Date())
 	const [valueModalidad, setValueModalidad] = React.useState('')
-	const [valueCaracteristicas, setValueCaracteristicas] = React.useState('')
 	const [valueOrg, setValueOrg] = React.useState('')
 	const [acompanante, setValueAcompanante] = React.useState('')
 	const [descripcion, setValueDescripcion] = React.useState('')
@@ -97,7 +90,7 @@ export const Agregar: React.FC<IProps> = props => {
 			!formattedDate ||
 			!descripcion ||
 			!localStorage.getItem('loggedUser') ||
-			isEmpty(caracteristicasSeleccionados) ||
+			// isEmpty(caracteristicasSeleccionados) ||
 			isEmpty(estudiantes)
 		) {
 			return false
@@ -191,74 +184,7 @@ export const Agregar: React.FC<IProps> = props => {
 					</FormControl>
 				</SimpleModal>
 			)}
-			{showCaracteristicas && (
-				<SimpleModal
-					title='Selección de caracteristicas'
-					openDialog={showCaracteristicas}
-					onConfirm={() => {
-						setShowCaracteristicas(false)
-					}}
-					onClose={() => setShowCaracteristicas(false)}
-				>
-					<FormControl>
-						{catalogos.caracteristicas.map((item, index) => (
-							<Row>
-								<Col
-									style={{
-										display: 'flex',
-										textAlign: 'left',
-										justifyContent: 'left',
-										alignItems: 'left'
-									}}
-									sm={3}
-								>
-									<FormControlLabel
-										control={
-											<Checkbox
-												checked={caracteristicasSeleccionados.map(v => v.id).includes(item.id)}
-												value={item.id}
-											/>
-										}
-										label={
-											<div
-												onClick={async () => {
-													let caracteristicas = [...caracteristicasSeleccionados]
-													let caracteristicasId = [...caracteristicasIdSeleccionados]
-													if (!caracteristicasId.includes(item.id)) {
-														caracteristicas.push(item)
-														caracteristicasId.push(item.id)
-													} else {
-														caracteristicas = caracteristicas.filter(n => n.id != item.id)
-														caracteristicasId = caracteristicasId.filter(n => n != item.id)
-													}
-													setCaracteristicasSeleccionados(caracteristicas)
-													setCaracteristicasIdSeleccionados(caracteristicasId)
-												}}
-											>
-												{item.nombre}
-											</div>
-										}
-										onClick={async () => {
-											let caracteristicas = [...caracteristicasSeleccionados]
-											let caracteristicasId = [...caracteristicasIdSeleccionados]
-											if (!caracteristicasId.includes(item.id)) {
-												caracteristicas.push(item)
-												caracteristicasId.push(item.id)
-											} else {
-												caracteristicas = caracteristicas.filter(n => n.id != item.id)
-												caracteristicasId = caracteristicasId.filter(n => n != item.id)
-											}
-											setCaracteristicasSeleccionados(caracteristicas)
-											setCaracteristicasIdSeleccionados(caracteristicasId)
-										}}
-									/>
-								</Col>
-								<Col sm={9}>{item.descripcion}</Col>
-							</Row>
-						))}
-					</FormControl>
-				</SimpleModal>
-			)}
+
 			{showModalidades && (
 				<SimpleModal
 					title='Tipo de proyecto'
@@ -432,7 +358,7 @@ export const Agregar: React.FC<IProps> = props => {
 											name='objetivo'
 											value={nombreSend ? nombreSend : ''}
 											readOnly
-											onClick={() => !showNombre && setShowNombre(true)}
+											onClick={() => areaProyecto && !showNombre && setShowNombre(true)}
 										/>{' '}
 										{checkedValid && !nombreSend && (
 											<span style={{ color: 'red' }}>Campo requerido</span>
@@ -458,40 +384,9 @@ export const Agregar: React.FC<IProps> = props => {
 								</Col>
 							</Row>
 							<Row className='mb-2'>
-								<Col sm={3}>
-									<Label>{t('registro_servicio_comunal>caracteristicas', 'Caracteristicas')}</Label>
 
-									{caracteristicasSeleccionados.length == 0 && (
-										<FormGroup>
-											<Input
-												style={{
-													border:
-														checkedValid && isEmpty(caracteristicasSeleccionados)
-															? '1px solid red'
-															: ''
-												}}
-												name='caracteristicas'
-												value={''}
-												readOnly
-												onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
-											/>
-											{checkedValid && isEmpty(caracteristicasSeleccionados) && (
-												<span style={{ color: 'red' }}>Campo requerido</span>
-											)}
-										</FormGroup>
-									)}
-									{caracteristicasSeleccionados.length > 0 && (
-										<div
-											className='caracteristicas'
-											onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
-										>
-											{caracteristicasSeleccionados.map(n => (
-												<Chip label={n.nombre} />
-											))}
-										</div>
-									)}
-								</Col>
-								<Col sm={3}>
+
+								<Col sm={4}>
 									<FormGroup>
 										<Label>
 											{t('registro_servicio_comunal>fecha_conclusion', 'Fecha de conclusión SCE')}
@@ -518,7 +413,7 @@ export const Agregar: React.FC<IProps> = props => {
 										<span style={{ color: 'red' }}>Campo requerido</span>
 									)}
 								</Col>
-								<Col sm={3}>
+								<Col sm={4}>
 									<FormGroup>
 										<Label>
 											{t(
@@ -541,7 +436,7 @@ export const Agregar: React.FC<IProps> = props => {
 									</FormGroup>
 									{valueOrg}
 								</Col>
-								<Col sm={3}>
+								<Col sm={4}>
 									<FormGroup>
 										<Label>
 											{t('registro_servicio_comunal>docente_acompaña', 'Acompañante de proyecto')}
@@ -586,18 +481,18 @@ export const Agregar: React.FC<IProps> = props => {
 			<Row>
 				<Col sm={12}>
 					<div>
-						
-					<Button
-                       	onClick={() => {
-							showBuscador ? setShowBuscador(false) : setShowBuscador(true)
-						}}
-                        color='primary'
 
-						style={{ cursor: 'pointer' }}
-                      >
-						Agregar
-                      </Button>
-						 
+						<Button
+							onClick={() => {
+								showBuscador ? setShowBuscador(false) : setShowBuscador(true)
+							}}
+							color='primary'
+
+							style={{ cursor: 'pointer' }}
+						>
+							Agregar
+						</Button>
+
 					</div>
 					{checkedValid && isEmpty(estudiantes) && (
 						<span style={{ color: 'red' }}>Debe agregar estudiantes</span>
@@ -618,7 +513,7 @@ export const Agregar: React.FC<IProps> = props => {
 				<Col sm={12}>
 					<p style={{ textAlign: 'center' }}>
 						<Button
-							
+
 							color='primary'
 
 							style={{ cursor: 'pointer' }}
@@ -641,7 +536,7 @@ export const Agregar: React.FC<IProps> = props => {
 												descripcion,
 												fechaConclusionSCE: date.toISOString(),
 												insertadoPor: localStorage.getItem('loggedUser'),
-												caracteristicas: caracteristicasSeleccionados.map(e => e.id),
+												caracteristicas: [],
 												estudiantes: estudiantes.map(e => e.idEstudiante)
 											})
 											.then(() => {

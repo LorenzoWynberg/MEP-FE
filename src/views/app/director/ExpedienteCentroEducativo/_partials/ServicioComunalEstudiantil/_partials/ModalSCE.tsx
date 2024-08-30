@@ -18,23 +18,7 @@ const ModalSCE = props => {
 
 	useEffect(() => {
 		actions.GetServicioComunalInfoById(parseInt(props.servicioComunalId), parseInt(idInstitucion)).then(res => {
-			if (res[0]?.caracteristicas) {
-				setCaracteristicasString(() => {
-					return res[0]?.caracteristicas
-						.map(item => <span>{item.nombre}</span>)
-						.reduce(
-							(acc, x) =>
-								acc === null ? (
-									x
-								) : (
-									<>
-										{acc}, {x}
-									</>
-								),
-							null
-						)
-				})
-			}
+		
 			setSCE(res[0])
 			setLoading(false)
 			setShowProyecto(true)
@@ -120,11 +104,7 @@ const ModalSCE = props => {
 							<br />
 							<span>{sce.nombreModalidad && sce.nombreModalidad}</span>
 						</Col>
-						<Col sm={4} className='mb-3'>
-							<strong>{t('informationcarddetalle>caracteristicas', 'Características')}:</strong>
-							<br />
-							{<span>{sce.caracteristicas && caracteristicasString}</span>}
-						</Col>
+						
 						<Col sm={4} className='mb-3'>
 							<strong>
 								{t(
