@@ -618,12 +618,11 @@ export const Agregar: React.FC<IProps> = props => {
 				<Col sm={12}>
 					<p style={{ textAlign: 'center' }}>
 						<Button
-							class={
-								isValid()
-									? 'sc-iqcoie bQFwPO cursor-pointer'
-									: 'sc-iqcoie bQFwPO cursor-pointer disabled'
-							}
-							primary
+							
+							color='primary'
+
+							style={{ cursor: 'pointer' }}
+							disabled={!isValid()}
 							onClick={() => {
 								setLoading(true)
 								if (idInstitucion) {
