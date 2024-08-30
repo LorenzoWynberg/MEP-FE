@@ -402,6 +402,7 @@ export const Agregar: React.FC<IProps> = props => {
 											onChange={date => {
 												const d = new Date(date)
 												setSelectedDate(d)
+												setDate(d) 
 												setFormattedDate(d.toLocaleDateString('fr-FR'))
 											}}
 											maxDate={today} // Set the maximum selectable date to today
