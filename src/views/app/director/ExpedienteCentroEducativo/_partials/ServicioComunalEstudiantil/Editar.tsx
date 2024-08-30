@@ -225,15 +225,14 @@ export const Editar: React.FC<IProps> = props => {
 			 
 			{showModalidades && (
 				<SimpleModal
-					title='Modalidades'
+					title='Tipo de Proyecto'
 					value={value}
 					openDialog={showModalidades}
 					onConfirm={() => {
 						setShowModalidades(false)
 					}}
 					onClose={() => setShowModalidades(false)}
-				>
-					<Row>
+				> 
 						<FormControl>
 							<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
 								{catalogos.modalidades &&
@@ -242,7 +241,7 @@ export const Editar: React.FC<IProps> = props => {
 											<Col
 												style={{
 													display: 'flex',
-													justifyContent: 'center',
+													justifyContent: 'left',
 													alignItems: 'left'
 												}}
 												sm={3}
@@ -263,8 +262,7 @@ export const Editar: React.FC<IProps> = props => {
 										</Row>
 									))}
 							</RadioGroup>
-						</FormControl>
-					</Row>
+						</FormControl> 
 				</SimpleModal>
 			)}
 			{showTipoOrganizacion && (

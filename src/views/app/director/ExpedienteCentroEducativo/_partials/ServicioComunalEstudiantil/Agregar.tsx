@@ -194,8 +194,7 @@ export const Agregar: React.FC<IProps> = props => {
 						setShowModalidades(false)
 					}}
 					onClose={() => setShowModalidades(false)}
-				>
-					<Row>
+				> 
 						<FormControl>
 							<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
 								{catalogos.modalidades &&
@@ -225,8 +224,7 @@ export const Agregar: React.FC<IProps> = props => {
 										</Row>
 									))}
 							</RadioGroup>
-						</FormControl>
-					</Row>
+						</FormControl> 
 				</SimpleModal>
 			)}
 			{showTipoOrganizacion && (
