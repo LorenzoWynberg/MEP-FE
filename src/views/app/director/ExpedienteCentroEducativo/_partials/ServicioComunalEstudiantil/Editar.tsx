@@ -16,7 +16,7 @@ import {
 	FormLabel,
 	Radio,
 	RadioGroup,
-	Chip, 
+	Chip,
 	Typography
 } from '@material-ui/core'
 import { Button } from 'Components/CommonComponents'
@@ -144,7 +144,7 @@ export const Editar: React.FC<IProps> = props => {
 				setNombreSend(data.nombreProyecto)
 				setNombreId(data.nombreProyectoId)
 				setValueDescripcion(data.descripcion)
-				
+
 			})
 			.finally(() => {
 				setLoading(false)
@@ -223,7 +223,7 @@ export const Editar: React.FC<IProps> = props => {
 					</FormControl>
 				</SimpleModal>
 			)}
-			 
+
 			{showModalidades && (
 				<SimpleModal
 					title='Tipo de Proyecto'
@@ -233,37 +233,37 @@ export const Editar: React.FC<IProps> = props => {
 						setShowModalidades(false)
 					}}
 					onClose={() => setShowModalidades(false)}
-				> 
-						<FormControl>
-							<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
-								{catalogos.modalidades &&
-									catalogos.modalidades.map(item => (
-										<Row>
-											<Col
-												style={{
-													display: 'flex',
-													justifyContent: 'left',
-													alignItems: 'left'
+				>
+					<FormControl>
+						<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
+							{catalogos.modalidades &&
+								catalogos.modalidades.map(item => (
+									<Row>
+										<Col
+											style={{
+												display: 'flex',
+												justifyContent: 'left',
+												alignItems: 'left'
+											}}
+											sm={3}
+										>
+											<FormControlLabel
+												value={item.id}
+												onClick={(e, v) => {
+													e.persist()
+													setModalidadId(e.target.value)
+													setModalidad(item.nombre)
 												}}
-												sm={3}
-											>
-												<FormControlLabel
-													value={item.id}
-													onClick={(e, v) => {
-														e.persist()
-														setModalidadId(e.target.value)
-														setModalidad(item.nombre)
-													}}
-													checked={modalidadId == item.id}
-													control={<Radio />}
-													label={item.nombre}
-												/>
-											</Col>
-											<Col sm={9}>{item.descripcion}</Col>
-										</Row>
-									))}
-							</RadioGroup>
-						</FormControl> 
+												checked={modalidadId == item.id}
+												control={<Radio />}
+												label={item.nombre}
+											/>
+										</Col>
+										<Col sm={9}>{item.descripcion}</Col>
+									</Row>
+								))}
+						</RadioGroup>
+					</FormControl>
 				</SimpleModal>
 			)}
 			{showTipoOrganizacion && (
@@ -421,7 +421,7 @@ export const Editar: React.FC<IProps> = props => {
 								</Col>
 							</Row>
 							<Row className='mb-2'>
-							
+
 								<Col sm={4}>
 									<FormGroup>
 										<Label>
@@ -502,9 +502,9 @@ export const Editar: React.FC<IProps> = props => {
 
 			<Row>
 				<Col sm={12}>
-					<div>
-				
-					<Button
+					<div style={{ textAlign: 'right', width: '100%' }}>
+
+						<Button
 							onClick={() => {
 								showBuscador ? setShowBuscador(false) : setShowBuscador(true)
 							}}

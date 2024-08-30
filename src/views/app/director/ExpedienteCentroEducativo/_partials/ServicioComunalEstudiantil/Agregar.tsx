@@ -478,7 +478,7 @@ export const Agregar: React.FC<IProps> = props => {
 
 			<Row>
 				<Col sm={12}>
-					<div>
+				<div style={{ textAlign: 'right', width: '100%' }}>
 
 						<Button
 							onClick={() => {
