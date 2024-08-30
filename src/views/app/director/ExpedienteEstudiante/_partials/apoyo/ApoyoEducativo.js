@@ -55,17 +55,8 @@ const ApoyoEducativo = props => {
   const getHistoricos = useCallback(
     () => {
       axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/GetByIdentityIdHist/${props.identidadId}`).then(r => { setDiscapacidadesHistorico(r.data) }, [])
-      // axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/GetByIdentityIdHist/${props.identidadId}`).then(r => { setCondicionesHistorico(r.data) }, [])
-      axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/GetByIdentidad/${props.identidadId}`).then(r => {
-        var ids = r.data.map(v => v.elementosCatalogosId);
-        var condicionesHistoric = []
-        props.condiciones.forEach((condicion) => {
-          if (ids.includes(condicion.id)) {
-            condicionesHistoric.push(condicion)
-          }
-        })
-        setCondicionesHistorico(condicionesHistoric)
-      })
+      axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/GetByIdentidadHist/${props.identidadId}`).then(r => { setCondicionesHistorico(r.data) }, [])
+
     },
     [props.identidadId]
   )
@@ -105,8 +96,6 @@ const ApoyoEducativo = props => {
       modalOptions.forEach((el) => {
         if (el.checked) options.push(el)
       })
-      console.log('modalOptions', modalOptions)
-      console.log('modalOptions openOptions', openOptions)
       const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${openOptions.type === 'discapacidades' ? 'DiscapacidadesPorUsuario' : 'CondicionesPorUsuario'}/CreateMultiple/${props.identidadId}`
       const optionsMap = options.map(d => {
         return {
