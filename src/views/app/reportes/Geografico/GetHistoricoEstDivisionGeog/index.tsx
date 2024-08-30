@@ -8,7 +8,7 @@ import ReporteStyledTableGeo from '../../_partials/ReporteStyledTableGeo'
 import { GenerateExcelObject, SendWorkbookToDownload } from 'Utils/excel'
 
 const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
-  const [state, setState] = React.useState(0)  
+  const [state, setState] = React.useState(0)
   const [values, setValues] = React.useState(0)
   const printRef = React.useRef()
   const [reportData, setReportData] = React.useState<any>()
@@ -143,31 +143,33 @@ const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
       column: ''
     }
   ]
-  const onShowReportEvent = (parametros) => {
-    const { idProvincia, idCanton, idDistrito } = parametros
-    if (!idProvincia || !idCanton || !idDistrito) return
-    setValues({ idProvincia, idCanton, idDistrito })
-    loadReportData(idProvincia.value, idCanton.value, idDistrito.value).then(() => {
-      setReportParameters(parametros)
-      setState(1)
-    })
-  }
-  const onExcelEvent = () => {
-    const workbook = GenerateExcelObject(reportData)
-    SendWorkbookToDownload(workbook, `${title}.xlsx`)
-  }
-  return (
-    <div>
-      <ReportBar onExcelBtnEvent={onExcelEvent}
-        regresarEvent={() => {
-          regresarEvent()
-          setState(0)
-        }} imprimirRef={printRef} showBtn={state === 1}
-      />
-      {state === 0 && <Parameters showReportEvent={onShowReportEvent} />}
-      {state === 1 && <ReporteStyledTableGeo innerRef={printRef} data={reportData} columns={columns} title={'Resumen de proyectos de Servicio Comunal Estudiantil según división geografica (Provincia, cantón, distrito)'} headerValues={values} />}
-    </div>
-  )
+  const onShowReportEvent = (p) => {
+    let objBase = {label:"",value:0}
+    const idProvincia = p.idProvincia || objBase
+    const idCanton = p.idCanton || objBase
+    const idDistrito = p.idDistrito || objBase 
+  setValues({ idProvincia, idCanton, idDistrito })
+  loadReportData(idProvincia.value, idCanton.value, idDistrito.value).then(() => {
+    setReportParameters(p)
+    setState(1)
+  })
+}
+const onExcelEvent = () => {
+  const workbook = GenerateExcelObject(reportData)
+  SendWorkbookToDownload(workbook, `${title}.xlsx`)
+}
+return (
+  <div>
+    <ReportBar onExcelBtnEvent={onExcelEvent}
+      regresarEvent={() => {
+        regresarEvent()
+        setState(0)
+      }} imprimirRef={printRef} showBtn={state === 1}
+    />
+    {state === 0 && <Parameters showReportEvent={onShowReportEvent} />}
+    {state === 1 && <ReporteStyledTableGeo innerRef={printRef} data={reportData} columns={columns} title={'Resumen de proyectos de Servicio Comunal Estudiantil según división geografica (Provincia, cantón, distrito)'} headerValues={values} />}
+  </div>
+)
 }
 
 export default GetHistoricoEstDivisionGeog

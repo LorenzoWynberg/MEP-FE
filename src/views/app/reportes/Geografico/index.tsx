@@ -4,7 +4,7 @@ import ReportCardContainer from '../_partials/ReportCardContainer'
 import { useTranslation } from 'react-i18next'
 import GetHistoricoEstDivisionGeog from './GetHistoricoEstDivisionGeog'
 
-const ReporteGeografico = () => {
+const ReporteGeografico = props => {
   const { t } = useTranslation()
 
   const reportes = [

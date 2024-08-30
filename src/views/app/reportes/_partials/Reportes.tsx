@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import HeaderTab from 'Components/Tab/Header'
 import Regional from '../Regional'
 import ReporteGeografico from '../Geografico'
@@ -20,29 +20,31 @@ const Reportes = props => {
 	const [activeTab, setActiveTab] = useState<number>(0)
 	const { accessRole } = useSelector((state: any) => state.authUser?.currentRoleOrganizacion)
 	const options = [
-		t('reportes>geografico', 'Geográfico'),
 		t('gestion_usuario>usuarios>regional', 'Regional'),
 		t('reportes>circuital', 'Circuital'),
-		t('reportes>institucional', 'Institucional')
+		t('reportes>institucional', 'Institucional'),
+		t('reportes>geografico', 'Geográfico'),
 	]
 
 	switch (accessRole.nivelAccesoId) {
 		case 1: // Institucion
 			removeFromArray(options, 'Regional')
 			removeFromArray(options, 'Circuital')
-			removeFromArray(options, 'Geografico')
+			removeFromArray(options, 'Geográfico')
 			break
 		case 2: // Circuito
-			removeFromArray(options, 'Geografico')
+			removeFromArray(options, 'Geográfico')
 			removeFromArray(options, 'Regional')
 			break
 		case 3: // Regional
-			removeFromArray(options, 'Geografico')
+			removeFromArray(options, 'Geográfico')
 			break
 		case 4: // Global
 			break
 	}
 
+	props.props.tipo == 'matricula' && removeFromArray(options, 'Geográfico')
+	console.log('props.props', props.props)
 	if (accessRole.rolId === 11) {
 		// Si el rol es Docente(11)  se oculta la seccion
 		return <></>
@@ -58,10 +60,10 @@ const Reportes = props => {
 						<>
 							{
 								{
-									0: <ReporteGeografico />,
-									1: <Regional />,
-									2: <Circuital />,
-									3: <Institucional />
+									0: <Regional props={props.props} />,
+									1: <Circuital props={props.props} />,
+									2: <Institucional props={props.props} />,
+									3: props.props.tipo != 'matricula' || <ReporteGeografico props={props.props} />
 								}[activeTab]
 							}
 						</>
@@ -70,9 +72,9 @@ const Reportes = props => {
 						<>
 							{
 								{
-									1: <Regional />,
-									2: <Circuital />,
-									3: <Institucional />
+									1: <Regional props={props.props} />,
+									2: <Circuital props={props.props.props} />,
+									3: <Institucional props={props.props} />
 								}[activeTab]
 							}
 						</>
@@ -81,8 +83,8 @@ const Reportes = props => {
 						<>
 							{
 								{
-									0: <Circuital />,
-									1: <Institucional />
+									0: <Circuital props={props.props} />,
+									1: <Institucional props={props.props} />
 								}[activeTab]
 							}
 						</>
@@ -91,7 +93,7 @@ const Reportes = props => {
 						<>
 							{
 								{
-									0: <Institucional />
+									0: <Institucional props={props.props} />
 								}[activeTab]
 							}
 						</>

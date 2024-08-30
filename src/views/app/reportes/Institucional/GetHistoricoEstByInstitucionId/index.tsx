@@ -138,7 +138,13 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
   ]
 
   const onExcelEvent = () => {
-    const workbook = GenerateExcelObject(reportData)
+    const dataToPrint = [] 
+    reportData.forEach(d => {
+      d.datos.forEach(d2 => {
+        dataToPrint.push(d2)
+      })
+    })
+    const workbook = GenerateExcelObject(dataToPrint)
     SendWorkbookToDownload(workbook, `${title}.xlsx`)
   }
   return (

@@ -2573,6 +2573,8 @@
 	"menu>invitaciones": "Invitaciones",
 	"menu>reportes": "Reportes",
 	"menu>reportes>reportes": "Reportes",
+	"menu>reportes>matricula": "Matricula",
+	"menu>reportes>sce": "SCE",
 	"menu>roles": "Roles",
 	"menu>supervisores-circuitos": "Supervisores",
 	"menu>usuarios>usuarios": "Usuarios",

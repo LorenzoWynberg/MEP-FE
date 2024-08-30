@@ -6,40 +6,34 @@ import GetHistoricoEstDivisionAdmin from './GetHistoricoEstDivisionAdmin'
 import { useTranslation } from 'react-i18next'
 import ReporteUltimoNivelSinSCE from './ReporteUltimoNivelSinSCE'
 
-const ReporteCircuital = () => {
+const ReporteCircuital = props => {
   const { t } = useTranslation()
+  const reportes = props.props.tipo == 'sce' ? [
 
-  const reportes = [
-    /* {
-      titulo: 'LISTADO DE PERSONAS ESTUDIANTES POR INSTITUCIÓN, NIVEL Y GRUPO',
-      descripcion:
-        'Este reporte se utiliza para visualizar la lista de todas las personas estudiantes de la institución',
-    },
-    {
-      titulo: 'REPORTE DE MATRÍCULA ACTUAL',
-      descripcion:
-        'Este reporte se utiliza para visualizar la matrícula por oferta, modalidad, nivel y especialidad',
-    }, */
-    {
-      titulo: t('reportes>circuital>reporte_de_matricula_por_circuito', 'Reporte de Matrícula por circuito'),
-      descripcion: t('reportes>circuital>resumen_de_estudiantes_matriculados_por_centro_educativo', 'Resumen de estudiantes matriculados por centro educativo')
-    },
 
     {
       titulo: t('reportes>circuital>reporte_de_sce_historico_division', 'Reporte de SCE Historico Division'),
-      descripcion: t('reportes>circuital>resumen_de_sce_historico_division', 'Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)')
+      descripcion: t('reportes>circuital>resumen_de_sce_historico_division', 'Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)'),
+      id: 2
     },
 
     {
       titulo: t('reportes>circuital>reporte_de_sce_historico_divisionnoSCE', 'Reporte de Estudiantes sin SCE'),
-      descripcion: t('reportes>circuital>resumen_de_sce_historico_divisionnoSCE', 'Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil')
-    }
+      descripcion: t('reportes>circuital>resumen_de_sce_historico_divisionnoSCE', 'Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil'),
+      id: 3
+    }] : [
+    {
+      titulo: t('reportes>circuital>reporte_de_matricula_por_circuito', 'Reporte de Matrícula por circuito'),
+      descripcion: t('reportes>circuital>resumen_de_estudiantes_matriculados_por_centro_educativo', 'Resumen de estudiantes matriculados por centro educativo'),
+      id: 1
+    },
+
   ]
   const [state, setState] = React.useState(0)
   const Cards = () => {
     return reportes.map((reporte, index) => (
       <ReportCard
-        onClick={() => setState(index + 1)}
+        onClick={() => setState(reporte.id)}
         titulo={reporte.titulo}
         descripcion={reporte.descripcion}
       />

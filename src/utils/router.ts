@@ -1337,6 +1337,30 @@ const routes: Route[] = [
 			activeTab: 0
 		}
 	},
+	
+	{
+		component: Reportes,
+		exact: true,
+		isAuthenticated: true,
+		section: 'menureporte',
+		route: '/reportes/sce',
+		routeProps: {
+			activeTab: 0,
+			tipo:'sce'
+		}
+	},
+	
+	{
+		component: Reportes,
+		exact: true,
+		isAuthenticated: true,
+		section: 'menureporte',
+		route: '/reportes/matricula',
+		routeProps: {
+			activeTab: 0,
+			tipo:'matricula'
+		}
+	},
 	{
 		component: Reportes,
 		exact: true,

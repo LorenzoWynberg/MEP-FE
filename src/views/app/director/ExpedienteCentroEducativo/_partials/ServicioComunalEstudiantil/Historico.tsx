@@ -99,7 +99,8 @@ const Historico = props => {
 			const response: any = await axios.get(
 				`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter${url}`
 			)
-			setData(response.data)
+			const dataSet = response.data.map(d => { return { ...d, descripcion: d.descripcion ? d.descripcion : 'No existe descripción' } })
+			setData(dataSet)
 			setLoading(false)
 		} catch (e) {
 			return { error: e.message, options: [] }
@@ -310,7 +311,7 @@ const Historico = props => {
 					</Col>
 					<Col xs={12}>
 
-						<FormControl fullWidth>		<InputLabel style={{marginLeft:16}} id="demo-simple-select-label">Area de Proyecto</InputLabel>
+						<FormControl fullWidth>		<InputLabel style={{ marginLeft: 16 }} id="demo-simple-select-label">Area de Proyecto</InputLabel>
 
 							<Select
 								placeholder='Area de Proyecto'
