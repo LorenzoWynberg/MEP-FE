@@ -53,7 +53,8 @@ const General = props => {
 		return {
 			apoyos: store.apoyos,
 			identification: store.identification,
-			selects: store.selects
+			selects: store.selects,
+			currentStudent: store.expedienteEstudiantil
 		}
 	})
 
@@ -74,7 +75,11 @@ const General = props => {
 	})
 
 	const agregarApoyo = async (data, category, categoryKeyName) => {
-		return await actions.addApoyo(data, category, categoryKeyName, state.apoyos[categoryKeyName].pageNumber)
+		let dataSend = {
+			...data,
+			condicionApoyoId: 6050
+		}
+		return await actions.addApoyo(dataSend, category, categoryKeyName, state.apoyos[categoryKeyName].pageNumber)
 	}
 
 	const handleDeleteApoyo = async (id, categoryKeyName, category) => {
@@ -123,8 +128,6 @@ const General = props => {
 
 	useEffect(() => {
 		const loadData = async () => {
-			//TODO JPBR borrar siguiente linea
-			debugger
 			setLoading(true)
 			await actions.getResources('discapacidades', state.identification.data.id)
 			await actions.getResources('condiciones', state.identification.data.id)
@@ -137,8 +140,6 @@ const General = props => {
 			!state.selects[catalogsEnumObj.DISCAPACIDADES.name][0] &&
 				(await actions.getCatalogs(catalogsEnumObj.DISCAPACIDADES.id))
 			await actions.getDiscapacidades(state.identification.data.id)
-			//TODO JPBR borrar siguiente linea
-			debugger
 			setLoading(false)
 		}
 		loadData()
@@ -153,20 +154,15 @@ const General = props => {
 			setLoading(true)
 
 			for (const category of state.apoyos.categorias) {
-				//TODO JPBR este se cayendo, debugger
-				//debugger
 				const response = await actions.getApoyosByType(state.identification.data.id, 1, 5, category)
-				//setLoading(false)
 			}
+			setLoading(false)
 		}
 		if (state.apoyos.categorias[0]) {
 			loadData()
 		}
 	}, [state.apoyos.categorias])
 
-	//TODO JPBR borrar siguientes dos lineas
-	//console.log('Loading JPBR', loading)
-	//debugger
 	if (loading) return <Loader />
 
 	return (
@@ -228,6 +224,8 @@ const General = props => {
 														apoyosMateriales={
 															storedValuesKey.search('Apoyosmateriales') !== -1
 														}
+														//TODO JPBR
+														matriculaId={state.currentStudent.currentStudent.idMatricula}
 													/>
 												)
 											})}
@@ -249,6 +247,8 @@ const General = props => {
 													editarApoyo={editarApoyo}
 													identidadesId={state.identification.data.id}
 													apoyosMateriales={storedValuesKey.search('Apoyosmateriales') !== -1}
+													//TODO JPBR
+													matriculaId={state.currentStudent.currentStudent.idMatricula}
 												/>
 											)}
 											<Pagination

@@ -27,6 +27,8 @@ import HighlightOffIcon from '@material-ui/icons/HighlightOff'
 import { useTranslation } from 'react-i18next'
 import CondicionDiscapacidad from './CondicionDiscapacidad'
 import { ApoyosCurriculares } from './ApoyosCurriculares'
+import { ApoyosPersonales } from './ApoyosPersonales'
+import { ApoyosOrganizativos } from './ApoyosOrganizativos'
 
 const useStyles = makeStyles(theme => ({
 	inputTags: {
@@ -256,6 +258,8 @@ const ApoyoEducativo = props => {
 					)}
 					{activeTab === 1 && <>HOla</>}
 					{activeTab === 2 && <ApoyosCurriculares />}
+					{activeTab === 3 && <ApoyosPersonales />}
+					{activeTab === 4 && <ApoyosOrganizativos />}
 				</ContentTab>
 
 				{/* <Col xs={12}>

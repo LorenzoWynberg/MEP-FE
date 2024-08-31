@@ -106,11 +106,14 @@ export const deleteApoyo = (id, categoryKeyName, identidadesId, pageNumber, cate
 }
 
 export const getTiposApoyos = () => async dispatch => {
+	//TODO JPBR borrar debugger
+	debugger
 	dispatch(loading(true))
 	try {
 		const response = await axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/TipoApoyo`)
 		dispatch(loadTypes(response.data))
 	} catch (e) {
+		dispatch(loading(false))
 		return { error: true, message: e.message }
 	}
 }
@@ -137,12 +140,10 @@ export const getCategoriasApoyos = () => async dispatch => {
 
 export const getApoyosByType = (identidad, page, quantity, type) => async dispatch => {
 	dispatch(loading(true))
-	//todo JPBR borrar linea abajo
-	const payloadLoadingApoyos = type.nombre.replace(/\s/g, '') + `${type.id}`
 	dispatch(loadingApoyos(type.nombre.replace(/\s/g, '') + `${type.id}`))
 	try {
 		debugger
-		const urlPayload = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${type.id}/${page}/${quantity}?identidadId=${identidad}`
+
 		const response = await axios.get(
 			`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${type.id}/${page}/${quantity}?identidadId=${identidad}`
 		)
@@ -183,8 +184,6 @@ export const getCondiciones = identidad => async dispatch => {
 }
 
 export const getResources = (type, identidadId) => async dispatch => {
-	//TODO JPBR borrar linea
-	debugger
 	const url =
 		type === 'discapacidades'
 			? `${envVariables.BACKEND_URL}/api/RecursosDiscapacidad/GetByIdentidad/${identidadId}`

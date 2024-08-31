@@ -208,10 +208,10 @@ const General = props => {
 				apoyos={state.apoyos}
 				handleSubmit={handleSubmit}
 			/>
-			//TODO JPBR aqui se agregan los 4 tabs de apoyos
+
 			{state.apoyos.categorias.map(categoria => {
 				const storedValuesKey = categoria.nombre.replace(/\s/g, '') + `${categoria.id}`
-				debugger
+
 				const totalRows =
 					state.apoyos[storedValuesKey] !== undefined ? state.apoyos[storedValuesKey].entityList?.length : 0
 				const _items =
