@@ -106,8 +106,6 @@ export const deleteApoyo = (id, categoryKeyName, identidadesId, pageNumber, cate
 }
 
 export const getTiposApoyos = () => async dispatch => {
-	//TODO JPBR borrar debugger
-	debugger
 	dispatch(loading(true))
 	try {
 		const response = await axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/TipoApoyo`)
