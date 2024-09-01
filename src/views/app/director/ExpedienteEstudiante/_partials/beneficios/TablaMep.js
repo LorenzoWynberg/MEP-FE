@@ -27,7 +27,6 @@ const TablaMep = props => {
 			}
 		}
 	]
-
 	const actionRow = [
 		{
 			actionName: 'Editar',
@@ -44,7 +43,7 @@ const TablaMep = props => {
 			actionDisplay: () => true
 		}
 	]
-
+	console.log(data, 'DATA')
 	const columns = useMemo(() => {
 		return [
 			{

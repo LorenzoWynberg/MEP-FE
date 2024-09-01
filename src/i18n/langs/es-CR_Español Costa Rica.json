@@ -2776,5 +2776,10 @@
 	"ubicacion_region_circuito>direccion_exacta": "Dirección exacta",
 	"ubicacion_region_circuito>distrito": "Distrito",
 	"ubicacion_region_circuito>poblado": "Poblado",
-	"ubicacion_region_circuito>provincia": "Provincia"
+	"ubicacion_region_circuito>provincia": "Provincia",
+	"estudiantes>expediente>nav>BitacoraExpediente": "Bitácoras",
+	"estudiantes>expediente>bitacora>titulo": "Bitácora de expediente",
+	"estudiantes>expediente>bitacora>alerta_temprana>titulo": "Alerta temprana",
+	"estudiantes>expediente>bitacora>cambios_identidad>titulo": "Cambios de identidad",
+	"estudiantes>expediente>bitacora>alerta_temprana>sub_titulo": "Histórico de alertas tempranas"
 }

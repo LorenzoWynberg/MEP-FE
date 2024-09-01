@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
@@ -17,6 +17,8 @@ import { InputGroup, InputGroupText, InputGroupAddon, Input } from 'reactstrap'
 
 import colors from '../../../../../../../assets/js/colors'
 import { useTranslation } from 'react-i18next'
+import { envVariables } from '../../../../../../../constants/enviroment'
+import axios from 'axios'
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
@@ -49,56 +51,22 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer'
   }
 }))
+const TikTokIcon = ({ color = "#000000" }) => {
+  return (
+    <i
+      className='fas fa-tiktok'
 
+    />
+  );
+};
 const Redes = (props) => {
   const { t } = useTranslation()
 
   const classes = useStyles()
-  const { hasEditable, socialNetworks, handleAdd, handleDelete } = props
-  const [socials, setSocials] = useState(socialNetworks)
+  const { hasEditable, setRedesParent, redes, redesTemp } = props
 
-  const handleText = (item, event) => {
-    const { name, value } = event.target
-    const socialLink = getSocialLink(item.id)
 
-    if (value.length === 1) {
-      item.textInput = `${socialLink}${value}`
-    } else if (value.length > 1) {
-      item.textInput = value
-    } else {
-      item.textInput = `${socialLink}`
-    }
 
-    const newSocials = socials.map((social) =>
-      item.id === social.id ? item : social
-    )
-
-    setSocials(newSocials)
-  }
-
-  const getSocial = (id) => {
-    return (
-      <Fab disabled aria-label='like' className={classes.social}>
-        {
-          {
-            1: <FacebookIcon fontSize='small' />,
-            2: <InstagramIcon fontSize='small' />,
-            3: <WhatsAppIcon fontSize='small' />,
-            4: <TwitterIcon fontSize='small' />
-          }[id]
-        }
-      </Fab>
-    )
-  }
-
-  const getSocialLink = (id) => {
-    switch (id) {
-      case 1: return 'https://facebook.com/'
-      case 2: return 'https://instagram.com/'
-      case 3: return 'https://wa.me/'
-      case 4: return 'https://twitter.com/'
-    }
-  }
 
   const getSocialContent = (item) => {
     return (
@@ -112,17 +80,17 @@ const Redes = (props) => {
                   <Fab
                     aria-label='like'
                     className={classes.delete}
-                    onClick={handleDelete.bind(this, item)}
+                    onClick={() => { }}
                   >
                     <CloseIcon fontSize='small' />
                   </Fab>
-                  )
+                )
                 : (
                   <>
                   </>
-                  )}
+                )}
             </>
-            )
+          )
           : (
             <>
               {hasEditable && <InputGroup>
@@ -130,12 +98,12 @@ const Redes = (props) => {
                   name={item.name}
                   value={item.textInput}
                   disabled={!hasEditable}
-                  onChange={handleText.bind(this, item)}
+                  onChange={() => { }}
                 />
                 <InputGroupAddon
                   addonType='append'
 
-                  onClick={handleAdd.bind(this, item)}
+                  onClick={() => { }}
                 >
                   <InputGroupText className={classes.addSocial}>
                     {t('general>agregar', 'Agregar')}
@@ -143,22 +111,61 @@ const Redes = (props) => {
                 </InputGroupAddon>
               </InputGroup>}
             </>
-            )}
+          )}
       </>
     )
   }
 
   return (
     <List className={classes.root}>
-      {socials.map((item) => {
-        return (
-          <ListItem>
-            <ListItemIcon>{getSocial(item.id)}</ListItemIcon>
-            <ListItemText id={item.name} primary={getSocialContent(item)} />
-          </ListItem>
-        )
-      })}
-    </List>
+
+      <ListItem>
+        <ListItemIcon>
+          <Fab disabled aria-label='like' className={classes.social}>
+            <FacebookIcon fontSize='small' />
+          </Fab>
+        </ListItemIcon>
+        {!hasEditable && <ListItemText id={1} primary={redes.facebook} />}
+        {hasEditable && <Input value={redesTemp.facebook} onChange={e => setRedesParent('facebook', e.target.value)} />}
+      </ListItem>
+      <ListItem>
+        <ListItemIcon>
+          <Fab disabled aria-label='like' className={classes.social}>
+            <InstagramIcon fontSize='small' />
+          </Fab>
+        </ListItemIcon>
+        {!hasEditable && <ListItemText id={1} primary={redes.instagram} />}
+        {hasEditable && <Input value={redesTemp.instagram} onChange={e => setRedesParent('instagram', e.target.value)} />}
+
+      </ListItem>
+      <ListItem>
+        <ListItemIcon>
+          <Fab disabled aria-label='like' className={classes.social}>
+            <WhatsAppIcon fontSize='small' />
+          </Fab></ListItemIcon>
+        {!hasEditable && <ListItemText id={1} primary={redes.whatsapp} />}
+        {hasEditable && <Input value={redesTemp.whatsapp} onChange={e => setRedesParent('whatsapp', e.target.value)} />}
+
+      </ListItem>
+      <ListItem>
+        <ListItemIcon>
+          <Fab disabled aria-label='like' className={classes.social}>
+            <TwitterIcon fontSize='small' />
+          </Fab></ListItemIcon>
+        {!hasEditable && <ListItemText id={1} primary={redes.twitter} />}
+        {hasEditable && <Input value={redesTemp.twitter} onChange={e => setRedesParent('twitter', e.target.value)} />}
+
+      </ListItem>
+      <ListItem>
+        <ListItemIcon>
+          
+        <Fab disabled aria-label='like' className={classes.social}><i class="fab fa-tiktok"></i></Fab></ListItemIcon>
+        {!hasEditable && <ListItemText id={1} primary={redes.tiktok} />}
+        {hasEditable && <Input value={redesTemp.tiktok} onChange={e => setRedesParent('tiktok', e.target.value)} />}
+
+      </ListItem>
+
+    </List >
   )
 }
 

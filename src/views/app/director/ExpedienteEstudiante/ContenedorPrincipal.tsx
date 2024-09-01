@@ -18,6 +18,7 @@ import { isEmpty, rest } from 'lodash'
 import { envVariables } from 'Constants/enviroment'
 import style from 'styled-components'
 import { Navbar } from 'react-bootstrap'
+import BitacoraExpediente from './BitacoraExpediente'
 
 const Navegacion = React.lazy(() => import('./Navegacion'))
 const Contacto = React.lazy(() => import('./Contacto'))
@@ -248,7 +249,8 @@ const ContenedorPrincipal = props => {
 												<ServicioComunalEstudiantil {...props} />
 											) : (
 												blockeo()
-											)
+											),
+											12: estudianteEnContexto() ? <BitacoraExpediente {...props} /> : blockeo()
 										}[active]
 									}
 								</>

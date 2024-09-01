@@ -7,6 +7,7 @@ import House from '@material-ui/icons/House'
 import Star from '@material-ui/icons/Star'
 import Solidarity from '../../../../assets/icons/Solidarity'
 import SquareFoot from '@material-ui/icons/SquareFoot'
+import BookIcon from '@mui/icons-material/Book'
 import Bookmark from '@material-ui/icons/Bookmark'
 import LocalHospital from '@material-ui/icons/LocalHospital'
 import EmailIcon from '@mui/icons-material/Email'
@@ -90,6 +91,7 @@ const Navegacion = props => {
 								src='/assets/img/construction-white.svg'
 							/>
 						</NavigationCard>
+
 						{
 							/*<NavigationCard
               icon={''}
@@ -110,6 +112,13 @@ const Navegacion = props => {
 								<EmailIcon style={{ fontSize: 50, color: 'white' }} />
 							</NavigationCard>
 						}
+						<NavigationCard
+							icon=''
+							title={t('estudiantes>expediente>nav>bitacora_expediente', 'Bitácoras')}
+							href='/director/expediente-estudiante/BitacoraExpediente'
+						>
+							<BookIcon style={{ fontSize: 50 }} />
+						</NavigationCard>
 						{aplicaSCE && tienePermisoSCE && tienePermisoSCE?.leer == 1 ? (
 							<NavigationCard
 								icon={''}

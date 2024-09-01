@@ -46,7 +46,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const EstudianteInformationCard = ({ data, fixed }) => {
-	console.log('JP Estudiante: ', data)
 	const { t } = useTranslation()
 
 	const [datosCatalogo, setDatosCatalogo] = useState({})
@@ -77,8 +76,6 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 			selects: store.selects
 		}
 	})
-
-	console.log('JP selects', state.selects)
 
 	// useEffect(() => {
 	// 	const loadData = async () => {
@@ -156,7 +153,9 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 						</span>
 						<span className={`${classes.information}`}>
 							<strong>{t('estudiantes>expediente>header>tipo_id', 'Tipo de Identificación')}:</strong>{' '}
-							{data.tipoIdentificacion}
+							{data.tipoIdentificacion == 'YÍS RÖ - IDENTIFICACIÓN MEP'
+								? 'YÍS RÖ'
+								: data.tipoIdentificacion}
 						</span>
 					</Col>
 					<Col

@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import IntlMessages from '../../../../../../helpers/IntlMessages'
 import styled from 'styled-components'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
-
+import Loader from 'Components/Loader'
 import { FormGroup, Label, Input, CustomInput, Form, FormFeedback } from 'reactstrap'
 import { EditButton } from '../../../../../../components/EditButton'
 import { useForm } from 'react-hook-form'
@@ -82,12 +82,14 @@ const BeneficiosMEP = props => {
 	const { register, handleSubmit, reset, watch, setValue } = useForm()
 	const [loading, setLoading] = useState(false)
 	const [dataTable, setDataTable] = useState({})
+
 	const state = useSelector(store => {
 		return {
 			identification: store.identification,
 			beneficios: store.beneficios
 		}
 	})
+
 	const actions = useActions({ addSubsidio, deleteSubsidio, editSubsidio, editSubsidioBody, GetSubsidiosMEP })
 	const fromDate = watch('dateFrom')
 	const toDate = watch('dateTo')
@@ -241,6 +243,13 @@ const BeneficiosMEP = props => {
 		setShowButtons(show)
 	}
 
+	const handleCreateToggle = () => {
+		clearData()
+		setView(true)
+		setShowButtons(true)
+		setVisualizing(false)
+		setEditable(true)
+	}
 	const handleCreateToggle = () => {
 		clearData()
 		setView(true)
