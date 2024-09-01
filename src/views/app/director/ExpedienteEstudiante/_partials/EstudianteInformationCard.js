@@ -97,6 +97,7 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 
 	useEffect(() => {
 		const catalogsNamesArray = [catalogsEnumObj.GENERO.name, catalogsEnumObj.NATIONALITIES.name]
+
 		if (validateSelectsData(state.selects, catalogsNamesArray)) {
 			const _item = {
 				nacionalidad: mapOption(

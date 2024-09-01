@@ -111,7 +111,6 @@ export const getTiposApoyos = () => async dispatch => {
 		const response = await axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/TipoApoyo`)
 		dispatch(loadTypes(response.data))
 	} catch (e) {
-		dispatch(loading(false))
 		return { error: true, message: e.message }
 	}
 }
