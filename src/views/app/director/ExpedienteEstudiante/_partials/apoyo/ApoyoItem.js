@@ -40,7 +40,7 @@ const ApoyoItem = props => {
 
 	const handleSaveApoyo = async data => {
 		debugger
-		console.log('JPBR idMatricula save', props.matriculaId)
+		//console.log('JPBR idMatricula save', props.matriculaId)
 		let _data = {
 			id: props.matriculaId, //props.apoyo.id || 0,
 			detalle: data[`${props.storedValuesKey}Detalle`],

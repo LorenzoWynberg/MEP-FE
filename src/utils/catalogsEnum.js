@@ -58,7 +58,7 @@ export const catalogsEnum = [
 	{ id: 50, name: 'estructurasTechosMaterialPrincipal' },
 	{ id: 51, name: 'techoMaterialPrincipal' },
 	{ id: 52, name: 'canoasBajantesMaterialPrincipal' },
-	{ id: 53, name: 'puertasVentanasMaterialPrincipal' },
+	{ id: 66, name: 'puertasVentanasMaterialPrincipal' },
 	{ id: 54, name: 'estadosElementosMaterialPrincipal' },
 	{ id: 55, name: 'cerramientoPerimetral' },
 	{ id: 56, name: 'estadoCerramientoPerimetral' },
@@ -70,7 +70,9 @@ export const catalogsEnum = [
 	{ id: 62, name: 'estadoGeneralMuros' },
 	{ id: 63, name: 'estadoSistemaCamaraCircuito' },
 	{ id: 64, name: 'proveedordelServicio' },
-	{ id: 65, name: 'responsabledePago' }
+	{ id: 65, name: 'responsabledePago' },
+	//TODO Estos no corresponden, tipoCondicionApoyo
+	{ id: 53, name: 'tipoCondicionApoyo' }
 ]
 
 export const catalogsEnumObj = {
@@ -137,7 +139,7 @@ export const catalogsEnumObj = {
 		name: 'canoasBajantesMaterialPrincipal'
 	},
 	PUERTASVENTANASMATERIALPRINCIPAL: {
-		id: 53,
+		id: 66,
 		name: 'puertasVentanasMaterialPrincipal'
 	},
 	ESTADOSELEMENTOSMATERIALPRINCIPAL: {

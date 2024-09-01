@@ -1,9 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { Row, Col, Form, FormGroup, Label, Input, Button } from 'reactstrap'
-import { TableReactImplementation } from 'Components/TableReactImplementation'
+import { Row, Col, Form, FormGroup, Label, Input, Button, Container } from 'reactstrap'
+import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
 import useNotification from 'Hooks/useNotification'
+import styled from 'styled-components'
 import {
 	getTiposApoyos,
 	getDependenciasApoyos,
@@ -29,6 +30,20 @@ export const ApoyosCurriculares = () => {
 	const [loading, setLoading] = useState(false)
 	const [data, setData] = useState([])
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
+	const [tiposApoyo, setTiposApoyo] = useState([])
+	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
+
+	const handleFechaAprobacionOnChange = event => {
+		debugger
+		const value = Number(event.target.value)
+		//formValue
+		//TODO JPBR refactorizar esa novatada de usar valores quemados
+		if (value === 6558) {
+			setShowFechaAprobacion(true)
+		} else {
+			setShowFechaAprobacion(false)
+		}
+	}
 
 	const { t } = useTranslation()
 
@@ -60,6 +75,11 @@ export const ApoyosCurriculares = () => {
 				await actions.getTiposApoyos()
 				//await actions.getDependenciasApoyos() //este no tiene permiso el usuario
 				//await actions.getCategoriasApoyos() //este es el que encicla el loading
+
+				const tiposDeApoyo = state.apoyos.tipos.filter(tipo => tipo.categoriaApoyoId === categoria.id)
+
+				setTiposApoyo(tiposDeApoyo)
+
 				!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
 					(await actions.getCatalogs(catalogsEnumObj.TIPOCONDICIONAPOYO.id))
 			} finally {
@@ -230,19 +250,24 @@ export const ApoyosCurriculares = () => {
 				}
 			}
 		]
-	}, [state.expedienteEstudiantil.currentStudent]) //TODO JPBR ver dependencia del use memo
+	}, [state.expedienteEstudiantil.currentStudent])
 
 	const onAgregarEvent = () => {
 		setShowNuevoApoyoModal(true)
+	}
+
+	const onConfirmSaveApoyo = formData => {
+		console.log('JP on confirm')
 	}
 
 	const closeAgregarModal = () => {
 		setShowNuevoApoyoModal(false)
 	}
 
+	//TODO JPBR refactorizar a un componente que se pueda usar en todas los tipos de apoyos cuando esten listos los endpoints
 	return (
 		<>
-			<TableReactImplementation
+			<TableReactImplementationApoyo
 				showAddButton
 				msjButton='Agregar'
 				onSubmitAddButton={() => onAgregarEvent()}
@@ -253,68 +278,97 @@ export const ApoyosCurriculares = () => {
 			<SimpleModal
 				openDialog={showNuevoApoyoModal}
 				onClose={() => closeAgregarModal()}
-				onConfirm={() => closeAgregarModal()}
+				onConfirm={onConfirmSaveApoyo}
 				actions={false}
 				title={'Registro de apoyo curricular'}
 			>
-				<>
-					<div>
-						<Form>
+				<Container width='100%' className='modal-detalle-subsidio'>
+					<Form>
+						<Row>
+							<Col md={6}>
+								<Label for='tipoDeApoyo'>Tipo de apoyo (requerido) </Label>
+								<StyledInput
+									id='tipoDeApoyo'
+									/* innerRef={register({
+										required: t('general>campo_requerido', 'El campo es requerido')
+									})} */
+									name='Tipo de apoyo'
+									type='select'
+									//invalid={errors[`${props.storedValuesKey}Tipos`]}
+									placeholder='Seleccionar'
+								>
+									<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
+									{tiposApoyo.map(tipo => {
+										return <option value={tipo.id}>{tipo.nombre}</option>
+									})}
+								</StyledInput>
+								{/* <FormFeedback>
+									{errors[`${props.storedValuesKey}Tipos`] &&
+										errors[`${props.storedValuesKey}Tipos`].message}
+								</FormFeedback> */}
+							</Col>
+							<Col md={6}>
+								<FormGroup>
+									<Label for='condicionDeApoyo'>Condición del apoyo</Label>
+									<StyledInput
+										id='condicionDeApoyo'
+										/* innerRef={register({
+										required: t('general>campo_requerido', 'El campo es requerido')
+									})} */
+										name='Tipo de apoyo'
+										type='select'
+										onChange={handleFechaAprobacionOnChange}
+										//invalid={errors[`${props.storedValuesKey}Tipos`]}
+										placeholder='Seleccionar'
+									>
+										<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
+										{state.selects.tipoCondicionApoyo.map(tipo => {
+											return <option value={tipo.id}>{tipo.nombre}</option>
+										})}
+									</StyledInput>
+								</FormGroup>
+							</Col>
+						</Row>
+						<Row>
+							<Col md={12}>
+								<FormGroup>
+									<Label for='detalleDelApoyo'>Detalle del apoyo (opcional)</Label>
+									<Input type='textarea' id='detalleDelApoyo' name='detalleDelApoyo' rows='5' />
+								</FormGroup>
+							</Col>
+						</Row>
+
+						{showFechaAprobacion && (
 							<Row>
 								<Col md={6}>
 									<FormGroup>
-										<Label for='tipoDeApoyo'>Tipo de Apoyo</Label>
-										<Input type='select' id='tipoDeApoyo' name='tipoDeApoyo'>
-											<option value=''>Seleccione una opción</option>
-											<option value='1'>Opción 1</option>
-											<option value='2'>Opción 2</option>
-											<option value='3'>Opción 3</option>
-										</Input>
-									</FormGroup>
-								</Col>
-								<Col md={6}>
-									<FormGroup>
-										<Label for='condicionDeApoyo'>Condición de Apoyo</Label>
-										<Input type='select' id='condicionDeApoyo' name='condicionDeApoyo'>
-											<option value=''>Seleccione una opción</option>
-											<option value='1'>Opción 1</option>
-											<option value='2'>Opción 2</option>
-										</Input>
-									</FormGroup>
-								</Col>
-							</Row>
-							<Row>
-								<Col md={12}>
-									<FormGroup>
-										<Label for='detalleDelApoyo'>Detalle del Apoyo</Label>
-										<Input type='textarea' id='detalleDelApoyo' name='detalleDelApoyo' rows='5' />
-									</FormGroup>
-								</Col>
-							</Row>
-							<Row>
-								<Col md={6}>
-									<FormGroup>
-										<Label for='fechaDeAprobacion'>Fecha de Aprobación</Label>
+										<Label for='fechaDeAprobacion'>Fecha de aprobación</Label>
 										<Input type='date' id='fechaDeAprobacion' name='fechaDeAprobacion' />
 									</FormGroup>
 								</Col>
 							</Row>
-							<Row>
-								<Col md={12}>
-									<Button color='secondary' type='button'>
-										Cancelar
-									</Button>
-									<Button color='primary' type='submit'>
-										Confirmar
-									</Button>
-								</Col>
-							</Row>
-						</Form>
-					</div>
-					{/* <WizardRegisterIdentityModal onConfirm={guardarNuevaPersona} /> /*}
-					{/*{loadingRegistrarModal && <Loader /> */}
-				</>
+						)}
+
+						<Row>
+							<Col md={12}>
+								<Button onClick={() => closeAgregarModal()} color='secondary' type='button'>
+									Cancelar
+								</Button>
+								<Button color='primary' type='submit'>
+									Confirmar
+								</Button>
+							</Col>
+						</Row>
+					</Form>
+				</Container>
 			</SimpleModal>
 		</>
 	)
 }
+
+const StyledInput = styled(Input)`
+	width: 100% !important;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	padding-right: 12%;
+`

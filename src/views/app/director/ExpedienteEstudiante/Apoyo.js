@@ -39,6 +39,7 @@ const ApoyoEducativoOpciones = withAuthorization({
 	Seccion: 'Apoyos Educativos'
 })(ApoyoEducativo)
 
+//TODO JPBR: Limpiar los llamados innesarios de esta pagina al BE
 const General = props => {
 	const { t } = useTranslation()
 
@@ -182,6 +183,9 @@ const General = props => {
 				apoyos={state.apoyos}
 				handleSubmit={handleSubmit}
 			/>
+
+			{/* 
+			//TODO JPBR Borrar esto luego de trabajar la logica de los apoyos
 			{categorias.map(categoria => {
 				const storedValuesKey = categoria.nombre.replace(/\s/g, '') + `${categoria.id}`
 				return (
@@ -278,7 +282,7 @@ const General = props => {
 						)}
 					</>
 				)
-			})}
+			})} */}
 		</>
 	)
 }
