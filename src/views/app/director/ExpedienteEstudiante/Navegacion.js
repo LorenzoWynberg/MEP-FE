@@ -24,7 +24,7 @@ const Navegacion = props => {
 			permisos: store.authUser.rolPermisos
 		}
 	})
-	const tienePermisoSCE = state.permisos.find(permiso => permiso.codigoSeccion == 'servicioComunalEstudiantilSCE')
+	const tienePermisoSCE = state.permisos.find(permiso => permiso.codigoSeccion == 'expedienteEstudianteSCE')
 	return (
 		<Container>
 			<Row className='mb-5'>
