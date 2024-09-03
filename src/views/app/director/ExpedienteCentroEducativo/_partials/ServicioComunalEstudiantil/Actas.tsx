@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo, useRef } from 'react'
 import { Col, Row } from 'reactstrap'
 import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
+import { Button } from 'Components/CommonComponents'
 import styled from 'styled-components'
 import { envVariables } from 'Constants/enviroment'
 import { formatoOracion } from 'utils/utils'
@@ -45,6 +46,7 @@ const Actas = props => {
 	const [studentId, setStudentId] = useState()
 	const [loading, setLoading] = useState(true)
 	const [expediente, setExpediente] = useState(null)
+	const [sce, setSCE] = useState(null)
 	const { t } = useTranslation()
 	const history = useHistory()
 	const { hasAddAccess = true, hasEditAccess = true, hasDeleteAccess = true } = props
@@ -99,9 +101,17 @@ const Actas = props => {
 				setData(response.data)
 			})
 			.catch(error => {})
-			.finally(() => setLoading(false))
-	}, [])
 
+		axios
+			.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter/${idInstitucion}`)
+			.then(response => {
+				setSCE(response.data)
+			})
+			.catch(error => {})
+			.finally(() => {
+				setLoading(false)
+			})
+	}, [])
 	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'actasSCE')
 
 	const columns = useMemo(() => {
@@ -180,8 +190,18 @@ const Actas = props => {
 		await actions.updatePeriodosLectivos(id)
 	}
 
+	if (sce?.length == 0) {
+		return (
+			<h4 className='mt-2'>
+				{t(
+					'Esta institución no cuenta con servicios comunales registrados; por lo tanto, no es posible generar un acta.'
+				)}
+			</h4>
+		)
+	}
+
 	if (!tienePermiso || tienePermiso?.leer == 0) {
-		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
+		return <h4 className='mt-2'>{t('No tienes permisos para acceder a esta sección')}</h4>
 	}
 
 	return (
@@ -206,46 +226,58 @@ const Actas = props => {
 
 			<Row>
 				<Col xs={12}>
-					<h3 className='mt-2 mb-3'>
+					<h3
+						className='mt-2 mb-3'
+						style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+					>
 						{/* {t('expediente_ce>titulo', 'Expediente Centro Educativo')} */}
 						Actas
+						{tienePermiso && tienePermiso?.agregar == 1 && (
+							<span>
+								<Button
+									style={{ cursor: 'pointer' }}
+									color='primary'
+									onClick={() => {
+										setLoading(true)
+										axios
+											.get(
+												`${envVariables.BACKEND_URL}/api/ExpedienteCentroEducativo/Institucion/GetById/${idInstitucion}`
+											)
+											.then(res => {
+												const data = { institucionId, codSaber: res.data.codigo }
+
+												axios
+													.post(
+														`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`,
+														data
+													)
+													.then(r2 => {
+														axios
+															.get(
+																`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${idInstitucion}`
+															)
+															.then(response => {
+																setData(response.data)
+															})
+															.catch(error => {
+																console.log('error', error)
+															})
+															.finally(() => setLoading(false))
+													})
+											})
+									}}
+								>
+									Generar Acta
+								</Button>
+							</span>
+						)}
 					</h3>
 				</Col>
 				<Col xs={12}>
 					<TableReactImplementation
 						data={data}
-						msjButton='Generar Acta'
-						showAddButton={tienePermiso && tienePermiso?.agregar == 1}
+						showAddButton={false}
 						avoidSearch
-						onSubmitAddButton={() => {
-							setLoading(true)
-							axios
-								.get(
-									`${envVariables.BACKEND_URL}/api/ExpedienteCentroEducativo/Institucion/GetById/${idInstitucion}`
-								)
-								.then(res => {
-									const data = { institucionId, codSaber: res.data.codigo }
-
-									axios
-										.post(
-											`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`,
-											data
-										)
-										.then(r2 => {
-											axios
-												.get(
-													`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${idInstitucion}`
-												)
-												.then(response => {
-													setData(response.data)
-												})
-												.catch(error => {
-													console.log('error', error)
-												})
-												.finally(() => setLoading(false))
-										})
-								})
-						}}
 						columns={columns}
 						orderOptions={[]}
 						pageSize={10}
