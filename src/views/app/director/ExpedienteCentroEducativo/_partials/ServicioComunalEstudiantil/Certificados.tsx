@@ -222,7 +222,7 @@ const Certificados = props => {
 					txtBtnCancel='Cerrar'
 					txtBtn='Imprimir'
 					onConfirm={handlePrint}
-					title='Certificado'
+					title='Registro'
 					onClose={() => setStudentId(null)}
 					stylesContent={{}}
 					openDialog={studentId && true}
@@ -255,7 +255,7 @@ const Certificados = props => {
 							</tr>
 							<tr>
 								<td style={{ paddingTop: 100, paddingBottom: 100 }}>
-									Desarrollo el proyecto del Servicio Comunal Estudiantil en el Área de proyecto:{' '}
+									Desarrolló el proyecto del Servicio Comunal Estudiantil en el Área de proyecto:{' '}
 									{certData.areaProyecto}, Nombre del proyecto: {certData.nombreProyecto} , Tipo de
 									proyecto: {certData.tipoProyecto}, Características: {certData.caracteristicas}, con
 									una duración de 30 horas, en el Año: {certData.anio}.
