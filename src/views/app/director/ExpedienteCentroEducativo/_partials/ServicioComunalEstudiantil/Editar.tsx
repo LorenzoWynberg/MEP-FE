@@ -32,6 +32,7 @@ import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import { Search } from 'Components/TableReactImplementationServicio/Header'
 import { isEmpty } from 'lodash'
+import { useHistory } from 'react-router'
 
 export const Editar: React.FC<IProps> = props => {
 	const { t } = useTranslation()
@@ -69,6 +70,7 @@ export const Editar: React.FC<IProps> = props => {
 	const [studentsSeleccionados, setStudentsSeleccionados] = React.useState([])
 	const [students, setStudents] = useState([])
 	const today = new Date()
+	const history = useHistory()
 
 	const mapper = el => {
 		return {
@@ -505,6 +507,16 @@ export const Editar: React.FC<IProps> = props => {
 			<Row>
 				<Col sm={12}>
 					<p style={{ textAlign: 'center' }}>
+						<Button
+							outline={true}
+							color='secondary'
+							style={{ cursor: 'pointer', marginRight: '5px' }}
+							onClick={() => {
+								history.push('/director/expediente-centro/servicio-comunal')
+							}}
+						>
+							Cancelar
+						</Button>
 						<Button
 							class={
 								isValid()

@@ -30,6 +30,7 @@ import { useSelector } from 'react-redux'
 import { Search } from 'Components/TableReactImplementationServicio/Header'
 import zIndex from '@material-ui/core/styles/zIndex'
 import { isEmpty } from 'lodash'
+import { useHistory } from 'react-router'
 
 export const Agregar: React.FC<IProps> = props => {
 	const { t } = useTranslation()
@@ -69,7 +70,7 @@ export const Agregar: React.FC<IProps> = props => {
 	const [selectedDate, setSelectedDate] = useState(null)
 	const [formattedDate, setFormattedDate] = useState('')
 	const today = new Date()
-
+	const history = useHistory()
 	const state = useSelector((store: any) => {
 		return {
 			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
@@ -507,6 +508,16 @@ export const Agregar: React.FC<IProps> = props => {
 			<Row>
 				<Col sm={12}>
 					<p style={{ textAlign: 'center' }}>
+						<Button
+							outline={true}
+							color='secondary'
+							style={{ cursor: 'pointer', marginRight: '5px' }}
+							onClick={() => {
+								history.push('/director/expediente-centro/servicio-comunal')
+							}}
+						>
+							Cancelar
+						</Button>
 						<Button
 							color='primary'
 							style={{ cursor: 'pointer' }}
