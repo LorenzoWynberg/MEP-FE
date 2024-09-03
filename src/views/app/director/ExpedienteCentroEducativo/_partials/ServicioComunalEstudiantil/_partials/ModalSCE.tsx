@@ -49,14 +49,14 @@ const ModalSCE = props => {
 				'Nacionalidad'
 			),
 			accessor: 'nacionalidad',
-			label: '',
-			column: ''
+			label: 'Nacionalidad',
+			column: 'nacionalidad'
 		},
 		{
 			Header: t('servicio_comunal>registro_servicio_comunal>genero', 'genero'),
 			accessor: 'genero',
-			label: '',
-			column: ''
+			label: 'Género',
+			column: 'genero'
 		},
 		{
 			Header: t(
@@ -64,21 +64,21 @@ const ModalSCE = props => {
 				'Fecha de nacimiento'
 			),
 			accessor: 'fechaNacimiento',
-			label: '',
-			column: ''
+			label: 'Fecha de nacimiento',
+			column: 'fechaNacimiento'
 		},
 		{
 			Header: t('servicio_comunal>registro_servicio_comunal>edad', 'Edad'),
 			accessor: 'edad',
-			label: '',
-			column: ''
+			label: 'Edad',
+			column: 'edad'
 		},
 
 		{
-			Header: t('servicio_comunal>registro_servicio_comunal>discapacidad', 'Discapacidad'),
+			Header: t('servicio_comunal>registro_servicio_comunal>discapacidad', 'Tiene discapacidades'),
 			accessor: 'discapacidad',
-			label: '',
-			column: ''
+			label: 'Condición de discapacidad',
+			column: 'discapacidad'
 		}
 	]
 
@@ -113,7 +113,7 @@ const ModalSCE = props => {
 						</Col>
 						<Col sm={4} className='mb-3'>
 							{/* TODO: i18n */}
-							<strong>{t('informationcarddetalle>docenteAcompan', 'Pesona tutor/a')}:</strong>
+							<strong>{t('informationcarddetalle>docenteAcompan', 'Persona tutor/a')}:</strong>
 							<br />
 							<span>{sce.nombreDocente && sce.nombreDocente}</span>
 						</Col>

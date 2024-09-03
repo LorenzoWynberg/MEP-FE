@@ -20,11 +20,10 @@ const TableStudentsSCE: React.FC<IProps> = props => {
 			...el,
 			id: el.matriculaId,
 			image: el.img,
-			edad: el.fechaNacimiento,
+			edad: el.edad,
 			fechaNacimiento: el.fechaNacimiento,
 			nacionalidad: el.nacionalidad ? el.nacionalidad : '',
-			genero: el.genero ? el.genero : '',
-			cuentaCorreoOffice: el.cuentaCorreoOffice ? 'Sí' : 'No'
+			genero: el.genero ? el.genero : ''
 		}
 	}
 	return (
