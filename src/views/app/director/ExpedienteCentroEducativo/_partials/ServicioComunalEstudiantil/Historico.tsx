@@ -158,6 +158,12 @@ const Historico = props => {
 				label: ''
 			},
 			{
+				Header: t('expediente_estudiantil>fecha_regsitro', 'Fecha de registro'),
+				column: 'fechaRegistro',
+				accessor: 'fechaRegistro',
+				label: ''
+			},
+			{
 				Header: t('expediente_estudiantil>organizacion', 'Organizacion contraparte'),
 				column: 'organizacionContraparte',
 				accessor: 'organizacionContraparte',
