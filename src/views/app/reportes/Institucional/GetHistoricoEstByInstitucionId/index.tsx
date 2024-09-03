@@ -45,7 +45,7 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
 			column: ''
 		},
 		{
-			Header: 'Area de Proyecto',
+			Header: 'Área de Proyecto',
 			accessor: 'nombreAreaProyecto',
 			label: '',
 			column: ''
@@ -81,7 +81,7 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
 			column: ''
 		},
 		{
-			Header: 'DIMEX',
+			Header: 'Cantidad de DIMEX',
 			accessor: 'dimexCount',
 			label: '',
 			column: ''
@@ -93,7 +93,7 @@ const GetHistoricoEstByInstitucionId = ({ regresarEvent }) => {
 			column: ''
 		},
 		{
-			Header: 'Discapacidad',
+			Header: 'Personas con discapacidad',
 			accessor: 'discapacidadCount',
 			label: '',
 			column: ''

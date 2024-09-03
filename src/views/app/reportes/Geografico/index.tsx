@@ -19,7 +19,7 @@ const ReporteGeografico = props => {
         'Este reporte se utiliza para visualizar la matrícula por oferta, modalidad, nivel y especialidad',
     }, */
 		{
-			titulo: 'Historico SCE por Division Geografica',
+			titulo: 'Histórico SCE por División Geográfica',
 			descripcion:
 				'Resumen de proyectos de Servicio Comunal Estudiantil según división geografica (Provincia, cantón, distrito)'
 		}

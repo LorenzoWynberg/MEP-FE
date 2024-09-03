@@ -14,7 +14,7 @@ const ReporteCircuital = props => {
 					{
 						titulo: t(
 							'reportes>circuital>reporte_de_sce_historico_division',
-							'Reporte de SCE historico division'
+							'Reporte de SCE histórico división'
 						),
 						descripcion: t(
 							'reportes>circuital>resumen_de_sce_historico_division',

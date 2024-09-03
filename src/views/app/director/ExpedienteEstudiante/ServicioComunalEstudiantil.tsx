@@ -86,7 +86,7 @@ const ServicioComunalEstudiantil = props => {
 						<span>{servicioData?.organizacionContraparte}</span>
 					</Col>
 					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>docenteAcompana', 'Acompañante de proyecto')}:</strong>
+						<strong>{t('informationcarddetalle>docenteAcompan', 'Persona tutor/a')}:</strong>
 						<br />
 						<span>{servicioData?.docenteAcompanante}</span>
 					</Col>
@@ -112,7 +112,7 @@ const ServicioComunalEstudiantil = props => {
 					</Col>
 				</Row>
 				<Row>
-					<Col sm={4} className='mb-3'>
+					<Col className='mb-3'>
 						<strong>
 							{/* TODO: i18 */}
 							{/* {t(

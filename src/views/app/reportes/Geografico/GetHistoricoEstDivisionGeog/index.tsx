@@ -32,7 +32,7 @@ const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
 			column: ''
 		},
 		{
-			Header: 'Canton',
+			Header: 'Cantón',
 			accessor: 'idCanton',
 			label: '',
 			column: ''
@@ -74,7 +74,7 @@ const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
 			column: ''
 		},
 		{
-			Header: 'Nombre de la organización contraparte',
+			Header: 'Organización contraparte',
 			accessor: 'nombreOrgContraparte',
 			label: '',
 			column: ''
@@ -98,7 +98,7 @@ const GetHistoricoEstDivisionGeog = ({ regresarEvent }) => {
 			column: ''
 		},
 		{
-			Header: 'Discapacidad',
+			Header: 'Personas con discapacidad',
 			accessor: 'discapacidadCount',
 			label: '',
 			column: ''

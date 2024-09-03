@@ -313,7 +313,7 @@ export const Editar: React.FC<IProps> = props => {
 			)}
 			{nombresSeleccionados && value && !showBuscador && showNombre && catalogos.nombresProyecto && (
 				<SimpleModal
-					title='Nombre proyecto'
+					title='Nombre de proyecto'
 					openDialog={showNombre}
 					onConfirm={() => {
 						setShowNombre(false)
@@ -385,7 +385,7 @@ export const Editar: React.FC<IProps> = props => {
 								</Col>
 								<Col md={4}>
 									<FormGroup>
-										<Label>{t('registro_servicio_comunal>objetivo', 'Nombre proyecto')}</Label>
+										<Label>{t('registro_servicio_comunal>objetivo', 'Nombre de proyecto')}</Label>
 										<Input
 											key={nombreSend}
 											name='objetivo'

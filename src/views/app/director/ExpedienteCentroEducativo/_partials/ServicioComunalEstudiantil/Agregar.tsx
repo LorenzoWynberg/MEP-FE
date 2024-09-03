@@ -161,7 +161,7 @@ export const Agregar: React.FC<IProps> = props => {
 											borderBottom: '1px solid #d7d7d7'
 										}}
 									>
-										<Col sm={3}>
+										<Col sm={4}>
 											<FormControlLabel
 												style={{ margin: '0 0 0 -11px' }}
 												value={item.id}
@@ -177,7 +177,7 @@ export const Agregar: React.FC<IProps> = props => {
 												label={item.nombre}
 											/>
 										</Col>
-										<Col sm={9}>{item.descripcion}</Col>
+										<Col sm={8}>{item.descripcion}</Col>
 									</Row>
 								))}
 						</RadioGroup>
@@ -209,7 +209,7 @@ export const Agregar: React.FC<IProps> = props => {
 											borderBottom: '1px solid #d7d7d7'
 										}}
 									>
-										<Col sm={3}>
+										<Col sm={4}>
 											<FormControlLabel
 												value={item.id}
 												onClick={(e, v) => {
@@ -222,7 +222,7 @@ export const Agregar: React.FC<IProps> = props => {
 												label={item.nombre}
 											/>
 										</Col>
-										<Col sm={9}>{item.descripcion}</Col>
+										<Col sm={8}>{item.descripcion}</Col>
 									</Row>
 								))}
 						</RadioGroup>
@@ -291,7 +291,7 @@ export const Agregar: React.FC<IProps> = props => {
 			)}
 			{nombresSeleccionados && value && !showBuscador && showNombre && catalogos.nombresProyecto && (
 				<SimpleModal
-					title='Nombre Proyecto'
+					title='Nombre de proyecto'
 					openDialog={showNombre}
 					onConfirm={() => {
 						setShowNombre(false)
@@ -316,7 +316,7 @@ export const Agregar: React.FC<IProps> = props => {
 											borderBottom: '1px solid #d7d7d7'
 										}}
 									>
-										<Col sm={3}>
+										<Col sm={4}>
 											<FormControlLabel
 												value={item.id}
 												onClick={(e, v) => {
@@ -329,7 +329,7 @@ export const Agregar: React.FC<IProps> = props => {
 												label={item.nombre}
 											/>
 										</Col>
-										<Col sm={9}>{item.descripcion}</Col>
+										<Col sm={8}>{item.descripcion}</Col>
 									</Row>
 								))}
 						</RadioGroup>
@@ -367,7 +367,7 @@ export const Agregar: React.FC<IProps> = props => {
 								</Col>
 								<Col md={4}>
 									<FormGroup>
-										<Label>{t('registro_servicio_comunal>objetivo', 'Nombre proyecto')}</Label>
+										<Label>{t('registro_servicio_comunal>objetivo', 'Nombre de proyecto')}</Label>
 										<Input
 											style={{ border: checkedValid && !nombreSend ? '1px solid red' : '' }}
 											key={nombreSend}

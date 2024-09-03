@@ -31,6 +31,7 @@ const ServicioComunalEstudiantil = props => {
 	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
 
 	const validarInstitucionSCE = async () => {
+		console.log('PERMISO', state.permisos)
 		try {
 			const response = await axios.post(
 				`https://mep-saber.azurewebsites.net/api/ServicioComunal/VerificarInstitucionAplicaSCE?idInstitucion=${idInstitucion}`

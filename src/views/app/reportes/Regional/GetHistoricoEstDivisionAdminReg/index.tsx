@@ -79,7 +79,7 @@ const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
 			column: ''
 		},
 		{
-			Header: 'Nombre de la organización contraparte',
+			Header: 'Organización contraparte',
 			accessor: 'nombreOrgContraparte',
 			label: '',
 			column: ''
@@ -103,7 +103,7 @@ const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
 			column: ''
 		},
 		{
-			Header: 'Discapacidades',
+			Header: 'Personas con discapacidad',
 			accessor: 'discapacidadCount',
 			label: '',
 			column: ''
