@@ -6,8 +6,15 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@material-ui/core'
 
 interface IProps {
+	onlyViewModule: any
+	avoidSearch: any
+	hasEditAccess: any
+	setEstudiantes: any
+	estudiantes: any
+	closeContextualMenu: any
 	data: Array<any>
 	handleGetData?: Function
+	button: any
 }
 
 const ComunalTabla: React.FC<IProps> = props => {
@@ -124,8 +131,14 @@ const ComunalTabla: React.FC<IProps> = props => {
 	return (
 		<Card className='my-3'>
 			<CardBody>
-				<h4>{t('servicio_comunal>registro_servicio_comunal>titulo', 'título')}</h4>
-
+				{/* <h4>
+					{t('servicio_comunal>registro_servicio_comunal>titulo', 'título')}
+					<span style={{ textAlign: 'right' }}>{props.button ?? props.button}</span>
+				</h4> */}
+				<h4 style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+					{t('servicio_comunal>registro_servicio_comunal>titulo', 'título')}
+					<p className='m-0'>{props.button ?? props.button}</p>
+				</h4>
 				<TableReactImplementationServicio
 					avoidSearch={props.avoidSearch}
 					handleGetData={() => {

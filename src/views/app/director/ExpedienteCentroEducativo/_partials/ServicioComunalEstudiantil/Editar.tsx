@@ -111,7 +111,6 @@ export const Editar: React.FC<IProps> = props => {
 			!organizacionId ||
 			!acompanante ||
 			!date ||
-			!descripcion ||
 			!localStorage.getItem('loggedUser') ||
 			// isEmpty(caracteristicasSeleccionados) ||
 			isEmpty(estudiantes)
@@ -144,7 +143,6 @@ export const Editar: React.FC<IProps> = props => {
 				setNombreSend(data.nombreProyecto)
 				setNombreId(data.nombreProyectoId)
 				setValueDescripcion(data.descripcion)
-
 			})
 			.finally(() => {
 				setLoading(false)
@@ -160,7 +158,7 @@ export const Editar: React.FC<IProps> = props => {
 			{loading && <BarLoader />}
 			{showAreaProyecto && catalogos.areasProyecto && (
 				<SimpleModal
-					title='Seleccion de Areas Proyecto'
+					title='Área de proyecto'
 					openDialog={showAreaProyecto}
 					onConfirm={() => {
 						setShowAreaProyecto(false)
@@ -168,22 +166,6 @@ export const Editar: React.FC<IProps> = props => {
 					onClose={() => setShowAreaProyecto(false)}
 				>
 					<FormControl>
-						<Row>
-							<Col
-								style={{
-									display: 'flex',
-									textAlign: 'center',
-									justifyContent: 'center',
-									alignItems: 'center'
-								}}
-								sm={3}
-							>
-								<Typography variant='h6'>Area De Proyecto</Typography>
-							</Col>
-							<Col sm={9}>
-								<Typography variant='h6'>Descripcion</Typography>
-							</Col>
-						</Row>
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
 							name='radio-buttons-group'
@@ -191,16 +173,16 @@ export const Editar: React.FC<IProps> = props => {
 						>
 							{catalogos?.areasProyecto &&
 								catalogos.areasProyecto.map(item => (
-									<Row>
-										<Col
-											style={{
-												display: 'flex',
-												textAlign: 'center',
-												justifyContent: 'center',
-												alignItems: 'center'
-											}}
-											sm={3}
-										>
+									<Row
+										className='py-2'
+										style={{
+											display: 'flex',
+											justifyContent: 'center',
+											alignItems: 'center',
+											borderBottom: '1px solid #d7d7d7'
+										}}
+									>
+										<Col sm={3}>
 											<FormControlLabel
 												value={item.id}
 												onClick={(e, v) => {
@@ -226,7 +208,7 @@ export const Editar: React.FC<IProps> = props => {
 
 			{showModalidades && (
 				<SimpleModal
-					title='Tipo de Proyecto'
+					title='Tipo de proyecto'
 					value={value}
 					openDialog={showModalidades}
 					onConfirm={() => {
@@ -238,15 +220,16 @@ export const Editar: React.FC<IProps> = props => {
 						<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
 							{catalogos.modalidades &&
 								catalogos.modalidades.map(item => (
-									<Row>
-										<Col
-											style={{
-												display: 'flex',
-												justifyContent: 'left',
-												alignItems: 'left'
-											}}
-											sm={3}
-										>
+									<Row
+										className='py-2'
+										style={{
+											display: 'flex',
+											justifyContent: 'center',
+											alignItems: 'center',
+											borderBottom: '1px solid #d7d7d7'
+										}}
+									>
+										<Col sm={3}>
 											<FormControlLabel
 												value={item.id}
 												onClick={(e, v) => {
@@ -276,25 +259,21 @@ export const Editar: React.FC<IProps> = props => {
 					onClose={() => setShowTipoOrganizacion(false)}
 				>
 					<FormControl>
-						<Row>
-							<Col
-								style={{
-									display: 'flex',
-									justifyContent: 'center',
-									alignItems: 'center'
-								}}
-								sm={3}
-							>
-								<Typography variant='h6'>Tipo</Typography>
-							</Col>
-						</Row>
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
 							name='radio-buttons-group'
 							value={value}
 						>
 							{catalogos.tipoOrganizacion.map(item => (
-								<Row>
+								<Row
+									className='py-2'
+									style={{
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center',
+										borderBottom: '1px solid #d7d7d7'
+									}}
+								>
 									<Col sm={12}>
 										<FormControlLabel
 											value={item.id}
@@ -332,7 +311,7 @@ export const Editar: React.FC<IProps> = props => {
 			)}
 			{nombresSeleccionados && value && !showBuscador && showNombre && catalogos.nombresProyecto && (
 				<SimpleModal
-					title='Nombre Proyecto'
+					title='Nombre proyecto'
 					openDialog={showNombre}
 					onConfirm={() => {
 						setShowNombre(false)
@@ -340,7 +319,6 @@ export const Editar: React.FC<IProps> = props => {
 					onClose={() => setShowNombre(false)}
 				>
 					<FormControl>
-						<FormLabel id='demo-radio-buttons-group-label'>Tipo Organizacion</FormLabel>
 						<RadioGroup
 							aria-labelledby='demo-radio-buttons-group-label'
 							name='radio-buttons-group'
@@ -349,8 +327,16 @@ export const Editar: React.FC<IProps> = props => {
 							{catalogos.nombresProyecto
 								.filter(item => parseInt(item.codigo) == parseInt(value))
 								.map(item => (
-									<Row>
-										<Col sm={12}>
+									<Row
+										className='py-2'
+										style={{
+											display: 'flex',
+											justifyContent: 'center',
+											alignItems: 'center',
+											borderBottom: '1px solid #d7d7d7'
+										}}
+									>
+										<Col sm={3}>
 											<FormControlLabel
 												value={item.id}
 												onClick={(e, v) => {
@@ -363,6 +349,7 @@ export const Editar: React.FC<IProps> = props => {
 												label={item.nombre}
 											/>
 										</Col>
+										<Col sm={9}>{item.descripcion}</Col>
 									</Row>
 								))}
 						</RadioGroup>
@@ -380,10 +367,10 @@ export const Editar: React.FC<IProps> = props => {
 						<CardTitle>Editar Servicio Comunal</CardTitle>
 						<Form>
 							<Row className='mb-2'>
-								<Col md={3}>
+								<Col md={4}>
 									<FormGroup>
 										<Label>
-											{t('registro_servicio_comunal>area_proyecto', 'Area de proyecto')}
+											{t('registro_servicio_comunal>area_proyecto', 'Área de proyecto')}
 										</Label>
 										<Input
 											key={areaProyecto}
@@ -394,9 +381,9 @@ export const Editar: React.FC<IProps> = props => {
 										/>
 									</FormGroup>
 								</Col>
-								<Col md={6}>
+								<Col md={4}>
 									<FormGroup>
-										<Label>{t('registro_servicio_comunal>objetivonombre', 'objetivo')}</Label>
+										<Label>{t('registro_servicio_comunal>objetivo', 'Nombre proyecto')}</Label>
 										<Input
 											key={nombreSend}
 											name='objetivo'
@@ -406,9 +393,9 @@ export const Editar: React.FC<IProps> = props => {
 										/>
 									</FormGroup>
 								</Col>
-								<Col sm={3}>
+								<Col sm={4}>
 									<FormGroup>
-										<Label>{t('registro_servicio_comunal>modalidad', 'Tipo de Proyecto')}</Label>
+										<Label>{t('registro_servicio_comunal>modalidad', 'Tipo de proyecto')}</Label>
 										<Input
 											name='modalidad'
 											type='text'
@@ -421,7 +408,6 @@ export const Editar: React.FC<IProps> = props => {
 								</Col>
 							</Row>
 							<Row className='mb-2'>
-
 								<Col sm={4}>
 									<FormGroup>
 										<Label>
@@ -429,6 +415,10 @@ export const Editar: React.FC<IProps> = props => {
 										</Label>
 										<DatePicker
 											dateFormat='dd/MM/yyyy'
+											style={{
+												zIndex: 99999
+											}}
+											popperPlacement={'right'}
 											value={Cdate}
 											onChange={date => {
 												const d = new Date(date)
@@ -461,7 +451,7 @@ export const Editar: React.FC<IProps> = props => {
 								<Col sm={4}>
 									<FormGroup>
 										<Label>
-											{t('registro_servicio_comunal>docente_acompaña', 'Acompañante de proyecto')}
+											{t('registro_servicio_comunal>docente_acompaña', 'Persona tutor/a')}
 										</Label>
 										<Input
 											style={{ border: checkedValid && !acompanante ? '1px solid red' : '' }}
@@ -479,22 +469,6 @@ export const Editar: React.FC<IProps> = props => {
 									</FormGroup>
 								</Col>
 							</Row>
-
-							<FormGroup>
-								<Label>{t('registro_servicio_comunal>descripcion', 'Descripción')}</Label>
-
-								<Input
-									style={{ border: checkedValid && !descripcion ? '1px solid red' : '' }}
-									name='descripcion'
-									type='text'
-									value={descripcion}
-									onChange={e => {
-										setValueDescripcion(e.target.value)
-									}}
-									autoFocus={true}
-								/>
-								{checkedValid && !descripcion && <span style={{ color: 'red' }}>Campo requerido</span>}
-							</FormGroup>
 						</Form>
 					</Card>
 				</Col>
@@ -502,23 +476,21 @@ export const Editar: React.FC<IProps> = props => {
 
 			<Row>
 				<Col sm={12}>
-					<div style={{ textAlign: 'right', width: '100%' }}>
-
-						<Button
-							onClick={() => {
-								showBuscador ? setShowBuscador(false) : setShowBuscador(true)
-							}}
-							color='primary'
-
-							style={{ cursor: 'pointer' }}
-						>
-							Agregar
-						</Button>
-					</div>
 					{checkedValid && isEmpty(estudiantes) && (
 						<span style={{ color: 'red' }}>Debe agregar estudiantes</span>
 					)}
 					<TableStudents
+						button={
+							<Button
+								onClick={() => {
+									showBuscador ? setShowBuscador(false) : setShowBuscador(true)
+								}}
+								color='primary'
+								style={{ cursor: 'pointer' }}
+							>
+								Agregar
+							</Button>
+						}
 						onlyViewModule={true}
 						data={estudiantes}
 						avoidSearch={true}
