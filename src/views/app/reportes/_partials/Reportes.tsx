@@ -20,31 +20,30 @@ const Reportes = props => {
 	const [activeTab, setActiveTab] = useState<number>(0)
 	const { accessRole } = useSelector((state: any) => state.authUser?.currentRoleOrganizacion)
 	const options = [
+		t('reportes>geografico', 'Geográfico'),
 		t('gestion_usuario>usuarios>regional', 'Regional'),
 		t('reportes>circuital', 'Circuital'),
-		t('reportes>institucional', 'Institucional'),
-		t('reportes>geografico', 'Geografico'),
+		t('reportes>institucional', 'Institucional')
 	]
 
 	switch (accessRole.nivelAccesoId) {
 		case 1: // Institucion
 			removeFromArray(options, 'Regional')
 			removeFromArray(options, 'Circuital')
-			removeFromArray(options, 'Geografico')
+			removeFromArray(options, 'Geográfico')
 			break
 		case 2: // Circuito
-			removeFromArray(options, 'Geografico')
+			removeFromArray(options, 'Geográfico')
 			removeFromArray(options, 'Regional')
 			break
 		case 3: // Regional
-			removeFromArray(options, 'Geografico')
 			break
 		case 4: // Global
 			break
 	}
 
-	props.props.tipo == 'matricula' && removeFromArray(options, 'Geografico')
-	console.log('props.props', props.props)
+	props.props.tipo == 'matricula' && removeFromArray(options, 'Geográfico')
+
 	if (accessRole.rolId === 11) {
 		// Si el rol es Docente(11)  se oculta la seccion
 		return <></>
@@ -60,10 +59,10 @@ const Reportes = props => {
 						<>
 							{
 								{
-									0: <Regional props={props.props} />,
-									1: <Circuital props={props.props} />,
-									2: <Institucional props={props.props} />,
-									3: <ReporteGeografico props={props.props} />
+									0: <ReporteGeografico props={props.props} />,
+									1: <Regional props={props.props} />,
+									2: <Circuital props={props.props} />,
+									3: <Institucional props={props.props} />
 								}[activeTab]
 							}
 						</>
@@ -72,6 +71,7 @@ const Reportes = props => {
 						<>
 							{
 								{
+									0: <ReporteGeografico props={props.props} />,
 									1: <Regional props={props.props} />,
 									2: <Circuital props={props.props.props} />,
 									3: <Institucional props={props.props} />

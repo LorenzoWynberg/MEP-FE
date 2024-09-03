@@ -19,7 +19,7 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
 
 	const columns = [
 		{
-			Header: 'Codigo Institucion',
+			Header: 'Código Institución',
 			accessor: 'codigoInstitucion',
 			label: '',
 			column: ''
@@ -76,11 +76,15 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
 	}
 
 	const onExcelEvent = () => {
-		const dataToPrint = [];
-		reportData.forEach(d => { d.datos.forEach(d2 => { dataToPrint.push(d2) }) }); 
+		const dataToPrint = []
+		reportData.forEach(d => {
+			d.datos.forEach(d2 => {
+				dataToPrint.push(d2)
+			})
+		})
 		const workbook = GenerateExcelObject(dataToPrint)
 		SendWorkbookToDownload(workbook, `ReporteUltimoNivelSinSCE.xlsx`)
-	  }
+	}
 
 	return (
 		<div>

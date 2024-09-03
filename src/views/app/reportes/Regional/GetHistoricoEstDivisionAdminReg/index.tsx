@@ -37,7 +37,7 @@ const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
 	}
 	const columns = [
 		{
-			Header: 'Region',
+			Header: 'Región',
 			accessor: 'nombreRegional',
 			label: '',
 			column: ''
@@ -79,12 +79,6 @@ const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
 			column: ''
 		},
 		{
-			Header: 'Características',
-			accessor: 'caracteristicas',
-			label: '',
-			column: ''
-		},
-		{
 			Header: 'Nombre de la organización contraparte',
 			accessor: 'nombreOrgContraparte',
 			label: '',
@@ -109,31 +103,31 @@ const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
 			column: ''
 		},
 		{
-			Header: 'Cantidad de discapacitados',
+			Header: 'Discapacidades',
 			accessor: 'discapacidadCount',
 			label: '',
 			column: ''
 		},
 		{
-			Header: 'Cantidad de hombres',
+			Header: 'Hombres',
 			accessor: 'hombreCount',
 			label: '',
 			column: ''
 		},
 		{
-			Header: 'Cantidad de mujeres',
+			Header: 'Mujeres',
 			accessor: 'mujerCount',
 			label: '',
 			column: ''
 		},
 		{
-			Header: 'Cantidad de indígenas',
+			Header: 'Indígenas',
 			accessor: 'indigenaCount',
 			label: '',
 			column: ''
 		},
 		{
-			Header: 'Cantidad de refugiados',
+			Header: 'Refugiados',
 			accessor: 'refugiadoCount',
 			label: '',
 			column: ''
@@ -169,7 +163,16 @@ const GetHistoricoEstDivisionAdminReg = ({ regresarEvent }) => {
 			/>
 			{state === 0 && <Parameters showReportEvent={onShowReportEvent} />}
 			{state === 1 && (
-				<ReporteStyledTableCircuitos innerRef={printRef} data={reportData} columns={columns} title={'Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)'} idRegion={idRegionSent} idCircuito={null} />
+				<ReporteStyledTableCircuitos
+					innerRef={printRef}
+					data={reportData}
+					columns={columns}
+					title={
+						'Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)'
+					}
+					idRegion={idRegionSent}
+					idCircuito={null}
+				/>
 			)}
 		</div>
 	)

@@ -5,10 +5,10 @@ import { useTranslation } from 'react-i18next'
 import GetHistoricoEstDivisionGeog from './GetHistoricoEstDivisionGeog'
 
 const ReporteGeografico = props => {
-  const { t } = useTranslation()
+	const { t } = useTranslation()
 
-  const reportes = [
-    /* {
+	const reportes = [
+		/* {
       titulo: 'LISTADO DE PERSONAS ESTUDIANTES POR INSTITUCIÓN, NIVEL Y GRUPO',
       descripcion:
         'Este reporte se utiliza para visualizar la lista de todas las personas estudiantes de la institución',
@@ -18,31 +18,26 @@ const ReporteGeografico = props => {
       descripcion:
         'Este reporte se utiliza para visualizar la matrícula por oferta, modalidad, nivel y especialidad',
     }, */
-    {
-      titulo: 'Historico SCE por Division Geografica',
-      descripcion: 'Resumen de proyectos de Servicio Comunal Estudiantil según división geografica (Provincia, cantón, distrito)'
-    }
-  ]
-  const [state, setState] = React.useState(0)
-  const Cards = () => { 
-    return reportes.map((reporte, index) => (
-      <ReportCard
-        onClick={() => setState(index + 1)}
-        titulo={reporte.titulo}
-        descripcion={reporte.descripcion}
-      />
-    ))
-  }
+		{
+			titulo: 'Historico SCE por Division Geografica',
+			descripcion:
+				'Resumen de proyectos de Servicio Comunal Estudiantil según división geografica (Provincia, cantón, distrito)'
+		}
+	]
+	const [state, setState] = React.useState(0)
+	const Cards = () => {
+		return reportes.map((reporte, index) => (
+			<ReportCard onClick={() => setState(index + 1)} titulo={reporte.titulo} descripcion={reporte.descripcion} />
+		))
+	}
 
-  return (
-    <>
-      {state == 0 && <ReportCardContainer>{Cards()}</ReportCardContainer>}
+	return (
+		<>
+			{state == 0 && <ReportCardContainer>{Cards()}</ReportCardContainer>}
 
-      {state == 1 && (
-        <GetHistoricoEstDivisionGeog regresarEvent={() => setState(0)} />
-      )}
-    </>
-  )
+			{state == 1 && <GetHistoricoEstDivisionGeog regresarEvent={() => setState(0)} />}
+		</>
+	)
 }
 
 export default ReporteGeografico
