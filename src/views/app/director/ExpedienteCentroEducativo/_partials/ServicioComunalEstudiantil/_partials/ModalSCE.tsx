@@ -18,7 +18,6 @@ const ModalSCE = props => {
 
 	useEffect(() => {
 		actions.GetServicioComunalInfoById(parseInt(props.servicioComunalId), parseInt(idInstitucion)).then(res => {
-		
 			setSCE(res[0])
 			setLoading(false)
 			setShowProyecto(true)
@@ -104,34 +103,29 @@ const ModalSCE = props => {
 							<br />
 							<span>{sce.nombreModalidad && sce.nombreModalidad}</span>
 						</Col>
-						
+
 						<Col sm={4} className='mb-3'>
 							<strong>
-								{t(
-									'informationcarddetalle>organizaciónContraParte',
-									'Tipo de organización contraparte'
-								)}
-								:
+								{t('informationcarddetalle>organizaciónContraPart', 'Organización contraparte')}:
 							</strong>
 							<br />
 							<span>{sce.nombreOrganizacionContraparte && sce.nombreOrganizacionContraparte}</span>
 						</Col>
 						<Col sm={4} className='mb-3'>
-							<strong>
-								{t('informationcarddetalle>docenteAcompana', 'Docente que acompaña el proyecto')}:
-							</strong>
+							{/* TODO: i18n */}
+							<strong>{t('informationcarddetalle>docenteAcompan', 'Pesona tutor/a')}:</strong>
 							<br />
 							<span>{sce.nombreDocente && sce.nombreDocente}</span>
-						</Col>
-						<Col sm={4} className='mb-3'>
-							<strong>{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:</strong>
-							<br />
-							<span>{sce.fechaConclusion && sce.fechaConclusion}</span>
 						</Col>
 						<Col sm={4} className='mb-3'>
 							<strong>{t('informationcarddetalle>quienRegistra', 'Quién registra')}:</strong>
 							<br />
 							<span>{sce.usuarioFechaRegistro && sce.usuarioFechaRegistro}</span>
+						</Col>
+						<Col sm={4} className='mb-3'>
+							<strong>{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:</strong>
+							<br />
+							<span>{sce.fechaConclusion && sce.fechaConclusion}</span>
 						</Col>
 						<Col sm={4} className='mb-3'>
 							<strong>

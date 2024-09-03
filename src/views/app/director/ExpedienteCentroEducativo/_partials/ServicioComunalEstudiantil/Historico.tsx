@@ -6,15 +6,7 @@ import { formatoOracion } from 'utils/utils'
 import { ObtenerInfoCatalogos } from 'Redux/formularioCentroResponse/actions'
 import axios from 'axios'
 import { envVariables } from 'Constants/enviroment'
-import {
-	FormControl,
-	FormControlLabel,
-	InputLabel,
-	MenuItem,
-	Radio,
-	RadioGroup,
-	Select,
-} from '@material-ui/core'
+import { FormControl, FormControlLabel, InputLabel, MenuItem, Radio, RadioGroup, Select } from '@material-ui/core'
 import {
 	filterInstitutionsPaginated,
 	cleanInstitutions,
@@ -42,7 +34,7 @@ const Historico = props => {
 	const [filterText, setFilterText] = useState('')
 	const [catalogos, setCatalogos] = React.useState([])
 	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
-	const [idAreaProyecto, setIdAreaProyecto] = useState(null);
+	const [idAreaProyecto, setIdAreaProyecto] = useState(null)
 	const [areaProyecto, setAreaProyecto] = useState()
 	const [firstCalled, setFirstCalled] = useState(false)
 	const [servicioComunalId, setServicioComunalId] = useState()
@@ -99,7 +91,9 @@ const Historico = props => {
 			const response: any = await axios.get(
 				`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter${url}`
 			)
-			const dataSet = response.data.map(d => { return { ...d, descripcion: d.descripcion ? d.descripcion : 'No existe descripción' } })
+			const dataSet = response.data.map(d => {
+				return { ...d, descripcion: d.descripcion ? d.descripcion : 'No existe descripción' }
+			})
 			setData(dataSet)
 			setLoading(false)
 		} catch (e) {
@@ -122,7 +116,6 @@ const Historico = props => {
 		await actions.updatePeriodosLectivos(id)
 	}
 
-
 	useEffect(() => {
 		ObtenerInfoCatalogos().then(response => {
 			setCatalogos(response)
@@ -135,7 +128,7 @@ const Historico = props => {
 	const columns = useMemo(() => {
 		return [
 			{
-				Header: t('expediente_estudiantil>area_proyecto', 'Area de Proyecto'),
+				Header: t('expediente_estudiantil>area_proyecto', 'Area de proyecto'),
 				column: 'areaProyecto',
 				accessor: 'areaProyecto',
 				label: ''
@@ -159,13 +152,13 @@ const Historico = props => {
 				label: ''
 			},
 			{
-				Header: t('expediente_estudiantil>fecha_conclusion', 'Fecha de Conclusion'),
+				Header: t('expediente_estudiantil>fecha_conclusion', 'Fecha de conclusion'),
 				column: 'fechaConclusionSCE',
 				accessor: 'fechaConclusionSCE',
 				label: ''
 			},
 			{
-				Header: t('expediente_estudiantil>organizacion', 'Organizacion Contraparte'),
+				Header: t('expediente_estudiantil>organizacion', 'Organizacion contraparte'),
 				column: 'organizacionContraparte',
 				accessor: 'organizacionContraparte',
 				label: ''
@@ -282,7 +275,7 @@ const Historico = props => {
 				<SimpleModal
 					btnCancel={false}
 					addMarginTitle
-					title='Detalle del Servicio Comunal'
+					title='Detalle del servicio comunal estudiantil'
 					onClose={() => setServicioComunalId(null)}
 					stylesContent={{}}
 					onConfirm={() => {
@@ -310,35 +303,38 @@ const Historico = props => {
 						</h3>
 					</Col>
 					<Col xs={12}>
-
-						<FormControl fullWidth>		<InputLabel style={{ marginLeft: 16 }} id="demo-simple-select-label">Area de Proyecto</InputLabel>
-
+						<FormControl fullWidth>
+							{' '}
+							<InputLabel style={{ marginLeft: 16 }} id='demo-simple-select-label'>
+								Area de Proyecto
+							</InputLabel>
 							<Select
 								placeholder='Area de Proyecto'
-								labelId="demo-simple-select-label"
-
-								id="demo-simple-select"
+								labelId='demo-simple-select-label'
+								id='demo-simple-select'
 								value={value}
 								variant='outlined'
 								style={{ marginBottom: 16 }}
-								label="Area De Proyecto"
+								label='Area De Proyecto'
 								onChange={(e, v) => {
 									e.persist()
 									setValue(e.target.value)
 								}}
 							>
+								<MenuItem key={0} value={0}>
+									{'Todas las áreas'}
+								</MenuItem>
 								{catalogos?.areasProyecto &&
 									catalogos.areasProyecto.map((item, i) => (
-
-										<MenuItem key={i} value={item.id}>{item.nombre}</MenuItem>
-
+										<MenuItem key={i} value={item.id}>
+											{item.nombre}
+										</MenuItem>
 									))}
 							</Select>
-						</FormControl >
+						</FormControl>
 						<TableReactImplementation
 							data={data}
 							showAddButton={tienePermiso && tienePermiso?.agregar == 1}
-							// avoidSearch
 							onSubmitAddButton={() => {
 								props.history.push('/director/expediente-centro/servicio-comunal/registro')
 							}}
@@ -371,11 +367,10 @@ const Historico = props => {
 							pageSize={10}
 							backendSearch
 						/>
-					</Col >
-				</Row >
-			)
-			}
-		</div >
+					</Col>
+				</Row>
+			)}
+		</div>
 	)
 }
 
