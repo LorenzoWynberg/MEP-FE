@@ -149,7 +149,7 @@ const BeneficiosMEP = props => {
 				id: dataTable.id,
 				identidadesId: state.identification.data?.id,
 				tipoSubsidioId: prevSubsidio?.id,
-				detalle: data.detSubsidio,
+				detalle: prevSubsidio?.detalle,
 				recepcionVerificada: verificated,
 				fechaInicio: moment(data.dateFrom).toDate(),
 				fechaFinal: moment(data.dateTo).toDate()
@@ -178,7 +178,7 @@ const BeneficiosMEP = props => {
 				id: 0,
 				identidadesId: state.identification.data?.id,
 				tipoSubsidioId: prevSubsidio?.id,
-				detalle: data.detSubsidio,
+				detalle: prevSubsidio?.detalle,
 				recepcionVerificada: verificated,
 				fechaInicio: moment(data.dateFrom).toDate(),
 				fechaFinal: moment(data.dateTo).toDate()
@@ -250,13 +250,6 @@ const BeneficiosMEP = props => {
 		setVisualizing(false)
 		setEditable(true)
 	}
-	const handleCreateToggle = () => {
-		clearData()
-		setView(true)
-		setShowButtons(true)
-		setVisualizing(false)
-		setEditable(true)
-	}
 
 	const toggleSnackbar = (type, msg) => {
 		setSnackbarContent({
@@ -282,8 +275,6 @@ const BeneficiosMEP = props => {
 			await actions.GetSubsidiosMEP(state.identification.data?.id, 1, 10)
 		}
 	}
-
-	console.log('Beneficios JP:', state.beneficios)
 
 	return (
 		<>
@@ -384,8 +375,9 @@ const BeneficiosMEP = props => {
 													}}
 													name='detSubsidio'
 													id='detSubsidio'
-													disabled={!editable}
+													disabled={true}
 													innerRef={register}
+													value={prevSubsidio?.detalle || ''}
 												/>
 											</FormGroup>
 											<FormGroup>
