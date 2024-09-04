@@ -32,6 +32,19 @@ export const ApoyosCurriculares = () => {
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
 	const [tiposApoyo, setTiposApoyo] = useState([])
 	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
+	const [formData, setFormData] = useState({
+		tipoDeApoyo: '',
+		condicionApoyo: '',
+		detalleApoyo: '',
+		fechaDeAprobacion: ''
+	})
+
+	const handleFormDataChange = event => {
+		setFormData({
+			...formData,
+			[event.target.name]: event.target.value
+		})
+	}
 
 	const handleFechaAprobacionOnChange = event => {
 		debugger
@@ -43,6 +56,10 @@ export const ApoyosCurriculares = () => {
 		} else {
 			setShowFechaAprobacion(false)
 		}
+		setFormData({
+			...formData,
+			condicionApoyo: value
+		})
 	}
 
 	const { t } = useTranslation()
@@ -256,8 +273,21 @@ export const ApoyosCurriculares = () => {
 		setShowNuevoApoyoModal(true)
 	}
 
-	const onConfirmSaveApoyo = formData => {
-		console.log('JP on confirm')
+	const onConfirmSaveApoyo = event => {
+		event.preventDefault()
+		setLoading(true)
+
+		let _data = {
+			id: state.expedienteEstudiantil.currentStudent.matriculaId,
+			detalle: formData.detalleApoyo,
+			fechaInicio: formData.fechaDeAprobacion ? formData.fechaDeAprobacion : null,
+			fechaFin: null,
+			tipoDeApoyoId: parseInt(formData.tipoDeApoyo),
+			dependenciasApoyosId: null,
+			condicionApoyoId: parseInt(formData.condicionApoyo),
+			identidadesId: state.identification.data.id
+		}
+		console.log('formData JP', _data)
 	}
 
 	const closeAgregarModal = () => {
@@ -283,7 +313,7 @@ export const ApoyosCurriculares = () => {
 				title={'Registro de apoyo curricular'}
 			>
 				<Container width='100%' className='modal-detalle-subsidio'>
-					<Form>
+					<Form onSubmit={onConfirmSaveApoyo}>
 						<Row>
 							<Col md={6}>
 								<Label for='tipoDeApoyo'>Tipo de apoyo (requerido) </Label>
@@ -292,10 +322,11 @@ export const ApoyosCurriculares = () => {
 									/* innerRef={register({
 										required: t('general>campo_requerido', 'El campo es requerido')
 									})} */
-									name='Tipo de apoyo'
+									name='tipoDeApoyo'
 									type='select'
 									//invalid={errors[`${props.storedValuesKey}Tipos`]}
 									placeholder='Seleccionar'
+									onChange={handleFormDataChange}
 								>
 									<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
 									{tiposApoyo.map(tipo => {
@@ -311,11 +342,11 @@ export const ApoyosCurriculares = () => {
 								<FormGroup>
 									<Label for='condicionDeApoyo'>Condición del apoyo</Label>
 									<StyledInput
-										id='condicionDeApoyo'
+										id='condicionApoyo'
 										/* innerRef={register({
 										required: t('general>campo_requerido', 'El campo es requerido')
 									})} */
-										name='Tipo de apoyo'
+										name='condicionApoyo'
 										type='select'
 										onChange={handleFechaAprobacionOnChange}
 										//invalid={errors[`${props.storedValuesKey}Tipos`]}
@@ -333,7 +364,13 @@ export const ApoyosCurriculares = () => {
 							<Col md={12}>
 								<FormGroup>
 									<Label for='detalleDelApoyo'>Detalle del apoyo (opcional)</Label>
-									<Input type='textarea' id='detalleDelApoyo' name='detalleDelApoyo' rows='5' />
+									<Input
+										type='textarea'
+										id='detalleDelApoyo'
+										name='detalleDelApoyo'
+										rows='5'
+										onChange={handleFormDataChange}
+									/>
 								</FormGroup>
 							</Col>
 						</Row>
@@ -343,7 +380,12 @@ export const ApoyosCurriculares = () => {
 								<Col md={6}>
 									<FormGroup>
 										<Label for='fechaDeAprobacion'>Fecha de aprobación</Label>
-										<Input type='date' id='fechaDeAprobacion' name='fechaDeAprobacion' />
+										<Input
+											type='date'
+											id='fechaDeAprobacion'
+											name='fechaDeAprobacion'
+											onChange={handleFormDataChange}
+										/>
 									</FormGroup>
 								</Col>
 							</Row>

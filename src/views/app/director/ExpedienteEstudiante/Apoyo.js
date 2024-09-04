@@ -80,6 +80,7 @@ const General = props => {
 			...data,
 			condicionApoyoId: 6050
 		}
+		debugger
 		return await actions.addApoyo(dataSend, category, categoryKeyName, state.apoyos[categoryKeyName].pageNumber)
 	}
 
@@ -185,7 +186,7 @@ const General = props => {
 			/>
 
 			{/* 
-			//TODO JPBR Borrar esto luego de trabajar la logica de los apoyos
+			//TODO JPBR Borrar esto luego de trabajar la logica de los apoyos */}
 			{categorias.map(categoria => {
 				const storedValuesKey = categoria.nombre.replace(/\s/g, '') + `${categoria.id}`
 				return (
@@ -282,7 +283,7 @@ const General = props => {
 						)}
 					</>
 				)
-			})} */}
+			})}
 		</>
 	)
 }
