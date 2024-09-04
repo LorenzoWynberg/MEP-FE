@@ -24,30 +24,35 @@ const Navegacion = props => {
 			permisos: store.authUser.rolPermisos
 		}
 	})
-	const tienePermisoSCE = state.permisos.find(permiso => permiso.codigoSeccion == 'expedienteEstudianteSCE')
+	const tienePermisoSCE = state.permisos.find(
+		permiso => permiso.codigoSeccion == 'expedienteEstudianteSCE'
+	)
 	return (
 		<Container>
-			<Row className='mb-5'>
-				<Colxx xxs='12' className='px-5'>
+			<Row className="mb-5">
+				<Colxx xxs="12" className="px-5">
 					<Row>
 						<NavigationCard
-							icon=''
-							title={t('estudiantes>expediente>nav>info_general', 'Información general')}
-							href='/director/expediente-estudiante/general'
+							icon=""
+							title={t(
+								'estudiantes>expediente>nav>info_general',
+								'Información general'
+							)}
+							href="/director/expediente-estudiante/general"
 						>
 							<AssignmentIcon style={{ fontSize: 50 }} />
 						</NavigationCard>
 						<NavigationCard
-							icon=''
+							icon=""
 							title={t('estudiantes>expediente>nav>contacto', 'Contacto')}
-							href='/director/expediente-estudiante/contacto'
+							href="/director/expediente-estudiante/contacto"
 						>
 							<AccountCircle style={{ fontSize: 50 }} />
 						</NavigationCard>
 						<NavigationCard
-							icon=''
+							icon=""
 							title={t('estudiantes>expediente>nav>hogar', 'Hogar')}
-							href='/director/expediente-estudiante/hogar'
+							href="/director/expediente-estudiante/hogar"
 						>
 							<House style={{ fontSize: 50 }} />
 						</NavigationCard>
@@ -59,35 +64,47 @@ const Navegacion = props => {
 							<Star style={{ fontSize: 50 }} />
 						</NavigationCard>
 						<NavigationCard
-							icon=''
-							title={t('estudiantes>expediente>nav>apoyos_edu', 'Apoyo Educativos')}
-							href='/director/expediente-estudiante/apoyos-educativos'
+							icon=""
+							title={t(
+								'estudiantes>expediente>nav>apoyos_edu',
+								'Apoyo Educativos'
+							)}
+							href="/director/expediente-estudiante/apoyos-educativos"
 						>
 							<SquareFoot style={{ fontSize: 50 }} />
 						</NavigationCard>
 						<NavigationCard
-							icon=''
-							title={t('estudiantes>expediente>nav>area_curric', 'Área Curricular')}
-							href='/director/expediente-estudiante/area-curricular'
+							icon=""
+							title={t(
+								'estudiantes>expediente>nav>area_curric',
+								'Área Curricular'
+							)}
+							href="/director/expediente-estudiante/area-curricular"
 						>
 							<Bookmark style={{ fontSize: 50 }} />
 						</NavigationCard>
 						<NavigationCard
-							icon=''
+							icon=""
 							title={t('estudiantes>expediente>nav>salud', 'Salud')}
-							href='/director/expediente-estudiante/salud'
+							href="/director/expediente-estudiante/salud"
 						>
 							<LocalHospital style={{ fontSize: 50 }} />
 						</NavigationCard>
 						<NavigationCard
-							icon=''
-							title={t('estudiantes>expediente>nav>oferta_edu', 'Oferta Educativa')}
-							href='/director/expediente-estudiante/oferta'
+							icon=""
+							title={t(
+								'estudiantes>expediente>nav>oferta_edu',
+								'Oferta Educativa'
+							)}
+							href="/director/expediente-estudiante/oferta"
 						>
 							<img
 								style={{ width: 50 }}
-								alt={t('estudiantes>expediente>nav>oferta_edu', 'Oferta Educativa')}
-								src='/assets/img/construction-white.svg'
+								alt={t(
+									'estudiantes>expediente>nav>oferta_edu',
+									'Oferta Educativa'
+								)}
+								src="/assets/img/construction-white.svg"
 							/>
 						</NavigationCard>
 						{
@@ -114,7 +131,7 @@ const Navegacion = props => {
 							<NavigationCard
 								icon={''}
 								title={'Servicio comunal estudiantil'}
-								href={'/director/expediente-estudiante/servicio-comunal'}
+								href={'/director/expediente-estudiante/sce'}
 							>
 								<Solidarity style={{ fontSize: 50, color: 'white' }} />
 							</NavigationCard>

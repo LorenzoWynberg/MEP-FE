@@ -15,18 +15,25 @@ const HeaderTab = props => {
 			setParentTab(index)
 		} else {
 			if (path) {
-				history.push(`/director/expediente-centro/servicio-comunal${path}`)
+				history.push(`/director/expediente-centro/sce${path}`)
 			}
 		}
 	}
 
 	return (
-		<Nav tabs className={`separator-tabs ml-0 mb-${props.marginTop}`} style={{ ...style }}>
+		<Nav
+			tabs
+			className={`separator-tabs ml-0 mb-${props.marginTop}`}
+			style={{ ...style }}
+		>
 			{options.map((opt, i) => (
 				<NavItem key={i}>
 					<NavLink
 						disabled={disabled}
-						className={classnames({ active: activeTab === i, 'nav-link': true }, 'cursor-pointer')}
+						className={classnames(
+							{ active: activeTab === i, 'nav-link': true },
+							'cursor-pointer'
+						)}
 						onClick={() => handleTabClick(i, opt.path)}
 					>
 						{opt.title}
