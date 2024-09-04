@@ -36,8 +36,7 @@ const Historico = props => {
 	const state = useSelector((store: any) => {
 		return {
 			permisos: store.authUser.rolPermisos,
-			selectedYear: store.authUser.selectedActiveYear,
-			activeYears: store.authUser.activeYears
+			selectedYear: store.authUser.selectedActiveYear
 		}
 	})
 
@@ -60,12 +59,12 @@ const Historico = props => {
 			setLoading(true)
 			let url = ''
 			if (idAreaProyecto) {
-				url = `/${idInstitucion}/${filterText}/${idAreaProyecto}`
+				url = `${idInstitucion}/${state.selectedYear.id}/${filterText}/${idAreaProyecto}`
 			} else {
-				url = `/${idInstitucion}/${filterText}`
+				url = `${idInstitucion}/${state.selectedYear.id}/${filterText}`
 			}
 			const response: any = await axios.get(
-				`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter${url}`
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter/${url}`
 			)
 			const dataSet = response.data.map(d => {
 				return { ...d, descripcion: d.descripcion ? d.descripcion : 'No existe descripción' }
@@ -79,7 +78,7 @@ const Historico = props => {
 
 	useEffect(() => {
 		fetch(idInstitucion, value)
-	}, [idInstitucion, value, filterText])
+	}, [idInstitucion, value, filterText, state.selectedYear])
 
 	// TODO: Arreglar
 	// useEffect(() => {

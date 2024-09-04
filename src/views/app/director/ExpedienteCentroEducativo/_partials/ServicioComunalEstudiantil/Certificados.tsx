@@ -30,7 +30,8 @@ const Certificados = props => {
 
 	const state = useSelector((store: any) => {
 		return {
-			permisos: store.authUser.rolPermisos
+			permisos: store.authUser.rolPermisos,
+			selectedYear: store.authUser.selectedActiveYear.id
 		}
 	})
 
@@ -40,7 +41,7 @@ const Certificados = props => {
 
 	useEffect(() => {
 		actions
-			.getCertificadosByInstitucionFiltered(idInstitucion)
+			.getCertificadosByInstitucionFiltered(idInstitucion, ' ', 1, 250, state.selectedYear)
 			.then(data => {
 				setData(data.options)
 				setLoading(false)
@@ -50,6 +51,19 @@ const Certificados = props => {
 				setLoading(false)
 			})
 	}, [])
+
+	useEffect(() => {
+		actions
+			.getCertificadosByInstitucionFiltered(idInstitucion, ' ', 1, 250, state.selectedYear)
+			.then(data => {
+				setData(data.options)
+				setLoading(false)
+			})
+			.catch(error => {
+				console.log('error', error)
+				setLoading(false)
+			})
+	}, [state.selectedYear])
 
 	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'certificadosSCE')
 
@@ -153,13 +167,6 @@ const Certificados = props => {
 		orientation: ''
 	})
 
-	useEffect(() => {
-		setFirstCalled(true)
-		return () => {
-			actions.cleanInstitutions()
-		}
-	}, [])
-
 	if (!tienePermiso || tienePermiso?.leer == 0) {
 		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
 	}
@@ -217,8 +224,8 @@ const Certificados = props => {
 								<td style={{ paddingTop: 100, paddingBottom: 100 }}>
 									Desarrolló el proyecto del Servicio Comunal Estudiantil en el Área de proyecto:{' '}
 									{certData.areaProyecto}, Nombre del proyecto: {certData.nombreProyecto} , Tipo de
-									proyecto: {certData.tipoProyecto}, Características: {certData.caracteristicas}, con
-									una duración de 30 horas, en el Año: {certData.anio}.
+									proyecto: {certData.tipoProyecto}, con una duración de 30 horas, en el Año:{' '}
+									{certData.anio}.
 								</td>
 							</tr>
 							<tr>
@@ -272,13 +279,17 @@ const Certificados = props => {
 									column,
 									searchValue
 								})
-								if (firstCalled) {
-									setLoading(true)
-									await actions
-										.getCertificadosByInstitucionFiltered(idInstitucion, searchValue, 1, 250)
-										.then(res => setData(res.options))
-									setLoading(false)
-								}
+								setLoading(true)
+								await actions
+									.getCertificadosByInstitucionFiltered(
+										idInstitucion,
+										searchValue,
+										1,
+										250,
+										state.selectedYear
+									)
+									.then(res => setData(res.options))
+								setLoading(false)
 							}}
 							columns={columns}
 							orderOptions={[]}
