@@ -31,7 +31,6 @@ const ServicioComunalEstudiantil = props => {
 	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
 
 	const validarInstitucionSCE = async () => {
-		console.log('PERMISO', state.permisos)
 		try {
 			const response = await axios.post(
 				`https://mep-saber.azurewebsites.net/api/ServicioComunal/VerificarInstitucionAplicaSCE?idInstitucion=${idInstitucion}`
@@ -67,6 +66,10 @@ const ServicioComunalEstudiantil = props => {
 		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
 	}
 
+	if (!aplicaSCE) {
+		return <h4>{t('Esta institución no cuenta con servicio comunal estudiantil.')}</h4>
+	}
+
 	return (
 		<Notification>
 			{showSnackbar => {
@@ -75,11 +78,7 @@ const ServicioComunalEstudiantil = props => {
 						<Helmet>
 							<title>Historico SCE</title>
 						</Helmet>
-						{aplicaSCE ? (
-							<h4>Servicio comunal estudiantil</h4>
-						) : (
-							<h4>Esta institución no cuenta con servicio comunal estudiantil.</h4>
-						)}
+						<h4>Servicio comunal estudiantil</h4>
 						<div>
 							{loading ?? <Loader />}
 							{!loading && aplicaSCE && (
