@@ -6,16 +6,12 @@ import { ObtenerInfoCatalogos } from 'Redux/formularioCentroResponse/actions'
 import axios from 'axios'
 import { envVariables } from 'Constants/enviroment'
 import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core'
-import {
-	filterInstitutionsPaginated,
-	cleanInstitutions,
-	GetServicioComunalByInstitucionId
-} from 'Redux/configuracion/actions'
+import { GetServicioComunalByInstitucionId } from 'Redux/configuracion/actions'
 import withRouter from 'react-router-dom/withRouter'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import Tooltip from '@mui/material/Tooltip'
 import styles from './ServicioComunal.css'
-import { handleChangeInstitution, updatePeriodosLectivos, desactivarServicioComunal } from 'Redux/auth/actions'
+import { desactivarServicioComunal } from 'Redux/auth/actions'
 import BarLoader from 'Components/barLoader/barLoader'
 import { useHistory } from 'react-router-dom'
 import colors from 'assets/js/colors'
@@ -39,10 +35,6 @@ const Historico = props => {
 
 	const state = useSelector((store: any) => {
 		return {
-			centros: store.configuracion.instituciones,
-			totalCount: store.configuracion.instituciones.totalCount,
-			selects: store.selects,
-			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
 			permisos: store.authUser.rolPermisos,
 			selectedYear: store.authUser.selectedActiveYear,
 			activeYears: store.authUser.activeYears
@@ -59,11 +51,7 @@ const Historico = props => {
 	})
 
 	const actions = useActions({
-		filterInstitutionsPaginated,
-		cleanInstitutions,
 		GetServicioComunalByInstitucionId,
-		handleChangeInstitution,
-		updatePeriodosLectivos,
 		desactivarServicioComunal
 	})
 
@@ -90,12 +78,6 @@ const Historico = props => {
 	}
 
 	useEffect(() => {
-		return () => {
-			actions.cleanInstitutions()
-		}
-	}, [])
-
-	useEffect(() => {
 		fetch(idInstitucion, value)
 	}, [idInstitucion, value, filterText])
 
@@ -111,7 +93,6 @@ const Historico = props => {
 		})
 	}, [])
 
-	// TODO: Poner permiso correcto
 	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
 
 	const columns = useMemo(() => {
