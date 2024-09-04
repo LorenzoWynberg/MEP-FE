@@ -17,203 +17,234 @@ import { useReactToPrint } from 'react-to-print'
 import { isEmpty } from 'lodash'
 
 const Actas = props => {
-	const [data, setData] = useState([])
-	const printRef = useRef()
-	const [htmlToShow, setHtmlToShow] = useState('')
-	const [openDialog, setOpenDialog] = useState(false)
-	const [loading, setLoading] = useState(true)
-	const [registrosSinActa, setRegistrosSinActa] = useState(true)
-	const { t } = useTranslation()
-	const institucionId = localStorage.getItem('idInstitucion')
+  const [data, setData] = useState([])
+  const printRef = useRef()
+  const [htmlToShow, setHtmlToShow] = useState('')
+  const [openDialog, setOpenDialog] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [registrosSinActa, setRegistrosSinActa] = useState(true)
+  const { t } = useTranslation()
+  const institucionId = localStorage.getItem('idInstitucion')
 
-	const reactToPrintContent = React.useCallback(() => {
-		return printRef.current
-	}, [printRef.current])
-	const handlePrint = useReactToPrint({
-		content: reactToPrintContent
-	})
+  const reactToPrintContent = React.useCallback(() => {
+    return printRef.current
+  }, [printRef.current])
+  const handlePrint = useReactToPrint({
+    content: reactToPrintContent
+  })
 
-	const state = useSelector((store: any) => {
-		return {
-			selectedYear: store.authUser.selectedActiveYear,
-			permisos: store.authUser.rolPermisos
-		}
-	})
+  const state = useSelector((store: any) => {
+    return {
+      selectedYear: store.authUser.selectedActiveYear,
+      permisos: store.authUser.rolPermisos
+    }
+  })
 
-	useEffect(() => {
-		axios
-			.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${institucionId}`)
-			.then(response => {
-				setData(response.data)
-			})
-			.catch(error => {})
+  useEffect(() => {
+    axios
+      .get(
+        `${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${institucionId}`
+      )
+      .then(response => {
+        setData(response.data)
+      })
+      .catch(error => {})
 
-		axios
-			.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter/${institucionId}`)
-			.then(response => {
-				setRegistrosSinActa(!isEmpty(response.data.filter(item => !item.actaId)))
-			})
-			.catch(error => {})
-			.finally(() => {
-				setLoading(false)
-			})
-	}, [])
+    axios
+      .get(
+        `${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter/${institucionId}/${state.selectedYear.id}`
+      )
+      .then(response => {
+        setRegistrosSinActa(
+          !isEmpty(response.data.filter(item => !item.actaId))
+        )
+      })
+      .catch(error => {})
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [])
 
-	const generarActa = () => {
-		setLoading(true)
-		axios
-			.get(`${envVariables.BACKEND_URL}/api/ExpedienteCentroEducativo/Institucion/GetById/${institucionId}`)
-			.then(res => {
-				const data = { institucionId, codSaber: res.data.codigo }
-				axios.post(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`, data).then(r2 => {
-					axios
-						.get(
-							`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${institucionId}`
-						)
-						.then(response => {
-							setData(response.data)
-							axios
-								.get(
-									`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter/${institucionId}`
-								)
-								.then(r3 => {
-									setRegistrosSinActa(!isEmpty(r3.data.filter(item => !item.actaId)))
-								})
-								.catch(error => {
-									console.log('error', error)
-								})
-								.finally(() => {
-									setLoading(false)
-								})
-						})
-						.catch(error => {
-							console.log('error', error)
-						})
-				})
-			})
-	}
+  const generarActa = () => {
+    setLoading(true)
+    axios
+      .get(
+        `${envVariables.BACKEND_URL}/api/ExpedienteCentroEducativo/Institucion/GetById/${institucionId}`
+      )
+      .then(res => {
+        const data = { institucionId, codSaber: res.data.codigo }
+        axios
+          .post(
+            `${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`,
+            data
+          )
+          .then(r2 => {
+            axios
+              .get(
+                `${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${institucionId}`
+              )
+              .then(response => {
+                setData(response.data)
+                axios
+                  .get(
+                    `${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter/${institucionId}/${state.selectedYear.id}`
+                  )
+                  .then(r3 => {
+                    setRegistrosSinActa(
+                      !isEmpty(r3.data.filter(item => !item.actaId))
+                    )
+                  })
+                  .catch(error => {
+                    console.log('error', error)
+                  })
+                  .finally(() => {
+                    setLoading(false)
+                  })
+              })
+              .catch(error => {
+                console.log('error', error)
+              })
+          })
+      })
+  }
 
-	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'actasSCE')
+  const tienePermiso = state.permisos.find(
+    permiso => permiso.codigoSeccion == 'actasSCE'
+  )
 
-	const columns = useMemo(() => {
-		return [
-			{
-				Header: 'Codigo',
-				column: 'codigo',
-				accessor: 'codigo',
-				label: ''
-			},
-			{
-				Header: 'Fecha',
-				column: 'fechaInsercion',
-				accessor: 'fechaInsercion',
-				label: ''
-			},
-			{
-				Header: t('buscador_ce>buscador>columna_acciones', 'Acciones'),
-				column: '',
-				accessor: '',
-				label: '',
-				Cell: ({ _, row, data }) => {
-					const fullRow = data[row.index]
-					return (
-						<div
-							style={{
-								display: 'flex',
-								placeContent: 'center',
-								alignItems: 'center'
-							}}
-						>
-							<Tooltip title={t('buscador_ce>buscador>columna_acciones>ver', 'Ver')}>
-								<RemoveRedEyeRounded
-									onClick={() => {
-										axios
-											.get(
-												`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/ObtenerDocumentoActaById/${fullRow.id}`
-											)
-											.then(response => {
-												setHtmlToShow(response.data)
-												setOpenDialog(true)
-											})
-									}}
-									style={{
-										fontSize: 25,
-										color: colors.darkGray,
-										cursor: 'pointer'
-									}}
-								/>
-							</Tooltip>
-						</div>
-					)
-				}
-			}
-		]
-	}, [t])
+  const columns = useMemo(() => {
+    return [
+      {
+        Header: 'Codigo',
+        column: 'codigo',
+        accessor: 'codigo',
+        label: ''
+      },
+      {
+        Header: 'Fecha',
+        column: 'fechaInsercion',
+        accessor: 'fechaInsercion',
+        label: ''
+      },
+      {
+        Header: t('buscador_ce>buscador>columna_acciones', 'Acciones'),
+        column: '',
+        accessor: '',
+        label: '',
+        Cell: ({ _, row, data }) => {
+          const fullRow = data[row.index]
+          return (
+            <div
+              style={{
+                display: 'flex',
+                placeContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Tooltip
+                title={t('buscador_ce>buscador>columna_acciones>ver', 'Ver')}
+              >
+                <RemoveRedEyeRounded
+                  onClick={() => {
+                    axios
+                      .get(
+                        `${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/ObtenerDocumentoActaById/${fullRow.id}`
+                      )
+                      .then(response => {
+                        setHtmlToShow(response.data)
+                        setOpenDialog(true)
+                      })
+                  }}
+                  style={{
+                    fontSize: 25,
+                    color: colors.darkGray,
+                    cursor: 'pointer'
+                  }}
+                />
+              </Tooltip>
+            </div>
+          )
+        }
+      }
+    ]
+  }, [t])
 
-	if (!tienePermiso || tienePermiso?.leer == 0) {
-		return <h4 className='mt-2'>{t('No tienes permisos para acceder a esta sección')}</h4>
-	}
+  if (!tienePermiso || tienePermiso?.leer == 0) {
+    return (
+      <h4 className="mt-2">
+        {t('No tienes permisos para acceder a esta sección')}
+      </h4>
+    )
+  }
 
-	return (
-		<div className={styles}>
-			{loading && <BarLoader />}
+  return (
+    <div className={styles}>
+      {loading && <BarLoader />}
 
-			{htmlToShow && openDialog && (
-				<SimpleModal
-					addMarginTitle
-					txtBtnCancel='Cerrar'
-					txtBtn='Imprimir'
-					onConfirm={handlePrint}
-					title='Acta'
-					onClose={() => setOpenDialog(false)}
-					stylesContent={{}}
-					openDialog={openDialog}
-				>
-					{/* <object style={{ width: '50vw', height: '90vh' }} data={`data:application/pdf;base64,${base64}`} /> */}
-					<div ref={printRef} className='content' dangerouslySetInnerHTML={{ __html: htmlToShow }}></div>
-				</SimpleModal>
-			)}
+      {htmlToShow && openDialog && (
+        <SimpleModal
+          addMarginTitle
+          txtBtnCancel="Cerrar"
+          txtBtn="Imprimir"
+          onConfirm={handlePrint}
+          title="Acta"
+          onClose={() => setOpenDialog(false)}
+          stylesContent={{}}
+          openDialog={openDialog}
+        >
+          {/* <object style={{ width: '50vw', height: '90vh' }} data={`data:application/pdf;base64,${base64}`} /> */}
+          <div
+            ref={printRef}
+            className="content"
+            dangerouslySetInnerHTML={{ __html: htmlToShow }}
+          ></div>
+        </SimpleModal>
+      )}
 
-			<Row>
-				<Col xs={12}>
-					<h3
-						className='mt-2 mb-3'
-						style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-					>
-						{/* {t('expediente_ce>titulo', 'Expediente Centro Educativo')} */}
-						Actas
-						{tienePermiso &&
-							tienePermiso?.agregar == 1 &&
-							registrosSinActa &&
-							state.selectedYear.esActivo && (
-								<span>
-									<Button
-										style={{ cursor: 'pointer' }}
-										color='primary'
-										onClick={() => {
-											generarActa()
-										}}
-									>
-										Generar Acta
-									</Button>
-								</span>
-							)}
-					</h3>
-				</Col>
-				<Col xs={12}>
-					<TableReactImplementation
-						data={data}
-						showAddButton={false}
-						avoidSearch
-						columns={columns}
-						orderOptions={[]}
-						pageSize={10}
-						backendSearch
-					/>
-				</Col>
-			</Row>
-		</div>
-	)
+      <Row>
+        <Col xs={12}>
+          <h3
+            className="mt-2 mb-3"
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
+            {/* {t('expediente_ce>titulo', 'Expediente Centro Educativo')} */}
+            Actas
+            {tienePermiso &&
+              tienePermiso?.agregar == 1 &&
+              registrosSinActa &&
+              state.selectedYear.esActivo && (
+                <span>
+                  <Button
+                    style={{ cursor: 'pointer' }}
+                    color="primary"
+                    onClick={() => {
+                      generarActa()
+                    }}
+                  >
+                    Generar Acta
+                  </Button>
+                </span>
+              )}
+          </h3>
+        </Col>
+        <Col xs={12}>
+          <TableReactImplementation
+            data={data}
+            showAddButton={false}
+            avoidSearch
+            columns={columns}
+            orderOptions={[]}
+            pageSize={10}
+            backendSearch
+          />
+        </Col>
+      </Row>
+    </div>
+  )
 }
 
 export default withRouter(Actas)
