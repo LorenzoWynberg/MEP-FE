@@ -1,59 +1,30 @@
 import React, { useEffect, useState, useMemo, useRef } from 'react'
 import { Col, Row } from 'reactstrap'
-import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import { Button } from 'Components/CommonComponents'
-import styled from 'styled-components'
 import { envVariables } from 'Constants/enviroment'
-import { formatoOracion } from 'utils/utils'
-import {
-	filterInstitutionsPaginated,
-	cleanInstitutions,
-	GetServicioComunalByInstitucionId,
-	getCertificadosByInstitucionFiltered
-} from 'Redux/configuracion/actions'
-import { Document } from '@react-pdf/renderer'
 import withRouter from 'react-router-dom/withRouter'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
-import CancelIcon from '@mui/icons-material/RemoveCircle'
 import Tooltip from '@mui/material/Tooltip'
 import styles from './ServicioComunal.css'
-import { handleChangeInstitution, updatePeriodosLectivos, desactivarServicioComunal } from 'Redux/auth/actions'
 import BarLoader from 'Components/barLoader/barLoader'
-import { useHistory } from 'react-router-dom'
 import colors from 'assets/js/colors'
 import { useTranslation } from 'react-i18next'
-import { RemoveRedEyeRounded, Edit } from '@material-ui/icons'
+import { RemoveRedEyeRounded } from '@material-ui/icons'
 import SimpleModal from 'Components/Modal/simple'
-import ModalSCE from './_partials/ModalSCE'
-import { Delete } from '@material-ui/icons'
-import ReportHeader from 'Views/app/reportes/_partials/ReportHeader'
 import axios from 'axios'
 import { useReactToPrint } from 'react-to-print'
+import { isEmpty } from 'lodash'
 
 const Actas = props => {
 	const [data, setData] = useState([])
-	const [base64, setBase64] = useState('')
 	const printRef = useRef()
 	const [htmlToShow, setHtmlToShow] = useState('')
-	const [certData, setCertData] = useState({})
-	const [publicos, setPublicos] = useState(true)
 	const [openDialog, setOpenDialog] = useState(false)
-	const [institucionId, setInstitucionId] = useState(localStorage.getItem('idInstitucion'))
-	const [codSaber, setCodSaber] = useState()
-	const [dropdownToggle, setDropdownToggle] = useState(false)
-	const [firstCalled, setFirstCalled] = useState(false)
-	const [studentId, setStudentId] = useState()
 	const [loading, setLoading] = useState(true)
-	const [expediente, setExpediente] = useState(null)
-	const [sce, setSCE] = useState(null)
+	const [registrosSinActa, setRegistrosSinActa] = useState(true)
 	const { t } = useTranslation()
-	const history = useHistory()
-	const { hasAddAccess = true, hasEditAccess = true, hasDeleteAccess = true } = props
-
-	const toggle = () => {
-		setDropdownToggle(!dropdownToggle)
-	}
+	const institucionId = localStorage.getItem('idInstitucion')
 
 	const reactToPrintContent = React.useCallback(() => {
 		return printRef.current
@@ -61,18 +32,6 @@ const Actas = props => {
 	const handlePrint = useReactToPrint({
 		content: reactToPrintContent
 	})
-	const storeState = useSelector(store => {
-		return {
-			institution: store.authUser.currentInstitution,
-			info_general: store.VistasUsuarios.info_general
-		}
-	})
-	const { authUser } = useSelector(store => store.authUser)
-	const { accessRole } = useSelector((state: any) => state?.authUser?.currentRoleOrganizacion)
-
-	const idInstitucion = localStorage.getItem('idInstitucion')
-
-	const selectedInstitution = localStorage.getItem('selectedInstitution')
 
 	const state = useSelector((store: any) => {
 		return {
@@ -84,34 +43,59 @@ const Actas = props => {
 		}
 	})
 
-	const actions = useActions({
-		filterInstitutionsPaginated,
-		cleanInstitutions,
-		GetServicioComunalByInstitucionId,
-		handleChangeInstitution,
-		updatePeriodosLectivos,
-		desactivarServicioComunal,
-		getCertificadosByInstitucionFiltered
-	})
-
 	useEffect(() => {
 		axios
-			.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${idInstitucion}`)
+			.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${institucionId}`)
 			.then(response => {
 				setData(response.data)
 			})
 			.catch(error => {})
 
 		axios
-			.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter/${idInstitucion}`)
+			.get(`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter/${institucionId}`)
 			.then(response => {
-				setSCE(response.data)
+				setRegistrosSinActa(!isEmpty(response.data.filter(item => !item.actaId)))
 			})
 			.catch(error => {})
 			.finally(() => {
 				setLoading(false)
 			})
 	}, [])
+
+	const generarActa = () => {
+		setLoading(true)
+		axios
+			.get(`${envVariables.BACKEND_URL}/api/ExpedienteCentroEducativo/Institucion/GetById/${institucionId}`)
+			.then(res => {
+				const data = { institucionId, codSaber: res.data.codigo }
+				axios.post(`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`, data).then(r2 => {
+					axios
+						.get(
+							`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${institucionId}`
+						)
+						.then(response => {
+							setData(response.data)
+							axios
+								.get(
+									`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter/${institucionId}`
+								)
+								.then(r3 => {
+									setRegistrosSinActa(!isEmpty(r3.data.filter(item => !item.actaId)))
+								})
+								.catch(error => {
+									console.log('error', error)
+								})
+								.finally(() => {
+									setLoading(false)
+								})
+						})
+						.catch(error => {
+							console.log('error', error)
+						})
+				})
+			})
+	}
+
 	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'actasSCE')
 
 	const columns = useMemo(() => {
@@ -169,37 +153,6 @@ const Actas = props => {
 		]
 	}, [t])
 
-	const [pagination, setPagination] = useState({
-		page: 1,
-		selectedPageSize: 6,
-		selectedColumn: '',
-		searchValue: '',
-		orderColumn: '',
-		orientation: ''
-	})
-
-	useEffect(() => {
-		setFirstCalled(true)
-		return () => {
-			actions.cleanInstitutions()
-		}
-	}, [])
-
-	const setInstitution = async id => {
-		await actions.handleChangeInstitution(id)
-		await actions.updatePeriodosLectivos(id)
-	}
-
-	if (sce?.length == 0) {
-		return (
-			<h4 className='mt-2'>
-				{t(
-					'Esta institución no cuenta con servicios comunales registrados; por lo tanto, no es posible generar un acta.'
-				)}
-			</h4>
-		)
-	}
-
 	if (!tienePermiso || tienePermiso?.leer == 0) {
 		return <h4 className='mt-2'>{t('No tienes permisos para acceder a esta sección')}</h4>
 	}
@@ -232,39 +185,13 @@ const Actas = props => {
 					>
 						{/* {t('expediente_ce>titulo', 'Expediente Centro Educativo')} */}
 						Actas
-						{tienePermiso && tienePermiso?.agregar == 1 && (
+						{tienePermiso && tienePermiso?.agregar == 1 && registrosSinActa && (
 							<span>
 								<Button
 									style={{ cursor: 'pointer' }}
 									color='primary'
 									onClick={() => {
-										setLoading(true)
-										axios
-											.get(
-												`${envVariables.BACKEND_URL}/api/ExpedienteCentroEducativo/Institucion/GetById/${idInstitucion}`
-											)
-											.then(res => {
-												const data = { institucionId, codSaber: res.data.codigo }
-
-												axios
-													.post(
-														`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GenerarNuevaActa/`,
-														data
-													)
-													.then(r2 => {
-														axios
-															.get(
-																`${envVariables.BACKEND_URL}/api/ServicioComunal/Actas/GetActasByInstitucionId/${idInstitucion}`
-															)
-															.then(response => {
-																setData(response.data)
-															})
-															.catch(error => {
-																console.log('error', error)
-															})
-															.finally(() => setLoading(false))
-													})
-											})
+										generarActa()
 									}}
 								>
 									Generar Acta
@@ -290,40 +217,3 @@ const Actas = props => {
 }
 
 export default withRouter(Actas)
-
-const Table = styled.table`
-	border-collapse: collapse;
-	width: 100%;
-	thead {
-		font-width: bold;
-		text-align: center;
-	}
-	th {
-		border: solid 1px;
-		padding: 2px;
-	}
-	td {
-		text-align: center;
-		border: solid 1px;
-		padding: 2px;
-	}
-`
-
-const Card = styled.div`
-	border-radius: 15px;
-	min-width: 100%;
-	min-height: 100%;
-	border-color: gray;
-	background: white;
-	padding: 15px;
-`
-const Linea = styled.hr`
-	width: 100%;
-	background-color: black;
-	height: 1px;
-	border: none;
-	margin: 0;
-`
-const Seccion = styled.section`
-	text-align: center;
-`
