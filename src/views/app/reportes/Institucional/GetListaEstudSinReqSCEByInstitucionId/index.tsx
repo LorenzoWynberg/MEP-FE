@@ -37,6 +37,18 @@ const GetListaEstudSinReqSCEByInstitucionId = ({ regresarEvent }) => {
   }, [institucionId])
 
   const columns = [
+		{
+			Header: 'Direccion Regional',
+			accessor: 'direccionRegional',
+			label: '',
+			column: ''
+		},
+		{
+			Header: 'Circuito',
+			accessor: 'circuito',
+			label: '',
+			column: ''
+		},
     {
       Header: 'ID',
       accessor: 'identificacion',
