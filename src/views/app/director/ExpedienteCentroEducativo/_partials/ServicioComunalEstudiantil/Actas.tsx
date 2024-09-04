@@ -35,10 +35,7 @@ const Actas = props => {
 
 	const state = useSelector((store: any) => {
 		return {
-			centros: store.configuracion.instituciones,
-			totalCount: store.configuracion.instituciones.totalCount,
-			selects: store.selects,
-			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
+			selectedYear: store.authUser.selectedActiveYear,
 			permisos: store.authUser.rolPermisos
 		}
 	})
@@ -185,19 +182,22 @@ const Actas = props => {
 					>
 						{/* {t('expediente_ce>titulo', 'Expediente Centro Educativo')} */}
 						Actas
-						{tienePermiso && tienePermiso?.agregar == 1 && registrosSinActa && (
-							<span>
-								<Button
-									style={{ cursor: 'pointer' }}
-									color='primary'
-									onClick={() => {
-										generarActa()
-									}}
-								>
-									Generar Acta
-								</Button>
-							</span>
-						)}
+						{tienePermiso &&
+							tienePermiso?.agregar == 1 &&
+							registrosSinActa &&
+							state.selectedYear.esActivo && (
+								<span>
+									<Button
+										style={{ cursor: 'pointer' }}
+										color='primary'
+										onClick={() => {
+											generarActa()
+										}}
+									>
+										Generar Acta
+									</Button>
+								</span>
+							)}
 					</h3>
 				</Col>
 				<Col xs={12}>
