@@ -19,6 +19,18 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
 
 	const columns = [
 		{
+			Header: 'Direccion Regional',
+			accessor: 'direccionRegional',
+			label: '',
+			column: ''
+		},
+		{
+			Header: 'Circuito',
+			accessor: 'circuito',
+			label: '',
+			column: ''
+		},
+		{
 			Header: 'Código Institución',
 			accessor: 'codigoInstitucion',
 			label: '',
