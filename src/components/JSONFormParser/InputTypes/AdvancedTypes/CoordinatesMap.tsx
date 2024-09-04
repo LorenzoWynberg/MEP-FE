@@ -21,15 +21,16 @@ const CoordinatesMap: FunctionComponent<Props> = (props) => {
   }
 
   useEffect(() => {
-    const latitudeId = props.field.options.find(
+     const latitudeId = props.field.options.find(
       (item) => item.label == 'Latitud'
     )
     const longitudeId = props.field.options.find(
       (item) => item.label == 'Longitud'
     )
     if (longitudeId && latitudeId) {
-      props.setValue(`${latitudeId.id}`, location.latitude)
-      props.setValue(`${longitudeId.id}`, location.longitude)
+      //20240527 se modifica el mapa para que no capture la longitud y latitud. Dolores y Yair
+     // props.setValue(`${latitudeId.id}`, location.latitude)
+     // props.setValue(`${longitudeId.id}`, location.longitude)
     }
   }, [location])
   const map = props.field.options.find((field) => field.type === 'map')
@@ -51,9 +52,9 @@ const CoordinatesMap: FunctionComponent<Props> = (props) => {
         mapOpen={mapOpen}
         toggleModal={toggleModal}
         setSearch={props.setSearch || setSearch}
-        setLocation={setLocationIfEditable}
+        //setLocation={setLocationIfEditable}
         editable={props.editable}
-        setUbicacion={props.setUbicacion}
+        //setUbicacion={props.setUbicacion}
       />
       <Row>
         {texts.map((option) => {

@@ -5,7 +5,7 @@ import { Row, Container } from 'reactstrap'
 import AppLayout from '../../../../layout/AppLayout'
 
 import catalogoBreadCrumb from '../../../../constants/catalogoBreadCrumb'
-import adminItems from '../../../../constants/adminMenu'
+import directorItems from '../../../../constants/directorMenu'
 
 // import RoleList from "../Roles";
 import PlantillasCorreo from './PlantillasCorreo'
@@ -43,7 +43,7 @@ const Main = (props) => {
   const [activeTab, setActiveTab] = React.useState<number>(0)
 
   return (
-    <AppLayout items={adminItems}>
+    <AppLayout items={directorItems}>
       <Container>
         <TitleBread>Gestor de Catálogos</TitleBread>
         <HeaderTab

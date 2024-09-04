@@ -45,6 +45,7 @@ interface IProps {
 	hasAddAccess: boolean
 	onlyViewModule: boolean
 	hasEditAccess: boolean
+	estadoCentro: boolean
 }
 type SnackbarConfig = {
 	variant: string
@@ -52,7 +53,7 @@ type SnackbarConfig = {
 }
 const RegisterStudentForm: React.FC<IProps> = props => {
 	const { t } = useTranslation()
-	const { dataNivel, goBack, hasAddAccess = true, hasEditAccess, onlyViewModule } = props
+	const { dataNivel, goBack, hasAddAccess = true, hasEditAccess, onlyViewModule, estadoCentro } = props
 	const [estudiantes, setEstudiantes] = useState([])
 	const [noEncontradoModal, setNoEncontradoModal] = useState(false)
 	const [eliminarModal, setEliminarModal] = useState(false)
@@ -215,6 +216,7 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 
 			const response = await actions.createMatriculaWithAdditionalData(_data)
 			if (!response.error) {
+				debugger
 				setStudent(null)
 				setContentModal({
 					title: 'Estudiante matriculado',
@@ -530,7 +532,6 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 					hasAddAccess={hasAddAccess}
 					onMatricular={onMatricular}
 				/>
-				{console.log('test',[onlyViewModule, estudiantes, hasEditAccess, onSelectedStudent, verEstudianteModal])}
 				<TableStudents
 					onlyViewModule={onlyViewModule}
 					data={estudiantes}

@@ -253,6 +253,12 @@ const data = [
         label: 'menu>configuracion>idioma',
         section: 'modulomallascurriculares',
         to: '/idiomaeditor'
+      },
+      {
+        icon: 'simple-icon-book-open',
+        label: 'menu>configuracion>gestorCatalogo',
+        section: 'gestioncatalogos',
+         to: '/director/GestorCatalogos'
       }
 
     ]

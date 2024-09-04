@@ -78,7 +78,7 @@ const GroupMembers = React.lazy(
 
 const GestorFormulario = React.lazy(() => import('../views/app/gestorFormulario/index'))
 
-const GestorCatalogo = React.lazy(() => import('../views/app/admin/GestorCatalogos/main'))
+const GestorCatalogo = React.lazy(() => import('../views/app/director/GestorCatalogos/main'))
 
 const VistaEstudiante = React.lazy(() => import('../views/app/VistasUsuarios/Estudiante'))
 
@@ -937,9 +937,15 @@ const routes: Route[] = [
 		exact: true
 	},
 	{
-		component: GestorCatalogo, // to use IntlMessages
+		component: GestorCatalogo, //  to use IntlMessages
 		isAuthenticated: true,
-		route: '/admin/GestorCatalogos'
+		accessRoles: ['ADMIN', 'GESTOR'],
+		route: '/director/GestorCatalogos',
+		section: 'gestioncatalogos',
+		routeProps: {
+			active: 1
+		},
+		exact: true
 	},
 	{
 		component: GroupMembers, // to use IntlMessages

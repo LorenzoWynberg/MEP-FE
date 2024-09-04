@@ -292,9 +292,12 @@ const RegistroForm: React.FC<IProps> = props => {
 
 	const fechaNacimientoForm = watch('fechaNacimiento')
 	
+	
 	React.useEffect(() => {
+		
+		const today= moment().format("YYYY-MM-DD")
 		const birth = fechaNacimientoForm
-		if (birth !== undefined && birth !== '') {
+		if (birth !== undefined && birth !== '' && birth<= today) {
 			const nacimiento = moment(birth).toDate()
 			setValue('edad', getYearsOld(nacimiento))
 		} else {

@@ -64,6 +64,7 @@ const Ubicacion = props => {
 			formularioCategoriaId: 8
 		})
 		await setFormResponse(JSON.parse(response.data.solucion))
+		debugger
 		actions.updateLocation({
 			...JSON.parse(response.data.solucion),
 			id: response.data.id
@@ -72,6 +73,7 @@ const Ubicacion = props => {
 	}
 
 	const putData = async data => {
+		debugger
 		setLoadingRequest(true)
 
 		const _solucion = JSON.parse(data.solucion)
@@ -136,10 +138,11 @@ const Ubicacion = props => {
 		await putData(_data)
 		setLoading(false)
 	}
-
+debugger
+//20240527 se modifica el formulario para que no muestre el check de ubicacion temporal. Dolores y Yair
 	return (
 		<div>
-			<FormGroup className='mx-2'>
+			{/* <FormGroup className='mx-2'>
 				<CustomInput
 					className='custom-checkbox mb-0 d-inline-block'
 					type='checkbox'
@@ -148,7 +151,7 @@ const Ubicacion = props => {
 					disabled={!isEdit}
 					label='Ubicación temporal'
 				/>
-			</FormGroup>
+			</FormGroup> */}
 			{!loading ? (
 				<JSONFormParser
 					pageData={pageData}

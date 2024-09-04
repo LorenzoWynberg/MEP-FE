@@ -39,7 +39,7 @@ type FormValidations = {
   typeId?: boolean
   identification?: boolean
   nacionalidad?: boolean
-  nombre?: boolean
+  nombre?: boolean 
   primerApellido?: boolean
   segundoApellido?: boolean
   conocidoComo?: boolean

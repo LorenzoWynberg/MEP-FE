@@ -16,6 +16,7 @@ import Ofertas from './ofertas'
 import Register from './new/register'
 import { useTranslation } from 'react-i18next'
 import { usePrevious } from 'Hooks'
+import { Institucion } from 'api'
 
 const RegistroEstudiantil = props => {
 	const { hasAddAccess = true, hasEditAccess = true, hasDeleteAccess = true } = props
@@ -28,6 +29,7 @@ const RegistroEstudiantil = props => {
 	const [mount, setMount] = useState(false)
 	const [selectedNivelOferta, setSelectedNivelOferta] = useState<any>(null)
 	const [onlyViewModule, setOnlyViewModule] = useState<boolean>(true)
+	//const [estadoCentro, setEstadoCentro] = useState<boolean>(true)
 	const history = useHistory()
 
 	const actions = useActions({
@@ -47,15 +49,20 @@ const RegistroEstudiantil = props => {
 
 	const PREV_ACTIVE_YEAR: any = usePrevious(ACTIVE_YEAR)
 
+	
+
 	useEffect(() => {
-		setOnlyViewModule(!ACTIVE_YEAR.esActivo)
+		debugger
+		setOnlyViewModule(!ACTIVE_YEAR.esActivo || (state.institution?.estadoId!=1 && state.institution?.estadoId!=5 ))
 		if (PREV_ACTIVE_YEAR?.id) {
 			if (PREV_ACTIVE_YEAR?.id !== ACTIVE_YEAR?.id)
 				history.push('/director/registro-estudiantil')
 		}
 	}, [ACTIVE_YEAR])
 
+	
 	useEffect(() => {
+		debugger
 		const fetch = async () => {
 			setLoading(true)
 			await actions.getGroupsByIntitution(state.institution?.id)
@@ -68,6 +75,13 @@ const RegistroEstudiantil = props => {
 
 		setMount(true)
 	}, [state.institution, ACTIVE_YEAR, mount])
+
+	// useEffect(() => {
+	// 	debugger		
+	// 	if (state.institution.estadoId==6)	{
+	// 	setEstadoCentro(false) 
+	// }
+	// },[state.institution.estadoId] )
 
 	useEffect(() => {
 		if (nivelOfertaId) {
@@ -143,6 +157,7 @@ const RegistroEstudiantil = props => {
 								{selectedNivelOferta && (
 									<Register
 										onlyViewModule={onlyViewModule}
+										//estadoCentro={estadoCentro}
 										hasAddAccess={hasAddAccess}
 										hasEditAccess={hasEditAccess}
 										hasDeleteAccess={hasDeleteAccess}
