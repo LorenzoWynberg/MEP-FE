@@ -3,7 +3,7 @@ import { TableReactImplementationServicio } from 'Components/TableReactImplement
 import { Card, CardBody } from 'reactstrap'
 import colors from 'Assets/js/colors'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@material-ui/core'
+import { Button } from 'Components/CommonComponents'
 
 interface IProps {
   onlyViewModule: any
