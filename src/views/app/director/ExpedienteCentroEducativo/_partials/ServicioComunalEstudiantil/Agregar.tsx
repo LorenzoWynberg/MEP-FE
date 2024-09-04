@@ -73,7 +73,7 @@ export const Agregar: React.FC<IProps> = props => {
 	const history = useHistory()
 	const state = useSelector((store: any) => {
 		return {
-			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
+			selectedYear: store.authUser.selectedActiveYear,
 			permisos: store.authUser.rolPermisos
 		}
 	})
@@ -130,6 +130,10 @@ export const Agregar: React.FC<IProps> = props => {
 
 	if (!tienePermiso || tienePermiso?.agregar == 0) {
 		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
+	}
+
+	if (!state.selectedYear.esActivo) {
+		return <h4>{t('No se puede agregar registros en un año lectivo no activo')}</h4>
 	}
 
 	return (

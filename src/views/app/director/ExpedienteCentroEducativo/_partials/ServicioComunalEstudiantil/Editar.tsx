@@ -97,7 +97,7 @@ export const Editar: React.FC<IProps> = props => {
 
 	const state = useSelector((store: any) => {
 		return {
-			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
+			selectedYear: store.authUser.selectedActiveYear,
 			permisos: store.authUser.rolPermisos
 		}
 	})
@@ -153,6 +153,10 @@ export const Editar: React.FC<IProps> = props => {
 
 	if (!tienePermiso || tienePermiso?.modificar == 0) {
 		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
+	}
+
+	if (!state.selectedYear.esActivo) {
+		return <h4>{t('No se puede editar registros en un año lectivo no activo')}</h4>
 	}
 
 	return (

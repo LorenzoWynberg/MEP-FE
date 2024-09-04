@@ -18,12 +18,10 @@ const ServicioComunalEstudiantil = props => {
 	const { t } = useTranslation()
 	const [aplicaSCE, setAplicaSCE] = useState(true)
 	const [loading, setLoading] = useState(true)
-	const [activeTab, setActiveTab] = useState(0)
 	const idInstitucion = localStorage.getItem('idInstitucion')
 
 	const state = useSelector((store: any) => {
 		return {
-			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
 			permisos: store.authUser.rolPermisos
 		}
 	})
