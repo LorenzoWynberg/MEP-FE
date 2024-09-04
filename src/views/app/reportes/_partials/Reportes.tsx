@@ -4,46 +4,46 @@ import Regional from '../Regional'
 import ReporteGeografico from '../Geografico'
 import Circuital from '../Circuital'
 import Institucional from '../Institucional'
-import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 
-const removeFromArray = (arr, str) => {
-	const index = arr.findIndex(el => el === str)
-	if (index !== -1) {
-		arr.splice(index, 1)
-	}
-}
 
 const Reportes = props => {
 	const { t } = useTranslation()
 	const [activeTab, setActiveTab] = useState<number>(0)
 	const { accessRole } = useSelector((state: any) => state.authUser?.currentRoleOrganizacion)
-	const options = [
+	const [options, setOptions] = useState([
 		t('reportes>geografico', 'Geográfico'),
 		t('gestion_usuario>usuarios>regional', 'Regional'),
 		t('reportes>circuital', 'Circuital'),
 		t('reportes>institucional', 'Institucional')
-	]
+	])
+	useEffect(() => {
 
-	switch (accessRole.nivelAccesoId) {
-		case 1: // Institucion
-			removeFromArray(options, 'Regional')
-			removeFromArray(options, 'Circuital')
-			removeFromArray(options, 'Geográfico')
-			break
-		case 2: // Circuito
-			removeFromArray(options, 'Geográfico')
-			removeFromArray(options, 'Regional')
-			break
-		case 3: // Regional
-			break
-		case 4: // Global
-			break
-	}
+		let optionsCopy = [...options]
+		switch (accessRole.nivelAccesoId) {
+			case 1: // Institucion
+				optionsCopy.filter((item) => item !== 'Geográfico' && item !== 'Circuital' && item !== 'Regional')
+				setOptions(optionsCopy)
+				break
+			case 2: // Circuito 
+				optionsCopy.filter((item) => item !== 'Geográfico' && item !== 'Regional')
+				setOptions(optionsCopy)
+				break
+			case 3: // Regional
+				break
+			case 4: // Global
+				break
+		}
 
-	props.props.tipo == 'matricula' && removeFromArray(options, 'Geográfico')
+		console.log('options UE optionsCopy', optionsCopy)
+		console.log('options UE props.props.tipo', props.props.tipo)
+		if (props.props.tipo == 'matricula') {
 
+			setOptions(optionsCopy.filter((item) => item !== 'Geográfico'))
+		}
+
+	}, [accessRole, props.props.tipo])
 	if (accessRole.rolId === 11) {
 		// Si el rol es Docente(11)  se oculta la seccion
 		return <></>
@@ -55,23 +55,12 @@ const Reportes = props => {
 				<HeaderTab options={options} activeTab={activeTab} setActiveTab={setActiveTab} />
 				<div>
 					{/* activeTab === 0 && <Nacional/> */}
-					{accessRole?.nivelAccesoId === 4 && (
+					{accessRole?.nivelAccesoId === 4 || accessRole?.nivelAccesoId === 3 && (
+
 						<>
 							{
 								{
-									0: <ReporteGeografico props={props.props} />,
-									1: <Regional props={props.props} />,
-									2: <Circuital props={props.props} />,
-									3: <Institucional props={props.props} />
-								}[activeTab]
-							}
-						</>
-					)}
-					{accessRole?.nivelAccesoId === 3 && (
-						<>
-							{
-								{
-									0: <ReporteGeografico props={props.props} />,
+									0: props.props.tipo === 'matricula' ? <ReporteGeografico props={props.props} /> : <></>,
 									1: <Regional props={props.props} />,
 									2: <Circuital props={props.props.props} />,
 									3: <Institucional props={props.props} />
@@ -79,6 +68,7 @@ const Reportes = props => {
 							}
 						</>
 					)}
+
 					{accessRole?.nivelAccesoId === 2 && (
 						<>
 							{
@@ -103,11 +93,5 @@ const Reportes = props => {
 		</div>
 	)
 }
-
-const Container = styled.div`
-	display: grid;
-	justify-content: center;
-	width: 100%;
-`
 
 export default Reportes
