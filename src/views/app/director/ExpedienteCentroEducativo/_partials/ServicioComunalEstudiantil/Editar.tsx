@@ -159,9 +159,12 @@ export const Editar: React.FC<IProps> = props => {
 		return <h4>{t('No se puede editar registros en un año lectivo no activo')}</h4>
 	}
 
+	if (loading) {
+		return <BarLoader />
+	}
+
 	return (
 		<div className={styles}>
-			{loading && <BarLoader />}
 			{showAreaProyecto && catalogos.areasProyecto && (
 				<SimpleModal
 					title='Área de proyecto'
@@ -431,7 +434,8 @@ export const Editar: React.FC<IProps> = props => {
 												setDate(d)
 												setCDate(d.toLocaleDateString('fr-FR'))
 											}}
-											maxDate={today} // Set the maximum selectable date to today
+											minDate={new Date(new Date().getFullYear(), 0, 1)}
+											maxDate={today}
 										/>
 									</FormGroup>
 								</Col>
@@ -522,11 +526,6 @@ export const Editar: React.FC<IProps> = props => {
 							Cancelar
 						</Button>
 						<Button
-							class={
-								isValid()
-									? 'sc-iqcoie bQFwPO cursor-pointer'
-									: 'sc-iqcoie bQFwPO cursor-pointer disabled'
-							}
 							color='primary'
 							onClick={() => {
 								setLoading(true)

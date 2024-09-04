@@ -53,7 +53,7 @@ export const Agregar: React.FC<IProps> = props => {
 	const [modalidadId, setModalidadId] = React.useState()
 	const [modalidad, setModalidad] = React.useState()
 	const [institutionImage, setInstitutionImage] = React.useState(null)
-	const [loading, setLoading] = React.useState<boolean>(false)
+	const [loading, setLoading] = React.useState<boolean>(true)
 	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setValue((event.target as HTMLInputElement).value)
@@ -123,9 +123,13 @@ export const Agregar: React.FC<IProps> = props => {
 	})
 
 	useEffect(() => {
-		ObtenerInfoCatalogos().then(response => {
-			setCatalogos(response)
-		})
+		ObtenerInfoCatalogos()
+			.then(response => {
+				setCatalogos(response)
+			})
+			.finally(() => {
+				setLoading(false)
+			})
 	}, [])
 
 	if (!tienePermiso || tienePermiso?.agregar == 0) {
@@ -136,9 +140,12 @@ export const Agregar: React.FC<IProps> = props => {
 		return <h4>{t('No se puede agregar registros en un año lectivo no activo')}</h4>
 	}
 
+	if (loading) {
+		return <BarLoader />
+	}
+
 	return (
 		<div className={styles}>
-			{loading && <BarLoader />}
 			{showAreaProyecto && catalogos.areasProyecto && (
 				<SimpleModal
 					title='Área de proyecto'
@@ -425,7 +432,8 @@ export const Agregar: React.FC<IProps> = props => {
 												setDate(d)
 												setFormattedDate(d.toLocaleDateString('fr-FR'))
 											}}
-											maxDate={today} // Set the maximum selectable date to today
+											minDate={new Date(new Date().getFullYear(), 0, 1)}
+											maxDate={today}
 										/>
 									</FormGroup>
 									{checkedValid && !formattedDate && (
@@ -525,7 +533,6 @@ export const Agregar: React.FC<IProps> = props => {
 						<Button
 							color='primary'
 							style={{ cursor: 'pointer' }}
-							disabled={!isValid()}
 							onClick={() => {
 								setLoading(true)
 								if (idInstitucion) {
