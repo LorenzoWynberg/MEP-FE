@@ -46,7 +46,7 @@ const ReporteStyledTableCircuitos = ({ innerRef, data, columns, title, idRegion,
 									return (
 										<>
 											<tr>
-												<h6 style={{ marginTop: 16 }}>{item.nombreCircuito}</h6>
+												<h6 style={{ marginTop: 16 }}>{item.nombreCircuito || item.circuitoNombre}</h6>
 											</tr>
 											{item.datos.map(d => Row(d))}
 										</>
