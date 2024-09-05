@@ -139,6 +139,7 @@ export const getApoyosByType = (identidad, page, quantity, type) => async dispat
 	dispatch(loading(true))
 	dispatch(loadingApoyos(type.nombre.replace(/\s/g, '') + `${type.id}`))
 	try {
+		debugger
 		const response = await axios.get(
 			`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${type.id}/${page}/${quantity}?identidadId=${identidad}`
 		)

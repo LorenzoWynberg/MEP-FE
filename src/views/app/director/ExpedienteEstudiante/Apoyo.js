@@ -120,13 +120,14 @@ const General = props => {
 		handleClick()
 	}
 
-	useEffect(() => {
+	//TODO JPBR: si no da bronca borrar
+	/* useEffect(() => {
 		const newCategorias = state.apoyos.categorias
 		if (newCategorias?.length > 0) {
 			newCategorias.unshift(newCategorias.pop())
 		}
 		setCategorias(newCategorias)
-	}, [state.apoyos.categorias])
+	}, [state.apoyos.categorias]) */
 
 	useEffect(() => {
 		const loadData = async () => {
@@ -151,7 +152,8 @@ const General = props => {
 		}
 	}, [])
 
-	useEffect(() => {
+	//TODO JPBR: si no da bronca borrar
+	/* useEffect(() => {
 		const loadData = async () => {
 			setLoading(true)
 
@@ -163,7 +165,7 @@ const General = props => {
 		if (state.apoyos.categorias[0]) {
 			loadData()
 		}
-	}, [state.apoyos.categorias])
+	}, [state.apoyos.categorias]) */
 
 	if (loading) return <Loader />
 
@@ -184,106 +186,6 @@ const General = props => {
 				apoyos={state.apoyos}
 				handleSubmit={handleSubmit}
 			/>
-
-			{/* 
-			//TODO JPBR Borrar esto luego de trabajar la logica de los apoyos */}
-			{categorias.map(categoria => {
-				const storedValuesKey = categoria.nombre.replace(/\s/g, '') + `${categoria.id}`
-				return (
-					<>
-						{state.apoyos[storedValuesKey] && (
-							<CollapseCard
-								titulo={categoria.nombre}
-								label={t('general>agregar', 'Agregar')}
-								addItem={() => {
-									setAddItems({ ...addItems, [storedValuesKey]: true })
-								}}
-							>
-								<Container>
-									{width > 800 && (
-										<ApoyoHeader
-											apoyosMateriales={storedValuesKey.search('Apoyosmateriales') !== -1}
-										/>
-									)}
-									{!state.apoyos[storedValuesKey].loading ? (
-										<>
-											{state.apoyos[storedValuesKey].entityList.map(apoyo => {
-												return (
-													<ApoyoItem
-														showsnackBar={showsnackBar}
-														apoyo={apoyo || {}}
-														storedValuesKey={storedValuesKey}
-														tipos={state.apoyos.tipos.filter(
-															tipo => tipo.categoriaApoyoId === categoria.id
-														)}
-														dependencias={state.apoyos.dependencias}
-														agregarApoyo={agregarApoyo}
-														categoria={categoria}
-														setAddItems={setAddItems}
-														addItems={addItems}
-														addNew={false}
-														authHandler={props.authHandler}
-														handleDeleteApoyo={handleDeleteApoyo}
-														editarApoyo={editarApoyo}
-														identidadesId={state.identification.data.id}
-														apoyosMateriales={
-															storedValuesKey.search('Apoyosmateriales') !== -1
-														}
-														//TODO JPBR
-														matriculaId={state.currentStudent.currentStudent.idMatricula}
-													/>
-												)
-											})}
-											{addItems[storedValuesKey] && (
-												<ApoyoItem
-													showsnackBar={showsnackBar}
-													apoyo={{}}
-													storedValuesKey={storedValuesKey}
-													tipos={state.apoyos.tipos.filter(
-														tipo => tipo.categoriaApoyoId === categoria.id
-													)}
-													dependencias={state.apoyos.dependencias}
-													agregarApoyo={agregarApoyo}
-													categoria={categoria}
-													setAddItems={setAddItems}
-													addItems={addItems}
-													addNew
-													handleDeleteApoyo={handleDeleteApoyo}
-													editarApoyo={editarApoyo}
-													identidadesId={state.identification.data.id}
-													apoyosMateriales={storedValuesKey.search('Apoyosmateriales') !== -1}
-													//TODO JPBR
-													matriculaId={state.currentStudent.currentStudent.idMatricula}
-												/>
-											)}
-											<Pagination
-												currentPage={state.apoyos[storedValuesKey].pageNumber}
-												totalPage={
-													state.apoyos[storedValuesKey].totalCount % 5 === 0
-														? state.apoyos[storedValuesKey].totalPages
-														: state.apoyos[storedValuesKey].totalPages + 1
-												}
-												onChangePage={async i =>
-													await actions.getApoyosByType(
-														state.identification.data.id,
-														i,
-														5,
-														categoria
-													)
-												}
-											/>
-										</>
-									) : (
-										<div style={{ textAlign: 'center' }}>
-											<Loader formLoader />
-										</div>
-									)}
-								</Container>
-							</CollapseCard>
-						)}
-					</>
-				)
-			})}
 		</>
 	)
 }

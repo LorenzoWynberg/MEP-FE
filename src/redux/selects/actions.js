@@ -23,7 +23,6 @@ export const getCatalogs =
 	(type, page = -1, size = -1) =>
 	async (dispatch, getState) => {
 		try {
-			debugger
 			const _type = catalogsEnum.find(item => item.id === type)
 			const response = await axios.get(
 				`${envVariables.BACKEND_URL}/api/Catalogo/GetAllByType/${type}/${page}/${size}`

@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { Row, Col, Form, FormGroup, Label, Input, Button, Container } from 'reactstrap'
+
 import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
 import useNotification from 'Hooks/useNotification'
 import styled from 'styled-components'
@@ -14,11 +15,17 @@ import {
 	deleteApoyo,
 	editApoyo
 } from 'Redux/apoyos/actions'
+import Tooltip from '@mui/material/Tooltip'
 
 import { getCatalogs } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
 import { catalogsEnumObj } from 'Utils/catalogsEnum'
 import SimpleModal from 'Components/Modal/simple'
+import axios from 'axios'
+import { envVariables } from '../../../../../../constants/enviroment'
+import { IoMdTrash } from 'react-icons/io'
+import IconButton from '@mui/material/IconButton'
+import swal from 'sweetalert'
 
 const categoria = {
 	id: 4,
@@ -39,6 +46,16 @@ export const ApoyosCurriculares = () => {
 		fechaDeAprobacion: ''
 	})
 
+	const cleanFormData = () => {
+		const data = {
+			tipoDeApoyo: '',
+			condicionApoyo: '',
+			detalleApoyo: '',
+			fechaDeAprobacion: ''
+		}
+		setFormData(data)
+	}
+
 	const handleFormDataChange = event => {
 		setFormData({
 			...formData,
@@ -47,7 +64,6 @@ export const ApoyosCurriculares = () => {
 	}
 
 	const handleFechaAprobacionOnChange = event => {
-		debugger
 		const value = Number(event.target.value)
 		//formValue
 		//TODO JPBR refactorizar esa novatada de usar valores quemados
@@ -87,11 +103,8 @@ export const ApoyosCurriculares = () => {
 	useEffect(() => {
 		const loadData = async () => {
 			try {
-				debugger
 				setLoading(true)
 				await actions.getTiposApoyos()
-				//await actions.getDependenciasApoyos() //este no tiene permiso el usuario
-				//await actions.getCategoriasApoyos() //este es el que encicla el loading
 
 				const tiposDeApoyo = state.apoyos.tipos.filter(tipo => tipo.categoriaApoyoId === categoria.id)
 
@@ -104,59 +117,80 @@ export const ApoyosCurriculares = () => {
 			}
 		}
 		loadData()
-
-		return () => {
-			//actions.clearCurrentDiscapacidades()
-		}
 	}, [])
 
 	useEffect(() => {
-		const loadData = async () => {
-			debugger
-			setLoading(true)
-			await actions.getApoyosByType(state.identification.data.id, 1, 5, categoria)
-			setLoading(false)
-		}
+		setLoading(true)
 
-		loadData()
-	}, [state.identification.data.id])
+		axios
+			.get(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
+			)
+			.then(response => {
+				setData(response.data.entityList)
+			})
+			.catch(error => {
+				console.log(error)
+			})
+		setLoading(false)
+	}, [])
+
+	const deleteApoyoById = apoyoId => {
+		axios
+			.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`)
+			.then(response => {
+				axios
+					.get(
+						`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
+					)
+					.then(response => {
+						setData(response.data.entityList)
+					})
+					.catch(error => {
+						console.log(error)
+					})
+			})
+			.catch(error => {
+				console.log('Error', error)
+			})
+	}
 
 	const columns = useMemo(() => {
 		return [
 			{
 				Header: 'Tipo de apoyo',
-				column: 'parentesco',
-				accessor: 'parentesco',
+				column: 'sb_TiposDeApoyo',
+				accessor: 'sb_TiposDeApoyo',
 				label: ''
 			},
 			{
 				Header: 'Detalle del apoyo',
-				column: 'nombre',
-				accessor: 'nombre',
+				column: 'detalle',
+				accessor: 'detalle',
 				label: ''
 			},
 			{
 				Header: 'Condición del apoyo',
-				column: 'primerApellido',
-				accessor: 'primerApellido',
+				column: 'condicionApoyo',
+				accessor: 'condicionApoyo',
 				label: ''
 			},
 			{
 				Header: 'Fecha de aprobación',
-				column: 'segundoApellido',
-				accessor: 'segundoApellido',
+				column: 'fechaInicio',
+				accessor: 'fechaInicio',
 				label: ''
 			},
 			{
 				Header: 'Registrado por',
-				column: 'registradoPor',
-				accessor: 'registradoPor',
+				column: 'usuarioRegistro',
+				accessor: 'usuarioRegistro',
 				label: ''
 			},
 			{
 				Header: 'Fecha y hora del registro',
-				column: 'encargado',
-				accessor: 'encargado',
+				column: 'fechaInsercion',
+				accessor: 'fechaInsercion',
 				label: ''
 			},
 			{
@@ -183,32 +217,10 @@ export const ApoyosCurriculares = () => {
 									cursor: 'pointer',
 									color: 'grey'
 								}}
-								onClick={async () => {
-									setLoading(true)
-									await events.onEditarClick(fullRow.id)
-									setLoading(false)
-									// props.authHandler('modificar', () => {
-									//   setMemberDetailOpen(true)
-									// })
-								}}
-							>
-								<Tooltip title='Actualizar'>
-									<IconButton>
-										<HiPencil style={{ fontSize: 30 }} />
-									</IconButton>
-								</Tooltip>
-							</button>
-							<button
-								style={{
-									border: 'none',
-									background: 'transparent',
-									cursor: 'pointer',
-									color: 'grey'
-								}}
 								onClick={() => {
 									swal({
-										title: 'Eliminar Miembro',
-										text: '¿Esta seguro de que desea eliminar el miembro del hogar?',
+										title: 'Eliminar Apoyo',
+										text: '¿Esta seguro de que desea eliminar el apoyo?',
 										icon: 'warning',
 										className: 'text-alert-modal',
 										buttons: {
@@ -221,42 +233,12 @@ export const ApoyosCurriculares = () => {
 										}
 									}).then(async result => {
 										if (result) {
-											const age = identification.data?.fechaNacimiento
-												? moment().diff(identification.data?.fechaNacimiento, 'years', false)
-												: 0
-											if (
-												age < 18 &&
-												fullRow.encargado &&
-												data.filter(el => el?.encargado).length === 1
-											) {
-												setSnackbarContent({
-													msg: 'No se puede eliminar la relación de encargado con el estudiante, hasta que incluya un nuevo encargado',
-													variant: 'error'
-												})
-												handleClick()
-
-												return
-											}
-											if (
-												(fullRow.encargadoLegal && data.length < 1) ||
-												!fullRow.encargadoLegal
-											) {
-												setSnackbarContent({
-													msg: 'No se puede eliminar la relación de encargado con el estudiante, hasta que incluya un nuevo encargado',
-													variant: 'error'
-												})
-												handleClick()
-											} else {
-												setLoading(true)
-												await events.onDeleteClick(fullRow.id)
-												await loadFamilyMembers()
-												setLoading(false)
-											}
+											deleteApoyoById(row.original.id)
 										}
 									})
 								}}
 							>
-								<Tooltip title='Deshabilitar relación'>
+								<Tooltip title='Eliminar'>
 									<IconButton>
 										<IoMdTrash style={{ fontSize: 30 }} />
 									</IconButton>
@@ -273,12 +255,11 @@ export const ApoyosCurriculares = () => {
 		setShowNuevoApoyoModal(true)
 	}
 
-	const onConfirmSaveApoyo = event => {
+	const onConfirmSaveApoyo = async event => {
 		event.preventDefault()
 		setLoading(true)
-
 		let _data = {
-			id: state.expedienteEstudiantil.currentStudent.matriculaId,
+			id: state.expedienteEstudiantil.currentStudent.idMatricula,
 			detalle: formData.detalleApoyo,
 			fechaInicio: formData.fechaDeAprobacion ? formData.fechaDeAprobacion : null,
 			fechaFin: null,
@@ -287,7 +268,10 @@ export const ApoyosCurriculares = () => {
 			condicionApoyoId: parseInt(formData.condicionApoyo),
 			identidadesId: state.identification.data.id
 		}
-		console.log('formData JP', _data)
+		await actions.addApoyo(_data, categoria, 'apoyoscurriculares4', 1)
+		cleanFormData()
+		setLoading(false)
+		closeAgregarModal()
 	}
 
 	const closeAgregarModal = () => {
@@ -301,7 +285,7 @@ export const ApoyosCurriculares = () => {
 				showAddButton
 				msjButton='Agregar'
 				onSubmitAddButton={() => onAgregarEvent()}
-				data={data}
+				data={data || []}
 				columns={columns}
 			/>
 
@@ -366,8 +350,8 @@ export const ApoyosCurriculares = () => {
 									<Label for='detalleDelApoyo'>Detalle del apoyo (opcional)</Label>
 									<Input
 										type='textarea'
-										id='detalleDelApoyo'
-										name='detalleDelApoyo'
+										id='detalleApoyo'
+										name='detalleApoyo'
 										rows='5'
 										onChange={handleFormDataChange}
 									/>
