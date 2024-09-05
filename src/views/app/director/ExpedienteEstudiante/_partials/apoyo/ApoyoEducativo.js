@@ -228,7 +228,7 @@ const ApoyoEducativo = props => {
 									color='primary'
 									outline
 								>
-									{t('general>cancelaaaar', 'Cancaaelar')}
+									{t('general>cancelaaaar', 'Cancelar')}
 								</Button>
 								<Button
 									color='primary'
@@ -236,7 +236,7 @@ const ApoyoEducativo = props => {
 										toggleModal(true)
 									}}
 								>
-									{t('general>guardar', 'Guaraadar')}
+									{t('general>guardar', 'Guardar')}
 								</Button>
 							</CenteredRow>
 						</Row>

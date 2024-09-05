@@ -38,12 +38,11 @@ export const ApoyosOrganizativos = () => {
 	const [data, setData] = useState([])
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
 	const [tiposApoyo, setTiposApoyo] = useState([])
-	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
 	const [formData, setFormData] = useState({
 		tipoDeApoyo: '',
 		condicionApoyo: '',
 		detalleApoyo: '',
-		fechaDeAprobacion: ''
+		fechaDeAprobacion: null
 	})
 
 	const cleanFormData = () => {
@@ -51,7 +50,7 @@ export const ApoyosOrganizativos = () => {
 			tipoDeApoyo: '',
 			condicionApoyo: '',
 			detalleApoyo: '',
-			fechaDeAprobacion: ''
+			fechaDeAprobacion: null
 		}
 		setFormData(data)
 	}
@@ -60,21 +59,6 @@ export const ApoyosOrganizativos = () => {
 		setFormData({
 			...formData,
 			[event.target.name]: event.target.value
-		})
-	}
-
-	const handleFechaAprobacionOnChange = event => {
-		const value = Number(event.target.value)
-		//formValue
-		//TODO JPBR refactorizar esa novatada de usar valores quemados
-		if (value === 6558) {
-			setShowFechaAprobacion(true)
-		} else {
-			setShowFechaAprobacion(false)
-		}
-		setFormData({
-			...formData,
-			condicionApoyo: value
 		})
 	}
 
@@ -256,8 +240,12 @@ export const ApoyosOrganizativos = () => {
 	}
 
 	const onConfirmSaveApoyo = async event => {
+		debugger
 		event.preventDefault()
 		setLoading(true)
+
+		let validationMessage = ''
+		let hayError = false
 
 		if (formData.tipoDeApoyo === '' || isNaN(formData.tipoDeApoyo)) {
 			validationMessage = '\nEl tipo de apoyo es requerido'
@@ -271,11 +259,6 @@ export const ApoyosOrganizativos = () => {
 
 		if (formData.detalleApoyo === '') {
 			validationMessage += '\nEl detalle es requerido'
-			hayError = true
-		}
-
-		if (formData.fechaDeAprobacion === '' && formData.condicionApoyo === 6558) {
-			validationMessage += '\nLa fecha de aprobación es requerida'
 			hayError = true
 		}
 
@@ -331,7 +314,7 @@ export const ApoyosOrganizativos = () => {
 				onClose={() => closeAgregarModal()}
 				onConfirm={onConfirmSaveApoyo}
 				actions={false}
-				title={'Registro de apoyo curricular'}
+				title={'Registro de apoyo organizativo'}
 			>
 				<Container width='100%' className='modal-detalle-subsidio'>
 					<Form onSubmit={onConfirmSaveApoyo}>
@@ -369,7 +352,7 @@ export const ApoyosOrganizativos = () => {
 									})} */
 										name='condicionApoyo'
 										type='select'
-										onChange={handleFechaAprobacionOnChange}
+										onChange={handleFormDataChange}
 										//invalid={errors[`${props.storedValuesKey}Tipos`]}
 										placeholder='Seleccionar'
 									>
@@ -396,21 +379,19 @@ export const ApoyosOrganizativos = () => {
 							</Col>
 						</Row>
 
-						{showFechaAprobacion && (
-							<Row>
-								<Col md={6}>
-									<FormGroup>
-										<Label for='fechaDeAprobacion'>Fecha de aprobación</Label>
-										<Input
-											type='date'
-											id='fechaDeAprobacion'
-											name='fechaDeAprobacion'
-											onChange={handleFormDataChange}
-										/>
-									</FormGroup>
-								</Col>
-							</Row>
-						)}
+						<Row>
+							<Col md={6}>
+								<FormGroup>
+									<Label for='fechaDeAprobacion'>Fecha de aprobación</Label>
+									<Input
+										type='date'
+										id='fechaDeAprobacion'
+										name='fechaDeAprobacion'
+										onChange={handleFormDataChange}
+									/>
+								</FormGroup>
+							</Col>
+						</Row>
 
 						<Row>
 							<Col md={12}>

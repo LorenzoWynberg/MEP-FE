@@ -296,6 +296,7 @@ export const ApoyosCurriculares = () => {
 			condicionApoyoId: parseInt(formData.condicionApoyo),
 			identidadesId: state.identification.data.id
 		}
+
 		await actions.addApoyo(_data, categoria, 'apoyoscurriculares4', 1)
 
 		axios

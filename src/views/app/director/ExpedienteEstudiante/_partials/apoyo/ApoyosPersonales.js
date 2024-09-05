@@ -334,7 +334,7 @@ export const ApoyosPersonales = () => {
 				onClose={() => closeAgregarModal()}
 				onConfirm={onConfirmSaveApoyo}
 				actions={false}
-				title={'Registro de apoyo curricular'}
+				title={'Registro de apoyo personal'}
 			>
 				<Container width='100%' className='modal-detalle-subsidio'>
 					<Form onSubmit={onConfirmSaveApoyo}>
