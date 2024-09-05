@@ -290,7 +290,6 @@ export const ApoyosPersonales = () => {
 		setShowNuevoApoyoModal(false)
 	}
 
-	//TODO JPBR refactorizar a un componente que se pueda usar en todas los tipos de apoyos cuando esten listos los endpoints
 	return (
 		<>
 			<TableReactImplementationApoyo
