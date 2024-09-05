@@ -19,7 +19,7 @@ const Search: FC<IProps> = props => {
 		{ id: 3, name: '2024' }
 	]
 
-	const handleChangeSelectAll = e => {}
+	const handleChangeSelectAll = e => { }
 
 	return (
 		<SearchContainer className='mr-4'>
@@ -56,6 +56,7 @@ const Search: FC<IProps> = props => {
 							color: '#ffffff',
 							marginLeft: 10
 						}}
+						onChange={e => onSearch(e.target.value)}
 						className='custom-checkbox mb-0 d-inline-block'
 						type='select'
 						id='checkAll'
@@ -65,7 +66,7 @@ const Search: FC<IProps> = props => {
 					>
 						<option value={null}>{'Filtrar por año'}</option>
 						{yearList.map(tipo => {
-							return <option value={tipo.id}>{tipo.name}</option>
+							return <option value={tipo.name}>{tipo.name}</option>
 						})}
 					</CustomInput>
 				</StyledInputGroupAddon>
