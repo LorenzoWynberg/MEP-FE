@@ -271,21 +271,14 @@ export const ApoyosCurriculares = () => {
 		await actions.addApoyo(_data, categoria, 'apoyoscurriculares4', 1)
 
 		axios
-			.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`)
+			.get(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
+			)
 			.then(response => {
-				axios
-					.get(
-						`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
-					)
-					.then(response => {
-						setData(response.data.entityList)
-					})
-					.catch(error => {
-						console.log(error)
-					})
+				setData(response.data.entityList)
 			})
 			.catch(error => {
-				console.log('Error', error)
+				console.log(error)
 			})
 
 		cleanFormData()
