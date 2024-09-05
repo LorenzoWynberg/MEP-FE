@@ -269,6 +269,25 @@ export const ApoyosCurriculares = () => {
 			identidadesId: state.identification.data.id
 		}
 		await actions.addApoyo(_data, categoria, 'apoyoscurriculares4', 1)
+
+		axios
+			.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`)
+			.then(response => {
+				axios
+					.get(
+						`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
+					)
+					.then(response => {
+						setData(response.data.entityList)
+					})
+					.catch(error => {
+						console.log(error)
+					})
+			})
+			.catch(error => {
+				console.log('Error', error)
+			})
+
 		cleanFormData()
 		setLoading(false)
 		closeAgregarModal()
