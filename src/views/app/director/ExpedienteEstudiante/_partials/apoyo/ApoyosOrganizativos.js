@@ -258,6 +258,32 @@ export const ApoyosOrganizativos = () => {
 	const onConfirmSaveApoyo = async event => {
 		event.preventDefault()
 		setLoading(true)
+
+		if (formData.tipoDeApoyo === '' || isNaN(formData.tipoDeApoyo)) {
+			validationMessage = '\nEl tipo de apoyo es requerido'
+			hayError = true
+		}
+
+		if (formData.condicionApoyo === '' || isNaN(formData.condicionApoyo)) {
+			validationMessage += '\nLa condición es requerida'
+			hayError = true
+		}
+
+		if (formData.detalleApoyo === '') {
+			validationMessage += '\nEl detalle es requerido'
+			hayError = true
+		}
+
+		if (formData.fechaDeAprobacion === '' && formData.condicionApoyo === 6558) {
+			validationMessage += '\nLa fecha de aprobación es requerida'
+			hayError = true
+		}
+
+		if (hayError) {
+			alert(validationMessage)
+			return
+		}
+
 		let _data = {
 			id: state.expedienteEstudiantil.currentStudent.idMatricula,
 			detalle: formData.detalleApoyo,
