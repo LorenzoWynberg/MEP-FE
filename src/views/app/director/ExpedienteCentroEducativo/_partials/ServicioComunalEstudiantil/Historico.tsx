@@ -20,6 +20,7 @@ import { RemoveRedEyeRounded, Edit } from '@material-ui/icons'
 import SimpleModal from 'Components/Modal/simple'
 import ModalSCE from './_partials/ModalSCE'
 import { Delete } from '@material-ui/icons'
+import { filter, get } from 'lodash'
 
 const Historico = props => {
 	const [data, setData] = useState([])
@@ -55,7 +56,6 @@ const Historico = props => {
 		GetServicioComunalByInstitucionId,
 		desactivarServicioComunal
 	})
-
 	const fetch = async (idInstitucion, idAreaProyecto = null) => {
 		try {
 			setLoading(true)
@@ -63,7 +63,10 @@ const Historico = props => {
 			if (idAreaProyecto) {
 				url = `${idInstitucion}/${state.selectedYear.id}/${filterText}/${idAreaProyecto}`
 			} else {
-				url = `${idInstitucion}/${state.selectedYear.id}/${filterText}`
+				url = `${idInstitucion}/${state.selectedYear.id}/` + filterText + `/0`
+			}
+			if (!url) {
+				url = `${idInstitucion}/${state.selectedYear.id}/null/0`
 			}
 			const response: any = await axios.get(
 				`${envVariables.BACKEND_URL}/api/ServicioComunal/GetServiciosComunalByFilter/${url}`
