@@ -180,6 +180,7 @@ const ApoyoEducativo = props => {
 					<Container className='modal-detalle-subsidio'>
 						<Row>
 							<Col xs={12}>
+								{/**TODO JPBR el filtro de Beto */}
 								{modalOptions
 									.filter(d =>
 										openOptions.type === 'discapacidades'

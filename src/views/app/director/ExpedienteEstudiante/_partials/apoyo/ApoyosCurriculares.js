@@ -105,6 +105,7 @@ export const ApoyosCurriculares = () => {
 				setLoading(true)
 				await actions.getTiposApoyos()
 
+				//dropdown
 				const tiposDeApoyo = state.apoyos.tipos.filter(tipo => tipo.categoriaApoyoId === categoria.id)
 
 				setTiposApoyo(tiposDeApoyo)
@@ -296,6 +297,8 @@ export const ApoyosCurriculares = () => {
 			condicionApoyoId: parseInt(formData.condicionApoyo),
 			identidadesId: state.identification.data.id
 		}
+
+		console.log('JPBR apoyos', data)
 
 		await actions.addApoyo(_data, categoria, 'apoyoscurriculares4', 1)
 

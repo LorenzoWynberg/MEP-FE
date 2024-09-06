@@ -329,7 +329,6 @@ function BackendFilter({
 export const TableDataFrontPaginated: React.FC<IProps> = props => {
 	const { t } = useTranslation()
 
-	console.log(props?.columns?.map(el => el.column))
 	const [columnsToShow, setColumnsToShow] = React.useState(
 		Array.isArray(props?.columns) && !props?.columns?.includes(undefined)
 			? props?.columns?.map(el => el.column)
