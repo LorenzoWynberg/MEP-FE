@@ -138,26 +138,24 @@ const BeneficiosMEP = props => {
 	}
 
 	const sendData = async data => {
+		setLoading(true)
 		if (toDateInvalid) {
 			return
 		}
 
 		let response = null
-		let _data = {}
+		let _data = {
+			identidadesId: state.identification.data?.id,
+			tipoSubsidioId: prevSubsidio?.id,
+			detalle: prevSubsidio?.detalle,
+			recepcionVerificada: verificated,
+			fechaInicio: moment(data.dateFrom).toDate(),
+			fechaFinal: moment(data.dateTo).toDate()
+		}
 		if (dataTable.id) {
-			_data = {
-				id: dataTable.id,
-				identidadesId: state.identification.data?.id,
-				tipoSubsidioId: prevSubsidio?.id,
-				detalle: prevSubsidio?.detalle,
-				recepcionVerificada: verificated,
-				fechaInicio: moment(data.dateFrom).toDate(),
-				fechaFinal: moment(data.dateTo).toDate()
-			}
-			setLoading(true)
+			_data.id = dataTable.id
 			response = await actions.editSubsidioBody(_data)
 			setLoading(false)
-
 			if (response.error) {
 				setSnackbarContent({
 					msg: 'Hubo un error al editar',
@@ -174,16 +172,7 @@ const BeneficiosMEP = props => {
 				clearData()
 			}
 		} else {
-			_data = {
-				id: 0,
-				identidadesId: state.identification.data?.id,
-				tipoSubsidioId: prevSubsidio?.id,
-				detalle: prevSubsidio?.detalle,
-				recepcionVerificada: verificated,
-				fechaInicio: moment(data.dateFrom).toDate(),
-				fechaFinal: moment(data.dateTo).toDate()
-			}
-			setLoading(true)
+			_data.id = 0
 			response = await actions.addSubsidio(_data)
 			setLoading(false)
 			if (response.error) {
@@ -218,20 +207,7 @@ const BeneficiosMEP = props => {
 	}
 
 	const handleViewSubsidio = async (e, show) => {
-		var delay = 1500
-
-		setTimeout(function () {
-			setView(true)
-			setDataTable(e)
-			setDependencia({ label: e?.nombreDependecia, value: null })
-			setValue('dateFrom', moment(e?.fechaInicio).format('YYYY-MM-DD'))
-			setValue('dateTo', moment(e?.fechaFinal).format('YYYY-MM-DD'))
-			setValue('detSubsidio', e?.detalle)
-			setVerificated(e?.recepcionVerificada == 'Si')
-			setPrevSubsidio(tipos.find(tipo => tipo?.nombre == e?.nombreTipoSubsidio))
-			setShowButtons(show)
-		}, delay)
-
+		setLoading(true)
 		setView(true)
 		setDataTable(e)
 		setDependencia({ label: e?.nombreDependecia, value: null })
@@ -241,6 +217,7 @@ const BeneficiosMEP = props => {
 		setVerificated(e?.recepcionVerificada == 'Si')
 		setPrevSubsidio(tipos.find(tipo => tipo?.nombre == e?.nombreTipoSubsidio))
 		setShowButtons(show)
+		setLoading(false)
 	}
 
 	const handleCreateToggle = () => {
@@ -259,14 +236,9 @@ const BeneficiosMEP = props => {
 		handleClick()
 	}
 	const handleUpdateSubsidio = async (id, estado) => {
-		let response = null
-
 		setLoading(true)
-
+		let response = null
 		response = await actions.editSubsidio(id, estado)
-
-		setLoading(false)
-
 		if (!response?.error && estado === 0) {
 			toggleSnackbar('success', 'Se ha deshabilitado correctamente.')
 			await actions.GetSubsidiosMEP(state.identification.data?.id, 1, 10)
@@ -274,12 +246,13 @@ const BeneficiosMEP = props => {
 			toggleSnackbar('success', 'Se ha activado correctamente.')
 			await actions.GetSubsidiosMEP(state.identification.data?.id, 1, 10)
 		}
+		setLoading(false)
 	}
 
+	if (loading || props.loading) return <BarLoader />
 	return (
 		<>
 			{snackbar(snackbarContent.type, snackbarContent.msg)}
-			{loading && <BarLoader />}
 			{!view && (
 				<div>
 					<h5>Por parte del MEP</h5>

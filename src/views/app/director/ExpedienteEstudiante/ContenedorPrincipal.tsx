@@ -16,8 +16,6 @@ import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { isEmpty, rest } from 'lodash'
 import { envVariables } from 'Constants/enviroment'
-import style from 'styled-components'
-import { Navbar } from 'react-bootstrap'
 import BitacoraExpediente from './BitacoraExpediente'
 
 const Navegacion = React.lazy(() => import('./Navegacion'))
@@ -30,8 +28,6 @@ const Beneficios = React.lazy(() => import('./Beneficios'))
 const Apoyo = React.lazy(() => import('./Apoyo'))
 const Salud = React.lazy(() => import('./Salud'))
 const Buscador = React.lazy(() => import('./Buscador'))
-const Sinirube = React.lazy(() => import('./Sinirube'))
-const CuentaCorreo = React.lazy(() => import('./CuentaCorreo'))
 const CuentaUsuarios = React.lazy(() => import('./CuentaUsuario'))
 const ServicioComunalEstudiantil = React.lazy(() => import('./ServicioComunalEstudiantil'))
 
@@ -39,11 +35,10 @@ const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
 	const { idEstudiante } = useParams()
 	const [active, setActive] = React.useState(0)
-	const [loading, setLoading] = React.useState(false)
+	const [loading, setLoading] = React.useState(true)
 	const [aplicaSCE, setAplicaSCE] = React.useState(false)
 	const [breadcrumbs, setBreadcrumbs] = React.useState([])
 	const idInstitucion = localStorage.getItem('idInstitucion')
-	const [identidadData, setIdentidadData] = React.useState({})
 	const [infoCard, setInfoCard] = React.useState({})
 
 	studentBreadcrumb.map((item, idx) => {
@@ -80,10 +75,10 @@ const ContenedorPrincipal = props => {
 	}, [props.active])
 
 	useEffect(() => {
+		setLoading(true)
 		const fetch = async () => {
 			const _id = idEstudiante
 			idEstudiante && setActive(1)
-			setLoading(true)
 			const response = await actions.getStudentDataFilter(_id, 'identificacion')
 
 			if (response.data) {
@@ -96,12 +91,10 @@ const ContenedorPrincipal = props => {
 	}, [idEstudiante])
 
 	useEffect(() => {
+		setLoading(true)
 		const fetch = async () => {
 			const _id = state.expedienteEstudiantil.currentStudent.idEstudiante
-			setLoading(true)
 			await actions.getIdentification(_id)
-			setLoading(false)
-
 			setInfoCard(prevState => {
 				return {
 					...prevState,
@@ -109,6 +102,7 @@ const ContenedorPrincipal = props => {
 					datos: state.identification.data.datos
 				}
 			})
+			setLoading(false)
 		}
 
 		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
@@ -117,21 +111,19 @@ const ContenedorPrincipal = props => {
 	}, [state.expedienteEstudiantil.currentStudent])
 
 	useEffect(() => {
+		setLoading(true)
 		const loadData = async () => {
-			setLoading(true)
 			const discapacidades = await actions.getDiscapacidades(
 				state.expedienteEstudiantil.currentStudent.idEstudiante
 			)
-			setLoading(false)
-
 			const tieneDiscapacidades = !isEmpty(discapacidades) ? 'SI' : 'NO'
-
 			setInfoCard(prevState => {
 				return {
 					...prevState,
 					tieneDiscapacidades: tieneDiscapacidades
 				}
 			})
+			setLoading(false)
 		}
 		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
 			loadData()
@@ -139,6 +131,7 @@ const ContenedorPrincipal = props => {
 	}, [state.expedienteEstudiantil.currentStudent])
 
 	useEffect(() => {
+		setLoading(true)
 		const loadData = async () => {
 			try {
 				const datosAdicionales = await axios.get(
@@ -154,6 +147,7 @@ const ContenedorPrincipal = props => {
 					}
 				})
 			} catch (err) {}
+			setLoading(false)
 		}
 
 		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
@@ -173,6 +167,7 @@ const ContenedorPrincipal = props => {
 	}
 
 	const validarAcceso = async () => {
+		setLoading(true)
 		await Promise.all([validarEstudianteSCE()])
 		setLoading(false)
 	}
@@ -190,7 +185,6 @@ const ContenedorPrincipal = props => {
 	}, [aplicaSCE])
 
 	useEffect(() => {
-		setLoading(true)
 		validarAcceso()
 	}, [])
 

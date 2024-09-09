@@ -43,7 +43,7 @@ const TablaMep = props => {
 			actionDisplay: () => true
 		}
 	]
-	console.log(data, 'DATA')
+
 	const columns = useMemo(() => {
 		return [
 			{
@@ -79,9 +79,8 @@ const TablaMep = props => {
 					const fullRow = data[row.index]
 					return (
 						<div>
-							{`${moment(fullRow.fechaInicio).format('DD/MM/YYYY')} - ${moment(fullRow.fechaFinal).format(
-								'DD/MM/YYYY'
-							)}`}
+							{`${moment(fullRow.fechaInicio).format('DD/MM/YYYY')} - ` +
+								(fullRow.fechaFinal ? moment(fullRow.fechaFinal).format('DD/MM/YYYY') : 'Indefinido')}
 						</div>
 					)
 				}
@@ -223,7 +222,7 @@ const TablaMep = props => {
 
 	return (
 		<div>
-			{loading && <BarLoader />}
+			{(loading || props.loading) && <BarLoader />}
 			<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 				<div />
 				<div>
