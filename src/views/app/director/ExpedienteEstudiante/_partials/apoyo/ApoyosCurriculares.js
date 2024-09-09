@@ -26,15 +26,22 @@ import { envVariables } from '../../../../../../constants/enviroment'
 import { IoMdTrash } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import swal from 'sweetalert'
+import { isNull } from 'lodash'
+import BarLoader from 'Components/barLoader/barLoader'
 
 const categoria = {
 	id: 4,
-	nombre: 'Apoyos curriculares'
+	nombre: 'Apoyos curriculares',
+	addDispatchName: 'apoyoscurriculares4'
 }
+
+const tituloModal = 'Registro de apoyo curricular'
+
+const condicionSeRecibeNombre = 'Se recibe'
 
 export const ApoyosCurriculares = () => {
 	const [snackBar, handleClick] = useNotification()
-	const [loading, setLoading] = useState(false)
+	const [loading, setLoading] = useState(true)
 	const [data, setData] = useState([])
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
 	const [tiposApoyo, setTiposApoyo] = useState([])
@@ -65,8 +72,12 @@ export const ApoyosCurriculares = () => {
 
 	const handleFechaAprobacionOnChange = event => {
 		const value = Number(event.target.value)
-		//TODO JPBR refactorizar esa novatada de usar valores quemados
-		if (value === 6558) {
+
+		const condicionesApoyo = state.selects.tipoCondicionApoyo
+
+		const condicionSeRecibe = condicionesApoyo.find(o => o.nombre === condicionSeRecibeNombre)
+
+		if (value === condicionSeRecibe.id) {
 			setShowFechaAprobacion(true)
 		} else {
 			setShowFechaAprobacion(false)
@@ -95,7 +106,8 @@ export const ApoyosCurriculares = () => {
 			expedienteEstudiantil: store.expedienteEstudiantil,
 			identification: store.identification,
 			apoyos: store.apoyos,
-			selects: store.selects
+			selects: store.selects,
+			activeYear: store.authUser.selectedActiveYear
 		}
 	})
 
@@ -127,32 +139,41 @@ export const ApoyosCurriculares = () => {
 				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
 			)
 			.then(response => {
+				setLoading(false)
 				setData(response.data.entityList)
 			})
 			.catch(error => {
+				setLoading(false)
 				console.log(error)
 			})
-		setLoading(false)
 	}, [])
 
 	const deleteApoyoById = apoyoId => {
-		axios
-			.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`)
-			.then(response => {
-				axios
-					.get(
-						`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
-					)
-					.then(response => {
-						setData(response.data.entityList)
-					})
-					.catch(error => {
-						console.log(error)
-					})
-			})
-			.catch(error => {
-				console.log('Error', error)
-			})
+		setLoading(true)
+		try {
+			axios
+				.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`)
+				.then(response => {
+					axios
+						.get(
+							`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
+						)
+						.then(response => {
+							setData(response.data.entityList)
+							setLoading(false)
+						})
+						.catch(error => {
+							setLoading(false)
+							console.log(error)
+						})
+				})
+				.catch(error => {
+					setLoading(false)
+					console.log('Error', error)
+				})
+		} catch (e) {
+			setLoading(false)
+		}
 	}
 
 	const columns = useMemo(() => {
@@ -268,7 +289,7 @@ export const ApoyosCurriculares = () => {
 		}
 
 		if (formData.condicionApoyo === '' || isNaN(formData.condicionApoyo)) {
-			validationMessage += '\nLa condición es requerida'
+			validationMessage += '\nLa condición de apoyo es requerida'
 			hayError = true
 		}
 
@@ -283,7 +304,13 @@ export const ApoyosCurriculares = () => {
 		}
 
 		if (hayError) {
-			alert(validationMessage)
+			swal({
+				title: 'Error al registrar el apoyo',
+				text: validationMessage,
+				icon: 'error',
+				className: 'text-alert-modal'
+			})
+			setLoading(false)
 			return
 		}
 
@@ -298,18 +325,50 @@ export const ApoyosCurriculares = () => {
 			identidadesId: state.identification.data.id
 		}
 
-		console.log('JPBR apoyos', data)
+		const existeApoyo = data.find(item => {
+			if (item.sb_TiposDeApoyoId === _data.tipoDeApoyoId) {
+				const date = new Date(item.fechaInicio)
+				const anioApoyoExistente = date.getFullYear()
 
-		await actions.addApoyo(_data, categoria, 'apoyoscurriculares4', 1)
+				let anioAprobacion = null
+
+				if (isNull(_data.fechaInicio)) {
+					anioAprobacion = parseInt(state.activeYear.nombre)
+				} else {
+					anioAprobacion = new Date(_data.fechaInicio).getFullYear()
+				}
+
+				if (anioApoyoExistente === anioAprobacion) {
+					return item
+				} else {
+					return null
+				}
+			}
+		})
+
+		if (existeApoyo) {
+			swal({
+				title: 'Error al registrar el apoyo',
+				text: 'Ya existe un apoyo para el año ingresado.',
+				icon: 'error',
+				className: 'text-alert-modal'
+			})
+			setLoading(false)
+			return
+		}
+
+		await actions.addApoyo(_data, categoria, categoria.addDispatchName, 1)
 
 		axios
 			.get(
 				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
 			)
 			.then(response => {
+				setLoading(false)
 				setData(response.data.entityList)
 			})
 			.catch(error => {
+				setLoading(false)
 				console.log(error)
 			})
 
@@ -324,6 +383,7 @@ export const ApoyosCurriculares = () => {
 
 	return (
 		<>
+			{loading && <BarLoader />}
 			<TableReactImplementationApoyo
 				showAddButton
 				msjButton='Agregar'
@@ -337,7 +397,7 @@ export const ApoyosCurriculares = () => {
 				onClose={() => closeAgregarModal()}
 				onConfirm={onConfirmSaveApoyo}
 				actions={false}
-				title={'Registro de apoyo curricular'}
+				title={tituloModal}
 			>
 				<Container width='100%' className='modal-detalle-subsidio'>
 					<Form onSubmit={onConfirmSaveApoyo}>

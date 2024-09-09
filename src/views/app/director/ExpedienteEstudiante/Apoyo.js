@@ -120,15 +120,6 @@ const General = props => {
 		handleClick()
 	}
 
-	//TODO JPBR: si no da bronca borrar
-	/* useEffect(() => {
-		const newCategorias = state.apoyos.categorias
-		if (newCategorias?.length > 0) {
-			newCategorias.unshift(newCategorias.pop())
-		}
-		setCategorias(newCategorias)
-	}, [state.apoyos.categorias]) */
-
 	useEffect(() => {
 		const loadData = async () => {
 			setLoading(true)
@@ -151,21 +142,6 @@ const General = props => {
 			actions.clearCurrentDiscapacidades()
 		}
 	}, [])
-
-	//TODO JPBR: si no da bronca borrar
-	/* useEffect(() => {
-		const loadData = async () => {
-			setLoading(true)
-
-			for (const category of state.apoyos.categorias) {
-				const response = await actions.getApoyosByType(state.identification.data.id, 1, 5, category)
-			}
-			setLoading(false)
-		}
-		if (state.apoyos.categorias[0]) {
-			loadData()
-		}
-	}, [state.apoyos.categorias]) */
 
 	if (loading) return <Loader />
 

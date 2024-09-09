@@ -26,10 +26,13 @@ import { envVariables } from '../../../../../../constants/enviroment'
 import { IoMdTrash } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
 import swal from 'sweetalert'
+import { isNull } from 'lodash'
+import BarLoader from 'Components/barLoader/barLoader'
 
 const categoria = {
 	id: 2,
-	nombre: 'Apoyos organizativos'
+	nombre: 'Apoyos organizativos',
+	addDispatchName: 'apoyosorganizativos2'
 }
 
 export const ApoyosOrganizativos = () => {
@@ -80,7 +83,8 @@ export const ApoyosOrganizativos = () => {
 			expedienteEstudiantil: store.expedienteEstudiantil,
 			identification: store.identification,
 			apoyos: store.apoyos,
-			selects: store.selects
+			selects: store.selects,
+			activeYear: store.authUser.selectedActiveYear
 		}
 	})
 
@@ -112,31 +116,40 @@ export const ApoyosOrganizativos = () => {
 			)
 			.then(response => {
 				setData(response.data.entityList)
+				setLoading(false)
 			})
 			.catch(error => {
 				console.log(error)
+				setLoading(false)
 			})
-		setLoading(false)
 	}, [])
 
 	const deleteApoyoById = apoyoId => {
-		axios
-			.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`)
-			.then(response => {
-				axios
-					.get(
-						`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
-					)
-					.then(response => {
-						setData(response.data.entityList)
-					})
-					.catch(error => {
-						console.log(error)
-					})
-			})
-			.catch(error => {
-				console.log('Error', error)
-			})
+		setLoading(true)
+		try {
+			axios
+				.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`)
+				.then(response => {
+					axios
+						.get(
+							`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
+						)
+						.then(response => {
+							setLoading(false)
+							setData(response.data.entityList)
+						})
+						.catch(error => {
+							setLoading(false)
+							console.log(error)
+						})
+				})
+				.catch(error => {
+					console.log('Error', error)
+				})
+		} catch (error) {
+			setLoading(false)
+			console.log(error)
+		}
 	}
 
 	const columns = useMemo(() => {
@@ -253,7 +266,7 @@ export const ApoyosOrganizativos = () => {
 		}
 
 		if (formData.condicionApoyo === '' || isNaN(formData.condicionApoyo)) {
-			validationMessage += '\nLa condición es requerida'
+			validationMessage += '\nLa condición de apoyo es requerida'
 			hayError = true
 		}
 
@@ -263,7 +276,13 @@ export const ApoyosOrganizativos = () => {
 		}
 
 		if (hayError) {
-			alert(validationMessage)
+			swal({
+				title: 'Error al registrar el apoyo',
+				text: validationMessage,
+				icon: 'error',
+				className: 'text-alert-modal'
+			})
+			setLoading(false)
 			return
 		}
 
@@ -277,16 +296,51 @@ export const ApoyosOrganizativos = () => {
 			condicionApoyoId: parseInt(formData.condicionApoyo),
 			identidadesId: state.identification.data.id
 		}
-		await actions.addApoyo(_data, categoria, 'apoyosorganizativos2', 1)
+
+		const existeApoyo = data.find(item => {
+			if (item.sb_TiposDeApoyoId === _data.tipoDeApoyoId) {
+				const date = new Date(item.fechaInicio)
+				const anioApoyoExistente = date.getFullYear()
+
+				let anioAprobacion = null
+
+				if (isNull(_data.fechaInicio)) {
+					anioAprobacion = parseInt(state.activeYear.nombre)
+				} else {
+					anioAprobacion = new Date(_data.fechaInicio).getFullYear()
+				}
+
+				if (anioApoyoExistente === anioAprobacion) {
+					return item
+				} else {
+					return null
+				}
+			}
+		})
+
+		if (existeApoyo) {
+			swal({
+				title: 'Error al registrar el apoyo',
+				text: 'Ya existe un apoyo para el año ingresado.',
+				icon: 'error',
+				className: 'text-alert-modal'
+			})
+			setLoading(false)
+			return
+		}
+
+		await actions.addApoyo(_data, categoria, categoria.addDispatchName, 1)
 
 		axios
 			.get(
 				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
 			)
 			.then(response => {
+				setLoading(false)
 				setData(response.data.entityList)
 			})
 			.catch(error => {
+				setLoading(false)
 				console.log(error)
 			})
 
@@ -301,6 +355,7 @@ export const ApoyosOrganizativos = () => {
 
 	return (
 		<>
+			{loading && <BarLoader />}
 			<TableReactImplementationApoyo
 				showAddButton
 				msjButton='Agregar'

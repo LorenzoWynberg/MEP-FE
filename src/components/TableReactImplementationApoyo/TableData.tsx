@@ -18,6 +18,8 @@ import styled from 'styled-components'
 import IntlMessages from 'Helpers/IntlMessages'
 import { useTranslation } from 'react-i18next'
 import { Search } from './Header'
+import { useSelector } from 'react-redux'
+
 interface IProps {
 	autoResetPage?: boolean
 	pageSize?: number
@@ -103,10 +105,23 @@ function GlobalFilter({
 	const toggleSplit = () => {
 		setDropdownSplitOpen(!dropdownSplitOpen)
 	}
+
+	const state = useSelector(store => {
+		return {
+			activeYears: store.authUser.activeYears
+		}
+	})
+
+	const yearList = state.activeYears.map(year => {
+		return { id: year.id, name: year.nombre }
+	})
+
+	const sortedYearList = yearList.sort((a, b) => b.name.localeCompare(a.name))
+
 	return (
 		<Row>
 			<Col className='container-nav d-flex justify-content-between aling-items-center'>
-				{!avoidSearch ? <Search onSearch={onChange} /> : <></>}
+				{!avoidSearch ? <Search onSearch={onChange} yearList={sortedYearList} /> : <></>}
 				<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
 					{showAddButton && (
 						<Button
