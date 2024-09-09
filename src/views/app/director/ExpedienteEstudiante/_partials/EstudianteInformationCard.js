@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import { makeStyles } from '@material-ui/core/styles'
-
 import { Row, Col } from 'reactstrap'
-
 import colors from '../../../../../assets/js/colors'
 import { useActions } from '../../../../../hooks/useActions'
 import { useSelector } from 'react-redux'
@@ -33,7 +31,16 @@ const useStyles = makeStyles(theme => ({
 	},
 	informationCard: {
 		background: colors.primary,
-		borderRadius: '50px'
+		top: '70px',
+		'@media (min-width: 768px)': {
+			top: '80px'
+		},
+		'@media (min-width: 1200px)': {
+			top: '120px'
+		},
+		'@media (min-width: 1440px)': {
+			top: '100px'
+		}
 	},
 	information: {
 		width: '100%',
@@ -115,14 +122,14 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 
 	return (
 		<Row
-			className={`${classes.informationCard} mb-4 p-3 `}
+			id='estudianteInformationCard'
+			className={`${classes.informationCard} p-3 mb-5`}
 			style={
 				fixed
 					? {
-							position: 'fixed',
-							borderBottom: '1px solid #ddd',
+							position: 'sticky',
 							zIndex: 3,
-							width: '80vw'
+							marginTop: '-64px'
 					  }
 					: {}
 			}
