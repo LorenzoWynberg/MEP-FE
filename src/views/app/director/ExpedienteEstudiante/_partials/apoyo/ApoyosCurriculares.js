@@ -308,7 +308,14 @@ export const ApoyosCurriculares = () => {
 				title: 'Error al registrar el apoyo',
 				text: validationMessage,
 				icon: 'error',
-				className: 'text-alert-modal'
+				className: 'text-alert-modal',
+				buttons: {
+					ok: {
+						text: 'Ok',
+						value: true,
+						className: 'btn-alert-color'
+					}
+				}
 			})
 			setLoading(false)
 			return
@@ -351,7 +358,13 @@ export const ApoyosCurriculares = () => {
 				title: 'Error al registrar el apoyo',
 				text: 'Ya existe un apoyo para el año ingresado.',
 				icon: 'error',
-				className: 'text-alert-modal'
+				buttons: {
+					ok: {
+						text: 'Ok',
+						value: true,
+						className: 'btn-alert-color'
+					}
+				}
 			})
 			setLoading(false)
 			return
