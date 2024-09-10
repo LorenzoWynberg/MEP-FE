@@ -19,6 +19,8 @@ import {
 } from 'reactstrap'
 import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
+import Loader from 'Components/LoaderContainer'
+
 import CondicionDiscapacidad from './CondicionDiscapacidad'
 import OtraCondicion from './OtraCondicion'
 import axios from 'axios'
@@ -31,12 +33,14 @@ const ApoyoEducativo = props => {
 
 	const [discapacidadesHistorico, setDiscapacidadesHistorico] = useState()
 	const [condicionesHistorico, setCondicionesHistorico] = useState()
+	const [loading, setLoading] = useState()
 
 	const [discapacidades, setDiscapacidades] = useState([])
 	const [condiciones, setCondiciones] = useState([])
 	const [openOptions, setOpenOptions] = useState({ open: false, type: null })
 	const [modalOptions, setModalOptions] = useState([])
 	const [activeTab, setActiveTab] = useState(0)
+
 
 	useEffect(() => {
 		const _discapacidades = []
@@ -55,12 +59,14 @@ const ApoyoEducativo = props => {
 	}, [])
 
 	const getHistoricos = useCallback(() => {
+		setLoading(true)
 		axios
 			.get(
 				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/GetByIdentityIdHist/${props.identidadId}`
 			)
 			.then(r => {
 				setDiscapacidadesHistorico(r.data)
+				setLoading(false)
 			}, [])
 		axios
 			.get(
@@ -68,6 +74,7 @@ const ApoyoEducativo = props => {
 			)
 			.then(r => {
 				setCondicionesHistorico(r.data)
+				setLoading(false)
 			}, [])
 	}, [props.identidadId])
 
@@ -84,6 +91,7 @@ const ApoyoEducativo = props => {
 	}, [props.condicionesIdentidad])
 
 	const handleOpenOptions = (options, name) => {
+
 		let _options = []
 
 		const map =
@@ -100,15 +108,15 @@ const ApoyoEducativo = props => {
 	}
 
 	const toggleModal = async (saveData = false) => {
+		setLoading(true)
 		let options = []
 		if (saveData) {
 			options = []
 			modalOptions.forEach(el => {
 				if (el.checked) options.push(el)
 			})
-			const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${
-				openOptions.type === 'discapacidades' ? 'DiscapacidadesPorUsuario' : 'CondicionesPorUsuario'
-			}/CreateMultiple/${props.identidadId}`
+			const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${openOptions.type === 'discapacidades' ? 'DiscapacidadesPorUsuario' : 'CondicionesPorUsuario'
+				}/CreateMultiple/${props.identidadId}`
 			const optionsMap = options.map(d => {
 				return {
 					id: 0,
@@ -117,14 +125,18 @@ const ApoyoEducativo = props => {
 					estado: true
 				}
 			})
+
 			axios.post(url, optionsMap).then(r => {
 				r.data &&
 					setTimeout(() => {
 						getHistoricos()
+						setLoading(false)
 						props.showsnackBar('success', 'Contenido enviado; con éxito')
 					}, 6000)
 				r.error && props.showsnackBar('error', 'Error agregando condición')
+
 			})
+
 		}
 		setOpenOptions({ open: false, type: null })
 	}
@@ -148,6 +160,8 @@ const ApoyoEducativo = props => {
 	]
 	return (
 		<Card style={{ paddingLeft: 36, paddingRight: 36 }}>
+
+			{loading && <Loader />}
 			<Row>
 				<HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
 				<ContentTab activeTab={activeTab} numberId={activeTab}>
@@ -180,19 +194,19 @@ const ApoyoEducativo = props => {
 					<Container className='modal-detalle-subsidio'>
 						<Row>
 							<Col xs={12}>
-								{/**TODO JPBR el filtro de Beto */}
+								{console.log('apoyoeducativo props', props)}
 								{modalOptions
 									.filter(d =>
 										openOptions.type === 'discapacidades'
 											? !discapacidadesHistorico?.some(di => di.id == d.id)
 											: !condicionesHistorico?.some(di => di.id == d.id)
 									)
-									.map(item => {
+									.map((item, i) => {
 										console.log('the item', item)
 										console.log('the item props.condicionesHistorico', condicionesHistorico)
 										console.log('the item props.discapacidadesHistorico', discapacidadesHistorico)
 										return (
-											<Row>
+											<Row key={i}>
 												<Col xs={3} className='modal-detalle-subsidio-col'>
 													<div>
 														<CustomInput
@@ -210,8 +224,8 @@ const ApoyoEducativo = props => {
 															{item.descripcion
 																? item.descripcion
 																: item.detalle
-																? item.detalle
-																: 'Elemento sin detalle actualmente'}
+																	? item.detalle
+																	: 'Elemento sin detalle actualmente'}
 														</p>
 													</div>
 												</Col>
