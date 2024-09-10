@@ -64,7 +64,7 @@
 								{
 									"type": "dropDown",
 									"id": "cd492ff2-eebd-3976-163e-5b88bc3684a0",
-									"label": "Canton",
+									"label": "Cantón",
 									"langKey": "buscador_ce>ver_centro>ubicacion_geografica>canton",
 									"options": [
 										{
@@ -177,7 +177,7 @@
 									"type": "dropDown",
 									"id": "348f4d67-29f4-b254-369e-b8c5a0817025",
 									"label": "Provincia",
-									"langKey":"buscador_ce>ver_centro>ubicacion_geografica>provincia",
+									"langKey": "buscador_ce>ver_centro>ubicacion_geografica>provincia",
 									"options": [
 										{
 											"label": "",

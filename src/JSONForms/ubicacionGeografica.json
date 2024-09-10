@@ -44,12 +44,12 @@
 			"type": "containerParent",
 			"config": {
 				"titulo": "Ubicación temporal",
-				"subtitle": "Por, complete esta información únicamente si su institución ha sido reubicada temporalmente.",
+				"subtitle": "Por favor, complete esta información únicamente si su institución ha sido reubicada temporalmente.",
 				"relleno": true,
 				"tooltip": ""
 			},
 			"rowH": 0,
-			"moved": false,                                                                                                        
+			"moved": false,
 			"static": false
 		}
 	],
@@ -170,7 +170,7 @@
 									"type": "dropDown",
 									"id": "9905c516-75b5-6c94-4703-507b2dfc00d0",
 									"label": "Poblado",
-									"langKey":"ubicacion_geografica>poblado",
+									"langKey": "ubicacion_geografica>poblado",
 									"options": [
 										{
 											"label": "",
@@ -234,7 +234,7 @@
 						"required": true,
 						"h": 12,
 						"tooltips": {
-							"descripcion": "Describir con más detalle o referencias con la dirección exacta del terreno"
+							"descripcion": "Describir con más detalle y/o referencias con la dirección exacta del terreno"
 						}
 					},
 					"id": "3f61ec91-914d-f1c8-b4d2-04db511dcabc_3def7ee4-7907-6cf8-bf5a-59d5e782741c_col"
@@ -270,7 +270,7 @@
 								{
 									"type": "dropDown",
 									"id": "bf1b226c-5ede-8bd8-48c5-0f41a71b2643",
-									"label": "Canton",
+									"label": "Cantón",
 									"langKey": "ubicacion_geografica>canton",
 									"options": [
 										{
