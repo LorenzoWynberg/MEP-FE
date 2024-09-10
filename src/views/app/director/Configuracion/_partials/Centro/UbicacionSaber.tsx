@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { GetByName } from 'Redux/formularios/actions'
-import { CreateNewFormResponse, UpdateFormResponse } from '../../../../../../redux/formularioCentroResponse/actions'
+import {
+	CreateNewFormResponse,
+	UpdateFormResponse
+} from '../../../../../../redux/formularioCentroResponse/actions'
 import Loader from 'Components/Loader'
 import JSONFormParser from 'Components/JSONFormParser/JSONFormParser'
 import { updateLocation } from '../../../../../../redux/configuracion/actions'
 import { useActions } from 'Hooks/useActions'
 import { withRouter } from 'react-router-dom'
-
 import swal from 'sweetalert'
 import { Label, Input, FormGroup, CustomInput } from 'reactstrap'
 
@@ -34,7 +36,10 @@ const Ubicacion = props => {
 			const form = await GetByName('ubicacionGeografica')
 			if (Object.keys(state.location).length > 0) {
 				setFormResponse({ ...state.location })
-				if (state.location?.isTemporal !== null && state.location?.isTemporal !== undefined) {
+				if (
+					state.location?.isTemporal !== null &&
+					state.location?.isTemporal !== undefined
+				) {
 					setIsTemporal(state.location.isTemporal)
 				}
 			} else {
@@ -64,7 +69,6 @@ const Ubicacion = props => {
 			formularioCategoriaId: 8
 		})
 		await setFormResponse(JSON.parse(response.data.solucion))
-		debugger
 		actions.updateLocation({
 			...JSON.parse(response.data.solucion),
 			id: response.data.id
@@ -73,7 +77,6 @@ const Ubicacion = props => {
 	}
 
 	const putData = async data => {
-		debugger
 		setLoadingRequest(true)
 
 		const _solucion = JSON.parse(data.solucion)
@@ -119,6 +122,7 @@ const Ubicacion = props => {
 			setIsTemporal(newValue)
 		}
 	}
+
 	const clearTemp = async () => {
 		const _data = {
 			solucion: JSON.stringify({
@@ -130,7 +134,8 @@ const Ubicacion = props => {
 				'6fbb1a78-25a8-36a3-6787-157a44330fb5': '', // Lon
 				'd65200df-4d2c-763e-8999-a3cddf592b05': '', // Lat
 				'71168050-db09-86b6-78a8-4ab5568aa966': '', // DirExac
-				'c45338e8-d6f6-c7af-e8f1-7d43afe6c7d8_9a61c7dd-7ad8-5808-2deb-36ab85f79d55_col': '' // Mot
+				'c45338e8-d6f6-c7af-e8f1-7d43afe6c7d8_9a61c7dd-7ad8-5808-2deb-36ab85f79d55_col':
+					'' // Mot
 			})
 		}
 		setLoading(true)
@@ -138,20 +143,9 @@ const Ubicacion = props => {
 		await putData(_data)
 		setLoading(false)
 	}
-debugger
-//20240527 se modifica el formulario para que no muestre el check de ubicacion temporal. Dolores y Yair
+
 	return (
 		<div>
-			{/* <FormGroup className='mx-2'>
-				<CustomInput
-					className='custom-checkbox mb-0 d-inline-block'
-					type='checkbox'
-					checked={isTemporal}
-					onClick={() => disabledTemporal()}
-					disabled={!isEdit}
-					label='Ubicación temporal'
-				/>
-			</FormGroup> */}
 			{!loading ? (
 				<JSONFormParser
 					pageData={pageData}
