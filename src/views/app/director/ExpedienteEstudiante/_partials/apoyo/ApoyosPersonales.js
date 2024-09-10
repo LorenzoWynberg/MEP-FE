@@ -28,6 +28,8 @@ import IconButton from '@mui/material/IconButton'
 import swal from 'sweetalert'
 import { isNull } from 'lodash'
 import BarLoader from 'Components/barLoader/barLoader'
+import OptionModal from '../../../../../../components/Modal/OptionModal'
+import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
 
 const categoria = {
 	id: 1,
@@ -405,103 +407,86 @@ export const ApoyosPersonales = () => {
 				data={data || []}
 				columns={columns}
 			/>
+			<OptionModal isOpen={showNuevoApoyoModal} titleHeader={tituloModal} onConfirm={onConfirmSaveApoyo} onCancel={() => closeAgregarModal()} >
 
-			<SimpleModal
-				openDialog={showNuevoApoyoModal}
-				onClose={() => closeAgregarModal()}
-				onConfirm={onConfirmSaveApoyo}
-				actions={false}
-				title={tituloModal}
-			>
-				<Container width='100%' className='modal-detalle-subsidio'>
-					<Form onSubmit={onConfirmSaveApoyo}>
-						<Row>
-							<Col md={6}>
-								<Label for='tipoDeApoyo'>Tipo de apoyo (requerido) </Label>
-								<StyledInput
-									id='tipoDeApoyo'
-									/* innerRef={register({
-										required: t('general>campo_requerido', 'El campo es requerido')
-									})} */
-									name='tipoDeApoyo'
-									type='select'
-									//invalid={errors[`${props.storedValuesKey}Tipos`]}
-									placeholder='Seleccionar'
-									onChange={handleFormDataChange}
-								>
-									<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
-									{tiposApoyo.map(tipo => {
-										return <option value={tipo.id}>{tipo.nombre}</option>
-									})}
-								</StyledInput>
-								{/* <FormFeedback>
+
+				<Form onSubmit={onConfirmSaveApoyo}>
+					<Row>
+						<Col md={6}>
+							<Label for='tipoDeApoyo'>Tipo de apoyo <RequiredSpan/> </Label>
+							<StyledInput
+								id='tipoDeApoyo'
+								/* innerRef={register({
+									required: t('general>campo_requerido', 'El campo es requerido')
+								})} */
+								name='tipoDeApoyo'
+								type='select'
+								//invalid={errors[`${props.storedValuesKey}Tipos`]}
+								placeholder='Seleccionar'
+								onChange={handleFormDataChange}
+							>
+								<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
+								{tiposApoyo.map(tipo => {
+									return <option value={tipo.id}>{tipo.nombre}</option>
+								})}
+							</StyledInput>
+							{/* <FormFeedback>
 									{errors[`${props.storedValuesKey}Tipos`] &&
 										errors[`${props.storedValuesKey}Tipos`].message}
 								</FormFeedback> */}
-							</Col>
+						</Col>
+						<Col md={6}>
+							<FormGroup>
+								<Label for='condicionDeApoyo'>Condición del apoyo</Label>
+								<StyledInput
+									id='condicionApoyo'
+									name='condicionApoyo'
+									type='select'
+									onChange={handleFechaAprobacionOnChange}
+									//invalid={errors[`${props.storedValuesKey}Tipos`]}
+									placeholder='Seleccionar'
+								>
+									<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
+									{state.selects.tipoCondicionApoyo.map(tipo => {
+										return <option value={tipo.id}>{tipo.nombre}</option>
+									})}
+								</StyledInput>
+							</FormGroup>
+						</Col>
+					</Row>
+					<Row>
+						<Col md={12}>
+							<FormGroup>
+								<Label for='detalleDelApoyo'>Detalle del apoyo (opcional)</Label>
+								<Input
+									type='textarea'
+									id='detalleApoyo'
+									name='detalleApoyo'
+									rows='5'
+									onChange={handleFormDataChange}
+								/>
+							</FormGroup>
+						</Col>
+					</Row>
+
+					{showFechaAprobacion && (
+						<Row>
 							<Col md={6}>
 								<FormGroup>
-									<Label for='condicionDeApoyo'>Condición del apoyo</Label>
-									<StyledInput
-										id='condicionApoyo'
-										name='condicionApoyo'
-										type='select'
-										onChange={handleFechaAprobacionOnChange}
-										//invalid={errors[`${props.storedValuesKey}Tipos`]}
-										placeholder='Seleccionar'
-									>
-										<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
-										{state.selects.tipoCondicionApoyo.map(tipo => {
-											return <option value={tipo.id}>{tipo.nombre}</option>
-										})}
-									</StyledInput>
-								</FormGroup>
-							</Col>
-						</Row>
-						<Row>
-							<Col md={12}>
-								<FormGroup>
-									<Label for='detalleDelApoyo'>Detalle del apoyo (opcional)</Label>
+									<Label for='fechaDeAprobacion'>Fecha de aprobación</Label>
 									<Input
-										type='textarea'
-										id='detalleApoyo'
-										name='detalleApoyo'
-										rows='5'
+										type='date'
+										id='fechaDeAprobacion'
+										name='fechaDeAprobacion'
 										onChange={handleFormDataChange}
 									/>
 								</FormGroup>
 							</Col>
 						</Row>
-
-						{showFechaAprobacion && (
-							<Row>
-								<Col md={6}>
-									<FormGroup>
-										<Label for='fechaDeAprobacion'>Fecha de aprobación</Label>
-										<Input
-											type='date'
-											id='fechaDeAprobacion'
-											name='fechaDeAprobacion'
-											onChange={handleFormDataChange}
-										/>
-									</FormGroup>
-								</Col>
-							</Row>
-						)}
-
-						<Row>
-							<Col md={12}>
-								<Button onClick={() => closeAgregarModal()} color='secondary' type='button'>
-									Cancelar
-								</Button>
-								<Button color='primary' type='submit'>
-									Confirmar
-								</Button>
-							</Col>
-						</Row>
-					</Form>
-				</Container>
-			</SimpleModal>
+					)}
+ 
+				</Form>
+			</OptionModal>
 		</>
 	)
 }

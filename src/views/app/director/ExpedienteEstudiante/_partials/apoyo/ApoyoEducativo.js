@@ -27,6 +27,8 @@ import axios from 'axios'
 import { ApoyosCurriculares } from './ApoyosCurriculares'
 import { ApoyosPersonales } from './ApoyosPersonales'
 import { ApoyosOrganizativos } from './ApoyosOrganizativos'
+import OptionModal from '../../../../../../components/Modal/OptionModal'
+import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
 
 const ApoyoEducativo = props => {
 	const { t } = useTranslation()
@@ -58,7 +60,7 @@ const ApoyoEducativo = props => {
 		getHistoricos()
 	}, [])
 
-	const getHistoricos = useCallback(() => {
+	const getHistoricos = () => {
 		setLoading(true)
 		axios
 			.get(
@@ -76,7 +78,7 @@ const ApoyoEducativo = props => {
 				setCondicionesHistorico(r.data)
 				setLoading(false)
 			}, [])
-	}, [props.identidadId])
+	}
 
 	useEffect(() => {
 		const _condiciones = []
@@ -127,16 +129,17 @@ const ApoyoEducativo = props => {
 			})
 
 			axios.post(url, optionsMap).then(r => {
-				r.data &&
-					setTimeout(() => {
-						getHistoricos()
-						setLoading(false)
-						props.showsnackBar('success', 'Contenido enviado; con éxito')
-					}, 6000)
+				if (r.data) {
+					getHistoricos()
+					props.showsnackBar('success', 'Contenido enviado con éxito')
+				}
 				r.error && props.showsnackBar('error', 'Error agregando condición')
 
 			})
 
+		} else {
+
+			setLoading(false)
 		}
 		setOpenOptions({ open: false, type: null })
 	}
@@ -152,17 +155,17 @@ const ApoyoEducativo = props => {
 	}
 
 	const optionsTab = [
-		{ title: 'Condicion De Discapacidad' },
-		{ title: 'Otras Condiciones' },
-		{ title: 'Apoyos Curriculares' },
-		{ title: 'Apoyos Personales' },
-		{ title: 'Apoyos Organizativos' }
+		{ title: 'Condicion de discapacidad' },
+		{ title: 'Otras condiciones' },
+		{ title: 'Apoyos curriculares' },
+		{ title: 'Apoyos personales' },
+		{ title: 'Apoyos organizativos' }
 	]
 	return (
-		<Card style={{ paddingLeft: 36, paddingRight: 36 }}>
+		<>
 
 			{loading && <Loader />}
-			<Row>
+			<Row> 
 				<HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
 				<ContentTab activeTab={activeTab} numberId={activeTab}>
 					{activeTab === 0 && (
@@ -184,81 +187,46 @@ const ApoyoEducativo = props => {
 					{activeTab === 4 && <ApoyosOrganizativos />}
 				</ContentTab>
 			</Row>
-			<Modal isOpen={openOptions.open} size='lg'>
-				<ModalHeader>
-					{openOptions.type === 'discapacidades'
-						? t('estudiantes>expediente>apoyos_edu>modal>tipos', 'Tipos de discapacidades')
-						: t('estudiantes>expediente>apoyos_edu>modal>otro', 'Otros tipos de condiciones')}
-				</ModalHeader>
-				<ModalBody>
-					<Container className='modal-detalle-subsidio'>
-						<Row>
-							<Col xs={12}>
-								{console.log('apoyoeducativo props', props)}
-								{modalOptions
-									.filter(d =>
-										openOptions.type === 'discapacidades'
-											? !discapacidadesHistorico?.some(di => di.id == d.id)
-											: !condicionesHistorico?.some(di => di.id == d.id)
-									)
-									.map((item, i) => {
-										console.log('the item', item)
-										console.log('the item props.condicionesHistorico', condicionesHistorico)
-										console.log('the item props.discapacidadesHistorico', discapacidadesHistorico)
-										return (
-											<Row key={i}>
-												<Col xs={3} className='modal-detalle-subsidio-col'>
-													<div>
-														<CustomInput
-															type='checkbox'
-															label={item.nombre}
-															inline
-															onClick={() => handleChangeItem(item)}
-															checked={item.checked}
-														/>
-													</div>
-												</Col>
-												<Col xs={9} className='modal-detalle-subsidio-col'>
-													<div>
-														<p>
-															{item.descripcion
-																? item.descripcion
-																: item.detalle
-																	? item.detalle
-																	: 'Elemento sin detalle actualmente'}
-														</p>
-													</div>
-												</Col>
-											</Row>
-										)
-									})}
-							</Col>
-						</Row>
-						<div style={{ display: 'flex', justifyContent: 'center', alignItems:'center', width: '100%', }}>
-							<Button
-								onClick={() => {
-									toggleModal()
-								}}
-								color='primary'
-								outline
-								style={{ marginRight: 10 }}
-							>
-								{t('general>cancelaaaar', 'Cancelar')}
-							</Button>
-							<Button
-								color='primary'
-								onClick={() => {
-									toggleModal(true)
-								}}
-							>
-								{t('general>guardar', 'Guardar')}
-							</Button>
-						</div>
+			<OptionModal isOpen={openOptions.open} titleHeader={openOptions.type === 'discapacidades'
+				? t('estudiantes>expediente>apoyos_edu>modal>tipos', 'Tipos de discapacidades')
+				: t('estudiantes>expediente>apoyos_edu>modal>otro', 'Otros tipos de condiciones')} onConfirm={() => toggleModal(true)} onCancel={() => toggleModal(false)}  >
+				{modalOptions
+					.filter(d =>
+						openOptions.type === 'discapacidades'
+							? !discapacidadesHistorico?.some(di => di.id == d.id)
+							: !condicionesHistorico?.some(di => di.id == d.id)
+					)
+					.map((item, i) => {
+						return (
+							<Row key={i}>
+								<Col xs={3} className='modal-detalle-subsidio-col'>
+									<div>
+										<CustomInput
+											type='checkbox'
+											label={item.nombre}
+											inline
+											onClick={() => handleChangeItem(item)}
+											checked={item.checked}
+										/>
+									</div>
+								</Col>
+								<Col xs={9} className='modal-detalle-subsidio-col'>
+									<div>
+										<p>
+											{item.descripcion
+												? item.descripcion
+												: item.detalle
+													? item.detalle
+													: 'Elemento sin detalle actualmente'}
+										</p>
+									</div>
+								</Col>
+							</Row>
+						)
+					})}
+			</OptionModal>
 
-					</Container>
-				</ModalBody>
-			</Modal>
-		</Card>
+		</>
 	)
 }
 export default ApoyoEducativo
