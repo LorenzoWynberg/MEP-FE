@@ -234,38 +234,31 @@ const ApoyoEducativo = props => {
 									})}
 							</Col>
 						</Row>
-						<Row>
-							<CenteredRow xs='12'>
-								<Button
-									onClick={() => {
-										toggleModal()
-									}}
-									color='primary'
-									outline
-								>
-									{t('general>cancelaaaar', 'Cancelar')}
-								</Button>
-								<Button
-									color='primary'
-									onClick={() => {
-										toggleModal(true)
-									}}
-								>
-									{t('general>guardar', 'Guardar')}
-								</Button>
-							</CenteredRow>
-						</Row>
+						<div style={{ display: 'flex', justifyContent: 'center', alignItems:'center', width: '100%', }}>
+							<Button
+								onClick={() => {
+									toggleModal()
+								}}
+								color='primary'
+								outline
+								style={{ marginRight: 10 }}
+							>
+								{t('general>cancelaaaar', 'Cancelar')}
+							</Button>
+							<Button
+								color='primary'
+								onClick={() => {
+									toggleModal(true)
+								}}
+							>
+								{t('general>guardar', 'Guardar')}
+							</Button>
+						</div>
+
 					</Container>
 				</ModalBody>
 			</Modal>
 		</Card>
 	)
 }
-
-const CenteredRow = styled(Col)`
-      display: flex;
-      justify - content: center;
-      align - items: center;
-      `
-
 export default ApoyoEducativo
