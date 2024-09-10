@@ -8,7 +8,6 @@ import PropTypes from 'prop-types'
 import IntlMessages from '../../../../../../helpers/IntlMessages'
 import styled from 'styled-components'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
-import Loader from 'Components/Loader'
 import { FormGroup, Label, Input, CustomInput, Form, FormFeedback } from 'reactstrap'
 import { EditButton } from '../../../../../../components/EditButton'
 import { useForm } from 'react-hook-form'
@@ -26,7 +25,6 @@ import {
 import useNotification from '../../../../../../hooks/useNotification'
 import RequiredLabel from '../../../../../../components/common/RequeredLabel'
 import BarLoader from 'Components/barLoader/barLoader'
-import { useParams } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -257,6 +255,7 @@ const BeneficiosMEP = props => {
 				<div>
 					<h5>Por parte del MEP</h5>
 					<Tabla
+						beneficios={state.beneficios}
 						handlePagination={handlePagination}
 						toggleSnackbar={toggleSnackbar}
 						handleSearch={handleSearch}

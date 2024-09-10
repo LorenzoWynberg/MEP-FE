@@ -1,8 +1,5 @@
-import React, { useMemo } from 'react'
-import Table from 'Components/table/paginacion'
+import React, { useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
-import { useWindowSize } from 'react-use'
-import { IoMdTrash } from 'react-icons/io'
 import { HiPencil } from 'react-icons/hi'
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
@@ -17,7 +14,6 @@ import colors from 'Assets/js/colors'
 import BarLoader from 'Components/barLoader/barLoader.tsx'
 const TablaMep = props => {
 	const { data, loading, handlePagination, handleSearch, totalRegistros } = props
-	const { width } = useWindowSize()
 
 	const actions = [
 		{
@@ -62,7 +58,15 @@ const TablaMep = props => {
 				Header: 'Detalle del subsidio',
 				column: 'detalle',
 				accessor: 'detalle',
-				label: ''
+				label: '',
+				Cell: ({ _, row, data }) => {
+					const fullRow = data[row.index]
+					return (
+						<div>
+							{props.beneficios.typesSubsidios.find(item => item.id === fullRow.tipoSubsidioId).detalle}
+						</div>
+					)
+				}
 			},
 			{
 				Header: 'Verificación de recepción del apoyo',
@@ -125,7 +129,9 @@ const TablaMep = props => {
 									onClick={() => {
 										props.authHandler(
 											'modificar',
-											() => props.handleViewSubsidio(fullRow, true),
+											() => {
+												props.handleViewSubsidio(fullRow, true)
+											},
 											props.toggleSnackbar,
 											props.setEditable(false)
 											// handlePagination
