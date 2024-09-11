@@ -1,10 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import ReportHeader from './ReportHeader'
-import { getYearsOld } from '../../../../../utils/years'
 import { useSelector } from 'react-redux'
-import moment from 'moment'
-import { GenerateExcelObject, SendWorkbookToDownload } from 'utils/excel'
 
 const formatter = Intl.DateTimeFormat('es-ES', {
 	dateStyle: 'full',
