@@ -408,7 +408,6 @@ export const ApoyosCurriculares = () => {
 				data={data || []}
 				columns={columns}
 			/>
-
 			<OptionModal
 				isOpen={showNuevoApoyoModal}
 				titleHeader={tituloModal}
@@ -461,21 +460,6 @@ export const ApoyosCurriculares = () => {
 							</FormGroup>
 						</Col>
 					</Row>
-					<Row>
-						<Col md={12}>
-							<FormGroup>
-								<Label for='detalleDelApoyo'>Detalle del apoyo (opcional)</Label>
-								<Input
-									type='textarea'
-									id='detalleApoyo'
-									name='detalleApoyo'
-									rows='5'
-									onChange={handleFormDataChange}
-								/>
-							</FormGroup>
-						</Col>
-					</Row>
-
 					{showFechaAprobacion && (
 						<Row>
 							<Col md={6}>
@@ -491,6 +475,20 @@ export const ApoyosCurriculares = () => {
 							</Col>
 						</Row>
 					)}
+					<Row>
+						<Col md={12}>
+							<FormGroup>
+								<Label for='detalleDelApoyo'>Detalle del apoyo (opcional)</Label>
+								<Input
+									type='textarea'
+									id='detalleApoyo'
+									name='detalleApoyo'
+									rows='5'
+									onChange={handleFormDataChange}
+								/>
+							</FormGroup>
+						</Col>
+					</Row>
 				</Form>
 			</OptionModal>
 		</>
@@ -499,7 +497,4 @@ export const ApoyosCurriculares = () => {
 
 const StyledInput = styled(Input)`
 	width: 100% !important;
-	margin-top: 1rem;
-	margin-bottom: 1rem;
-	padding-right: 12%;
 `

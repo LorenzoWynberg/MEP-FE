@@ -43,7 +43,6 @@ const ApoyoEducativo = props => {
 	const [modalOptions, setModalOptions] = useState([])
 	const [activeTab, setActiveTab] = useState(0)
 
-
 	useEffect(() => {
 		const _discapacidades = []
 		const _discapacidadesIdentidad = props.discapacidadesIdentidad.map(
@@ -93,7 +92,6 @@ const ApoyoEducativo = props => {
 	}, [props.condicionesIdentidad])
 
 	const handleOpenOptions = (options, name) => {
-
 		let _options = []
 
 		const map =
@@ -117,8 +115,9 @@ const ApoyoEducativo = props => {
 			modalOptions.forEach(el => {
 				if (el.checked) options.push(el)
 			})
-			const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${openOptions.type === 'discapacidades' ? 'DiscapacidadesPorUsuario' : 'CondicionesPorUsuario'
-				}/CreateMultiple/${props.identidadId}`
+			const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${
+				openOptions.type === 'discapacidades' ? 'DiscapacidadesPorUsuario' : 'CondicionesPorUsuario'
+			}/CreateMultiple/${props.identidadId}`
 			const optionsMap = options.map(d => {
 				return {
 					id: 0,
@@ -134,11 +133,8 @@ const ApoyoEducativo = props => {
 					props.showsnackBar('success', 'Contenido enviado con éxito')
 				}
 				r.error && props.showsnackBar('error', 'Error agregando condición')
-
 			})
-
 		} else {
-
 			setLoading(false)
 		}
 		setOpenOptions({ open: false, type: null })
@@ -155,7 +151,7 @@ const ApoyoEducativo = props => {
 	}
 
 	const optionsTab = [
-		{ title: 'Condicion de discapacidad' },
+		{ title: 'Condición de discapacidad' },
 		{ title: 'Otras condiciones' },
 		{ title: 'Apoyos curriculares' },
 		{ title: 'Apoyos personales' },
@@ -163,9 +159,8 @@ const ApoyoEducativo = props => {
 	]
 	return (
 		<>
-
 			{loading && <Loader />}
-			<Row> 
+			<Row>
 				<HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
 				<ContentTab activeTab={activeTab} numberId={activeTab}>
 					{activeTab === 0 && (
@@ -187,9 +182,16 @@ const ApoyoEducativo = props => {
 					{activeTab === 4 && <ApoyosOrganizativos />}
 				</ContentTab>
 			</Row>
-			<OptionModal isOpen={openOptions.open} titleHeader={openOptions.type === 'discapacidades'
-				? t('estudiantes>expediente>apoyos_edu>modal>tipos', 'Tipos de discapacidades')
-				: t('estudiantes>expediente>apoyos_edu>modal>otro', 'Otros tipos de condiciones')} onConfirm={() => toggleModal(true)} onCancel={() => toggleModal(false)}  >
+			<OptionModal
+				isOpen={openOptions.open}
+				titleHeader={
+					openOptions.type === 'discapacidades'
+						? t('estudiantes>expediente>apoyos_edu>modal>tipos', 'Tipos de discapacidades')
+						: t('estudiantes>expediente>apoyos_edu>modal>otro', 'Otros tipos de condiciones')
+				}
+				onConfirm={() => toggleModal(true)}
+				onCancel={() => toggleModal(false)}
+			>
 				{modalOptions
 					.filter(d =>
 						openOptions.type === 'discapacidades'
@@ -216,8 +218,8 @@ const ApoyoEducativo = props => {
 											{item.descripcion
 												? item.descripcion
 												: item.detalle
-													? item.detalle
-													: 'Elemento sin detalle actualmente'}
+												? item.detalle
+												: 'Elemento sin detalle actualmente'}
 										</p>
 									</div>
 								</Col>
@@ -225,7 +227,6 @@ const ApoyoEducativo = props => {
 						)
 					})}
 			</OptionModal>
-
 		</>
 	)
 }

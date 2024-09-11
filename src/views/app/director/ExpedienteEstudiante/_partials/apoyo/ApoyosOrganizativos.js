@@ -176,7 +176,7 @@ export const ApoyosOrganizativos = () => {
 				label: ''
 			},
 			{
-				Header: 'Fecha de aprobación',
+				Header: 'Fecha en que el estudiante empezó a recibir este apoyo',
 				column: 'fechaInicio',
 				accessor: 'fechaInicio',
 				label: ''
@@ -380,7 +380,6 @@ export const ApoyosOrganizativos = () => {
 				data={data || []}
 				columns={columns}
 			/>
-
 			<OptionModal
 				isOpen={showNuevoApoyoModal}
 				titleHeader={'Registro de apoyo organizativo'}
@@ -433,6 +432,21 @@ export const ApoyosOrganizativos = () => {
 						</Col>
 					</Row>
 					<Row>
+						<Col md={6}>
+							<FormGroup>
+								<Label for='fechaDeAprobacion'>
+									Fecha en que el estudiante empezó a recibir este apoyo
+								</Label>
+								<Input
+									type='date'
+									id='fechaDeAprobacion'
+									name='fechaDeAprobacion'
+									onChange={handleFormDataChange}
+								/>
+							</FormGroup>
+						</Col>
+					</Row>
+					<Row>
 						<Col md={12}>
 							<FormGroup>
 								<Label for='detalleDelApoyo'>Detalle del apoyo (opcional)</Label>
@@ -446,20 +460,6 @@ export const ApoyosOrganizativos = () => {
 							</FormGroup>
 						</Col>
 					</Row>
-
-					<Row>
-						<Col md={6}>
-							<FormGroup>
-								<Label for='fechaDeAprobacion'>Fecha de aprobación</Label>
-								<Input
-									type='date'
-									id='fechaDeAprobacion'
-									name='fechaDeAprobacion'
-									onChange={handleFormDataChange}
-								/>
-							</FormGroup>
-						</Col>
-					</Row>
 				</Form>
 			</OptionModal>
 		</>
@@ -468,7 +468,4 @@ export const ApoyosOrganizativos = () => {
 
 const StyledInput = styled(Input)`
 	width: 100% !important;
-	margin-top: 1rem;
-	margin-bottom: 1rem;
-	padding-right: 12%;
 `
