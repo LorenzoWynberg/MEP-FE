@@ -10,6 +10,7 @@ import JSONFormParser from 'Components/JSONFormParser/JSONFormParser'
 import { updateLocation } from '../../../../../../redux/configuracion/actions'
 import { useActions } from 'Hooks/useActions'
 import { withRouter } from 'react-router-dom'
+
 import swal from 'sweetalert'
 import { Label, Input, FormGroup, CustomInput } from 'reactstrap'
 
@@ -122,7 +123,6 @@ const Ubicacion = props => {
 			setIsTemporal(newValue)
 		}
 	}
-
 	const clearTemp = async () => {
 		const _data = {
 			solucion: JSON.stringify({
@@ -143,9 +143,19 @@ const Ubicacion = props => {
 		await putData(_data)
 		setLoading(false)
 	}
-
+	//20240527 se modifica el formulario para que no muestre el check de ubicacion temporal. Dolores y Yair
 	return (
 		<div>
+			{/* <FormGroup className='mx-2'>
+				<CustomInput
+					className='custom-checkbox mb-0 d-inline-block'
+					type='checkbox'
+					checked={isTemporal}
+					onClick={() => disabledTemporal()}
+					disabled={!isEdit}
+					label='Ubicación temporal'
+				/>
+			</FormGroup> */}
 			{!loading ? (
 				<JSONFormParser
 					pageData={pageData}

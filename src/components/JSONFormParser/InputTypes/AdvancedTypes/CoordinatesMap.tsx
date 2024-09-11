@@ -3,6 +3,7 @@ import { Row, Col } from 'reactstrap'
 import { Field } from '../../Interfaces'
 import TextInput from '../TextInput'
 import MapInput from '../MapInput'
+
 type Props = {
 	showLocation: boolean
 	useModal: boolean
@@ -10,6 +11,7 @@ type Props = {
 	options: Field
 	register: any
 }
+
 const CoordinatesMap: FunctionComponent<Props> = props => {
 	const [mapOpen, setMapOpen] = useState(props.useModal && !props.defaultHidden)
 	const [search, setSearch] = useState(null)
@@ -24,12 +26,14 @@ const CoordinatesMap: FunctionComponent<Props> = props => {
 			item => item.label == 'Longitud'
 		)
 		if (longitudeId && latitudeId) {
-			props.setValue(`${latitudeId.id}`, location.latitude)
-			props.setValue(`${longitudeId.id}`, location.longitude)
+			//20240527 se modifica el mapa para que no capture la longitud y latitud. Dolores y Yair
+			// props.setValue(`${latitudeId.id}`, location.latitude)
+			// props.setValue(`${longitudeId.id}`, location.longitude)
 		}
 	}, [location])
 	const map = props.field.options.find(field => field.type === 'map')
 	const texts = props.field.options.filter(field => field.type === 'text')
+
 	const setLocationIfEditable = value => {
 		if (props.editable) {
 			setLocation(value)
@@ -46,9 +50,9 @@ const CoordinatesMap: FunctionComponent<Props> = props => {
 				mapOpen={mapOpen}
 				toggleModal={toggleModal}
 				setSearch={props.setSearch || setSearch}
-				setLocation={setLocationIfEditable}
+				//setLocation={setLocationIfEditable}
 				editable={props.editable}
-				setUbicacion={props.setUbicacion}
+				//setUbicacion={props.setUbicacion}
 			/>
 			<Row>
 				{texts.map(option => {
@@ -67,4 +71,5 @@ const CoordinatesMap: FunctionComponent<Props> = props => {
 		</div>
 	)
 }
+
 export default CoordinatesMap
