@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { Row, Col, Form, FormGroup, Label, Input, Button, Container } from 'reactstrap'
+import { Row, Col, Form, FormGroup, Label, Input, CustomInput,  } from 'reactstrap'
 import DatePicker from 'react-datepicker'
 
 import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
@@ -45,6 +45,7 @@ const condicionSeRecibeNombre = 'Se recibe'
 export const ApoyosPersonales = () => {
 	const [snackBar, handleClick] = useNotification()
 	const [loading, setLoading] = useState(true)
+	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
 	const [data, setData] = useState([])
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
 	const [tiposApoyo, setTiposApoyo] = useState([])
@@ -443,8 +444,37 @@ export const ApoyosPersonales = () => {
 				data={data || []}
 				columns={columns}
 			/>
+			<OptionModal isOpen={showModalTiposApoyo } titleHeader={'Tipos de apoyo'} onConfirm={() => setShowModalTiposApoyo(false)} onCancel={() => setShowModalTiposApoyo(false)}  >
+				{tiposApoyoFilter
+					.map((item, i) => {
+						return (
+							<Row key={i}>
+								<Col xs={3} className='modal-detalle-subsidio-col'>
+									<div>
+										<CustomInput
+											type='checkbox'
+											label={item.nombre}
+											inline
+											onClick={() => handleChangeItem(item)}
+											checked={false}
+										/>
+									</div>
+								</Col>
+								<Col xs={9} className='modal-detalle-subsidio-col'>
+									<div>
+										<p>
+											{item.detalle
+												? item.detalle
+												: 'Elemento sin detalle actualmente'}
+										</p>
+									</div>
+								</Col>
+							</Row>
+						)
+					})}
+			</OptionModal>
 			<OptionModal
-				isOpen={showNuevoApoyoModal}
+				isOpen={showNuevoApoyoModal && !showModalTiposApoyo}
 				titleHeader={tituloModal}
 				onConfirm={onConfirmSaveApoyo}
 				onCancel={() => closeAgregarModal()}
@@ -458,14 +488,11 @@ export const ApoyosPersonales = () => {
 							<StyledInput
 								id='tipoDeApoyo'
 								name='tipoDeApoyo'
-								type='select'
+								type='text'
 								placeholder='Seleccionar'
-								onChange={handleFormDataChange}
+								onClick={() =>{alert(); setShowModalTiposApoyo(true)}}
 							>
-								<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
-								{tiposApoyoFilter.map(tipo => {
-									return <option value={tipo.id}>{tipo.nombre}</option>
-								})}
+								{formData.tipoDeApoyo || 'Seleccionar'}
 							</StyledInput>
 						</Col>
 						<Col md={6}>
