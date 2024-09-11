@@ -36,7 +36,8 @@ const useStyles = makeStyles(theme => ({
 			top: '80px'
 		},
 		'@media (min-width: 1200px)': {
-			top: '120px'
+			top: '120px',
+			marginBottom: '3rem !important'
 		},
 		'@media (min-width: 1440px)': {
 			top: '100px'
