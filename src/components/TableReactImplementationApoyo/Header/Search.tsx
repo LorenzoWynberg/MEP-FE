@@ -1,18 +1,27 @@
 import React, { FC } from 'react'
-import { InputGroupAddon, Input } from 'reactstrap'
+import { InputGroupAddon, Input, CustomInput } from 'reactstrap'
 import styled from 'styled-components'
 import { Button } from 'Components/CommonComponents'
 import { useTranslation } from 'react-i18next'
 
 interface IProps {
 	onSearch: Function
-	tipo: string
+	yearList?: []
 }
 const Search: FC<IProps> = props => {
 	const { t } = useTranslation()
+
 	const { onSearch } = props
 	const [text, setText] = React.useState<string>('')
-	const placeholderString = `place_holder>general>buscar_en_tabla` + `>${props.tipo}`
+
+	/* const yearList = [
+		{ id: 1, name: '2022' },
+		{ id: 2, name: '2023' },
+		{ id: 3, name: '2024' }
+	] */
+
+	const handleChangeSelectAll = e => {}
+
 	return (
 		<SearchContainer className='mr-4'>
 			<InputSearchDiv>
@@ -40,7 +49,32 @@ const Search: FC<IProps> = props => {
 					>
 						{t('general>buscar', 'Buscar')}
 					</Button>
+
+					{props.yearList.length > 0 && (
+						<CustomInput
+							style={{
+								width: 125,
+								backgroundColor: '#145388',
+								borderRadius: '50px',
+								color: '#ffffff',
+								marginLeft: 10
+							}}
+							onChange={e => onSearch(e.target.value)}
+							className='custom-checkbox mb-0 d-inline-block'
+							type='select'
+							id='checkAll'
+							onClick={e => {
+								handleChangeSelectAll(!e.target.checked)
+							}}
+						>
+							<option value={null}>{'Filtrar por año'}</option>
+							{props.yearList.map(tipo => {
+								return <option value={tipo.name}>{tipo.name}</option>
+							})}
+						</CustomInput>
+					)}
 				</StyledInputGroupAddon>
+				<StyledInputGroupAddon addonType='append'></StyledInputGroupAddon>
 			</InputSearchDiv>
 		</SearchContainer>
 	)

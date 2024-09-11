@@ -35,6 +35,7 @@ import Loader from '../../../../../../components/Loader'
 import { EditButton } from '../../../../../../components/EditButton'
 import RequiredLabel from '../../../../../../components/common/RequeredLabel'
 import { useForm } from 'react-hook-form'
+import _ from 'lodash'
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -56,8 +57,8 @@ const InformacionResidenciaSaber = (props) => {
 		label: 'seleccionar'
 	}
 	const initialLocationCoordinates = {
-		latitude: 'No seleccionado',
-		longitude: 'No seleccionado'
+		latitude: null,
+		longitude: null
 	}
 	const [currentProvince, setCurrentProvince] = useState(initialSelectOption)
 	const [currentCanton, setCurrentCanton] = useState(initialSelectOption)
@@ -73,7 +74,7 @@ const InformacionResidenciaSaber = (props) => {
 	const [razon, setRazon] = useState('')
 	const [snackbarMsg, setSnackbarMsg] = useState('')
 	const [snackbarVariant, setSnackbarVariant] = useState('')
-	const [location, setLocation] = useState(initialLocationCoordinates)
+	const [location, setLocation] = useState({latitude:0,longitude:0})
 	const [editDirection, setEditDirection] = useState({})
 	const [editable, setEditable] = useState(false)
 	const [loading, setLoading] = useState(true)
@@ -99,7 +100,7 @@ const InformacionResidenciaSaber = (props) => {
 		setCurrentPoblado(initialSelectOption)
 		setCurrentTerritory(initialSelectOption)
 		setDirection('')
-		setLocation(initialLocationCoordinates)
+		setLocation({latitude:null,longitude:null})
 	}
 
 	useEffect(() => {
@@ -119,11 +120,10 @@ const InformacionResidenciaSaber = (props) => {
 				setDireccionArray(_direccionArray)
 				setLoadLocation(true)
 				const _province = props.provinces.provincias.find(
-					(provincia) =>
-						{
-							const stringCompare = provincia?.nombre.normalize("NFD").replace(/\p{Diacritic}/gu, "")
-							return stringCompare == _direccionArray[0].trim()
-						}
+					(provincia) => {
+						const stringCompare = provincia?.nombre.normalize("NFD").replace(/\p{Diacritic}/gu, "")
+						return stringCompare == _direccionArray[0].trim()
+					}
 				)
 				const provinceResponse = await props.getCantonesByProvincia(
 					_province?.id
@@ -276,10 +276,9 @@ const InformacionResidenciaSaber = (props) => {
 	}, [props.poblados.poblados])
 
 	useEffect(() => {
+		console.log('location useEffect', location)
 		if (
-			location.latitude !== 'No seleccionado' &&
-			location.longitude !== 'No seleccionado' &&
-			search
+			search && location.latitude !== '' && location.longitude !== '' 
 		) {
 			search.searchTerm = 'CRI'
 			search
@@ -292,7 +291,7 @@ const InformacionResidenciaSaber = (props) => {
 							if (
 								!(
 									firstResultArray[
-										firstResultArray.length - 1
+									firstResultArray.length - 1
 									] === ' CRI'
 								)
 							) {
@@ -338,6 +337,7 @@ const InformacionResidenciaSaber = (props) => {
 	}
 
 	const handleSearchBySelects = (data, name) => {
+		console.log("location handleSearchBySelects data", data,name)
 		if (search) {
 			search.clear()
 		}
@@ -393,21 +393,15 @@ const InformacionResidenciaSaber = (props) => {
 			_errors['razon'] =
 				'Debe tener una razón para su residencia temporal'
 		}
-		if (
-			data.latitud === 'No seleccionado' ||
-			data.longitud === 'No seleccionado'
-		) {
-			_errors['location'] =
-				'Debe seleccionar coordenadas para su ubicación'
-		}
+		
 
 		let error = _errors['poblado']
 			? true
 			: _errors['razon']
-			? true
-			: _errors['location']
-			? true
-			: false
+				? true
+				: _errors['location']
+					? true
+					: false
 		setErrors(_errors)
 
 		if (error) {
@@ -510,6 +504,7 @@ const InformacionResidenciaSaber = (props) => {
 	}
 
 	const setLocationIfEditable = (value) => {
+
 		if (editable) {
 			setLocation(value)
 		}
@@ -795,14 +790,18 @@ const InformacionResidenciaSaber = (props) => {
 												style={{ paddingRight: 10 }}
 											>
 												<FormGroup>
-													<RequiredLabel for="latitud">
+													<Label for="latitud">
 														Latitud
-													</RequiredLabel>
+													</Label>
 													<Input
 														type="text"
 														name="latitud"
 														id="latitud"
-														disabled
+														onChange={(e) => { 
+															const locationActual = {...location, latitude: e.target.value}
+															_.debounce(setLocationIfEditable(locationActual), 1500)
+														}}
+														disabled={!editable}
 														value={
 															location.latitude
 														}
@@ -815,14 +814,18 @@ const InformacionResidenciaSaber = (props) => {
 												style={{ paddingLeft: 10 }}
 											>
 												<FormGroup>
-													<RequiredLabel for="longitud">
+													<Label for="longitud">
 														Longitud
-													</RequiredLabel>
+													</Label>
 													<Input
 														type="text"
 														name="longitud"
 														id="longitud"
-														disabled
+														onChange={(e) => { 
+															const locationActual = {...location, longitude: e.target.value}
+															_.debounce(setLocationIfEditable(locationActual), 1500)
+														}}
+														disabled={!editable}
 														value={
 															location.longitude
 														}
@@ -866,25 +869,13 @@ const InformacionResidenciaSaber = (props) => {
 								className={classes.control}
 							>
 								<WebMapView
-									setLocation={setLocationIfEditable}
+									setLocation={setLocation}
 									setSearch={setSearch}
 									setUbicacion={setUbicacion}
 									editable={editable}
 								/>
 							</MapContainer>
 
-							{!props.temporal && (
-								<div style={{ paddingLeft: 40 }}>
-									<Input
-										type="checkbox"
-										onClick={() => {
-											props.toggleAddress()
-										}}
-										checked={props.tempAddress}
-									/>
-									<Label>Domicilio temporal</Label>
-								</div>
-							)}
 						</Grid>
 						<Grid
 							item

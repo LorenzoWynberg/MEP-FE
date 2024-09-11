@@ -598,7 +598,7 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 					</span>
 				</TextModal>
 			</SimpleModal>
-			//TODO JP: modal de registro
+
 			<SimpleModal
 				openDialog={registrarModal}
 				onClose={() => closeRegistrarPersona()}

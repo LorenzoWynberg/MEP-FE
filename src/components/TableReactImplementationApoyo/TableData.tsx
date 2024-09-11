@@ -18,6 +18,8 @@ import styled from 'styled-components'
 import IntlMessages from 'Helpers/IntlMessages'
 import { useTranslation } from 'react-i18next'
 import { Search } from './Header'
+import { useSelector } from 'react-redux'
+
 interface IProps {
 	autoResetPage?: boolean
 	pageSize?: number
@@ -28,7 +30,14 @@ interface IProps {
 	backendSearch?: boolean
 	useExpanded?: boolean
 	RightAction?: JSX.Element
-	handleGetData?: Function
+	handleGetData?: (
+		searchValue: string,
+		filterColumn: string | undefined | null,
+		pageSize: number,
+		page: number,
+		column: string,
+		order: string
+	) => {} | any | undefined
 	selectedColumn: any
 	setSelectedColumn: (value: string) => void
 	preferences?: boolean
@@ -37,6 +46,7 @@ interface IProps {
 	handleChangeSelectAll?: (value: boolean) => void
 	actions?: []
 	checked?: boolean
+	onSearch?: () => void
 }
 
 interface IBackendPaginatedProps extends IProps {
@@ -95,10 +105,23 @@ function GlobalFilter({
 	const toggleSplit = () => {
 		setDropdownSplitOpen(!dropdownSplitOpen)
 	}
+
+	const state = useSelector(store => {
+		return {
+			activeYears: store.authUser.activeYears
+		}
+	})
+
+	const yearList = state.activeYears.map(year => {
+		return { id: year.id, name: year.nombre }
+	})
+
+	const sortedYearList = yearList.sort((a, b) => b.name.localeCompare(a.name))
+
 	return (
 		<Row>
 			<Col className='container-nav d-flex justify-content-between aling-items-center'>
-				{!avoidSearch ? <Search onSearch={onChange} /> : <></>}
+				{!avoidSearch ? <Search onSearch={onChange} yearList={sortedYearList} /> : <></>}
 				<div style={{ display: 'flex', justifyContent: 'flex-end' }}>
 					{showAddButton && (
 						<Button
@@ -395,7 +418,10 @@ export const TableDataFrontPaginated: React.FC<IProps> = props => {
 				setSelectedColumn={props.setSelectedColumn}
 				selectedColumn={props.selectedColumn}
 				setGlobalFilter={value => {
-					props.handleGetData(value)
+					if (props.backendSearch) {
+						return props.handleGetData(value, props.selectedColumn.column)
+					}
+					tableState.setGlobalFilter(value)
 				}}
 				showAddButton={props.showAddButton}
 				onSubmitAddButton={props.onSubmitAddButton}

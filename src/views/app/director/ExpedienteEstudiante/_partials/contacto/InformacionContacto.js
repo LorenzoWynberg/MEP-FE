@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
 
 const InformacionContacto = props => {
 	const { t } = useTranslation()
-	console.log('props.informacionContacto', props.expedienteEstudiantil.currentStudent.idEstudiante)
+	console.log('props.informacionContacto', props.expedienteEstudiantil.currentStudent)
 
 	const classes = useStyles()
 	const [snakbar, handleClick, handleClose] = useNotification()
@@ -53,29 +53,6 @@ const InformacionContacto = props => {
 	const [loading, setLoading] = useState(true)
 	const [errorFields, setErrorFields] = useState(props.informacionContacto.errorFields)
 	const [errorMessages, setErrorMessages] = useState(props.informacionContacto.errorMessages)
-	const [redesTemp, setRedesTemp] = useState({
-		telefono: null,
-		telefonoSecundario: null,
-		email: null,
-		emailSecundario: null,
-		facebook: null,
-		instagram: null,
-		whatsapp: null,
-		twitter: null,
-		tiktok: null
-	})
-
-	const [redes, setRedes] = useState({
-		telefono: null,
-		telefonoSecundario: null,
-		email: null,
-		emailSecundario: null,
-		facebook: null,
-		instagram: null,
-		whatsapp: null,
-		twitter: null,
-		tiktok: null
-	})
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -88,55 +65,47 @@ const InformacionContacto = props => {
 		}
 	}, [])
 
-	useEffect(() => {
-		setFormState(props.informacionContacto.contactInformation)
-
-		setErrorFields(props.informacionContacto.errorFields)
-		setErrorMessages(props.informacionContacto.errorMessages)
-	}, [props.informacionContacto, editable])
-
 	const [formState, setFormState] = useState({
 		telefono: '',
 		telefonoSecundario: '',
-		email: '',
 		emailSecundario: '',
 		facebook: '',
 		twitter: '',
 		instagram: '',
 		whatsapp: ''
 	})
+	useEffect(() => {
+		axios
+			.get(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Contacto/${props.expedienteEstudiantil.currentStudent.idEstudiante}`
+			)
+			.then(r => {
+				setFormState({ ...props.informacionContacto.contactInformation, ...r.data })
+				setErrorFields(props.informacionContacto.errorFields)
+				setErrorMessages(props.informacionContacto.errorMessages)
+			})
+	}, [props.informacionContacto, editable])
 
-	const onSubmit = async e => {
-		e.preventDefault()
-		const payload = {
-			...redesTemp,
-			...formState,
-			telefono: formState.telefono,
-			telefonoSecundario: formState.telefonoSecundario,
-			email: formState.email,
-			emailSecundario: formState.emailSecundario
-		}
-		const redesSend = { ...redesTemp }
-		console.log(payload)
-		const rest = await props.updateInformationContactFromUser(
-			props.expedienteEstudiantil.currentStudent.idEstudiante,
-			payload
-		)
-
-		if (rest.payload) {
-			setSnackbarVariant('success')
-			setSnackbarMsg(t('general>success_act', 'Se actualizo correctamente'))
-			handleClick()
-			setEditable(false)
-			setRedes(redesSend)
-		}
-
-		if (rest.data && rest.data.error) {
-			setSnackbarVariant('error')
-			setSnackbarMsg(t('general>error_act', 'Ocurrio un error al actualizar'))
-			handleClick()
-		}
-	}
+	const onSubmit = useCallback(
+		async e => {
+			e.preventDefault()
+			console.log('formState', formState)
+			props
+				.updateInformationContactFromUser(props.expedienteEstudiantil.currentStudent.idEstudiante, formState)
+				.then(rest => {
+					setSnackbarVariant('success')
+					setSnackbarMsg(t('general>success_act', 'Se actualizo correctamente'))
+					handleClick()
+					setEditable(false)
+				})
+				.catch(err => {
+					setSnackbarVariant('error')
+					setSnackbarMsg(t('general>error_act', 'Ocurrio un error al actualizar'))
+					handleClick()
+				})
+		},
+		[formState]
+	)
 
 	const handleInputChange = ({ target }) => {
 		if (editable) {
@@ -144,19 +113,6 @@ const InformacionContacto = props => {
 		}
 	}
 
-	const setRedesValues = (red, valor) => {
-		setRedesTemp({ ...redesTemp, [red]: valor })
-	}
-	useEffect(() => {
-		axios
-			.get(
-				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Contacto/${props.expedienteEstudiantil.currentStudent.idEstudiante}`
-			)
-			.then(r => {
-				setRedes(r.data)
-				setRedesTemp(r.data)
-			})
-	}, [])
 	return (
 		<Grid container className={classes.root} spacing={2}>
 			{loading ? (
@@ -219,32 +175,12 @@ const InformacionContacto = props => {
 										</ReactInputMask>
 										<FormFeedback>{errorMessages.TelefonoSecundario}</FormFeedback>
 									</FormGroup>
-
 									<FormGroup>
-										<Label>
+										<Label for='emailSecundario'>
 											*
 											{t(
 												'estudiantes>expediente>contacto>info_cont>correo_per',
 												'Correo electrónico personal'
-											)}
-										</Label>
-										<Input
-											type='email'
-											name='email'
-											id='email'
-											placeholder='correo@gmail.com'
-											onChange={handleInputChange}
-											disabled={!editable}
-											value={formState.email}
-											invalid={errorFields.Email}
-										/>
-										<FormFeedback>{errorMessages.Email}</FormFeedback>
-									</FormGroup>
-									<FormGroup>
-										<Label for='emailSecundario'>
-											{t(
-												'estudiantes>expediente>contacto>info_cont>correo_inst',
-												'Correo electrónico institucional'
 											)}
 										</Label>
 										<Input
@@ -257,7 +193,24 @@ const InformacionContacto = props => {
 											value={formState.emailSecundario}
 											invalid={errorFields.EmailSecundario}
 										/>
-										<FormFeedback>{errorMessages.EmailSecundario}</FormFeedback>
+										<FormFeedback>{errorMessages.Email}</FormFeedback>
+									</FormGroup>
+									<FormGroup>
+										<Label for='email'>
+											{t(
+												'estudiantes>expediente>contacto>info_cont>correo_inst',
+												'Correo electrónico institucional'
+											)}
+										</Label>
+										<Input
+											type='email'
+											name='email'
+											id='email'
+											placeholder='correo@gmail.com'
+											onChange={handleInputChange}
+											disabled
+											value={formState.email}
+										/>
 									</FormGroup>
 								</Grid>
 							</Grid>
@@ -275,9 +228,8 @@ const InformacionContacto = props => {
 								<Grid item xs={12} className={classes.control}>
 									<Redes
 										hasEditable={editable}
-										setRedesParent={setRedesValues}
-										redes={redes}
-										redesTemp={redesTemp}
+										handleInputChange={handleInputChange}
+										formState={formState}
 									/>
 								</Grid>
 							</Grid>
@@ -300,7 +252,6 @@ const InformacionContacto = props => {
 												type='button'
 												onClick={() => {
 													setEditable(false)
-													setRedesTemp(redes)
 													props.cleanFormErrors()
 												}}
 											>
