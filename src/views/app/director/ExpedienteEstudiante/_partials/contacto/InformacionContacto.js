@@ -68,12 +68,14 @@ const InformacionContacto = props => {
 	const [formState, setFormState] = useState({
 		telefono: '',
 		telefonoSecundario: '',
+		email: '',
 		emailSecundario: '',
 		facebook: '',
 		twitter: '',
 		instagram: '',
 		whatsapp: ''
 	})
+
 	useEffect(() => {
 		axios
 			.get(
@@ -131,11 +133,11 @@ const InformacionContacto = props => {
 								<Grid item xs={12} className={classes.control}>
 									<FormGroup>
 										<Label>
-											*{' '}
 											{t(
 												'estudiantes>expediente>contacto>info_cont>tel_prin',
 												'Teléfono principal'
-											)}
+											)}{' '}
+											<span style={{ color: 'red' }}>*</span>
 										</Label>
 										<ReactInputMask
 											mask='9999-9999'
@@ -177,7 +179,6 @@ const InformacionContacto = props => {
 									</FormGroup>
 									<FormGroup>
 										<Label for='emailSecundario'>
-											*
 											{t(
 												'estudiantes>expediente>contacto>info_cont>correo_per',
 												'Correo electrónico personal'
@@ -206,7 +207,7 @@ const InformacionContacto = props => {
 											type='email'
 											name='email'
 											id='email'
-											placeholder='correo@gmail.com'
+											placeholder='correo@est.mep.go.cr'
 											onChange={handleInputChange}
 											disabled
 											value={formState.email}
