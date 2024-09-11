@@ -122,6 +122,8 @@ export const ApoyosCurriculares = () => {
 				//dropdown
 				const tiposDeApoyo = state.apoyos.tipos.filter(tipo => tipo.categoriaApoyoId === categoria.id)
 
+				console.log('JP tipos de apoyo', tiposDeApoyo)
+
 				setTiposApoyo(tiposDeApoyo)
 
 				!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
@@ -407,13 +409,18 @@ export const ApoyosCurriculares = () => {
 				columns={columns}
 			/>
 
-			<OptionModal isOpen={showNuevoApoyoModal} titleHeader={tituloModal} onConfirm={onConfirmSaveApoyo} onCancel={() => closeAgregarModal()} >
-
-
+			<OptionModal
+				isOpen={showNuevoApoyoModal}
+				titleHeader={tituloModal}
+				onConfirm={onConfirmSaveApoyo}
+				onCancel={() => closeAgregarModal()}
+			>
 				<Form onSubmit={onConfirmSaveApoyo}>
 					<Row>
 						<Col md={6}>
-							<Label for='tipoDeApoyo'>Tipo de apoyo <RequiredSpan/>  </Label>
+							<Label for='tipoDeApoyo'>
+								Tipo de apoyo <RequiredSpan />{' '}
+							</Label>
 							<StyledInput
 								id='tipoDeApoyo'
 								/* innerRef={register({

@@ -43,6 +43,7 @@ export const ApoyosOrganizativos = () => {
 	const [data, setData] = useState([])
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
 	const [tiposApoyo, setTiposApoyo] = useState([])
+	const [tiposApoyoFilter, setTiposApoyoFilter] = useState([])
 	const [formData, setFormData] = useState({
 		tipoDeApoyo: '',
 		condicionApoyo: '',
@@ -380,13 +381,18 @@ export const ApoyosOrganizativos = () => {
 				columns={columns}
 			/>
 
-			<OptionModal isOpen={showNuevoApoyoModal} titleHeader={'Registro de apoyo organizativo'} onConfirm={onConfirmSaveApoyo} onCancel={() => closeAgregarModal()} >
-
-
+			<OptionModal
+				isOpen={showNuevoApoyoModal}
+				titleHeader={'Registro de apoyo organizativo'}
+				onConfirm={onConfirmSaveApoyo}
+				onCancel={() => closeAgregarModal()}
+			>
 				<Form onSubmit={onConfirmSaveApoyo}>
 					<Row>
 						<Col md={6}>
-							<Label for='tipoDeApoyo'>Tipo de apoyo <RequiredSpan/>  </Label>
+							<Label for='tipoDeApoyo'>
+								Tipo de apoyo <RequiredSpan />{' '}
+							</Label>
 							<StyledInput
 								id='tipoDeApoyo'
 								/* innerRef={register({
@@ -403,10 +409,6 @@ export const ApoyosOrganizativos = () => {
 									return <option value={tipo.id}>{tipo.nombre}</option>
 								})}
 							</StyledInput>
-							{/* <FormFeedback>
-									{errors[`${props.storedValuesKey}Tipos`] &&
-										errors[`${props.storedValuesKey}Tipos`].message}
-								</FormFeedback> */}
 						</Col>
 						<Col md={6}>
 							<FormGroup>
@@ -457,7 +459,7 @@ export const ApoyosOrganizativos = () => {
 								/>
 							</FormGroup>
 						</Col>
-					</Row> 
+					</Row>
 				</Form>
 			</OptionModal>
 		</>

@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { Row, Col, Form, FormGroup, Label, Input, Button, Container } from 'reactstrap'
+import DatePicker from 'react-datepicker'
 
 import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
 import useNotification from 'Hooks/useNotification'
@@ -47,6 +48,8 @@ export const ApoyosPersonales = () => {
 	const [data, setData] = useState([])
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
 	const [tiposApoyo, setTiposApoyo] = useState([])
+	const [tiposApoyoFilter, setTiposApoyoFilter] = useState([])
+	const [sortedYearList, setSortedYearList] = useState(null)
 	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
 	const [formData, setFormData] = useState({
 		tipoDeApoyo: '',
@@ -109,7 +112,8 @@ export const ApoyosPersonales = () => {
 			identification: store.identification,
 			apoyos: store.apoyos,
 			selects: store.selects,
-			activeYear: store.authUser.selectedActiveYear
+			activeYear: store.authUser.selectedActiveYear,
+			activeYears: store.authUser.activeYears
 		}
 	})
 
@@ -149,6 +153,21 @@ export const ApoyosPersonales = () => {
 				setLoading(false)
 			})
 	}, [])
+
+	useEffect(() => {
+		if (isNull(sortedYearList)) {
+			const yearList = state.activeYears.map(year => {
+				return { id: year.id, name: year.nombre }
+			})
+
+			const sortedYears = yearList.sort((a, b) => b.name.localeCompare(a.name))
+			setSortedYearList(sortedYears)
+		}
+
+		//const activeYear = sortedYearList[0].name
+		//console.log('activeYear', activeYear)
+		filterTiposDeApoyo(tiposApoyo, parseInt(state.activeYear.nombre))
+	}, [data])
 
 	const deleteApoyoById = apoyoId => {
 		setLoading(true)
@@ -397,6 +416,23 @@ export const ApoyosPersonales = () => {
 		setShowNuevoApoyoModal(false)
 	}
 
+	const filterTiposDeApoyo = (tipos, currentYear) => {
+		let filtro = tiposApoyo
+
+		if (tipos.length > 0) {
+			filtro = tipos.filter(
+				tipoApoyo =>
+					!data.some(
+						apoyoEstudiante =>
+							apoyoEstudiante.sb_TiposDeApoyoId === tipoApoyo.id &&
+							new Date(apoyoEstudiante.fechaInsercion).getFullYear() === parseInt(currentYear)
+					)
+			)
+		}
+
+		setTiposApoyoFilter(filtro)
+	}
+
 	return (
 		<>
 			{loading && <BarLoader />}
@@ -407,33 +443,30 @@ export const ApoyosPersonales = () => {
 				data={data || []}
 				columns={columns}
 			/>
-			<OptionModal isOpen={showNuevoApoyoModal} titleHeader={tituloModal} onConfirm={onConfirmSaveApoyo} onCancel={() => closeAgregarModal()} >
-
-
+			<OptionModal
+				isOpen={showNuevoApoyoModal}
+				titleHeader={tituloModal}
+				onConfirm={onConfirmSaveApoyo}
+				onCancel={() => closeAgregarModal()}
+			>
 				<Form onSubmit={onConfirmSaveApoyo}>
 					<Row>
 						<Col md={6}>
-							<Label for='tipoDeApoyo'>Tipo de apoyo <RequiredSpan/> </Label>
+							<Label for='tipoDeApoyo'>
+								Tipo de apoyo <RequiredSpan />{' '}
+							</Label>
 							<StyledInput
 								id='tipoDeApoyo'
-								/* innerRef={register({
-									required: t('general>campo_requerido', 'El campo es requerido')
-								})} */
 								name='tipoDeApoyo'
 								type='select'
-								//invalid={errors[`${props.storedValuesKey}Tipos`]}
 								placeholder='Seleccionar'
 								onChange={handleFormDataChange}
 							>
 								<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
-								{tiposApoyo.map(tipo => {
+								{tiposApoyoFilter.map(tipo => {
 									return <option value={tipo.id}>{tipo.nombre}</option>
 								})}
 							</StyledInput>
-							{/* <FormFeedback>
-									{errors[`${props.storedValuesKey}Tipos`] &&
-										errors[`${props.storedValuesKey}Tipos`].message}
-								</FormFeedback> */}
 						</Col>
 						<Col md={6}>
 							<FormGroup>
@@ -443,7 +476,6 @@ export const ApoyosPersonales = () => {
 									name='condicionApoyo'
 									type='select'
 									onChange={handleFechaAprobacionOnChange}
-									//invalid={errors[`${props.storedValuesKey}Tipos`]}
 									placeholder='Seleccionar'
 								>
 									<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
@@ -474,17 +506,21 @@ export const ApoyosPersonales = () => {
 							<Col md={6}>
 								<FormGroup>
 									<Label for='fechaDeAprobacion'>Fecha de aprobación</Label>
-									<Input
-										type='date'
-										id='fechaDeAprobacion'
-										name='fechaDeAprobacion'
-										onChange={handleFormDataChange}
+									<DatePicker
+										style={{
+											zIndex: 99999
+										}}
+										popperPlacement={'right'}
+										dateFormat='dd/MM/yyyy'
+										selected={formData.fechaDeAprobacion}
+										onChange={date => setFormData({ ...formData, fechaDeAprobacion: date })}
+										minDate={new Date(new Date().getFullYear(), 0, 1)}
+										maxDate={new Date(new Date().getFullYear(), 11, 31)}
 									/>
 								</FormGroup>
 							</Col>
 						</Row>
 					)}
- 
 				</Form>
 			</OptionModal>
 		</>
