@@ -435,6 +435,14 @@ export const ApoyosPersonales = () => {
 		setTiposApoyoFilter(filtro)
 	}
 
+	const handleChangeItem = (item) => {
+
+		const newItems = tiposApoyoFilter.map((element) => {
+			if (element.id === item.id) { return { ...element, checked: !element.checked } }
+			return element
+		})
+		setTiposApoyoFilter(newItems)
+	}
 	return (
 		<>
 			{loading && <BarLoader />}
@@ -461,7 +469,7 @@ export const ApoyosPersonales = () => {
 										label={item.nombre}
 										inline
 										onClick={() => handleChangeItem(item)}
-										checked={false}
+										checked={item.checked}
 									/>
 								</div>
 							</Col>
