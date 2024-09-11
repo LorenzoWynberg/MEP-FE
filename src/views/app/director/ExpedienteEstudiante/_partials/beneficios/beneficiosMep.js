@@ -226,19 +226,21 @@ const BeneficiosMEP = props => {
 
 	const handleViewSubsidio = async (e, show) => {
 		setLoading(true)
-		setView(true)
+
 		setDataTable(e)
 		setDependencia({ label: e?.nombreDependecia, value: null })
 		setFormData({
 			...formData,
 			dateFrom: moment(e?.fechaInicio).format('YYYY-MM-DD'),
-			dateTo: moment(e?.fechaFinal).format('YYYY-MM-DD')
+			dateTo: moment(e?.fechaFinal).format('YYYY-MM-DD'),
+			detSubsidio: e?.detalle
 		})
-		setValue('detSubsidio', e?.detalle)
+
 		setVerificated(e?.recepcionVerificada == 'Si')
 		const prevSub = tipos.find(tipo => tipo?.nombre == e?.nombreTipoSubsidio)
 		setPrevSubsidio(tipos.find(tipo => tipo?.nombre == e?.nombreTipoSubsidio))
 		setShowButtons(show)
+		setView(true)
 		setLoading(false)
 	}
 
@@ -329,7 +331,7 @@ const BeneficiosMEP = props => {
 								id='detSubsidio'
 								disabled={true}
 								//innerRef={register}
-								value={prevSubsidio?.detalle || ''}
+								value={formData?.detSubsidio || ''}
 							/>
 						</FormGroup>
 						<FormGroup>
