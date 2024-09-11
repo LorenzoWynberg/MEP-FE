@@ -2554,6 +2554,8 @@
 	"perfil_centro>nombre_oficial": "Nombre officiel",
 	"perfil_centro>vision_de_la_institucion": "Vision de l'institution",
 	"place_holder>general>buscar_en_tabla": "Recherche dans le tableau\n",
+	"place_holder>general>buscar_en_tabla>estudiantes": "Rechercher par nom ou numéro d'identification\n",
+	"place_holder>general>buscar_en_tabla>instituciones": "Rechercher par nom ou code de l'établissement éducatif\n",
 	"reportes>asistencia_por_fecha": "PARTICIPATION PAR DATE",
 	"reportes>circuital": "Circuit",
 	"reportes>circuital>reporte_de_matricula_por_circuito": "Rapport d’immatriculation par circuit",

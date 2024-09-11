@@ -2566,6 +2566,8 @@
 	"perfil_centro>nombre_oficial": "Official name",
 	"perfil_centro>vision_de_la_institucion": "Vision of the institution",
 	"place_holder>general>buscar_en_tabla": "Search in table\n",
+	"place_holder>general>buscar_en_tabla>estudiantes": "Searh by name or id number\n",
+	"place_holder>general>buscar_en_tabla>instituciones": "Search by name or institutional code\n",
 	"reportes>asistencia_por_fecha": "ATTENDANCE BY DATE",
 	"reportes>circuital": "Circuit",
 	"reportes>circuital>reporte_de_matricula_por_circuito": "Registration Report by circuit",

@@ -31,6 +31,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	informationCard: {
 		background: colors.primary,
+		borderRadius: '14px',
 		top: '70px',
 		'@media (min-width: 768px)': {
 			top: '80px'
@@ -160,7 +161,7 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 							{data.identificacion}
 						</span>
 						<span className={`${classes.information}`}>
-							<strong>{t('estudiantes>expediente>header>tipo_id', 'Tipo de Identificación')}:</strong>{' '}
+							<strong>{t('estudiantes>expediente>header>tipo_id', 'Tipo de identificación')}:</strong>{' '}
 							{data.tipoIdentificacion == 'YÍS RÖ - IDENTIFICACIÓN MEP'
 								? 'YÍS RÖ'
 								: data.tipoIdentificacion}

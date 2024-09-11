@@ -6,12 +6,13 @@ import { useTranslation } from 'react-i18next'
 
 interface IProps {
 	onSearch: Function
+	tipo: string
 }
 const Search: FC<IProps> = props => {
 	const { t } = useTranslation()
-
 	const { onSearch } = props
 	const [text, setText] = React.useState<string>('')
+	const placeholderString = `place_holder>general>buscar_en_tabla` + `>${props.tipo}`
 	return (
 		<SearchContainer className='mr-4'>
 			<InputSearchDiv>
