@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 	},
 	informationCard: {
 		background: colors.primary,
-		borderRadius: '14px',
+		borderRadius: '0 0 30px 30px',
 		top: '70px',
 		'@media (min-width: 768px)': {
 			top: '80px'
