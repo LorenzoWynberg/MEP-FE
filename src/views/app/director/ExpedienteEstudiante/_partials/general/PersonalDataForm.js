@@ -37,7 +37,7 @@ const PersonalDataForm = props => {
 		try {
 			let type = ''
 			if (idType == 'YISRO') {
-				type = 'YÍS RÖ'
+				type = 'Yís Rö'
 			} else {
 				type = idType
 			}
