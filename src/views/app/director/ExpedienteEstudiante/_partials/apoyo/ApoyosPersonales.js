@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { Row, Col, Form, FormGroup, Label, Input, CustomInput,  } from 'reactstrap'
+import { Row, Col, Form, FormGroup, Label, Input, CustomInput } from 'reactstrap'
 import DatePicker from 'react-datepicker'
 
 import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
@@ -16,8 +16,9 @@ import {
 	deleteApoyo,
 	editApoyo
 } from 'Redux/apoyos/actions'
+import styles from './apoyos.css'
 import Tooltip from '@mui/material/Tooltip'
-
+import 'react-datepicker/dist/react-datepicker.css'
 import { getCatalogs } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
 import { catalogsEnumObj } from 'Utils/catalogsEnum'
@@ -444,34 +445,34 @@ export const ApoyosPersonales = () => {
 				data={data || []}
 				columns={columns}
 			/>
-			<OptionModal isOpen={showModalTiposApoyo } titleHeader={'Tipos de apoyo'} onConfirm={() => setShowModalTiposApoyo(false)} onCancel={() => setShowModalTiposApoyo(false)}  >
-				{tiposApoyoFilter
-					.map((item, i) => {
-						return (
-							<Row key={i}>
-								<Col xs={3} className='modal-detalle-subsidio-col'>
-									<div>
-										<CustomInput
-											type='checkbox'
-											label={item.nombre}
-											inline
-											onClick={() => handleChangeItem(item)}
-											checked={false}
-										/>
-									</div>
-								</Col>
-								<Col xs={9} className='modal-detalle-subsidio-col'>
-									<div>
-										<p>
-											{item.detalle
-												? item.detalle
-												: 'Elemento sin detalle actualmente'}
-										</p>
-									</div>
-								</Col>
-							</Row>
-						)
-					})}
+			<OptionModal
+				isOpen={showModalTiposApoyo}
+				titleHeader={'Tipos de apoyo'}
+				onConfirm={() => setShowModalTiposApoyo(false)}
+				onCancel={() => setShowModalTiposApoyo(false)}
+			>
+				{tiposApoyoFilter.map((item, i) => {
+					return (
+						<Row key={i}>
+							<Col xs={3} className='modal-detalle-subsidio-col'>
+								<div>
+									<CustomInput
+										type='checkbox'
+										label={item.nombre}
+										inline
+										onClick={() => handleChangeItem(item)}
+										checked={false}
+									/>
+								</div>
+							</Col>
+							<Col xs={9} className='modal-detalle-subsidio-col'>
+								<div>
+									<p>{item.detalle ? item.detalle : 'Elemento sin detalle actualmente'}</p>
+								</div>
+							</Col>
+						</Row>
+					)
+				})}
 			</OptionModal>
 			<OptionModal
 				isOpen={showNuevoApoyoModal && !showModalTiposApoyo}
@@ -490,7 +491,10 @@ export const ApoyosPersonales = () => {
 								name='tipoDeApoyo'
 								type='text'
 								placeholder='Seleccionar'
-								onClick={() =>{alert(); setShowModalTiposApoyo(true)}}
+								onClick={() => {
+									// alert()
+									setShowModalTiposApoyo(true)
+								}}
 							>
 								{formData.tipoDeApoyo || 'Seleccionar'}
 							</StyledInput>

@@ -1,0 +1,7 @@
+.react-datepicker__input-container input {
+	background-color: #fff;
+	color: black !important;
+}
+.react-datepicker__input-container input.invalid {
+	border: 1px solid red !important;
+}
