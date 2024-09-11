@@ -22,7 +22,9 @@ const Infraestructura = React.lazy(() => import('./Infraestructura'))
 const OrganizacionAuxiliar = React.lazy(() => import('./OrganizacionAuxiliar'))
 const InformationCard = React.lazy(() => import('./_partials/InformationCard'))
 const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
-const ServicioComunalEstudiantil = React.lazy(() => import('./ServicioComunalEstudiantil'))
+const ServicioComunalEstudiantil = React.lazy(
+	() => import('./ServicioComunalEstudiantil')
+)
 
 const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
@@ -69,7 +71,9 @@ const ContenedorPrincipal = props => {
 		validarAcceso()
 	}, [])
 
-	const currentInstitucion = useSelector(store => store.authUser.currentInstitution)
+	const currentInstitucion = useSelector(
+		store => store.authUser.currentInstitution
+	)
 
 	if (loading) {
 		return <Loader />
@@ -78,7 +82,7 @@ const ContenedorPrincipal = props => {
 	if (currentInstitucion?.id == -1) {
 		return (
 			<AppLayout items={directorItems}>
-				<div className='dashboard-wrapper'>
+				<div className="dashboard-wrapper">
 					<section>
 						<Container>
 							<Row>
@@ -103,14 +107,17 @@ const ContenedorPrincipal = props => {
 			<Helmet>
 				<title>Expediente de institución</title>
 			</Helmet>
-			<div className='dashboard-wrapper'>
+			<div className="dashboard-wrapper">
 				<Container>
 					<Row>
 						<InformationCard data={{}} />
 						{props.active !== 0 && (
-							<Col xs={12} className='mt-3'>
+							<Col xs={12} className="mt-3">
 								<Breadcrumb
-									header={t('expediente_ce>titulo', 'Expediente Centro educativo')}
+									header={t(
+										'expediente_ce>titulo',
+										'Expediente Centro educativo'
+									)}
 									data={breadcrumbs}
 								/>
 								<br />
