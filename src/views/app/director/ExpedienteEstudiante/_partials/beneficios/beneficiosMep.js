@@ -9,23 +9,18 @@ import IntlMessages from '../../../../../../helpers/IntlMessages'
 import styled from 'styled-components'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
 import { FormGroup, Label, Input, CustomInput, Form, FormFeedback } from 'reactstrap'
-import { EditButton } from '../../../../../../components/EditButton'
+import { EditButton } from 'Components/EditButton'
 import { useForm } from 'react-hook-form'
 import moment from 'moment'
 import Select from 'react-select'
 import { useSelector } from 'react-redux'
-import { useActions } from '../../../../../../hooks/useActions'
-import {
-	addSubsidio,
-	deleteSubsidio,
-	editSubsidio,
-	editSubsidioBody,
-	GetSubsidiosMEP
-} from '../../../../../../redux/beneficios/actions'
-import useNotification from '../../../../../../hooks/useNotification'
-import RequiredLabel from '../../../../../../components/common/RequeredLabel'
+import { useActions } from 'Hooks/useActions'
+import { addSubsidio, deleteSubsidio, editSubsidio, editSubsidioBody, GetSubsidiosMEP } from 'Redux/beneficios/actions'
+import useNotification from 'Hooks/useNotification'
+import RequiredLabel from 'Components/common/RequeredLabel'
 import BarLoader from 'Components/barLoader/barLoader'
 import OptionModal from 'Components/Modal/OptionModal'
+import { datePickerDefaultProps } from '@material-ui/pickers/constants/prop-types'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -81,6 +76,11 @@ const BeneficiosMEP = props => {
 	const { register, handleSubmit, reset, watch, setValue } = useForm()
 	const [loading, setLoading] = useState(false)
 	const [dataTable, setDataTable] = useState({})
+	const [dataForm, setDataForm] = useState({
+		dateFrom: '',
+		dateTo: '',
+		detSubsidio: ''
+	})
 
 	const state = useSelector(store => {
 		return {
@@ -206,6 +206,8 @@ const BeneficiosMEP = props => {
 	}
 
 	const handleViewSubsidio = async (e, show) => {
+		alert('Handle view')
+		debugger
 		setLoading(true)
 		setView(true)
 		setDataTable(e)
@@ -214,6 +216,7 @@ const BeneficiosMEP = props => {
 		setValue('dateTo', moment(e?.fechaFinal).format('YYYY-MM-DD'))
 		setValue('detSubsidio', e?.detalle)
 		setVerificated(e?.recepcionVerificada == 'Si')
+		const prevSub = tipos.find(tipo => tipo?.nombre == e?.nombreTipoSubsidio)
 		setPrevSubsidio(tipos.find(tipo => tipo?.nombre == e?.nombreTipoSubsidio))
 		setShowButtons(show)
 		setLoading(false)
@@ -235,6 +238,7 @@ const BeneficiosMEP = props => {
 		handleClick()
 	}
 	const handleUpdateSubsidio = async (id, estado) => {
+		alert('Handle edit')
 		setLoading(true)
 		let response = null
 		response = await actions.editSubsidio(id, estado)
@@ -257,151 +261,139 @@ const BeneficiosMEP = props => {
 				titleHeader={'Por parte del MEP'}
 				onConfirm={() => sendData(data)}
 				onCancel={() => setView(false)}
-			> 
-					<Grid container>
-						<Grid item xs={12} className={classes.control}>
-							<FormGroup>
-								<RequiredLabel>Dependencia</RequiredLabel>
-								<Select
-									name='dependencia'
-									className='react-select'
-									classNamePrefix='react-select'
-									value={dependencia}
-									options={dependencias.map(item => ({
-										...item,
-										value: item.id,
-										label: item.nombre
-									}))}
-									isDisabled={!editable}
-									noOptionsMessage={() => 'No hay opciones'}
-									onChange={data => {
-										setDependencia(data)
-										setOrderedTypes(
-											tipos.filter(
-												item => item.dependeciasSubsidioId === data.value
-											)
-										)
-										setPrevSubsidio(null)
-									}}
-								/>
-							</FormGroup>
-							<FormGroup>
-								<RequiredLabel>Tipo de subsidio MEP</RequiredLabel>
-								<Input
-									name='tiposubsidio'
-									onClick={() => {
-										handleSubsidio()
-									}}
-									value={prevSubsidio?.nombre || ''}
-									disabled={!editable}
-								/>
-							</FormGroup>
-							<FormGroup>
-								<Label for='detSubsidio'>Detalle del subsidio MEP</Label>
-								<Input
-									type='textarea'
-									style={{
-										resize: 'none',
-										height: 80
-									}}
-									name='detSubsidio'
-									id='detSubsidio'
-									disabled={true}
-									innerRef={register}
-									value={prevSubsidio?.detalle || ''}
-								/>
-							</FormGroup>
-							<FormGroup>
-								<Label>Verificación de la recepción del apoyo</Label>
-								<div>
-									<CustomInput
-										type='radio'
-										label='Si'
-										inline
-										disabled={!editable || disabledRadio}
-										checked={verificated}
-										onClick={() => {
-											setVerificated(true)
-										}}
-									/>
-									<CustomInput
-										type='radio'
-										label='No'
-										inline
-										disabled={!editable || disabledRadio}
-										checked={!verificated}
-										onClick={() => {
-											setVerificated(false)
-										}}
-									/>
-								</div>
-							</FormGroup>
-						</Grid>
-						<Grid container>
-							<Grid item xs={12} className={classes.periodo}>
-								<Label>Periodo activo</Label>
-							</Grid>
-							<Grid item xs={5} className={classes.control}>
-								<FormGroup>
-									<Label>*Fecha inicio</Label>
-									<Input
-										type='date'
-										name='dateFrom'
-										style={{
-											paddingRight: '12%'
-										}}
-										invalid={
-											toDateInvalid || state.beneficios.fields.fechaInicio
-										}
-										disabled={!editable}
-										innerRef={register}
-									/>
-								</FormGroup>
-								<FormFeedback>
-									{toDateInvalid &&
-										'la fecha de inicio debe ser antes de la fecha de final'}
-									{state.beneficios.fields.fechaInicio &&
-										state.beneficios.errors.fechaInicio}
-								</FormFeedback>
-							</Grid>
-							<Grid
-								item
-								xs={2}
-								style={{
-									textAlign: 'center',
-									paddingTop: 40
+			>
+				<Grid container>
+					<Grid item xs={12} className={classes.control}>
+						<FormGroup>
+							<RequiredLabel>Dependencia</RequiredLabel>
+							<Select
+								name='dependencia'
+								className='react-select'
+								classNamePrefix='react-select'
+								value={dependencia}
+								options={dependencias.map(item => ({
+									...item,
+									value: item.id,
+									label: item.nombre
+								}))}
+								isDisabled={!editable}
+								noOptionsMessage={() => 'No hay opciones'}
+								onChange={data => {
+									setDependencia(data)
+									setOrderedTypes(tipos.filter(item => item.dependeciasSubsidioId === data.value))
+									setPrevSubsidio(null)
 								}}
-								className={classes.control}
-							>
-								<FormGroup>
-									<Label> al </Label>
-								</FormGroup>
-							</Grid>
-							<Grid item xs={5} className={classes.control}>
-								<FormGroup>
-									<Label>*Fecha final</Label>
-									<Input
-										type='date'
-										name='dateTo'
-										style={{
-											paddingRight: '12%'
-										}}
-										invalid={
-											toDateInvalid || state.beneficios.fields.fechaFinal
-										}
-										disabled={!editable}
-										innerRef={register}
-									/>
-									<FormFeedback>
-										{toDateInvalid &&
-											'la fecha de inicio debe ser antes de la fecha de final'}
-										{state.beneficios.fields.fechaFinal &&
-											state.beneficios.errors.fechaFinal}
-									</FormFeedback>
-								</FormGroup>
-							</Grid>
+							/>
+						</FormGroup>
+						<FormGroup>
+							<RequiredLabel>Tipo de subsidio MEP</RequiredLabel>
+							<Input
+								name='tiposubsidio'
+								onClick={() => {
+									handleSubsidio()
+								}}
+								value={prevSubsidio?.nombre || ''}
+								disabled={!editable}
+							/>
+						</FormGroup>
+						<FormGroup>
+							<Label for='detSubsidio'>Detalle del subsidio MEP</Label>
+							<Input
+								type='textarea'
+								style={{
+									resize: 'none',
+									height: 80
+								}}
+								name='detSubsidio'
+								id='detSubsidio'
+								disabled={true}
+								innerRef={register}
+								value={prevSubsidio?.detalle || ''}
+							/>
+						</FormGroup>
+						<FormGroup>
+							<Label>Verificación de la recepción del apoyo</Label>
+							<div>
+								<CustomInput
+									type='radio'
+									label='Si'
+									inline
+									disabled={!editable || disabledRadio}
+									checked={verificated}
+									onClick={() => {
+										setVerificated(true)
+									}}
+								/>
+								<CustomInput
+									type='radio'
+									label='No'
+									inline
+									disabled={!editable || disabledRadio}
+									checked={!verificated}
+									onClick={() => {
+										setVerificated(false)
+									}}
+								/>
+							</div>
+						</FormGroup>
+					</Grid>
+					<Grid container>
+						<Grid item xs={12} className={classes.periodo}>
+							<Label>Periodo activo</Label>
 						</Grid>
-					</Grid> 
+						<Grid item xs={5} className={classes.control}>
+							<FormGroup>
+								<Label>*Fecha inicio</Label>
+								<Input
+									type='date'
+									name='dateFrom'
+									style={{
+										paddingRight: '12%'
+									}}
+									invalid={toDateInvalid || state.beneficios.fields.fechaInicio}
+									disabled={!editable}
+									innerRef={register}
+								/>
+							</FormGroup>
+							<FormFeedback>
+								{toDateInvalid && 'la fecha de inicio debe ser antes de la fecha de final'}
+								{state.beneficios.fields.fechaInicio && state.beneficios.errors.fechaInicio}
+							</FormFeedback>
+						</Grid>
+						<Grid
+							item
+							xs={2}
+							style={{
+								textAlign: 'center',
+								paddingTop: 40
+							}}
+							className={classes.control}
+						>
+							<FormGroup>
+								<Label> al </Label>
+							</FormGroup>
+						</Grid>
+						<Grid item xs={5} className={classes.control}>
+							<FormGroup>
+								<Label>*Fecha final</Label>
+								<Input
+									type='date'
+									name='dateTo'
+									style={{
+										paddingRight: '12%'
+									}}
+									invalid={toDateInvalid || state.beneficios.fields.fechaFinal}
+									disabled={!editable}
+									innerRef={register}
+								/>
+								<FormFeedback>
+									{toDateInvalid && 'la fecha de inicio debe ser antes de la fecha de final'}
+									{state.beneficios.fields.fechaFinal && state.beneficios.errors.fechaFinal}
+								</FormFeedback>
+							</FormGroup>
+						</Grid>
+					</Grid>
+				</Grid>
 				{/* <Grid item xs={12} style={{ textAlign: 'center' }} className={classes.control}>
 					{showButtons && (
 						<FormGroup check row>
@@ -424,42 +416,43 @@ const BeneficiosMEP = props => {
 					)}
 				</Grid> */}
 			</OptionModal>
-				<div><NavigationContainer
-						onClick={e => {
-							setView(false)
-						}}
-					>
-						<ArrowBackIosIcon />
-						<h4>
-							<IntlMessages id='pages.go-back-home' />
-						</h4>
-					</NavigationContainer>
-					<h5>Por parte del MEP</h5>
-					<Tabla
-						beneficios={state.beneficios}
-						handlePagination={handlePagination}
-						toggleSnackbar={toggleSnackbar}
-						handleSearch={handleSearch}
-						totalRegistros={totalRegistros}
-						data={data}
-						authHandler={props.authHandler}
-						handleViewSubsidio={handleViewSubsidio}
-						tipos={tipos}
-						match={props.match}
-						loading={loading}
-						setEditable={setEditable}
-						handleCreateToggle={handleCreateToggle}
-						handleDeleteSubsidio={handleDeleteSubsidio}
-						handleUpdateSubsidio={handleUpdateSubsidio}
-					/>
-				</div>
+			<div>
+				<NavigationContainer
+					onClick={e => {
+						setView(false)
+					}}
+				>
+					<ArrowBackIosIcon />
+					<h4>
+						<IntlMessages id='pages.go-back-home' />
+					</h4>
+				</NavigationContainer>
+				<h5>Por parte del MEP</h5>
+				<Tabla
+					beneficios={state.beneficios}
+					handlePagination={handlePagination}
+					toggleSnackbar={toggleSnackbar}
+					handleSearch={handleSearch}
+					totalRegistros={totalRegistros}
+					data={data}
+					authHandler={props.authHandler}
+					handleViewSubsidio={handleViewSubsidio}
+					tipos={tipos}
+					match={props.match}
+					loading={loading}
+					setEditable={setEditable}
+					handleCreateToggle={handleCreateToggle}
+					handleDeleteSubsidio={handleDeleteSubsidio}
+					handleUpdateSubsidio={handleUpdateSubsidio}
+				/>
+			</div>
 			<Subsidio
 				open={open}
 				tipos={orderedTypes}
 				currentSubsidio={currentSubsidio}
 				handleChangeSubsidio={handleChangeSubsidio}
 				toggleModal={toggleModal}
-			/> 
+			/>
 		</>
 	)
 }
