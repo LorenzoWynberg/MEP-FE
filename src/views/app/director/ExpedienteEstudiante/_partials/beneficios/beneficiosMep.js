@@ -154,6 +154,7 @@ const BeneficiosMEP = props => {
 	}
 
 	const sendData = async data => {
+		debugger
 		setLoading(true)
 		if (toDateInvalid) {
 			return
@@ -165,8 +166,8 @@ const BeneficiosMEP = props => {
 			tipoSubsidioId: prevSubsidio?.id,
 			detalle: prevSubsidio?.detalle,
 			recepcionVerificada: verificated,
-			fechaInicio: moment(data.dateFrom).toDate(),
-			fechaFinal: moment(data.dateTo).toDate()
+			fechaInicio: moment(formData.dateFrom).toDate(),
+			fechaFinal: moment(formData.dateTo).toDate()
 		}
 		if (dataTable.id) {
 			_data.id = dataTable.id
