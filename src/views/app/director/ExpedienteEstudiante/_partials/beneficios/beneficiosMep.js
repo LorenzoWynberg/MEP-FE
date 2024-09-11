@@ -252,8 +252,188 @@ const BeneficiosMEP = props => {
 	return (
 		<>
 			{snackbar(snackbarContent.type, snackbarContent.msg)}
-			{!view && (
-				<div>
+			<OptionModal
+				isOpen={view}
+				titleHeader={'Por parte del MEP'}
+				onConfirm={() => sendData(data)}
+				onCancel={() => setView(false)}
+			> 
+					<Grid container>
+						<Grid item xs={12} className={classes.control}>
+							<FormGroup>
+								<RequiredLabel>Dependencia</RequiredLabel>
+								<Select
+									name='dependencia'
+									className='react-select'
+									classNamePrefix='react-select'
+									value={dependencia}
+									options={dependencias.map(item => ({
+										...item,
+										value: item.id,
+										label: item.nombre
+									}))}
+									isDisabled={!editable}
+									noOptionsMessage={() => 'No hay opciones'}
+									onChange={data => {
+										setDependencia(data)
+										setOrderedTypes(
+											tipos.filter(
+												item => item.dependeciasSubsidioId === data.value
+											)
+										)
+										setPrevSubsidio(null)
+									}}
+								/>
+							</FormGroup>
+							<FormGroup>
+								<RequiredLabel>Tipo de subsidio MEP</RequiredLabel>
+								<Input
+									name='tiposubsidio'
+									onClick={() => {
+										handleSubsidio()
+									}}
+									value={prevSubsidio?.nombre || ''}
+									disabled={!editable}
+								/>
+							</FormGroup>
+							<FormGroup>
+								<Label for='detSubsidio'>Detalle del subsidio MEP</Label>
+								<Input
+									type='textarea'
+									style={{
+										resize: 'none',
+										height: 80
+									}}
+									name='detSubsidio'
+									id='detSubsidio'
+									disabled={true}
+									innerRef={register}
+									value={prevSubsidio?.detalle || ''}
+								/>
+							</FormGroup>
+							<FormGroup>
+								<Label>Verificación de la recepción del apoyo</Label>
+								<div>
+									<CustomInput
+										type='radio'
+										label='Si'
+										inline
+										disabled={!editable || disabledRadio}
+										checked={verificated}
+										onClick={() => {
+											setVerificated(true)
+										}}
+									/>
+									<CustomInput
+										type='radio'
+										label='No'
+										inline
+										disabled={!editable || disabledRadio}
+										checked={!verificated}
+										onClick={() => {
+											setVerificated(false)
+										}}
+									/>
+								</div>
+							</FormGroup>
+						</Grid>
+						<Grid container>
+							<Grid item xs={12} className={classes.periodo}>
+								<Label>Periodo activo</Label>
+							</Grid>
+							<Grid item xs={5} className={classes.control}>
+								<FormGroup>
+									<Label>*Fecha inicio</Label>
+									<Input
+										type='date'
+										name='dateFrom'
+										style={{
+											paddingRight: '12%'
+										}}
+										invalid={
+											toDateInvalid || state.beneficios.fields.fechaInicio
+										}
+										disabled={!editable}
+										innerRef={register}
+									/>
+								</FormGroup>
+								<FormFeedback>
+									{toDateInvalid &&
+										'la fecha de inicio debe ser antes de la fecha de final'}
+									{state.beneficios.fields.fechaInicio &&
+										state.beneficios.errors.fechaInicio}
+								</FormFeedback>
+							</Grid>
+							<Grid
+								item
+								xs={2}
+								style={{
+									textAlign: 'center',
+									paddingTop: 40
+								}}
+								className={classes.control}
+							>
+								<FormGroup>
+									<Label> al </Label>
+								</FormGroup>
+							</Grid>
+							<Grid item xs={5} className={classes.control}>
+								<FormGroup>
+									<Label>*Fecha final</Label>
+									<Input
+										type='date'
+										name='dateTo'
+										style={{
+											paddingRight: '12%'
+										}}
+										invalid={
+											toDateInvalid || state.beneficios.fields.fechaFinal
+										}
+										disabled={!editable}
+										innerRef={register}
+									/>
+									<FormFeedback>
+										{toDateInvalid &&
+											'la fecha de inicio debe ser antes de la fecha de final'}
+										{state.beneficios.fields.fechaFinal &&
+											state.beneficios.errors.fechaFinal}
+									</FormFeedback>
+								</FormGroup>
+							</Grid>
+						</Grid>
+					</Grid> 
+				{/* <Grid item xs={12} style={{ textAlign: 'center' }} className={classes.control}>
+					{showButtons && (
+						<FormGroup check row>
+							<EditButton
+								editable={editable}
+								setEditable={value => {
+									if (!value) {
+										setView(false)
+									}
+									props.authHandler(
+										'modificar',
+										() => setEditable(value),
+										toggleSnackbar
+									)
+								}}
+								sendData={() => { }}
+								loading={state.beneficios.loading}
+							/>
+						</FormGroup>
+					)}
+				</Grid> */}
+			</OptionModal>
+				<div><NavigationContainer
+						onClick={e => {
+							setView(false)
+						}}
+					>
+						<ArrowBackIosIcon />
+						<h4>
+							<IntlMessages id='pages.go-back-home' />
+						</h4>
+					</NavigationContainer>
 					<h5>Por parte del MEP</h5>
 					<Tabla
 						beneficios={state.beneficios}
@@ -273,211 +453,13 @@ const BeneficiosMEP = props => {
 						handleUpdateSubsidio={handleUpdateSubsidio}
 					/>
 				</div>
-			)}
-			{view && (
-				<>
-					<NavigationContainer
-						onClick={e => {
-							setView(false)
-						}}
-					>
-						<ArrowBackIosIcon />
-						<h4>
-							<IntlMessages id='pages.go-back-home' />
-						</h4>
-					</NavigationContainer>
-					<Subsidio
-						open={open}
-						tipos={orderedTypes}
-						currentSubsidio={currentSubsidio}
-						handleChangeSubsidio={handleChangeSubsidio}
-						toggleModal={toggleModal}
-					/>
-					<OptionModal
-						isOpen={view}
-						titleHeader={'Por parte del MEP'}
-						onConfirm={handleSubmit(data => props.authHandler('modificar', () => sendData(data)))}
-						onCancel={setView(false)}
-					>
-						<Form onSubmit={handleSubmit(data => props.authHandler('modificar', () => sendData(data)))}>
-							<Grid container className={classes.root} spacing={2}>
-								<Grid item xs={12} md={6}>
-									<Paper className={classes.paper}>
-										<Grid container>
-											<Grid item xs={12} className={classes.control}>
-												<h4>Por parte del MEP</h4>
-											</Grid>
-											<Grid item xs={12} className={classes.control}>
-												<FormGroup>
-													<RequiredLabel>Dependencia</RequiredLabel>
-													<Select
-														name='dependencia'
-														className='react-select'
-														classNamePrefix='react-select'
-														value={dependencia}
-														options={dependencias.map(item => ({
-															...item,
-															value: item.id,
-															label: item.nombre
-														}))}
-														isDisabled={!editable}
-														noOptionsMessage={() => 'No hay opciones'}
-														onChange={data => {
-															setDependencia(data)
-															setOrderedTypes(
-																tipos.filter(
-																	item => item.dependeciasSubsidioId === data.value
-																)
-															)
-															setPrevSubsidio(null)
-														}}
-													/>
-												</FormGroup>
-												<FormGroup>
-													<RequiredLabel>Tipo de subsidio MEP</RequiredLabel>
-													<Input
-														name='tiposubsidio'
-														onClick={() => {
-															handleSubsidio()
-														}}
-														value={prevSubsidio?.nombre || ''}
-														disabled={!editable}
-													/>
-												</FormGroup>
-												<FormGroup>
-													<Label for='detSubsidio'>Detalle del subsidio MEP</Label>
-													<Input
-														type='textarea'
-														style={{
-															resize: 'none',
-															height: 80
-														}}
-														name='detSubsidio'
-														id='detSubsidio'
-														disabled={true}
-														innerRef={register}
-														value={prevSubsidio?.detalle || ''}
-													/>
-												</FormGroup>
-												<FormGroup>
-													<Label>Verificación de la recepción del apoyo</Label>
-													<div>
-														<CustomInput
-															type='radio'
-															label='Si'
-															inline
-															disabled={!editable || disabledRadio}
-															checked={verificated}
-															onClick={() => {
-																setVerificated(true)
-															}}
-														/>
-														<CustomInput
-															type='radio'
-															label='No'
-															inline
-															disabled={!editable || disabledRadio}
-															checked={!verificated}
-															onClick={() => {
-																setVerificated(false)
-															}}
-														/>
-													</div>
-												</FormGroup>
-											</Grid>
-											<Grid container>
-												<Grid item xs={12} className={classes.periodo}>
-													<Label>Periodo activo</Label>
-												</Grid>
-												<Grid item xs={5} className={classes.control}>
-													<FormGroup>
-														<Label>*Fecha inicio</Label>
-														<Input
-															type='date'
-															name='dateFrom'
-															style={{
-																paddingRight: '12%'
-															}}
-															invalid={
-																toDateInvalid || state.beneficios.fields.fechaInicio
-															}
-															disabled={!editable}
-															innerRef={register}
-														/>
-													</FormGroup>
-													<FormFeedback>
-														{toDateInvalid &&
-															'la fecha de inicio debe ser antes de la fecha de final'}
-														{state.beneficios.fields.fechaInicio &&
-															state.beneficios.errors.fechaInicio}
-													</FormFeedback>
-												</Grid>
-												<Grid
-													item
-													xs={2}
-													style={{
-														textAlign: 'center',
-														paddingTop: 40
-													}}
-													className={classes.control}
-												>
-													<FormGroup>
-														<Label> al </Label>
-													</FormGroup>
-												</Grid>
-												<Grid item xs={5} className={classes.control}>
-													<FormGroup>
-														<Label>*Fecha final</Label>
-														<Input
-															type='date'
-															name='dateTo'
-															style={{
-																paddingRight: '12%'
-															}}
-															invalid={
-																toDateInvalid || state.beneficios.fields.fechaFinal
-															}
-															disabled={!editable}
-															innerRef={register}
-														/>
-														<FormFeedback>
-															{toDateInvalid &&
-																'la fecha de inicio debe ser antes de la fecha de final'}
-															{state.beneficios.fields.fechaFinal &&
-																state.beneficios.errors.fechaFinal}
-														</FormFeedback>
-													</FormGroup>
-												</Grid>
-											</Grid>
-										</Grid>
-									</Paper>
-									<Grid item xs={12} style={{ textAlign: 'center' }} className={classes.control}>
-										{showButtons && (
-											<FormGroup check row>
-												<EditButton
-													editable={editable}
-													setEditable={value => {
-														if (!value) {
-															setView(false)
-														}
-														props.authHandler(
-															'modificar',
-															() => setEditable(value),
-															toggleSnackbar
-														)
-													}}
-													sendData={() => {}}
-													loading={state.beneficios.loading}
-												/>
-											</FormGroup>
-										)}
-									</Grid>
-								</Grid>
-							</Grid>
-						</Form>
-					</OptionModal>
-				</>
-			)}
+			<Subsidio
+				open={open}
+				tipos={orderedTypes}
+				currentSubsidio={currentSubsidio}
+				handleChangeSubsidio={handleChangeSubsidio}
+				toggleModal={toggleModal}
+			/> 
 		</>
 	)
 }
