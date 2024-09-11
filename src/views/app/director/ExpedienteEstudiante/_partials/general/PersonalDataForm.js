@@ -81,73 +81,11 @@ const PersonalDataForm = props => {
 				</CardTitle>
 				<Form>
 					<Row>
-						{/*
-            <Col sm='12'>
-              
-              <FormGroup>
-                {props.label
-                  ? (
-                    <Label>{t('estudiantes>expediente>info_gen>info_gen>datos_personales>nombre', 'Nombre')}</Label>
-                    )
-                  : (
-                    <RequiredLabel>{t('estudiantes>expediente>info_gen>info_gen>datos_personales>nombre', 'Nombre')}</RequiredLabel>
-                    )}
-                <Input
-                  type='text'
-                  name='nombre'
-                  value={props.personalData.nombre}
-                  disabled={props.disabled}
-                  invalid={errorFields.Nombre}
-                  onChange={props.handleChange}
-                />
-                <FormFeedback>
-                  {errorMessages.Nombre}
-                </FormFeedback>
-              </FormGroup>
-            </Col>
-            <Col sm='12'>
-              <FormGroup>
-                {props.label
-                  ? (
-                    <Label>{t('estudiantes>expediente>info_gen>info_gen>datos_personales>apellido_1', 'Primer apellido')}</Label>
-                    )
-                  : (
-                    <RequiredLabel>
-                    {t('estudiantes>expediente>info_gen>info_gen>datos_personales>apellido_1', 'Primer apellido')}
-                  </RequiredLabel>
-                    )}
-                <Input
-                  type='text'
-                  name='primerApellido'
-                  value={props.personalData.primerApellido}
-                  disabled={props.disabled}
-                  invalid={errorFields.PrimerApellido}
-                  onChange={props.handleChange}
-                />
-                <FormFeedback>
-                  {errorMessages.PrimerApellido}
-                </FormFeedback>
-              </FormGroup>
-            </Col>
-            <Col sm='12'>
-              <FormGroup>
-                <Label>{t('estudiantes>expediente>info_gen>info_gen>datos_personales>apellido_2', 'Segundo apellido')}</Label>
-                <Input
-                  type='text'
-                  name='segundoApellido'
-                  value={props.personalData.segundoApellido}
-                  onChange={props.handleChange}
-                  disabled={props.disabled}
-                />
-              </FormGroup>
-            </Col>
-            */}
-
 						{!isEmpty(tipoIdentidadData) && (
 							<Col sm='12'>
 								<FormGroup>
 									<Label>{tipoIdentidadData.label}</Label>
-									<Input type='text' value={tipoIdentidadData.value} disabled={props.disabled} />
+									<Input type='text' value={tipoIdentidadData.value} disabled />
 								</FormGroup>
 							</Col>
 						)}

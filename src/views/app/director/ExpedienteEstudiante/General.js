@@ -254,7 +254,7 @@ const General = props => {
 		} else {
 			setSnacbarContent({
 				variant: 'success',
-				msg: 'Datos actualizados con exito'
+				msg: '¡Los datos se han actualizado con éxito!'
 			})
 			handleClick()
 		}
