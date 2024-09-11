@@ -133,7 +133,7 @@ const TablaMep = props => {
 												props.handleViewSubsidio(fullRow, true)
 											},
 											props.toggleSnackbar,
-											props.setEditable(false)
+											props.setEditable(true)
 											// handlePagination
 										)
 									}}
