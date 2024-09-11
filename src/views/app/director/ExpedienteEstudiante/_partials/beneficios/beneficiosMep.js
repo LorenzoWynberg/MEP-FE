@@ -261,7 +261,7 @@ const BeneficiosMEP = props => {
 	}
 
 	const handleUpdateSubsidio = async (id, estado) => {
-		alert('Handle edit')
+		debugger
 		setLoading(true)
 		let response = null
 		response = await actions.editSubsidio(id, estado)
@@ -421,39 +421,8 @@ const BeneficiosMEP = props => {
 						</Grid>
 					</Grid>
 				</Grid>
-				{/* <Grid item xs={12} style={{ textAlign: 'center' }} className={classes.control}>
-					{showButtons && (
-						<FormGroup check row>
-							<EditButton
-								editable={editable}
-								setEditable={value => {
-									if (!value) {
-										setView(false)
-									}
-									props.authHandler(
-										'modificar',
-										() => setEditable(value),
-										toggleSnackbar
-									)
-								}}
-								sendData={() => { }}
-								loading={state.beneficios.loading}
-							/>
-						</FormGroup>
-					)}
-				</Grid> */}
 			</OptionModal>
 			<div>
-				<NavigationContainer
-					onClick={e => {
-						setView(false)
-					}}
-				>
-					<ArrowBackIosIcon />
-					<h4>
-						<IntlMessages id='pages.go-back-home' />
-					</h4>
-				</NavigationContainer>
 				<h5>Por parte del MEP</h5>
 				<Tabla
 					beneficios={state.beneficios}
