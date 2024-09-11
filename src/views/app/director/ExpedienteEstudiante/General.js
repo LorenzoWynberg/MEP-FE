@@ -82,6 +82,7 @@ const General = props => {
 				catalogsEnumObj.ESTADOCIVIL
 			]
 			const response = await actions.getCatalogsSet(catalogsArray)
+
 			if (response.error) {
 				setSnacbarContent({
 					variant: 'error',
@@ -223,7 +224,6 @@ const General = props => {
 			'etnia'
 		])
 
-		console.log('datos parseados', datos)
 		const _data = {
 			id: identidadData.id,
 			identificacion: identidadData.identificacion,
@@ -296,7 +296,7 @@ const General = props => {
 			) : (
 				<>
 					<br />
-					<Row>
+					{/* <Row>
 						<Colxx>
 							<IdForm
 								{...props}
@@ -308,14 +308,14 @@ const General = props => {
 								avoidSearch={props.avoidSearch}
 								image={image}
 								setImage={setImage}
-								editable
+								editable={false}
 							/>
 						</Colxx>
-					</Row>
+					</Row> */}
 					{snackBar(snackbarContent.variant, snackbarContent.msg)}
 					<Form onSubmit={handleSubmit(submitData)}>
 						<Row>
-							<Colxx lg='6' className='mt-4'>
+							<Colxx lg='6'>
 								<PersonalDataForm
 									personalData={identidadData}
 									disabled={
@@ -332,7 +332,7 @@ const General = props => {
 								/>
 							</Colxx>
 
-							<Colxx lg='6' className='mt-4'>
+							<Colxx lg='6'>
 								<DataForm
 									selects={props.selects}
 									identification={state.identification}
