@@ -91,8 +91,6 @@ export const GetSubsidiosMEP = (identidad, pagina, cantidad) => async dispatch =
 		if (response.data.error) {
 			dispatch(error(response.data))
 		} else {
-			//TODO ELIMINAR JPBR
-			debugger
 			dispatch(loadMEP(response.data))
 		}
 	} catch (e) {

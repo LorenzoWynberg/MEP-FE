@@ -76,11 +76,28 @@ const BeneficiosMEP = props => {
 	const { register, handleSubmit, reset, watch, setValue } = useForm()
 	const [loading, setLoading] = useState(false)
 	const [dataTable, setDataTable] = useState({})
-	const [dataForm, setDataForm] = useState({
+	const [formData, setFormData] = useState({
 		dateFrom: '',
 		dateTo: '',
 		detSubsidio: ''
 	})
+
+	const cleanDataForm = () => {
+		const data = {
+			dateFrom: '',
+			dateTo: '',
+			detSubsidio: ''
+		}
+		setFormData(data)
+	}
+
+	const handleFormDataChange = event => {
+		debugger
+		setFormData({
+			...formData,
+			[event.target.name]: event.target.value
+		})
+	}
 
 	const state = useSelector(store => {
 		return {
@@ -198,6 +215,7 @@ const BeneficiosMEP = props => {
 		setPrevSubsidio({})
 		setDependencia({})
 		setVerificated(false)
+		cleanDataForm()
 	}
 
 	const handleDeleteSubsidio = async ids => {
@@ -206,14 +224,15 @@ const BeneficiosMEP = props => {
 	}
 
 	const handleViewSubsidio = async (e, show) => {
-		alert('Handle view')
-		debugger
 		setLoading(true)
 		setView(true)
 		setDataTable(e)
 		setDependencia({ label: e?.nombreDependecia, value: null })
-		setValue('dateFrom', moment(e?.fechaInicio).format('YYYY-MM-DD'))
-		setValue('dateTo', moment(e?.fechaFinal).format('YYYY-MM-DD'))
+		setFormData({
+			...formData,
+			dateFrom: moment(e?.fechaInicio).format('YYYY-MM-DD'),
+			dateTo: moment(e?.fechaFinal).format('YYYY-MM-DD')
+		})
 		setValue('detSubsidio', e?.detalle)
 		setVerificated(e?.recepcionVerificada == 'Si')
 		const prevSub = tipos.find(tipo => tipo?.nombre == e?.nombreTipoSubsidio)
@@ -237,6 +256,7 @@ const BeneficiosMEP = props => {
 		})
 		handleClick()
 	}
+
 	const handleUpdateSubsidio = async (id, estado) => {
 		alert('Handle edit')
 		setLoading(true)
@@ -307,7 +327,7 @@ const BeneficiosMEP = props => {
 								name='detSubsidio'
 								id='detSubsidio'
 								disabled={true}
-								innerRef={register}
+								//innerRef={register}
 								value={prevSubsidio?.detalle || ''}
 							/>
 						</FormGroup>
@@ -323,6 +343,7 @@ const BeneficiosMEP = props => {
 									onClick={() => {
 										setVerificated(true)
 									}}
+									value={verificated}
 								/>
 								<CustomInput
 									type='radio'
@@ -333,6 +354,7 @@ const BeneficiosMEP = props => {
 									onClick={() => {
 										setVerificated(false)
 									}}
+									value={verificated}
 								/>
 							</div>
 						</FormGroup>
@@ -352,7 +374,8 @@ const BeneficiosMEP = props => {
 									}}
 									invalid={toDateInvalid || state.beneficios.fields.fechaInicio}
 									disabled={!editable}
-									innerRef={register}
+									value={formData.dateFrom}
+									onChange={handleFormDataChange}
 								/>
 							</FormGroup>
 							<FormFeedback>
@@ -384,7 +407,8 @@ const BeneficiosMEP = props => {
 									}}
 									invalid={toDateInvalid || state.beneficios.fields.fechaFinal}
 									disabled={!editable}
-									innerRef={register}
+									value={formData.dateTo}
+									onChange={handleFormDataChange}
 								/>
 								<FormFeedback>
 									{toDateInvalid && 'la fecha de inicio debe ser antes de la fecha de final'}
