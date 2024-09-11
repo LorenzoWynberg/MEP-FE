@@ -35,7 +35,13 @@ const PersonalDataForm = props => {
 
 	const getTipoIdentificacion = async (codigoDeCatalogo, idType, nombreCatalogo) => {
 		try {
-			const titulo = `Tipo de ${idType}`
+			let type = ''
+			if (idType == 'YISRO') {
+				type = 'YÍS RÖ'
+			} else {
+				type = idType
+			}
+			const titulo = `Tipo de ${type}`
 
 			const response = await actions.getCatalogs(codigoDeCatalogo)
 
