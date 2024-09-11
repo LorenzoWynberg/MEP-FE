@@ -11,7 +11,13 @@ const formatter = Intl.DateTimeFormat('es-ES', {
 	timeStyle: 'short',
 	hour12: true
 })
-const ReporteStyledTableGeo = ({ innerRef, data, columns, title, headerValues }) => {
+const ReporteStyledTableGeo = ({
+	innerRef,
+	data,
+	columns,
+	title,
+	headerValues
+}) => {
 	const state = useSelector<any, any>(store => {
 		return {
 			user: store.authUser.authObject.user,
@@ -40,11 +46,10 @@ const ReporteStyledTableGeo = ({ innerRef, data, columns, title, headerValues })
 				</Seccion>
 				<p>
 					<Table>
-						<thead>{columns && columns.map((item, index) => <th>{item.Header}</th>)}</thead>
-						<tbody>
-							{console.log('data', data)}
-							{data && data.map((item, index) => Row(item, index))}
-						</tbody>
+						<thead>
+							{columns && columns.map((item, index) => <th>{item.Header}</th>)}
+						</thead>
+						<tbody>{data && data.map((item, index) => Row(item, index))}</tbody>
 					</Table>
 				</p>
 				<p>
