@@ -119,11 +119,11 @@ const BeneficiosMEP = props => {
 		setOrderedTypes(tipos)
 	}, [currentBeneficio])
 
-	useEffect(() => {
+	/* useEffect(() => {
 		if (!editable) {
 			clearData()
 		}
-	}, [editable])
+	}, [editable]) */
 
 	useEffect(() => {
 		if (fromDate) {
@@ -224,7 +224,7 @@ const BeneficiosMEP = props => {
 		return response
 	}
 
-	const handleViewSubsidio = async (e, show) => {
+	const handleViewSubsidio = (e, show) => {
 		setLoading(true)
 
 		setDataTable(e)
