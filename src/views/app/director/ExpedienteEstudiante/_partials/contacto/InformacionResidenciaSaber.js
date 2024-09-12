@@ -734,9 +734,9 @@ const InformacionResidenciaSaber = (props) => {
 											</FormSpan>
 										</FormGroup>
 										<FormGroup>
-											<RequiredLabel for="dirExacta">
-												Dirección exacta
-											</RequiredLabel>
+											<Label for="dirExacta">
+												Dirección exacta <RequiredSpan/>
+											</Label>
 											<Input
 												type="textarea"
 												style={{
