@@ -856,9 +856,9 @@ const InformacionResidenciaSaber = (props) => {
 										</Grid>
 										{props.temporal && (
 											<FormGroup>
-												<RequiredLabel for="razon">
-													Razón
-												</RequiredLabel>
+												<Label for="razon">
+													Razón <RequiredSpan/>
+												</Label>
 												<Input
 													type="textarea"
 													style={{
