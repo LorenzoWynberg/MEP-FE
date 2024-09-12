@@ -46,7 +46,10 @@ const General = props => {
 	const [addItems, setAddItems] = useState({})
 	const [loading, setLoading] = useState(false)
 	const [snackBar, handleClick] = useNotification()
-	const [snackBarContent, setSnackbarContent] = useState({ varian: 'error', msg: '' })
+	const [snackBarContent, setSnackbarContent] = useState({
+		varian: 'error',
+		msg: ''
+	})
 	const { handleSubmit } = useForm()
 	const [categorias, setCategorias] = useState([])
 	const { width } = useWindowSize()
@@ -81,7 +84,12 @@ const General = props => {
 			condicionApoyoId: 6050
 		}
 		debugger
-		return await actions.addApoyo(dataSend, category, categoryKeyName, state.apoyos[categoryKeyName].pageNumber)
+		return await actions.addApoyo(
+			dataSend,
+			category,
+			categoryKeyName,
+			state.apoyos[categoryKeyName].pageNumber
+		)
 	}
 
 	const handleDeleteApoyo = async (id, categoryKeyName, category) => {
@@ -112,7 +120,12 @@ const General = props => {
 	}
 
 	const editarApoyo = async (data, category, categoryKeyName) => {
-		return await actions.editApoyo(data, category, categoryKeyName, state.apoyos[categoryKeyName].pageNumber)
+		return await actions.editApoyo(
+			data,
+			category,
+			categoryKeyName,
+			state.apoyos[categoryKeyName].pageNumber
+		)
 	}
 
 	const showsnackBar = (variant, msg) => {
@@ -148,7 +161,9 @@ const General = props => {
 	return (
 		<>
 			{snackBar(snackBarContent.variant, snackBarContent.msg)}
-			<h4>{t('estudiantes>expediente>apoyos_edu>titulo', 'Apoyos educativos')}</h4>
+			<h4>
+				{t('estudiantes>expediente>apoyos_edu>titulo', 'Apoyos educativos')}
+			</h4>
 			<br />
 			<ApoyoEducativoOpciones
 				showsnackBar={showsnackBar}

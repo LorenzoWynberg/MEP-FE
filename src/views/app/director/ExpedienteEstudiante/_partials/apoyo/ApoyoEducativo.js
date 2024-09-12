@@ -16,11 +16,9 @@ import OptionModal from '../../../../../../components/Modal/OptionModal'
 
 const ApoyoEducativo = props => {
 	const { t } = useTranslation()
-
 	const [discapacidadesHistorico, setDiscapacidadesHistorico] = useState()
 	const [condicionesHistorico, setCondicionesHistorico] = useState()
-	const [loading, setLoading] = useState()
-
+	const [loading, setLoading] = useState(true)
 	const [discapacidades, setDiscapacidades] = useState([])
 	const [condiciones, setCondiciones] = useState([])
 	const [openOptions, setOpenOptions] = useState({ open: false, type: null })
@@ -28,6 +26,7 @@ const ApoyoEducativo = props => {
 	const [activeTab, setActiveTab] = useState(0)
 
 	useEffect(() => {
+		setLoading(true)
 		const _discapacidades = []
 		const _discapacidadesIdentidad = props.discapacidadesIdentidad.map(
 			discapacidad => discapacidad.elementosCatalogosId
@@ -38,7 +37,9 @@ const ApoyoEducativo = props => {
 			}
 		})
 		setDiscapacidades(_discapacidades)
+		setLoading(false)
 	}, [props.discapacidadesIdentidad])
+
 	useEffect(() => {
 		getHistoricos()
 	}, [])
@@ -51,19 +52,19 @@ const ApoyoEducativo = props => {
 			)
 			.then(r => {
 				setDiscapacidadesHistorico(r.data)
-				setLoading(false)
-			}, [])
-		axios
-			.get(
-				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/GetByIdentidadHist/${props.identidadId}`
-			)
-			.then(r => {
-				setCondicionesHistorico(r.data)
-				setLoading(false)
+				axios
+					.get(
+						`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/GetByIdentidadHist/${props.identidadId}`
+					)
+					.then(r2 => {
+						setCondicionesHistorico(r2.data)
+						setLoading(false)
+					}, [])
 			}, [])
 	}
 
 	useEffect(() => {
+		setLoading(true)
 		const _condiciones = []
 		const _condicionesIdentidad = props.condicionesIdentidad.map(
 			condicion => condicion.elementosCatalogosId
@@ -73,13 +74,13 @@ const ApoyoEducativo = props => {
 				_condiciones.push(condicion)
 			}
 		})
-
 		setCondiciones(_condiciones)
+		setLoading(false)
 	}, [props.condicionesIdentidad])
 
 	const handleOpenOptions = (options, name) => {
+		setLoading(true)
 		let _options = []
-
 		const map =
 			(name === 'discapacidades' && discapacidades.map(item => item.id)) ||
 			condiciones.map(item => item.id)
@@ -92,6 +93,7 @@ const ApoyoEducativo = props => {
 		})
 		setModalOptions(_options)
 		setOpenOptions({ open: true, type: name })
+		setLoading(false)
 	}
 
 	const toggleModal = async (saveData = false) => {
@@ -122,6 +124,7 @@ const ApoyoEducativo = props => {
 					props.showsnackBar('success', 'Contenido enviado con éxito')
 				}
 				r.error && props.showsnackBar('error', 'Error agregando condición')
+				setLoading(false)
 			})
 		} else {
 			setLoading(false)
@@ -146,10 +149,11 @@ const ApoyoEducativo = props => {
 		{ title: 'Apoyos personales' },
 		{ title: 'Apoyos organizativos' }
 	]
+
+	if (loading) return <Loader />
+
 	return (
 		<>
-			{loading && <Loader />}
-
 			<HeaderTab
 				options={optionsTab}
 				activeTab={activeTab}
