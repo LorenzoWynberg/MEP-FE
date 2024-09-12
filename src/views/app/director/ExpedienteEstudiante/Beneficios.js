@@ -4,7 +4,8 @@ import ContentTab from 'Components/Tab/Content'
 import BeneficiosMEP from './_partials/beneficios/beneficiosMep'
 import BeneficiosSinirube from './_partials/beneficios/beneficiosSinirube'
 import { connect } from 'react-redux'
-
+import BarLoader from 'Components/barLoader/barLoader'
+import Loader from '../../../../components/Loader'
 import { GetTypes, GetSubsidiosMEP, GetSubsidiosFilterMEP, GetDependencias } from 'Redux/beneficios/actions'
 import moment from 'moment'
 import './style.scss'
@@ -25,14 +26,16 @@ const BeneficiosSinirubeWithAuth = withAuthorization({
 })(BeneficiosSinirube)
 
 const Expediente = props => {
-	const { dataMEP, dataSINIRUBE, typesSubsidios, data, dependencias, errors, error, loading } = props
+	const { dataMEP, dataSINIRUBE, typesSubsidios, data, dependencias, errors, error } = props
 	const [activeTab, setActiveTab] = useState(0)
 	const [listMep, setListMep] = useState([])
 	const [totalRegitroMEP, setTotalRegitroMEP] = useState([])
+	const [loading, setLoading] = useState(true)
 
 	const optionsTab = ['MEP']
 
 	useEffect(() => {
+		setLoading(true)
 		if (dataMEP && dataMEP.entityList) {
 			setListMep(
 				dataMEP.entityList.map(item => {
@@ -44,24 +47,36 @@ const Expediente = props => {
 			)
 			setTotalRegitroMEP(dataMEP.totalCount)
 		}
+		setLoading(false)
 	}, [dataMEP])
 
 	const handlePagination = async (pagina, cantidadPagina) => {
+		setLoading(true)
 		await props.GetSubsidiosMEP(data.id, pagina, cantidadPagina)
+		setLoading(false)
 	}
 
 	const handleSearch = async (FilterText, cantidadPagina, pagina) => {
-		return await props.GetSubsidiosFilterMEP(data.id, FilterText, pagina, cantidadPagina)
+		setLoading(true)
+		const res = await props.GetSubsidiosFilterMEP(data.id, FilterText, pagina, cantidadPagina)
+		setLoading(false)
+		return res
 	}
 
 	useEffect(() => {
+		setLoading(true)
 		const fetch = async () => {
 			await props.GetDependencias()
 			await props.GetTypes()
 			await props.GetSubsidiosMEP(data.id, 1, 10)
+			setLoading(false)
 		}
 		fetch()
 	}, [])
+
+	if (loading || loading || props.loading) {
+		return <BarLoader />
+	}
 
 	return (
 		<>
@@ -76,7 +91,7 @@ const Expediente = props => {
 								handlePagination={handlePagination}
 								handleSearch={handleSearch}
 								totalRegistros={totalRegitroMEP}
-								loading={loading}
+								loading={loading || props.loading}
 								data={listMep}
 								data1={data}
 								match={props.match}
