@@ -21,6 +21,9 @@ import RequiredLabel from 'Components/common/RequeredLabel'
 import BarLoader from 'Components/barLoader/barLoader'
 import OptionModal from 'Components/Modal/OptionModal'
 import { datePickerDefaultProps } from '@material-ui/pickers/constants/prop-types'
+import { isNaN, isEmpty } from 'lodash'
+import swal from 'sweetalert'
+import RequiredSpan from 'Components/Form/RequiredSpan'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -119,12 +122,6 @@ const BeneficiosMEP = props => {
 		setOrderedTypes(tipos)
 	}, [currentBeneficio])
 
-	/* useEffect(() => {
-		if (!editable) {
-			clearData()
-		}
-	}, [editable]) */
-
 	useEffect(() => {
 		if (fromDate) {
 			const fromDateParsed = moment(fromDate)
@@ -142,6 +139,10 @@ const BeneficiosMEP = props => {
 	}
 
 	const handleChangeSubsidio = item => {
+		setFormData({
+			...formData,
+			detSubsidio: item.detalle
+		})
 		setCurrentSubsidio(item)
 	}
 
@@ -154,13 +155,55 @@ const BeneficiosMEP = props => {
 	}
 
 	const sendData = async data => {
-		debugger
 		setLoading(true)
+		debugger
 		if (toDateInvalid) {
 			return
 		}
 
+		let hayError = false
+		let validationMessage = ''
+
+		if (isEmpty(dependencia)) {
+			validationMessage = '\nLa dependencia es requerida'
+			hayError = true
+		}
+
+		if (!prevSubsidio?.id || isNaN(prevSubsidio?.id)) {
+			validationMessage += '\nEl tipo de subsidio es requerido'
+			hayError = true
+		}
+
+		if (formData.dateFrom === '') {
+			validationMessage += '\nLa fecha de inicio es requerida'
+			hayError = true
+		}
+
+		if (formData.dateTo === '') {
+			validationMessage += '\nLa fecha de fin es requerida'
+			hayError = true
+		}
+
+		if (hayError) {
+			swal({
+				title: 'Error al registrar el apoyo',
+				text: validationMessage,
+				icon: 'error',
+				className: 'text-alert-modal',
+				buttons: {
+					ok: {
+						text: 'Ok',
+						value: true,
+						className: 'btn-alert-color'
+					}
+				}
+			})
+			setLoading(false)
+			return
+		}
+
 		let response = null
+
 		let _data = {
 			identidadesId: state.identification.data?.id,
 			tipoSubsidioId: prevSubsidio?.id,
@@ -169,6 +212,7 @@ const BeneficiosMEP = props => {
 			fechaInicio: moment(formData.dateFrom).toDate(),
 			fechaFinal: moment(formData.dateTo).toDate()
 		}
+
 		if (dataTable.id) {
 			_data.id = dataTable.id
 			response = await actions.editSubsidioBody(_data)
@@ -261,8 +305,6 @@ const BeneficiosMEP = props => {
 	}
 
 	const handleUpdateSubsidio = async (id, estado) => {
-		debugger
-		setLoading(true)
 		let response = null
 		response = await actions.editSubsidio(id, estado)
 		if (!response?.error && estado === 0) {
@@ -272,7 +314,6 @@ const BeneficiosMEP = props => {
 			toggleSnackbar('success', 'Se ha activado correctamente.')
 			await actions.GetSubsidiosMEP(state.identification.data?.id, 1, 10)
 		}
-		setLoading(false)
 	}
 
 	if (loading || props.loading) return <BarLoader />
@@ -282,13 +323,16 @@ const BeneficiosMEP = props => {
 			<OptionModal
 				isOpen={view}
 				titleHeader={'Por parte del MEP'}
-				onConfirm={() => sendData(data)}
+				hideCancel={visualizing}
+				onConfirm={() => (!visualizing ? sendData(dataTable) : setView(false))}
 				onCancel={() => setView(false)}
 			>
 				<Grid container>
 					<Grid item xs={12} className={classes.control}>
 						<FormGroup>
-							<RequiredLabel>Dependencia</RequiredLabel>
+							<Label for='dependencia'>
+								Dependecia <RequiredSpan />{' '}
+							</Label>
 							<Select
 								name='dependencia'
 								className='react-select'
@@ -309,7 +353,9 @@ const BeneficiosMEP = props => {
 							/>
 						</FormGroup>
 						<FormGroup>
-							<RequiredLabel>Tipo de subsidio MEP</RequiredLabel>
+							<Label for='tiposubsidio'>
+								Tipo de subsidio MEP <RequiredSpan />
+							</Label>
 							<Input
 								name='tiposubsidio'
 								onClick={() => {
@@ -368,7 +414,9 @@ const BeneficiosMEP = props => {
 						</Grid>
 						<Grid item xs={5} className={classes.control}>
 							<FormGroup>
-								<Label>*Fecha inicio</Label>
+								<Label for='dateFrom'>
+									Fecha inicio <RequiredSpan />
+								</Label>
 								<Input
 									type='date'
 									name='dateFrom'
@@ -381,10 +429,6 @@ const BeneficiosMEP = props => {
 									onChange={handleFormDataChange}
 								/>
 							</FormGroup>
-							<FormFeedback>
-								{toDateInvalid && 'la fecha de inicio debe ser antes de la fecha de final'}
-								{state.beneficios.fields.fechaInicio && state.beneficios.errors.fechaInicio}
-							</FormFeedback>
 						</Grid>
 						<Grid
 							item
@@ -401,7 +445,9 @@ const BeneficiosMEP = props => {
 						</Grid>
 						<Grid item xs={5} className={classes.control}>
 							<FormGroup>
-								<Label>*Fecha final</Label>
+								<Label for='dateTo'>
+									Fecha final <RequiredSpan />
+								</Label>
 								<Input
 									type='date'
 									name='dateTo'
@@ -440,6 +486,7 @@ const BeneficiosMEP = props => {
 					handleCreateToggle={handleCreateToggle}
 					handleDeleteSubsidio={handleDeleteSubsidio}
 					handleUpdateSubsidio={handleUpdateSubsidio}
+					setVisualizing={setVisualizing}
 				/>
 			</div>
 			<Subsidio

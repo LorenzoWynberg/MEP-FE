@@ -13,7 +13,7 @@ import BookAvailable from 'Assets/icons/bookAvailable'
 import colors from 'Assets/js/colors'
 import BarLoader from 'Components/barLoader/barLoader.tsx'
 const TablaMep = props => {
-	const { data, loading, handlePagination, handleSearch, totalRegistros } = props
+	const { data, loading, handlePagination, handleSearch, totalRegistros, setVisualizing } = props
 
 	const actions = [
 		{
@@ -118,6 +118,7 @@ const TablaMep = props => {
 									onClick={() => {
 										props.handleViewSubsidio(fullRow, false)
 										props.setEditable(false)
+										props.setVisualizing(true)
 									}}
 								>
 									<IoEyeSharp style={{ fontSize: 25, color: colors.darkGray }} />
@@ -133,7 +134,8 @@ const TablaMep = props => {
 												props.handleViewSubsidio(fullRow, true)
 											},
 											props.toggleSnackbar,
-											props.setEditable(true)
+											props.setEditable(true),
+											props.setVisualizing(false)
 											// handlePagination
 										)
 									}}
