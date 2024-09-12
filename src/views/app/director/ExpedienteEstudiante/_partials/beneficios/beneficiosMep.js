@@ -95,7 +95,6 @@ const BeneficiosMEP = props => {
 	}
 
 	const handleFormDataChange = event => {
-		debugger
 		setFormData({
 			...formData,
 			[event.target.name]: event.target.value
@@ -156,8 +155,22 @@ const BeneficiosMEP = props => {
 
 	const sendData = async data => {
 		setLoading(true)
-		debugger
-		if (toDateInvalid) {
+
+		if (moment(formData.dateTo, 'YYYY-MM-DD').isBefore(formData.dateFrom)) {
+			swal({
+				title: 'Error',
+				text: 'La fecha de final no puede ser menor a la fecha de inicio',
+				icon: 'error',
+				className: 'text-alert-modal',
+				buttons: {
+					ok: {
+						text: 'Ok',
+						value: true,
+						className: 'btn-alert-color'
+					}
+				}
+			})
+			setLoading(false)
 			return
 		}
 
@@ -313,6 +326,8 @@ const BeneficiosMEP = props => {
 		} else if (!response?.error && estado === 1) {
 			toggleSnackbar('success', 'Se ha activado correctamente.')
 			await actions.GetSubsidiosMEP(state.identification.data?.id, 1, 10)
+		} else if (response?.error) {
+			toggleSnackbar('error', 'Error activando el subsidio.')
 		}
 	}
 
