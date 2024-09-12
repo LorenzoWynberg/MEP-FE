@@ -409,7 +409,7 @@ const InformacionResidenciaSaber = (props) => {
 			? true
 			: _errors['razon']
 				? true
-				: _errors['location']
+				: _errors['direccionExacta']
 					? true
 					: false
 		setErrors(_errors)
