@@ -349,7 +349,7 @@ class TopNav extends Component {
 		} = this.props
 		const token = authObject.user.token
 		const { data } = this.state
-		const isEncargadoOrEstudiante = authObject.user.rolesOrganizaciones.find(
+		const isEncargadoOrEstudiante = authObject.user.rolesOrganizaciones?.find(
 			rol =>
 				rol.rolNombre.toLowerCase() === 'estudiante' ||
 				rol.rolNombre.toLowerCase() === 'encargado'
@@ -358,7 +358,7 @@ class TopNav extends Component {
 		const institutionsArray = isEncargadoOrEstudiante
 			? ''
 			: authObject.user.rolesOrganizaciones.map(el => {
-					const institution = authObject.user.instituciones.find(
+					const institution = authObject.user.instituciones?.find(
 						item => item.id === parseInt(el.organizacionId)
 					)
 					return { ...el, institutionObject: institution }
