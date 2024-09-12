@@ -357,7 +357,7 @@ class TopNav extends Component {
       isComunicado,
       activeYears,
       selectedActiveYear
-    } = this.props
+    } = this.props 
     const token = authObject.user.token
     const { data } = this.state
     const isEncargadoOrEstudiante =
@@ -370,7 +370,7 @@ class TopNav extends Component {
     const institutionsArray = isEncargadoOrEstudiante
       ? ''
       : authObject.user.rolesOrganizaciones.map((el) => {
-        const institution = authObject.user.instituciones.find(
+        const institution = authObject.user.instituciones?.find(
           (item) => item.id === parseInt(el.organizacionId)
         )
         return { ...el, institutionObject: institution }
