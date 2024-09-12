@@ -25,6 +25,7 @@ import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import { useTranslation } from 'react-i18next'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
+import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
 const useStyles = makeStyles(theme => ({
 	root: {
 		flexGrow: 1
@@ -43,7 +44,6 @@ const useStyles = makeStyles(theme => ({
 
 const InformacionContacto = props => {
 	const { t } = useTranslation()
-	console.log('props.informacionContacto', props.expedienteEstudiantil.currentStudent)
 
 	const classes = useStyles()
 	const [snakbar, handleClick, handleClose] = useNotification()
@@ -91,7 +91,6 @@ const InformacionContacto = props => {
 	const onSubmit = useCallback(
 		async e => {
 			e.preventDefault()
-			console.log('formState', formState)
 			props
 				.updateInformationContactFromUser(props.expedienteEstudiantil.currentStudent.idEstudiante, formState)
 				.then(rest => {
@@ -137,7 +136,7 @@ const InformacionContacto = props => {
 												'estudiantes>expediente>contacto>info_cont>tel_prin',
 												'Teléfono principal'
 											)}{' '}
-											<span style={{ color: 'red' }}>*</span>
+											<RequiredSpan/>
 										</Label>
 										<ReactInputMask
 											mask='9999-9999'

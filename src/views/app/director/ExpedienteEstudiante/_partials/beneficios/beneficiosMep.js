@@ -8,25 +8,22 @@ import PropTypes from 'prop-types'
 import IntlMessages from '../../../../../../helpers/IntlMessages'
 import styled from 'styled-components'
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos'
-import Loader from 'Components/Loader'
 import { FormGroup, Label, Input, CustomInput, Form, FormFeedback } from 'reactstrap'
-import { EditButton } from '../../../../../../components/EditButton'
+import { EditButton } from 'Components/EditButton'
 import { useForm } from 'react-hook-form'
 import moment from 'moment'
 import Select from 'react-select'
 import { useSelector } from 'react-redux'
-import { useActions } from '../../../../../../hooks/useActions'
-import {
-	addSubsidio,
-	deleteSubsidio,
-	editSubsidio,
-	editSubsidioBody,
-	GetSubsidiosMEP
-} from '../../../../../../redux/beneficios/actions'
-import useNotification from '../../../../../../hooks/useNotification'
-import RequiredLabel from '../../../../../../components/common/RequeredLabel'
+import { useActions } from 'Hooks/useActions'
+import { addSubsidio, deleteSubsidio, editSubsidio, editSubsidioBody, GetSubsidiosMEP } from 'Redux/beneficios/actions'
+import useNotification from 'Hooks/useNotification'
+import RequiredLabel from 'Components/common/RequeredLabel'
 import BarLoader from 'Components/barLoader/barLoader'
-import { useParams } from 'react-router-dom'
+import OptionModal from 'Components/Modal/OptionModal'
+import { datePickerDefaultProps } from '@material-ui/pickers/constants/prop-types'
+import { isNaN, isEmpty } from 'lodash'
+import swal from 'sweetalert'
+import RequiredSpan from 'Components/Form/RequiredSpan'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -82,6 +79,27 @@ const BeneficiosMEP = props => {
 	const { register, handleSubmit, reset, watch, setValue } = useForm()
 	const [loading, setLoading] = useState(false)
 	const [dataTable, setDataTable] = useState({})
+	const [formData, setFormData] = useState({
+		dateFrom: '',
+		dateTo: '',
+		detSubsidio: ''
+	})
+
+	const cleanDataForm = () => {
+		const data = {
+			dateFrom: '',
+			dateTo: '',
+			detSubsidio: ''
+		}
+		setFormData(data)
+	}
+
+	const handleFormDataChange = event => {
+		setFormData({
+			...formData,
+			[event.target.name]: event.target.value
+		})
+	}
 
 	const state = useSelector(store => {
 		return {
@@ -104,12 +122,6 @@ const BeneficiosMEP = props => {
 	}, [currentBeneficio])
 
 	useEffect(() => {
-		if (!editable) {
-			clearData()
-		}
-	}, [editable])
-
-	useEffect(() => {
 		if (fromDate) {
 			const fromDateParsed = moment(fromDate)
 			if (moment().isSameOrBefore(fromDateParsed)) {
@@ -126,6 +138,10 @@ const BeneficiosMEP = props => {
 	}
 
 	const handleChangeSubsidio = item => {
+		setFormData({
+			...formData,
+			detSubsidio: item.detalle
+		})
 		setCurrentSubsidio(item)
 	}
 
@@ -138,26 +154,82 @@ const BeneficiosMEP = props => {
 	}
 
 	const sendData = async data => {
-		if (toDateInvalid) {
+		setLoading(true)
+
+		if (moment(formData.dateTo, 'YYYY-MM-DD').isBefore(formData.dateFrom)) {
+			swal({
+				title: 'Error',
+				text: 'La fecha de final no puede ser menor a la fecha de inicio',
+				icon: 'error',
+				className: 'text-alert-modal',
+				buttons: {
+					ok: {
+						text: 'Ok',
+						value: true,
+						className: 'btn-alert-color'
+					}
+				}
+			})
+			setLoading(false)
+			return
+		}
+
+		let hayError = false
+		let validationMessage = ''
+
+		if (isEmpty(dependencia)) {
+			validationMessage = '\nLa dependencia es requerida'
+			hayError = true
+		}
+
+		if (!prevSubsidio?.id || isNaN(prevSubsidio?.id)) {
+			validationMessage += '\nEl tipo de subsidio es requerido'
+			hayError = true
+		}
+
+		if (formData.dateFrom === '') {
+			validationMessage += '\nLa fecha de inicio es requerida'
+			hayError = true
+		}
+
+		if (formData.dateTo === '') {
+			validationMessage += '\nLa fecha de fin es requerida'
+			hayError = true
+		}
+
+		if (hayError) {
+			swal({
+				title: 'Error al registrar el apoyo',
+				text: validationMessage,
+				icon: 'error',
+				className: 'text-alert-modal',
+				buttons: {
+					ok: {
+						text: 'Ok',
+						value: true,
+						className: 'btn-alert-color'
+					}
+				}
+			})
+			setLoading(false)
 			return
 		}
 
 		let response = null
-		let _data = {}
+
+		let _data = {
+			identidadesId: state.identification.data?.id,
+			tipoSubsidioId: prevSubsidio?.id,
+			detalle: prevSubsidio?.detalle,
+			recepcionVerificada: verificated,
+			fechaInicio: moment(formData.dateFrom).toDate(),
+			fechaFinal: moment(formData.dateTo).toDate()
+		}
+
 		if (dataTable.id) {
-			_data = {
-				id: dataTable.id,
-				identidadesId: state.identification.data?.id,
-				tipoSubsidioId: prevSubsidio?.id,
-				detalle: data.detSubsidio,
-				recepcionVerificada: verificated,
-				fechaInicio: moment(data.dateFrom).toDate(),
-				fechaFinal: moment(data.dateTo).toDate()
-			}
-			setLoading(true)
+			_data.id = dataTable.id
 			response = await actions.editSubsidioBody(_data)
 			setLoading(false)
-
 			if (response.error) {
 				setSnackbarContent({
 					msg: 'Hubo un error al editar',
@@ -174,16 +246,7 @@ const BeneficiosMEP = props => {
 				clearData()
 			}
 		} else {
-			_data = {
-				id: 0,
-				identidadesId: state.identification.data?.id,
-				tipoSubsidioId: prevSubsidio?.id,
-				detalle: data.detSubsidio,
-				recepcionVerificada: verificated,
-				fechaInicio: moment(data.dateFrom).toDate(),
-				fechaFinal: moment(data.dateTo).toDate()
-			}
-			setLoading(true)
+			_data.id = 0
 			response = await actions.addSubsidio(_data)
 			setLoading(false)
 			if (response.error) {
@@ -210,6 +273,7 @@ const BeneficiosMEP = props => {
 		setPrevSubsidio({})
 		setDependencia({})
 		setVerificated(false)
+		cleanDataForm()
 	}
 
 	const handleDeleteSubsidio = async ids => {
@@ -217,16 +281,24 @@ const BeneficiosMEP = props => {
 		return response
 	}
 
-	const handleViewSubsidio = async (e, show) => {
-		await setView(true)
+	const handleViewSubsidio = (e, show) => {
+		setLoading(true)
+
 		setDataTable(e)
 		setDependencia({ label: e?.nombreDependecia, value: null })
-		setValue('dateFrom', moment(e?.fechaInicio).format('YYYY-MM-DD'))
-		setValue('dateTo', moment(e?.fechaFinal).format('YYYY-MM-DD'))
-		setValue('detSubsidio', e?.detalle)
+		setFormData({
+			...formData,
+			dateFrom: moment(e?.fechaInicio).format('YYYY-MM-DD'),
+			dateTo: moment(e?.fechaFinal).format('YYYY-MM-DD'),
+			detSubsidio: e?.detalle
+		})
+
 		setVerificated(e?.recepcionVerificada == 'Si')
+		const prevSub = tipos.find(tipo => tipo?.nombre == e?.nombreTipoSubsidio)
 		setPrevSubsidio(tipos.find(tipo => tipo?.nombre == e?.nombreTipoSubsidio))
 		setShowButtons(show)
+		setView(true)
+		setLoading(false)
 	}
 
 	const handleCreateToggle = () => {
@@ -244,242 +316,205 @@ const BeneficiosMEP = props => {
 		})
 		handleClick()
 	}
+
 	const handleUpdateSubsidio = async (id, estado) => {
 		let response = null
-		setLoading(true)
 		response = await actions.editSubsidio(id, estado)
-		setLoading(false)
 		if (!response?.error && estado === 0) {
 			toggleSnackbar('success', 'Se ha deshabilitado correctamente.')
 			await actions.GetSubsidiosMEP(state.identification.data?.id, 1, 10)
 		} else if (!response?.error && estado === 1) {
 			toggleSnackbar('success', 'Se ha activado correctamente.')
 			await actions.GetSubsidiosMEP(state.identification.data?.id, 1, 10)
+		} else if (response?.error) {
+			toggleSnackbar('error', 'Error activando el subsidio.')
 		}
 	}
 
+	if (loading || props.loading) return <BarLoader />
 	return (
 		<>
 			{snackbar(snackbarContent.type, snackbarContent.msg)}
-			{loading && <BarLoader />}
-			{!view && (
-				<div>
-					<h5>Por parte del MEP</h5>
-					<Tabla
-						handlePagination={handlePagination}
-						toggleSnackbar={toggleSnackbar}
-						handleSearch={handleSearch}
-						totalRegistros={totalRegistros}
-						data={data}
-						authHandler={props.authHandler}
-						handleViewSubsidio={handleViewSubsidio}
-						tipos={tipos}
-						match={props.match}
-						loading={loading}
-						setEditable={setEditable}
-						handleCreateToggle={handleCreateToggle}
-						handleDeleteSubsidio={handleDeleteSubsidio}
-						handleUpdateSubsidio={handleUpdateSubsidio}
-					/>
-				</div>
-			)}
-			{view && (
-				<>
-					<NavigationContainer
-						onClick={e => {
-							setView(false)
-						}}
-					>
-						<ArrowBackIosIcon />
-						<h4>
-							<IntlMessages id='pages.go-back-home' />
-						</h4>
-					</NavigationContainer>
-					<Subsidio
-						open={open}
-						tipos={orderedTypes}
-						currentSubsidio={currentSubsidio}
-						handleChangeSubsidio={handleChangeSubsidio}
-						toggleModal={toggleModal}
-					/>
-					<Form onSubmit={handleSubmit(data => props.authHandler('modificar', () => sendData(data)))}>
-						<Grid container className={classes.root} spacing={2}>
-							<Grid item xs={12} md={6}>
-								<Paper className={classes.paper}>
-									<Grid container>
-										<Grid item xs={12} className={classes.control}>
-											<h4>Por parte del MEP</h4>
-										</Grid>
-										<Grid item xs={12} className={classes.control}>
-											<FormGroup>
-												<RequiredLabel>Dependencia</RequiredLabel>
-												<Select
-													name='dependencia'
-													className='react-select'
-													classNamePrefix='react-select'
-													value={dependencia}
-													options={dependencias.map(item => ({
-														...item,
-														value: item.id,
-														label: item.nombre
-													}))}
-													isDisabled={!editable}
-													noOptionsMessage={() => 'No hay opciones'}
-													onChange={data => {
-														setDependencia(data)
-														setOrderedTypes(
-															tipos.filter(
-																item => item.dependeciasSubsidioId === data.value
-															)
-														)
-														setPrevSubsidio(null)
-													}}
-												/>
-											</FormGroup>
-											<FormGroup>
-												<RequiredLabel>
-													Tipo de subsidio MEP / Apoyo material y tecnológico
-												</RequiredLabel>
-												<Input
-													name='tiposubsidio'
-													onClick={() => {
-														handleSubsidio()
-													}}
-													value={prevSubsidio?.nombre || ''}
-													disabled={!editable}
-												/>
-											</FormGroup>
-											<FormGroup>
-												<Label for='detSubsidio'>
-													Detalle del subsidio MEP / Apoyo material y tecnológico
-												</Label>
-												<Input
-													type='textarea'
-													style={{
-														resize: 'none',
-														height: 80
-													}}
-													value={prevSubsidio?.detalle}
-													name='detSubsidio'
-													id='detSubsidio'
-													disabled={true}
-													innerRef={register}
-												/>
-											</FormGroup>
-											<FormGroup>
-												<Label>Verificación de la recepción del apoyo</Label>
-												<div>
-													<CustomInput
-														type='radio'
-														label='Si'
-														inline
-														disabled={!editable || disabledRadio}
-														checked={verificated}
-														onClick={() => {
-															setVerificated(true)
-														}}
-													/>
-													<CustomInput
-														type='radio'
-														label='No'
-														inline
-														disabled={!editable || disabledRadio}
-														checked={!verificated}
-														onClick={() => {
-															setVerificated(false)
-														}}
-													/>
-												</div>
-											</FormGroup>
-										</Grid>
-										<Grid container>
-											<Grid item xs={12} className={classes.periodo}>
-												<Label>Periodo activo</Label>
-											</Grid>
-											<Grid item xs={5} className={classes.control}>
-												<FormGroup>
-													<Label>*Fecha inicio / Fecha de entrega</Label>
-													<Input
-														type='date'
-														name='dateFrom'
-														style={{
-															paddingRight: '12%'
-														}}
-														invalid={toDateInvalid || state.beneficios.fields.fechaInicio}
-														disabled={!editable}
-														innerRef={register}
-													/>
-												</FormGroup>
-												<FormFeedback>
-													{toDateInvalid &&
-														'la fecha de inicio debe ser antes de la fecha de final'}
-													{state.beneficios.fields.fechaInicio &&
-														state.beneficios.errors.fechaInicio}
-												</FormFeedback>
-											</Grid>
-											<Grid
-												item
-												xs={2}
-												style={{
-													textAlign: 'center',
-													paddingTop: 40
-												}}
-												className={classes.control}
-											>
-												<FormGroup>
-													<Label> al </Label>
-												</FormGroup>
-											</Grid>
-											<Grid item xs={5} className={classes.control}>
-												<FormGroup>
-													<Label>Fecha final</Label>
-													<Input
-														type='date'
-														name='dateTo'
-														style={{
-															paddingRight: '12%'
-														}}
-														invalid={toDateInvalid || state.beneficios.fields.fechaFinal}
-														disabled={!editable}
-														innerRef={register}
-													/>
-													<FormFeedback>
-														{toDateInvalid &&
-															'la fecha de inicio debe ser antes de la fecha de final'}
-														{state.beneficios.fields.fechaFinal &&
-															state.beneficios.errors.fechaFinal}
-													</FormFeedback>
-												</FormGroup>
-											</Grid>
-										</Grid>
-									</Grid>
-								</Paper>
-								<Grid item xs={12} style={{ textAlign: 'center' }} className={classes.control}>
-									{showButtons && (
-										<FormGroup check row>
-											<EditButton
-												editable={editable}
-												setEditable={value => {
-													if (!value) {
-														setView(false)
-													}
-													props.authHandler(
-														'modificar',
-														() => setEditable(value),
-														toggleSnackbar
-													)
-												}}
-												sendData={() => {}}
-												loading={state.beneficios.loading}
-											/>
-										</FormGroup>
-									)}
-								</Grid>
-							</Grid>
+			<OptionModal
+				isOpen={view}
+				titleHeader={'Por parte del MEP'}
+				hideCancel={visualizing}
+				onConfirm={() => (!visualizing ? sendData(dataTable) : setView(false))}
+				onCancel={() => setView(false)}
+			>
+				<Grid container>
+					<Grid item xs={12} className={classes.control}>
+						<FormGroup>
+							<Label for='dependencia'>
+								Dependecia <RequiredSpan />{' '}
+							</Label>
+							<Select
+								name='dependencia'
+								className='react-select'
+								classNamePrefix='react-select'
+								value={dependencia}
+								options={dependencias.map(item => ({
+									...item,
+									value: item.id,
+									label: item.nombre
+								}))}
+								isDisabled={!editable}
+								noOptionsMessage={() => 'No hay opciones'}
+								onChange={data => {
+									setDependencia(data)
+									setOrderedTypes(tipos.filter(item => item.dependeciasSubsidioId === data.value))
+									setPrevSubsidio(null)
+								}}
+							/>
+						</FormGroup>
+						<FormGroup>
+							<Label for='tiposubsidio'>
+								Tipo de subsidio MEP <RequiredSpan />
+							</Label>
+							<Input
+								name='tiposubsidio'
+								onClick={() => {
+									handleSubsidio()
+								}}
+								value={prevSubsidio?.nombre || ''}
+								disabled={!editable}
+							/>
+						</FormGroup>
+						<FormGroup>
+							<Label for='detSubsidio'>Detalle del subsidio MEP</Label>
+							<Input
+								type='textarea'
+								style={{
+									resize: 'none',
+									height: 80
+								}}
+								name='detSubsidio'
+								id='detSubsidio'
+								disabled={true}
+								//innerRef={register}
+								value={formData?.detSubsidio || ''}
+							/>
+						</FormGroup>
+						<FormGroup>
+							<Label>Verificación de la recepción del apoyo</Label>
+							<div>
+								<CustomInput
+									type='radio'
+									label='Si'
+									inline
+									disabled={!editable || disabledRadio}
+									checked={verificated}
+									onClick={() => {
+										setVerificated(true)
+									}}
+									value={verificated}
+								/>
+								<CustomInput
+									type='radio'
+									label='No'
+									inline
+									disabled={!editable || disabledRadio}
+									checked={!verificated}
+									onClick={() => {
+										setVerificated(false)
+									}}
+									value={verificated}
+								/>
+							</div>
+						</FormGroup>
+					</Grid>
+					<Grid container>
+						<Grid item xs={12} className={classes.periodo}>
+							<Label>Periodo activo</Label>
 						</Grid>
-					</Form>
-				</>
-			)}
+						<Grid item xs={5} className={classes.control}>
+							<FormGroup>
+								<Label for='dateFrom'>
+									Fecha inicio <RequiredSpan />
+								</Label>
+								<Input
+									type='date'
+									min={moment().startOf('year').format('YYYY-MM-DD')}
+									max={moment().format('YYYY-MM-DD')}
+									name='dateFrom'
+									style={{
+										paddingRight: '12%'
+									}}
+									invalid={toDateInvalid || state.beneficios.fields.fechaInicio}
+									disabled={!editable}
+									value={formData.dateFrom}
+									onChange={handleFormDataChange}
+								/>
+							</FormGroup>
+						</Grid>
+						<Grid
+							item
+							xs={2}
+							style={{
+								textAlign: 'center',
+								paddingTop: 40
+							}}
+							className={classes.control}
+						>
+							<FormGroup>
+								<Label> al </Label>
+							</FormGroup>
+						</Grid>
+						<Grid item xs={5} className={classes.control}>
+							<FormGroup>
+								<Label for='dateTo'>
+									Fecha final <RequiredSpan />
+								</Label>
+								<Input
+									min={moment().startOf('year').format('YYYY-MM-DD')}
+									max={moment().format('YYYY-MM-DD')}
+									type='date'
+									name='dateTo'
+									style={{
+										paddingRight: '12%'
+									}}
+									invalid={toDateInvalid || state.beneficios.fields.fechaFinal}
+									disabled={!editable}
+									value={formData.dateTo}
+									onChange={handleFormDataChange}
+								/>
+								<FormFeedback>
+									{toDateInvalid && 'la fecha de inicio debe ser antes de la fecha de final'}
+									{state.beneficios.fields.fechaFinal && state.beneficios.errors.fechaFinal}
+								</FormFeedback>
+							</FormGroup>
+						</Grid>
+					</Grid>
+				</Grid>
+			</OptionModal>
+			<div>
+				<h5>Por parte del MEP</h5>
+				<Tabla
+					beneficios={state.beneficios}
+					handlePagination={handlePagination}
+					toggleSnackbar={toggleSnackbar}
+					handleSearch={handleSearch}
+					totalRegistros={totalRegistros}
+					data={data}
+					authHandler={props.authHandler}
+					handleViewSubsidio={handleViewSubsidio}
+					tipos={tipos}
+					match={props.match}
+					loading={loading}
+					setEditable={setEditable}
+					handleCreateToggle={handleCreateToggle}
+					handleDeleteSubsidio={handleDeleteSubsidio}
+					handleUpdateSubsidio={handleUpdateSubsidio}
+					setVisualizing={setVisualizing}
+				/>
+			</div>
+			<Subsidio
+				open={open}
+				tipos={orderedTypes}
+				currentSubsidio={currentSubsidio}
+				handleChangeSubsidio={handleChangeSubsidio}
+				toggleModal={toggleModal}
+			/>
 		</>
 	)
 }
