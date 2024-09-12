@@ -44,7 +44,7 @@ const General = props => {
 	const { t } = useTranslation()
 
 	const [addItems, setAddItems] = useState({})
-	const [loading, setLoading] = useState(false)
+	const [loading, setLoading] = useState(true)
 	const [snackBar, handleClick] = useNotification()
 	const [snackBarContent, setSnackbarContent] = useState({
 		varian: 'error',
@@ -83,7 +83,6 @@ const General = props => {
 			...data,
 			condicionApoyoId: 6050
 		}
-		debugger
 		return await actions.addApoyo(
 			dataSend,
 			category,
