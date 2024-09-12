@@ -36,6 +36,7 @@ import { EditButton } from '../../../../../../components/EditButton'
 import RequiredLabel from '../../../../../../components/common/RequeredLabel'
 import { useForm } from 'react-hook-form'
 import _ from 'lodash'
+import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -54,7 +55,7 @@ const InformacionResidenciaSaber = (props) => {
 	const { handleSubmit } = useForm()
 	const initialSelectOption = {
 		value: null,
-		label: 'seleccionar'
+		label: 'Seleccionar'
 	}
 	const initialLocationCoordinates = {
 		latitude: null,
@@ -74,7 +75,7 @@ const InformacionResidenciaSaber = (props) => {
 	const [razon, setRazon] = useState('')
 	const [snackbarMsg, setSnackbarMsg] = useState('')
 	const [snackbarVariant, setSnackbarVariant] = useState('')
-	const [location, setLocation] = useState({latitude:0,longitude:0})
+	const [location, setLocation] = useState({ latitude: 0, longitude: 0 })
 	const [editDirection, setEditDirection] = useState({})
 	const [editable, setEditable] = useState(false)
 	const [loading, setLoading] = useState(true)
@@ -89,6 +90,13 @@ const InformacionResidenciaSaber = (props) => {
 		setSnackbarVariant('error')
 		handleClick()
 	}
+	const shiftedTerritories = [...props.selects.territoriosIndigenas]
+	shiftedTerritories.forEach(function (item, i) {
+		if (item.id === 144) {
+			shiftedTerritories.splice(i, 1);
+			shiftedTerritories.unshift(item);
+		}
+	});
 	const toggleModal = () => {
 		setOpenViewMap(!openViewMap)
 	}
@@ -100,7 +108,7 @@ const InformacionResidenciaSaber = (props) => {
 		setCurrentPoblado(initialSelectOption)
 		setCurrentTerritory(initialSelectOption)
 		setDirection('')
-		setLocation({latitude:null,longitude:null})
+		setLocation({ latitude: null, longitude: null })
 	}
 
 	useEffect(() => {
@@ -156,7 +164,7 @@ const InformacionResidenciaSaber = (props) => {
 					item.provinciasId,
 					item.cantonesId,
 					item.distritosId,
-					item.pobladoId
+					item.pobladosId
 				]
 
 				setDireccionArray(_direccionArray)
@@ -253,6 +261,8 @@ const InformacionResidenciaSaber = (props) => {
 	}, [props.distritos.distritos])
 
 	useEffect(() => {
+		console.log('props.poblados.poblados', props.poblados.poblados)
+		console.log('props.poblados.poblados props', props)
 		const loadData = async () => {
 			if (direccionArray[3]) {
 				const _poblado = props.poblados.poblados.find((item) => {
@@ -278,7 +288,7 @@ const InformacionResidenciaSaber = (props) => {
 	useEffect(() => {
 		console.log('location useEffect', location)
 		if (
-			search && location.latitude !== '' && location.longitude !== '' 
+			search && location.latitude !== '' && location.longitude !== ''
 		) {
 			search.searchTerm = 'CRI'
 			search
@@ -337,7 +347,7 @@ const InformacionResidenciaSaber = (props) => {
 	}
 
 	const handleSearchBySelects = (data, name) => {
-		console.log("location handleSearchBySelects data", data,name)
+		console.log("location handleSearchBySelects data", data, name)
 		if (search) {
 			search.clear()
 		}
@@ -393,7 +403,7 @@ const InformacionResidenciaSaber = (props) => {
 			_errors['razon'] =
 				'Debe tener una razón para su residencia temporal'
 		}
-		
+
 
 		let error = _errors['poblado']
 			? true
@@ -421,6 +431,7 @@ const InformacionResidenciaSaber = (props) => {
 				latitud: location.latitude,
 				longitud: location.longitude,
 				pobladoId: currentPoblado.value,
+				pobladosId: currentPoblado.value,
 				cantonesId: currentCanton.value,
 				provinciasId: currentProvince.value,
 				distritosId: currentDistrito.value,
@@ -464,6 +475,7 @@ const InformacionResidenciaSaber = (props) => {
 				latitud: location.latitude,
 				longitud: location.longitude,
 				pobladoId: currentPoblado.value,
+				pobladosId: currentPoblado.value,
 				cantonesId: currentCanton.value,
 				provinciasId: currentProvince.value,
 				distritosId: currentDistrito.value,
@@ -544,9 +556,9 @@ const InformacionResidenciaSaber = (props) => {
 										className={classes.control}
 									>
 										<FormGroup>
-											<RequiredLabel for="provincia">
-												Provincia
-											</RequiredLabel>
+											<Label for="provincia">
+												Provincia <RequiredSpan />
+											</Label>
 											<Select
 												components={{
 													Input: CustomSelectInput
@@ -585,9 +597,9 @@ const InformacionResidenciaSaber = (props) => {
 											/>
 										</FormGroup>
 										<FormGroup>
-											<RequiredLabel for="canton">
-												Cantón
-											</RequiredLabel>
+											<Label for="canton">
+												Cantón <RequiredSpan />
+											</Label>
 											<Select
 												components={{
 													Input: CustomSelectInput,
@@ -633,9 +645,9 @@ const InformacionResidenciaSaber = (props) => {
 											/>
 										</FormGroup>
 										<FormGroup>
-											<RequiredLabel for="distrito">
-												Distrito
-											</RequiredLabel>
+											<Label for="distrito">
+												Distrito <RequiredSpan />
+											</Label>
 											<Select
 												components={{
 													Input: CustomSelectInput,
@@ -676,11 +688,12 @@ const InformacionResidenciaSaber = (props) => {
 													})
 												)}
 											/>
+											{console.log('currentPobladocurrentPoblado currentDistrito', currentDistrito)}
 										</FormGroup>
 										<FormGroup>
-											<RequiredLabel for="poblado">
-												Poblado
-											</RequiredLabel>
+											<Label for="poblado">
+												Poblado <RequiredSpan />
+											</Label>
 											<Select
 												components={{
 													Input: CustomSelectInput,
@@ -715,6 +728,7 @@ const InformacionResidenciaSaber = (props) => {
 													})
 												)}
 											/>
+											{console.log('currentPobladocurrentPoblado', currentPoblado)}
 											<FormSpan>
 												{errors['poblado']}
 											</FormSpan>
@@ -749,6 +763,7 @@ const InformacionResidenciaSaber = (props) => {
 											<Label for="indigena">
 												Territorio indígena
 											</Label>
+											{console.log('props.selects.territoriosIndigenas', shiftedTerritories)}
 											<Select
 												components={{
 													Input: CustomSelectInput,
@@ -762,7 +777,13 @@ const InformacionResidenciaSaber = (props) => {
 												id="indigena"
 												isDisabled={!editable}
 												value={currentTerritory}
-												options={props.selects.territoriosIndigenas.map(
+												options={shiftedTerritories.sort((a, b) => {
+													if (a.id < b.id)
+														return -1;
+													if (a.id > b.id)
+														return 1;
+													return 0;
+												}).map(
 													(item) => ({
 														...item,
 														label: item?.nombre,
@@ -797,8 +818,8 @@ const InformacionResidenciaSaber = (props) => {
 														type="text"
 														name="latitud"
 														id="latitud"
-														onChange={(e) => { 
-															const locationActual = {...location, latitude: e.target.value}
+														onChange={(e) => {
+															const locationActual = { ...location, latitude: e.target.value }
 															_.debounce(setLocationIfEditable(locationActual), 1500)
 														}}
 														disabled={!editable}
@@ -821,8 +842,8 @@ const InformacionResidenciaSaber = (props) => {
 														type="text"
 														name="longitud"
 														id="longitud"
-														onChange={(e) => { 
-															const locationActual = {...location, longitude: e.target.value}
+														onChange={(e) => {
+															const locationActual = { ...location, longitude: e.target.value }
 															_.debounce(setLocationIfEditable(locationActual), 1500)
 														}}
 														disabled={!editable}
