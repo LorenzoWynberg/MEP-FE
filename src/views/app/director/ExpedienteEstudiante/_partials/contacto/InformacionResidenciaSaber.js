@@ -396,7 +396,7 @@ const InformacionResidenciaSaber = (props) => {
 		if (!currentPoblado.value) {
 			_errors['poblado'] = 'Debe tener un poblado seleccionado'
 		}
-		if (!currentPoblado.direccionExacta) {
+		if (!direction) {
 			_errors['direccionExacta'] = 'Debe tener una dirección'
 		}
 		if (props.temporal && !data.razon) {
