@@ -434,6 +434,8 @@ const BeneficiosMEP = props => {
 								</Label>
 								<Input
 									type='date'
+									min={moment().startOf('year').format('YYYY-MM-DD')}
+									max={moment().format('YYYY-MM-DD')}
 									name='dateFrom'
 									style={{
 										paddingRight: '12%'
@@ -464,6 +466,8 @@ const BeneficiosMEP = props => {
 									Fecha final <RequiredSpan />
 								</Label>
 								<Input
+									min={moment().startOf('year').format('YYYY-MM-DD')}
+									max={moment().format('YYYY-MM-DD')}
 									type='date'
 									name='dateTo'
 									style={{
