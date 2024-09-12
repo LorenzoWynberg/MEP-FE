@@ -260,9 +260,7 @@ const InformacionResidenciaSaber = (props) => {
 		}
 	}, [props.distritos.distritos])
 
-	useEffect(() => {
-		console.log('props.poblados.poblados', props.poblados.poblados)
-		console.log('props.poblados.poblados props', props)
+	useEffect(() => { 
 		const loadData = async () => {
 			if (direccionArray[3]) {
 				const _poblado = props.poblados.poblados.find((item) => {
@@ -286,7 +284,7 @@ const InformacionResidenciaSaber = (props) => {
 	}, [props.poblados.poblados])
 
 	useEffect(() => {
-		console.log('location useEffect', location)
+		
 		if (
 			search && location.latitude !== '' && location.longitude !== ''
 		) {
@@ -347,7 +345,7 @@ const InformacionResidenciaSaber = (props) => {
 	}
 
 	const handleSearchBySelects = (data, name) => {
-		console.log("location handleSearchBySelects data", data, name)
+		
 		if (search) {
 			search.clear()
 		}
@@ -688,7 +686,7 @@ const InformacionResidenciaSaber = (props) => {
 													})
 												)}
 											/>
-											{console.log('currentPobladocurrentPoblado currentDistrito', currentDistrito)}
+											
 										</FormGroup>
 										<FormGroup>
 											<Label for="poblado">
@@ -728,7 +726,6 @@ const InformacionResidenciaSaber = (props) => {
 													})
 												)}
 											/>
-											{console.log('currentPobladocurrentPoblado', currentPoblado)}
 											<FormSpan>
 												{errors['poblado']}
 											</FormSpan>
@@ -763,7 +760,6 @@ const InformacionResidenciaSaber = (props) => {
 											<Label for="indigena">
 												Territorio indígena
 											</Label>
-											{console.log('props.selects.territoriosIndigenas', shiftedTerritories)}
 											<Select
 												components={{
 													Input: CustomSelectInput,

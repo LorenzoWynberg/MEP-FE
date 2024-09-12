@@ -44,7 +44,6 @@ const useStyles = makeStyles(theme => ({
 
 const InformacionContacto = props => {
 	const { t } = useTranslation()
-	console.log('props.informacionContacto', props.expedienteEstudiantil.currentStudent)
 
 	const classes = useStyles()
 	const [snakbar, handleClick, handleClose] = useNotification()
@@ -92,7 +91,6 @@ const InformacionContacto = props => {
 	const onSubmit = useCallback(
 		async e => {
 			e.preventDefault()
-			console.log('formState', formState)
 			props
 				.updateInformationContactFromUser(props.expedienteEstudiantil.currentStudent.idEstudiante, formState)
 				.then(rest => {

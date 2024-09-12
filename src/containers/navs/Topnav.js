@@ -357,8 +357,7 @@ class TopNav extends Component {
       isComunicado,
       activeYears,
       selectedActiveYear
-    } = this.props
-    console.log('authObject',authObject)
+    } = this.props 
     const token = authObject.user.token
     const { data } = this.state
     const isEncargadoOrEstudiante =
