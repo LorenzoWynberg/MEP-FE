@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { Row, Col, Form, FormGroup, Label, Input, CustomInput } from 'reactstrap'
 import DatePicker from 'react-datepicker'
-
 import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
 import useNotification from 'Hooks/useNotification'
 import styled from 'styled-components'
@@ -16,6 +15,17 @@ import {
 	deleteApoyo,
 	editApoyo
 } from 'Redux/apoyos/actions'
+import {
+	Checkbox,
+	FormControl,
+	FormControlLabel,
+	FormLabel,
+	Radio,
+	RadioGroup,
+	Chip,
+	Button,
+	Typography
+} from '@material-ui/core'
 import styles from './apoyos.css'
 import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -27,11 +37,12 @@ import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
 import { IoMdTrash } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
+import { HiPencil } from 'react-icons/hi'
 import swal from 'sweetalert'
 import { isNull } from 'lodash'
 import BarLoader from 'Components/barLoader/barLoader'
-import OptionModal from '../../../../../../components/Modal/OptionModal'
-import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
+import OptionModal from 'Components/Modal/OptionModal'
+import RequiredSpan from 'Components/Form/RequiredSpan'
 
 const categoria = {
 	id: 1,
@@ -53,18 +64,24 @@ export const ApoyosPersonales = () => {
 	const [tiposApoyoFilter, setTiposApoyoFilter] = useState([])
 	const [sortedYearList, setSortedYearList] = useState(null)
 	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
+	const [editable, setEditable] = useState(false)
+	const [radioValue, setRadioValue] = useState(0)
 	const [formData, setFormData] = useState({
-		tipoDeApoyo: '',
+		id: 0,
+		tipoDeApoyo: 0,
 		condicionApoyo: '',
 		detalleApoyo: '',
+		nombreApoyo: '',
 		fechaDeAprobacion: ''
 	})
 
 	const cleanFormData = () => {
 		const data = {
-			tipoDeApoyo: '',
+			id: 0,
+			tipoDeApoyo: 0,
 			condicionApoyo: '',
 			detalleApoyo: '',
+			nombreApoyo: '',
 			fechaDeAprobacion: ''
 		}
 		setFormData(data)
@@ -127,6 +144,7 @@ export const ApoyosPersonales = () => {
 
 				//dropdown
 				const tiposDeApoyo = state.apoyos.tipos.filter(tipo => tipo.categoriaApoyoId === categoria.id)
+				setRadioValue(tiposDeApoyo[0].id)
 
 				setTiposApoyo(tiposDeApoyo)
 
@@ -166,8 +184,6 @@ export const ApoyosPersonales = () => {
 			setSortedYearList(sortedYears)
 		}
 
-		//const activeYear = sortedYearList[0].name
-		//console.log('activeYear', activeYear)
 		filterTiposDeApoyo(tiposApoyo, parseInt(state.activeYear.nombre))
 	}, [data])
 
@@ -197,6 +213,25 @@ export const ApoyosPersonales = () => {
 		} catch (e) {
 			setLoading(false)
 		}
+	}
+
+	const onAgregarEvent = () => {
+		setEditable(false)
+		setShowNuevoApoyoModal(true)
+	}
+
+	const onEditarEvent = row => {
+		setEditable(true)
+		console.log(row)
+		setShowNuevoApoyoModal(true)
+		setFormData({
+			id: row.id,
+			tipoDeApoyo: row.sb_TiposDeApoyoId,
+			condicionApoyo: row.condicionApoyoId,
+			detalleApoyo: row.detalle,
+			nombreApoyo: row.sb_TiposDeApoyo,
+			fechaDeAprobacion: row.fechaInicio
+		})
 	}
 
 	const columns = useMemo(() => {
@@ -262,6 +297,23 @@ export const ApoyosPersonales = () => {
 									color: 'grey'
 								}}
 								onClick={() => {
+									onEditarEvent(row.original)
+								}}
+							>
+								<Tooltip title='Actualizar'>
+									<IconButton>
+										<HiPencil style={{ fontSize: 30 }} />
+									</IconButton>
+								</Tooltip>
+							</button>
+							<button
+								style={{
+									border: 'none',
+									background: 'transparent',
+									cursor: 'pointer',
+									color: 'grey'
+								}}
+								onClick={() => {
 									swal({
 										title: 'Eliminar Apoyo',
 										text: '¿Esta seguro de que desea eliminar el apoyo?',
@@ -295,10 +347,6 @@ export const ApoyosPersonales = () => {
 		]
 	}, [state.expedienteEstudiantil.currentStudent])
 
-	const onAgregarEvent = () => {
-		setShowNuevoApoyoModal(true)
-	}
-
 	const onConfirmSaveApoyo = async event => {
 		event.preventDefault()
 		setLoading(true)
@@ -306,7 +354,7 @@ export const ApoyosPersonales = () => {
 		let validationMessage = ''
 		let hayError = false
 
-		if (formData.tipoDeApoyo === '' || isNaN(formData.tipoDeApoyo)) {
+		if (formData.tipoDeApoyo === 0 || isNaN(formData.tipoDeApoyo)) {
 			validationMessage = '\nEl tipo de apoyo es requerido'
 			hayError = true
 		}
@@ -414,6 +462,14 @@ export const ApoyosPersonales = () => {
 		closeAgregarModal()
 	}
 
+	useEffect(() => {
+		console.log('JP formData', formData)
+	}, [formData])
+
+	useEffect(() => {
+		console.log('JP radio value', radioValue)
+	}, [radioValue])
+
 	const closeAgregarModal = () => {
 		setShowNuevoApoyoModal(false)
 	}
@@ -435,14 +491,29 @@ export const ApoyosPersonales = () => {
 		setTiposApoyoFilter(filtro)
 	}
 
-	const handleChangeItem = (item) => {
+	const handleChangeItem = item => {
+		console.log('JP item', item)
+		setRadioValue(item.id)
+		setFormData({
+			...formData,
+			tipoDeApoyo: item.id,
+			nombreApoyo: item.nombre
+		})
 
-		const newItems = tiposApoyoFilter.map((element) => {
-			if (element.id === item.id) { return { ...element, checked: !element.checked } }
+		/* const newItems = tiposApoyoFilter.map(element => {
+			if (element.id === item.id) {
+				return { ...element, checked: !element.checked }
+			}
 			return element
 		})
-		setTiposApoyoFilter(newItems)
+		setTiposApoyoFilter(newItems) */
 	}
+
+	const handleRbTipoApoyo = e => {
+		console.log('JP handleRbTipoApoyo', e.target.value)
+		setRadioValue(e.target.value)
+	}
+
 	return (
 		<>
 			{loading && <BarLoader />}
@@ -459,7 +530,47 @@ export const ApoyosPersonales = () => {
 				onConfirm={() => setShowModalTiposApoyo(false)}
 				onCancel={() => setShowModalTiposApoyo(false)}
 			>
-				{tiposApoyoFilter.map((item, i) => {
+				<div>
+					<FormControl>
+						<RadioGroup
+							aria-labelledby='demo-radio-buttons-group-label'
+							name='radio-buttons-group'
+							value={radioValue}
+							//onChange={handleRbTipoApoyo}
+						>
+							{tiposApoyoFilter.map((item, i) => (
+								<Row key={i}>
+									<Col
+										style={{
+											display: 'flex',
+											textAlign: 'left',
+											justifyContent: 'left',
+											alignItems: 'left'
+										}}
+										sm={7}
+									>
+										<FormControlLabel
+											value={formData.tipoDeApoyo}
+											//onClick={() => handleChangeItem(item)}
+											onClick={(e, v) => {
+												e.persist()
+												handleChangeItem(item)
+												//setRadioValue(e.target.value)
+											}}
+											//handleChangeItem(item)}
+											checked={radioValue == formData.tipoDeApoyo}
+											control={<Radio />}
+											label={item.nombre}
+										/>
+									</Col>
+									<Col sm={5}>{item.detalle}</Col>
+								</Row>
+							))}
+						</RadioGroup>
+					</FormControl>
+				</div>
+
+				{/* {tiposApoyoFilter.map((item, i) => {
 					return (
 						<Row key={i}>
 							<Col xs={3} className='modal-detalle-subsidio-col'>
@@ -480,7 +591,7 @@ export const ApoyosPersonales = () => {
 							</Col>
 						</Row>
 					)
-				})}
+				})} */}
 			</OptionModal>
 			<OptionModal
 				isOpen={showNuevoApoyoModal && !showModalTiposApoyo}
@@ -500,16 +611,16 @@ export const ApoyosPersonales = () => {
 								type='text'
 								placeholder='Seleccionar'
 								onClick={() => {
-									// alert()
 									setShowModalTiposApoyo(true)
 								}}
-							>
-								{formData.tipoDeApoyo || 'Seleccionar'}
-							</StyledInput>
+								value={formData.nombreApoyo || 'Seleccionar'}
+							></StyledInput>
 						</Col>
 						<Col md={6}>
 							<FormGroup>
-								<Label for='condicionDeApoyo'>Condición del apoyo</Label>
+								<Label for='condicionDeApoyo'>
+									Condición del apoyo <RequiredSpan />{' '}
+								</Label>
 								<StyledInput
 									id='condicionApoyo'
 									name='condicionApoyo'
@@ -521,6 +632,7 @@ export const ApoyosPersonales = () => {
 									{state.selects.tipoCondicionApoyo.map(tipo => {
 										return <option value={tipo.id}>{tipo.nombre}</option>
 									})}
+									value={formData.condicionApoyo}
 								</StyledInput>
 							</FormGroup>
 						</Col>
@@ -529,7 +641,9 @@ export const ApoyosPersonales = () => {
 						<Row>
 							<Col md={6}>
 								<FormGroup>
-									<Label for='fechaDeAprobacion'>Fecha de aprobación</Label>
+									<Label for='fechaDeAprobacion'>
+										Fecha de aprobación <RequiredSpan />{' '}
+									</Label>
 									<DatePicker
 										style={{
 											zIndex: 99999
@@ -540,6 +654,7 @@ export const ApoyosPersonales = () => {
 										onChange={date => setFormData({ ...formData, fechaDeAprobacion: date })}
 										minDate={new Date(new Date().getFullYear(), 0, 1)}
 										maxDate={new Date(new Date().getFullYear(), 11, 31)}
+										//value={formData.fechaDeAprobacion}
 									/>
 								</FormGroup>
 							</Col>
@@ -555,6 +670,7 @@ export const ApoyosPersonales = () => {
 									name='detalleApoyo'
 									rows='5'
 									onChange={handleFormDataChange}
+									value={formData.detalleApoyo}
 								/>
 							</FormGroup>
 						</Col>
