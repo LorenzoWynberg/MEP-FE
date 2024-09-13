@@ -1,8 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { Row, Col, Form, FormGroup, Label, Input, Button, Container } from 'reactstrap'
-
+import { Row, Col, Form, FormGroup, Label, Input, CustomInput } from 'reactstrap'
 import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
 import useNotification from 'Hooks/useNotification'
 import styled from 'styled-components'
@@ -15,21 +14,25 @@ import {
 	deleteApoyo,
 	editApoyo
 } from 'Redux/apoyos/actions'
+import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core'
+import styles from './apoyos.css'
 import Tooltip from '@mui/material/Tooltip'
-
+import 'react-datepicker/dist/react-datepicker.css'
 import { getCatalogs } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
 import { catalogsEnumObj } from 'Utils/catalogsEnum'
-import SimpleModal from 'Components/Modal/simple'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
 import { IoMdTrash } from 'react-icons/io'
 import IconButton from '@mui/material/IconButton'
+import { HiPencil } from 'react-icons/hi'
 import swal from 'sweetalert'
-import { isNull } from 'lodash'
+import { isNull, isUndefined, isEmpty } from 'lodash'
 import BarLoader from 'Components/barLoader/barLoader'
-import OptionModal from '../../../../../../components/Modal/OptionModal'
-import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
+import Loader from 'Components/LoaderContainer'
+import OptionModal from 'Components/Modal/OptionModal'
+import RequiredSpan from 'Components/Form/RequiredSpan'
+import moment from 'moment'
 
 const categoria = {
 	id: 4,
@@ -42,27 +45,42 @@ const tituloModal = 'Registro de apoyo curricular'
 const condicionSeRecibeNombre = 'Se recibe'
 
 export const ApoyosCurriculares = () => {
-	const [snackBar, handleClick] = useNotification()
 	const [loading, setLoading] = useState(true)
+	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
 	const [data, setData] = useState([])
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
 	const [tiposApoyo, setTiposApoyo] = useState([])
+	const [tiposApoyoFilter, setTiposApoyoFilter] = useState([])
+	const [sortedYearList, setSortedYearList] = useState(null)
 	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
+	const [editable, setEditable] = useState(false)
+	const [radioValue, setRadioValue] = useState(0)
+	const [snackbar, handleClick] = useNotification()
+	const [snackbarContent, setSnackbarContent] = useState({
+		msg: '',
+		type: ''
+	})
 	const [formData, setFormData] = useState({
-		tipoDeApoyo: '',
+		id: 0,
+		tipoDeApoyo: 0,
 		condicionApoyo: '',
 		detalleApoyo: '',
+		nombreApoyo: '',
 		fechaDeAprobacion: ''
 	})
 
 	const cleanFormData = () => {
 		const data = {
-			tipoDeApoyo: '',
+			id: 0,
+			tipoDeApoyo: 0,
 			condicionApoyo: '',
 			detalleApoyo: '',
+			nombreApoyo: '',
 			fechaDeAprobacion: ''
 		}
 		setFormData(data)
+		setRadioValue(0)
+		setShowFechaAprobacion(false)
 	}
 
 	const handleFormDataChange = event => {
@@ -109,7 +127,8 @@ export const ApoyosCurriculares = () => {
 			identification: store.identification,
 			apoyos: store.apoyos,
 			selects: store.selects,
-			activeYear: store.authUser.selectedActiveYear
+			activeYear: store.authUser.selectedActiveYear,
+			activeYears: store.authUser.activeYears
 		}
 	})
 
@@ -119,10 +138,7 @@ export const ApoyosCurriculares = () => {
 				setLoading(true)
 				await actions.getTiposApoyos()
 
-				//dropdown
 				const tiposDeApoyo = state.apoyos.tipos.filter(tipo => tipo.categoriaApoyoId === categoria.id)
-
-				console.log('JP tipos de apoyo', tiposDeApoyo)
 
 				setTiposApoyo(tiposDeApoyo)
 
@@ -143,14 +159,27 @@ export const ApoyosCurriculares = () => {
 				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
 			)
 			.then(response => {
-				setLoading(false)
 				setData(response.data.entityList)
+				setLoading(false)
 			})
 			.catch(error => {
-				setLoading(false)
 				console.log(error)
+				setLoading(false)
 			})
 	}, [])
+
+	useEffect(() => {
+		if (isNull(sortedYearList)) {
+			const yearList = state.activeYears.map(year => {
+				return { id: year.id, name: year.nombre }
+			})
+
+			const sortedYears = yearList.sort((a, b) => b.name.localeCompare(a.name))
+			setSortedYearList(sortedYears)
+		}
+
+		filterTiposDeApoyo(tiposApoyo, parseInt(state.activeYear.nombre))
+	}, [data])
 
 	const deleteApoyoById = apoyoId => {
 		setLoading(true)
@@ -165,9 +194,19 @@ export const ApoyosCurriculares = () => {
 						.then(response => {
 							setData(response.data.entityList)
 							setLoading(false)
+							setSnackbarContent({
+								msg: 'Se ha eliminado el registro',
+								type: 'success'
+							})
+							handleClick()
 						})
 						.catch(error => {
 							setLoading(false)
+							setSnackbarContent({
+								msg: 'Hubo un error al eliminar el registro',
+								type: 'error'
+							})
+							handleClick()
 							console.log(error)
 						})
 				})
@@ -178,6 +217,29 @@ export const ApoyosCurriculares = () => {
 		} catch (e) {
 			setLoading(false)
 		}
+	}
+
+	const onAgregarEvent = () => {
+		setEditable(false)
+		setShowNuevoApoyoModal(true)
+	}
+
+	const onEditarEvent = row => {
+		setEditable(true)
+		setShowNuevoApoyoModal(true)
+
+		if (!isNull(row.fechaInicio) && !isUndefined(row.fechaInicio) && !isEmpty(row.fechaInicio)) {
+			setShowFechaAprobacion(true)
+		}
+
+		setFormData({
+			id: row.id,
+			tipoDeApoyo: row.sb_TiposDeApoyoId,
+			condicionApoyo: row.condicionApoyoId,
+			detalleApoyo: row.detalle,
+			nombreApoyo: row.sb_TiposDeApoyo,
+			fechaDeAprobacion: row.fechaInicio
+		})
 	}
 
 	const columns = useMemo(() => {
@@ -243,6 +305,23 @@ export const ApoyosCurriculares = () => {
 									color: 'grey'
 								}}
 								onClick={() => {
+									onEditarEvent(row.original)
+								}}
+							>
+								<Tooltip title='Actualizar'>
+									<IconButton>
+										<HiPencil style={{ fontSize: 30 }} />
+									</IconButton>
+								</Tooltip>
+							</button>
+							<button
+								style={{
+									border: 'none',
+									background: 'transparent',
+									cursor: 'pointer',
+									color: 'grey'
+								}}
+								onClick={() => {
 									swal({
 										title: 'Eliminar Apoyo',
 										text: '¿Esta seguro de que desea eliminar el apoyo?',
@@ -276,10 +355,6 @@ export const ApoyosCurriculares = () => {
 		]
 	}, [state.expedienteEstudiantil.currentStudent])
 
-	const onAgregarEvent = () => {
-		setShowNuevoApoyoModal(true)
-	}
-
 	const onConfirmSaveApoyo = async event => {
 		event.preventDefault()
 		setLoading(true)
@@ -287,7 +362,7 @@ export const ApoyosCurriculares = () => {
 		let validationMessage = ''
 		let hayError = false
 
-		if (formData.tipoDeApoyo === '' || isNaN(formData.tipoDeApoyo)) {
+		if (formData.tipoDeApoyo === 0 || isNaN(formData.tipoDeApoyo)) {
 			validationMessage = '\nEl tipo de apoyo es requerido'
 			hayError = true
 		}
@@ -302,7 +377,11 @@ export const ApoyosCurriculares = () => {
 			hayError = true
 		}
 
-		if (formData.fechaDeAprobacion === '' && formData.condicionApoyo === 6558) {
+		const condicionesApoyo = state.selects.tipoCondicionApoyo
+
+		const condicionSeRecibe = condicionesApoyo.find(o => o.nombre === condicionSeRecibeNombre)
+
+		if (formData.fechaDeAprobacion === '' && formData.condicionApoyo === condicionSeRecibe.id) {
 			validationMessage += '\nLa fecha de aprobación es requerida'
 			hayError = true
 		}
@@ -326,55 +405,107 @@ export const ApoyosCurriculares = () => {
 		}
 
 		let _data = {
-			id: state.expedienteEstudiantil.currentStudent.idMatricula,
+			//
 			detalle: formData.detalleApoyo,
 			fechaInicio: formData.fechaDeAprobacion ? formData.fechaDeAprobacion : null,
 			fechaFin: null,
-			tipoDeApoyoId: parseInt(formData.tipoDeApoyo),
 			dependenciasApoyosId: null,
+			sb_TiposDeApoyoId: parseInt(formData.tipoDeApoyo),
 			condicionApoyoId: parseInt(formData.condicionApoyo),
-			identidadesId: state.identification.data.id
+			identidadesId: state.identification.data.id,
+			sb_TalentoId: null,
+			estrategias: null
 		}
 
-		const existeApoyo = data.find(item => {
-			if (item.sb_TiposDeApoyoId === _data.tipoDeApoyoId) {
-				const date = new Date(item.fechaInicio)
-				const anioApoyoExistente = date.getFullYear()
+		let create = true
+		//create
+		if (formData.id === 0) {
+			const existeApoyo = data.find(item => {
+				if (item.sb_TiposDeApoyoId === _data.tipoDeApoyoId) {
+					const date = new Date(item.fechaInicio)
+					const anioApoyoExistente = date.getFullYear()
 
-				let anioAprobacion = null
+					let anioAprobacion = null
 
-				if (isNull(_data.fechaInicio)) {
-					anioAprobacion = parseInt(state.activeYear.nombre)
-				} else {
-					anioAprobacion = new Date(_data.fechaInicio).getFullYear()
-				}
+					if (isNull(_data.fechaInicio)) {
+						anioAprobacion = parseInt(state.activeYear.nombre)
+					} else {
+						anioAprobacion = new Date(_data.fechaInicio).getFullYear()
+					}
 
-				if (anioApoyoExistente === anioAprobacion) {
-					return item
-				} else {
-					return null
-				}
-			}
-		})
-
-		if (existeApoyo) {
-			swal({
-				title: 'Error al registrar el apoyo',
-				text: 'Ya existe un apoyo para el año ingresado.',
-				icon: 'error',
-				buttons: {
-					ok: {
-						text: 'Ok',
-						value: true,
-						className: 'btn-alert-color'
+					if (anioApoyoExistente === anioAprobacion) {
+						return item
+					} else {
+						return null
 					}
 				}
 			})
-			setLoading(false)
-			return
+
+			if (existeApoyo) {
+				swal({
+					title: 'Error al registrar el apoyo',
+					text: 'Ya existe un apoyo para el año ingresado.',
+					icon: 'error',
+					className: 'text-alert-modal',
+					buttons: {
+						ok: {
+							text: 'Ok',
+							value: true,
+							className: 'btn-alert-color'
+						}
+					}
+				})
+				setLoading(false)
+				return
+			}
+
+			_data = {
+				..._data,
+
+				id: state.expedienteEstudiantil.currentStudent.idMatricula
+			}
+		} else {
+			//update
+			create = false
+
+			_data = {
+				..._data,
+				tipoDeApoyoId: parseInt(formData.tipoDeApoyo),
+				id: formData.id
+			}
 		}
 
-		await actions.addApoyo(_data, categoria, categoria.addDispatchName, 1)
+		if (create) {
+			const response = await actions.addApoyo(_data, categoria, categoria.addDispatchName, 1)
+			if (response.error) {
+				setSnackbarContent({
+					msg: 'Hubo un error al crear el registro',
+					type: 'error'
+				})
+				handleClick()
+			} else {
+				setSnackbarContent({
+					msg: 'Se ha creado el registro',
+					type: 'success'
+				})
+				handleClick()
+			}
+		} else {
+			const response = await actions.editApoyo(_data, categoria, categoria.addDispatchName, 1)
+			if (response.error) {
+				setSnackbarContent({
+					msg: 'Hubo un error al editar',
+					type: 'error'
+				})
+				handleClick()
+			} else {
+				setSnackbarContent({
+					msg: 'Se ha editado el registro',
+					type: 'success'
+				})
+				handleClick()
+			}
+		}
 
 		axios
 			.get(
@@ -395,12 +526,41 @@ export const ApoyosCurriculares = () => {
 	}
 
 	const closeAgregarModal = () => {
+		cleanFormData()
 		setShowNuevoApoyoModal(false)
+	}
+
+	const filterTiposDeApoyo = (tipos, currentYear) => {
+		let filtro = tiposApoyo
+
+		if (tipos.length > 0) {
+			filtro = tipos.filter(
+				tipoApoyo =>
+					!data.some(
+						apoyoEstudiante =>
+							apoyoEstudiante.sb_TiposDeApoyoId === tipoApoyo.id &&
+							new Date(apoyoEstudiante.fechaInsercion).getFullYear() === parseInt(currentYear)
+					)
+			)
+		}
+
+		setTiposApoyoFilter(filtro)
+	}
+
+	const handleChangeItem = item => {
+		setRadioValue(item.id)
+		setFormData({
+			...formData,
+			tipoDeApoyo: item.id,
+			nombreApoyo: item.nombre
+		})
 	}
 
 	return (
 		<>
-			{loading && <BarLoader />}
+			{/*loading && <BarLoader />*/}
+			{loading && <Loader />}
+			{snackbar(snackbarContent.type, snackbarContent.msg)}
 			<TableReactImplementationApoyo
 				showAddButton
 				msjButton='Agregar'
@@ -409,7 +569,49 @@ export const ApoyosCurriculares = () => {
 				columns={columns}
 			/>
 			<OptionModal
-				isOpen={showNuevoApoyoModal}
+				isOpen={showModalTiposApoyo}
+				titleHeader={'Tipos de apoyo'}
+				onConfirm={() => setShowModalTiposApoyo(false)}
+				onCancel={() => setShowModalTiposApoyo(false)}
+			>
+				<div>
+					<FormControl>
+						<RadioGroup
+							aria-labelledby='demo-radio-buttons-group-label'
+							name='radio-buttons-group'
+							value={radioValue}
+						>
+							{tiposApoyoFilter.map((item, i) => (
+								<Row key={i}>
+									<Col
+										style={{
+											display: 'flex',
+											textAlign: 'left',
+											justifyContent: 'left',
+											alignItems: 'left'
+										}}
+										sm={7}
+									>
+										<FormControlLabel
+											value={formData.tipoDeApoyo}
+											onClick={(e, v) => {
+												e.persist()
+												handleChangeItem(item)
+											}}
+											checked={radioValue == item.id}
+											control={<Radio />}
+											label={item.nombre}
+										/>
+									</Col>
+									<Col sm={5}>{item.detalle}</Col>
+								</Row>
+							))}
+						</RadioGroup>
+					</FormControl>
+				</div>
+			</OptionModal>
+			<OptionModal
+				isOpen={showNuevoApoyoModal && !showModalTiposApoyo}
 				titleHeader={tituloModal}
 				onConfirm={onConfirmSaveApoyo}
 				onCancel={() => closeAgregarModal()}
@@ -422,35 +624,27 @@ export const ApoyosCurriculares = () => {
 							</Label>
 							<StyledInput
 								id='tipoDeApoyo'
-								/* innerRef={register({
-									required: t('general>campo_requerido', 'El campo es requerido')
-								})} */
 								name='tipoDeApoyo'
-								type='select'
-								//invalid={errors[`${props.storedValuesKey}Tipos`]}
+								type='text'
 								placeholder='Seleccionar'
-								onChange={handleFormDataChange}
-							>
-								<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
-								{tiposApoyo.map(tipo => {
-									return <option value={tipo.id}>{tipo.nombre}</option>
-								})}
-							</StyledInput>
-							{/* <FormFeedback>
-									{errors[`${props.storedValuesKey}Tipos`] &&
-										errors[`${props.storedValuesKey}Tipos`].message}
-								</FormFeedback> */}
+								onClick={() => {
+									setShowModalTiposApoyo(true)
+								}}
+								value={formData.nombreApoyo || 'Seleccionar'}
+							></StyledInput>
 						</Col>
 						<Col md={6}>
 							<FormGroup>
-								<Label for='condicionDeApoyo'>Condición del apoyo</Label>
+								<Label for='condicionDeApoyo'>
+									Condición del apoyo <RequiredSpan />{' '}
+								</Label>
 								<StyledInput
 									id='condicionApoyo'
 									name='condicionApoyo'
 									type='select'
 									onChange={handleFechaAprobacionOnChange}
-									//invalid={errors[`${props.storedValuesKey}Tipos`]}
 									placeholder='Seleccionar'
+									value={formData.condicionApoyo}
 								>
 									<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
 									{state.selects.tipoCondicionApoyo.map(tipo => {
@@ -464,11 +658,18 @@ export const ApoyosCurriculares = () => {
 						<Row>
 							<Col md={6}>
 								<FormGroup>
-									<Label for='fechaDeAprobacion'>Fecha de aprobación</Label>
+									<Label for='fechaDeAprobacion'>
+										Fecha de aprobación <RequiredSpan />{' '}
+									</Label>
 									<Input
 										type='date'
-										id='fechaDeAprobacion'
+										min={moment().startOf('year').format('YYYY-MM-DD')}
+										max={moment().format('YYYY-MM-DD')}
 										name='fechaDeAprobacion'
+										style={{
+											paddingRight: '12%'
+										}}
+										value={formData.fechaDeAprobacion}
 										onChange={handleFormDataChange}
 									/>
 								</FormGroup>
@@ -485,6 +686,7 @@ export const ApoyosCurriculares = () => {
 									name='detalleApoyo'
 									rows='5'
 									onChange={handleFormDataChange}
+									value={formData.detalleApoyo}
 								/>
 							</FormGroup>
 						</Col>
