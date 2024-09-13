@@ -558,7 +558,7 @@ export const ApoyosPersonales = () => {
 												//setRadioValue(e.target.value)
 											}}
 											//handleChangeItem(item)}
-											checked={radioValue == formData.tipoDeApoyo}
+											checked={radioValue == item.id}
 											control={<Radio />}
 											label={item.nombre}
 										/>
