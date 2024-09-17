@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { Colxx } from 'Components/common/CustomBootstrap'
-import IdForm from './_partials/general/IdForm'
 import PersonalDataForm from './_partials/general/PersonalDataForm'
 import DataForm from './_partials/general/DataForm'
 import { Row, Form } from 'reactstrap'
@@ -9,7 +8,7 @@ import { sendStudentData } from 'Redux/expedienteEstudiantil/actions'
 import { useActions } from 'Hooks/useActions'
 import useNotification from 'Hooks/useNotification'
 import moment from 'moment'
-import { getIdentification, updateIdentity } from 'Redux/identificacion/actions'
+import { updateIdentity } from 'Redux/identificacion/actions'
 import { getCatalogs, getCatalogsSet } from 'Redux/selects/actions'
 import { useSelector } from 'react-redux'
 import { withRouter } from 'react-router-dom'
@@ -32,23 +31,20 @@ const General = props => {
 	const { t } = useTranslation()
 	const { authHandler } = props
 	const [identidadData, setIdentidadData] = useState({})
-	const imageInitialState = { preview: '', raw: '', edited: false }
 	const [disableMigrationStatus, setDisableMigrationStatus] = useState(false)
 	const submitData = data => authHandler('modificar', sendData, toggleSnackbar)
 	const [loading, setLoading] = useState(true)
-	const [birthDate, setBirthDate] = useState('')
 	const [editable, setEditable] = useState(false)
-	const [image, setImage] = useState(imageInitialState)
 	const [snackBar, handleClick] = useNotification()
 	const { handleSubmit } = useForm()
 
-	const [snackbarContent, setSnacbarContent] = useState({
+	const [snackbarContent, setSnackbarContent] = useState({
 		msg: 'welcome',
 		variant: 'info'
 	})
 
 	const toggleSnackbar = (variant, msg) => {
-		setSnacbarContent({
+		setSnackbarContent({
 			variant,
 			msg
 		})
@@ -59,7 +55,6 @@ const General = props => {
 		sendStudentData,
 		getCatalogs,
 		updateIdentity,
-		getIdentification,
 		getCatalogsSet
 	})
 
@@ -84,7 +79,7 @@ const General = props => {
 			const response = await actions.getCatalogsSet(catalogsArray)
 
 			if (response.error) {
-				setSnacbarContent({
+				setSnackbarContent({
 					variant: 'error',
 					msg: 'Hubo un error al tratar de conseguir los datos del servidor'
 				})
@@ -105,7 +100,10 @@ const General = props => {
 			catalogsEnumObj.GENERO.name,
 			catalogsEnumObj.ESTADOCIVIL.name
 		]
-		if (state.identification.data.id && validateSelectsData(props.selects, catalogsNamesArray)) {
+		if (
+			state.identification.data.id &&
+			validateSelectsData(props.selects, catalogsNamesArray)
+		) {
 			const _item = {
 				...state.identification.data,
 				sexo: mapOption(
@@ -162,34 +160,30 @@ const General = props => {
 					catalogsEnumObj.ETNIAS.id,
 					catalogsEnumObj.ETNIAS.name
 				),
-				fechaDeNacimiento: moment(state.identification.data.fechaNacimiento).format('DD/MM/YYYY'),
+				fechaDeNacimiento: moment(
+					state.identification.data.fechaNacimiento
+				).format('DD/MM/YYYY'),
 				edad: getYearsOld(state.identification.data.fechaNacimiento),
-				facebook: state.identification.data.facebook ? state.identification.data.facebook : '',
-				instagram: state.identification.data.instagram ? state.identification.data.instagram : '',
-				twitter: state.identification.data.twitter ? state.identification.data.twitter : '',
-				whatsapp: state.identification.data.whatsapp ? state.identification.data.whatsapp : '',
-				fotografiaUrl: state.identification.data.fotografiaUrl ? state.identification.data.fotografiaUrl : ''
+				facebook: state.identification.data.facebook
+					? state.identification.data.facebook
+					: '',
+				instagram: state.identification.data.instagram
+					? state.identification.data.instagram
+					: '',
+				twitter: state.identification.data.twitter
+					? state.identification.data.twitter
+					: '',
+				whatsapp: state.identification.data.whatsapp
+					? state.identification.data.whatsapp
+					: ''
 			}
-
 			setIdentidadData(_item)
-
-			setBirthDate(state.identification.fechaDeNacimiento)
-			if (state.identification.data.fotografiaUrl) {
-				setImage({
-					preview: state.identification.data.fotografiaUrl,
-					raw: '',
-					edited: false
-				})
-			} else {
-				setImage(imageInitialState)
-			}
 			setLoading(false)
 		} else {
 			setLoading(true)
 		}
 	}, [
 		state.identification.data.id,
-		state.identification.data.fotografiaUrl,
 		state.identification.data.datos,
 		props.selects,
 		editable
@@ -199,7 +193,9 @@ const General = props => {
 		const reg = /([0-9]{9})/g
 		let _item = {}
 		if (reg.test(identidadData.identificacion)) {
-			const status = props.selects[catalogsEnumObj.ESTATUSMIGRATORIO.name].find(item => item.codigo === '02')
+			const status = props.selects[catalogsEnumObj.ESTATUSMIGRATORIO.name].find(
+				item => item.codigo === '02'
+			)
 			_item = {
 				...identidadData,
 				migracionStatus: {
@@ -208,10 +204,11 @@ const General = props => {
 					value: status.id
 				}
 			}
-
 			setIdentidadData(_item)
-			setDisableMigrationStatus(true)
 		}
+		setDisableMigrationStatus(
+			identidadData?.idType?.id && identidadData?.idType?.id == 1
+		)
 	}, [identidadData.id, editable])
 
 	const sendData = async () => {
@@ -230,7 +227,6 @@ const General = props => {
 			nombre: identidadData.nombre,
 			primerApellido: identidadData.primerApellido,
 			segundoApellido: identidadData.segundoApellido,
-			fotografiaUrl: identidadData.fotografiaUrl,
 			conocidoComo: identidadData.conocidoComo,
 			lesco: identidadData.lesco,
 			elementosNoRequiridosIds: datos,
@@ -239,24 +235,22 @@ const General = props => {
 			tipoIdentificacionId: identidadData.idType.value
 		}
 		let response
-		if (image.edited) {
-			response = await actions.updateIdentity(_data, image.raw)
-		} else {
-			response = await actions.updateIdentity(_data)
-		}
+		response = await actions.updateIdentity(_data)
+		setIdentidadData(_data)
 		if (response.data.error) {
-			setSnacbarContent({
+			setSnackbarContent({
 				variant: 'error',
 				msg: response.data.message
 			})
 			handleClick()
 			setEditable(true)
 		} else {
-			setSnacbarContent({
+			setSnackbarContent({
 				variant: 'success',
 				msg: '¡Los datos se han actualizado con éxito!'
 			})
 			handleClick()
+			setEditable(false)
 		}
 	}
 
@@ -289,33 +283,22 @@ const General = props => {
 		<div>
 			<br />
 
-			<h4>{t('estudiantes>expediente>info_gen>info_gen>titulo', 'Información general')}</h4>
+			<h4>
+				{t(
+					'estudiantes>expediente>info_gen>info_gen>titulo',
+					'Información general'
+				)}
+			</h4>
 
 			{loading ? (
 				<Loader />
 			) : (
 				<>
 					<br />
-					{/* <Row>
-						<Colxx>
-							<IdForm
-								{...props}
-								identification={state.identification}
-								errors={state.identification.errorMessages}
-								fields={state.identification.errorFields}
-								handleChange={handleChange}
-								identidadData={identidadData}
-								avoidSearch={props.avoidSearch}
-								image={image}
-								setImage={setImage}
-								editable={false}
-							/>
-						</Colxx>
-					</Row> */}
 					{snackBar(snackbarContent.variant, snackbarContent.msg)}
 					<Form onSubmit={handleSubmit(submitData)}>
 						<Row>
-							<Colxx lg='6'>
+							<Colxx lg="6">
 								<PersonalDataForm
 									personalData={identidadData}
 									disabled={
@@ -332,7 +315,7 @@ const General = props => {
 								/>
 							</Colxx>
 
-							<Colxx lg='6'>
+							<Colxx lg="6">
 								<DataForm
 									selects={props.selects}
 									identification={state.identification}
@@ -349,12 +332,16 @@ const General = props => {
 								/>
 							</Colxx>
 						</Row>
-						<div className='container-center my-3'>
+						<div className="container-center my-3">
 							<EditButton
 								loading={state.identification.loading}
 								editable={editable}
 								setEditable={value => {
-									authHandler('modificar', () => setEditable(value), toggleSnackbar)
+									authHandler(
+										'modificar',
+										() => setEditable(value),
+										toggleSnackbar
+									)
 								}}
 								sendData={sendData}
 							/>
