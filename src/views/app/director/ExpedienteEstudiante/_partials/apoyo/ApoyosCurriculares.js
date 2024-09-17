@@ -168,7 +168,7 @@ export const ApoyosCurriculares = () => {
 			})
 	}, [])
 
-	useEffect(() => {
+	/* useEffect(() => {
 		if (isNull(sortedYearList)) {
 			const yearList = state.activeYears.map(year => {
 				return { id: year.id, name: year.nombre }
@@ -179,7 +179,7 @@ export const ApoyosCurriculares = () => {
 		}
 
 		filterTiposDeApoyo(tiposApoyo, parseInt(state.activeYear.nombre))
-	}, [data])
+	}, [data]) */
 
 	const deleteApoyoById = apoyoId => {
 		setLoading(true)
@@ -420,7 +420,7 @@ export const ApoyosCurriculares = () => {
 		let create = true
 		//create
 		if (formData.id === 0) {
-			const existeApoyo = data.find(item => {
+			/* const existeApoyo = data.find(item => {
 				if (item.sb_TiposDeApoyoId === _data.tipoDeApoyoId) {
 					const date = new Date(item.fechaInicio)
 					const anioApoyoExistente = date.getFullYear()
@@ -457,7 +457,7 @@ export const ApoyosCurriculares = () => {
 				})
 				setLoading(false)
 				return
-			}
+			} */
 
 			_data = {
 				..._data,
@@ -581,7 +581,7 @@ export const ApoyosCurriculares = () => {
 							name='radio-buttons-group'
 							value={radioValue}
 						>
-							{tiposApoyoFilter.map((item, i) => (
+							{tiposApoyo.map((item, i) => (
 								<Row key={i}>
 									<Col
 										style={{
@@ -696,7 +696,3 @@ export const ApoyosCurriculares = () => {
 		</>
 	)
 }
-
-const StyledInput = styled(Input)`
-	width: 100% !important;
-`
