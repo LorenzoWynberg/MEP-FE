@@ -187,10 +187,10 @@ const BeneficiosMEP = props => {
 			isInvalid = true
 		}
 
-		if (formData.dateTo === '') {
-			validationMessage += '\nLa fecha de fin es requerida'
-			isInvalid = true
-		}
+		// if (formData.dateTo === '') {
+		// 	validationMessage += '\nLa fecha de fin es requerida'
+		// 	isInvalid = true
+		// }
 
 		if (isInvalid) {
 			swal({
@@ -380,7 +380,7 @@ const BeneficiosMEP = props => {
 									handleSubsidio()
 								}}
 								value={prevSubsidio?.nombre || ''}
-								disabled={!editable}
+								disabled={!editable || isEmpty(dependencia)}
 								onChange={() => {}}
 							/>
 						</FormGroup>
@@ -471,9 +471,7 @@ const BeneficiosMEP = props => {
 						</Grid>
 						<Grid item xs={5} className={classes.control}>
 							<FormGroup>
-								<Label for="dateTo">
-									Fecha final <RequiredSpan />
-								</Label>
+								<Label for="dateTo">Fecha final</Label>
 								<Input
 									min={moment().startOf('year').format('YYYY-MM-DD')}
 									max={moment().format('YYYY-MM-DD')}
