@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Button, Col, FormGroup, Label, Row, Form } from 'reactstrap'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
+import { IoMdTrash } from 'react-icons/io'
+import Tooltip from '@mui/material/Tooltip'
+import { IconButton } from '@material-ui/core'
+import swal from 'sweetalert'
+import axios from 'axios'
+import { envVariables } from '../../../../../../constants/enviroment'
 
 function CondicionDiscapacidad(props) {
-	const columns = [
-		{
+
+	const columns = useMemo(() => {
+		return [{
 			Header: 'Nombre',
 			column: 'nombre',
 			accessor: 'nombre',
@@ -27,8 +34,64 @@ function CondicionDiscapacidad(props) {
 			column: 'usuarioRegistro',
 			accessor: 'usuarioRegistro',
 			label: ''
+		}, {
+			Header: 'Acciones',
+			column: '',
+			accessor: '',
+			label: '',
+			Cell: ({ _, row, data }) => {
+
+				return (
+					<div
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							alignContent: 'center'
+						}}
+					>
+						<Button
+							style={{
+								border: 'none',
+								background: 'transparent',
+								cursor: 'pointer',
+								color: 'grey'
+							}}
+							color='primary'
+							onClick={() => {
+								swal({
+									title: 'Eliminar Apoyo',
+									text: '¿Esta seguro de que desea eliminar la condición?',
+									icon: 'warning',
+									className: 'text-alert-modal',
+									buttons: {
+										cancel: 'Cancelar',
+										ok: {
+											text: 'Eliminar',
+											value: true,
+											className: 'btn-alert-color'
+										}
+									}
+								}).then(async result => {
+									if (result) {
+										console.log('row.original.id', row)
+										props.delete(row.original.id)
+									}
+								})
+							}}
+						>
+							<Tooltip title='Eliminar'>
+								<IconButton>
+									<IoMdTrash style={{ fontSize: 30 }} />
+								</IconButton>
+							</Tooltip>
+						</Button>
+					</div>
+				)
+			}
 		}
-	]
+		]
+	}, [])
 	return (
 		<>
 			<Row>
