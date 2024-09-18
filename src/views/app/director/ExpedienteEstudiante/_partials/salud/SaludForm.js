@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import { Input, Label, Form, Row, Col, FormGroup, Card, CardBody, CardTitle, FormFeedback } from 'reactstrap'
+import {
+	Input,
+	Label,
+	Form,
+	Row,
+	Col,
+	FormGroup,
+	Card,
+	CardBody,
+	CardTitle,
+	FormFeedback
+} from 'reactstrap'
 import { EditButton } from '../../../../../../components/EditButton'
+import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
 import { useForm } from 'react-hook-form'
 import { onlyNumbers } from 'Utils/utils'
 import { useTranslation } from 'react-i18next'
@@ -14,18 +26,23 @@ const SaludForm = props => {
 
 	return (
 		<>
-			<h4>{t('estudiantes>expediente>salud>titulo', 'Información de salud')}</h4>
+			<h4>
+				{t('estudiantes>expediente>salud>titulo', 'Información de salud')}
+			</h4>
 			<br />
 			<Row>
-				<Col md='6' sm='12'>
+				<Col md="6" sm="12">
 					<Form onSubmit={handleSubmit(props.sendData)}>
 						<Card>
 							<CardBody>
 								<CardTitle>
-									{t('estudiantes>expediente>salud>valoracion_nutri', 'Valoración nutricional')}
+									{t(
+										'estudiantes>expediente>salud>valoracion_nutri',
+										'Valoración nutricional'
+									)}
 								</CardTitle>
 								<Row>
-									<Col sm='12'>
+									<Col sm="12">
 										<FormGroup>
 											<Label>
 												{t(
@@ -34,9 +51,13 @@ const SaludForm = props => {
 												)}
 											</Label>
 											<Input
-												type='text'
-												name='seguroSocial'
-												value={props.nacional ? props.identificacion : props.data.seguroSocial}
+												type="text"
+												name="seguroSocial"
+												value={
+													props.nacional
+														? props.identificacion
+														: props.data.seguroSocial
+												}
 												disabled={!props.editable || props.nacional}
 												onChange={e => {
 													props.handleChange(e)
@@ -44,26 +65,30 @@ const SaludForm = props => {
 											/>
 										</FormGroup>
 									</Col>
-									<Col sm='12'>
+									<Col sm="12">
 										<Row>
-											<Col sm='3'>
+											<Col sm="3">
 												<FormGroup>
 													<Label>
-														{t('estudiantes>expediente>salud>peso', 'Peso (kg)')} *
+														{t(
+															'estudiantes>expediente>salud>peso',
+															'Peso (kg)'
+														)}{' '}
+														<RequiredSpan />
 													</Label>
 													<Input
-														type='number'
-														name='peso'
+														type="number"
+														name="peso"
 														value={props.data.peso ? props.data.peso : ''}
 														disabled={!props.editable}
-														pattern='^\d*(\.\d{0,1})?$'
+														pattern="^\d*(\.\d{0,1})?$"
 														placeholder={t(
 															'estudiantes>expediente>salud>peso',
 															'Peso (kg)'
 														)}
 														max={250}
 														min={0}
-														step='.1'
+														step=".1"
 														onKeyPress={e => onlyNumbers(e)}
 														onChange={e => {
 															props.handleChange(e)
@@ -73,14 +98,18 @@ const SaludForm = props => {
 													<FormFeedback>{props.messages.Peso}</FormFeedback>
 												</FormGroup>
 											</Col>
-											<Col sm='3'>
+											<Col sm="3">
 												<FormGroup>
 													<Label>
-														{t('estudiantes>expediente>salud>talla', 'Talla (cm)')} *
+														{t(
+															'estudiantes>expediente>salud>talla',
+															'Talla (cm)'
+														)}{' '}
+														<RequiredSpan />
 													</Label>
 													<Input
-														type='number'
-														name='talla'
+														type="number"
+														name="talla"
 														value={props.data.talla ? props.data.talla : ''}
 														disabled={!props.editable}
 														min={1}
@@ -89,8 +118,8 @@ const SaludForm = props => {
 															'Talla (cm)'
 														)}
 														max={250}
-														step='1'
-														pattern='[0-9]'
+														step="1"
+														pattern="[0-9]"
 														onKeyPress={e => onlyNumbers(e)}
 														onChange={e => {
 															const newValue = parseInt(e.target.value)
@@ -106,18 +135,17 @@ const SaludForm = props => {
 													<FormFeedback>{props.messages.Talla}</FormFeedback>
 												</FormGroup>
 											</Col>
-											<Col sm='6'>
+											<Col sm="6">
 												<FormGroup>
 													<Label>
 														{t(
 															'estudiantes>expediente>salud>imc',
 															'Índice de masa corporal (imc)'
 														)}{' '}
-														*
 													</Label>
 													<Input
-														type='number'
-														name='imc'
+														type="number"
+														name="imc"
 														value={props.data.imc ? props.data.imc : ''}
 														disabled
 														readOnly
@@ -134,7 +162,7 @@ const SaludForm = props => {
 								</Row>
 							</CardBody>
 						</Card>
-						<div className='container-center my-5 mb-3'>
+						<div className="container-center my-5 mb-3">
 							<EditButton
 								editable={props.editable}
 								setEditable={props.setEditable}
