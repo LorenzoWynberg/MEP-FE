@@ -28,11 +28,11 @@ import IconButton from '@mui/material/IconButton'
 import { HiPencil } from 'react-icons/hi'
 import swal from 'sweetalert'
 import { isNull, isUndefined, isEmpty } from 'lodash'
-import BarLoader from 'Components/barLoader/barLoader'
 import Loader from 'Components/LoaderContainer'
 import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import moment from 'moment'
+import colors from 'assets/js/colors'
 
 const categoria = {
 	id: 1,
@@ -82,6 +82,8 @@ export const ApoyosPersonales = () => {
 		setRadioValue(0)
 		setShowFechaAprobacion(false)
 	}
+
+	const primary = colors.primary
 
 	const handleFormDataChange = event => {
 		setFormData({
@@ -599,7 +601,7 @@ export const ApoyosPersonales = () => {
 												handleChangeItem(item)
 											}}
 											checked={radioValue == item.id}
-											control={<Radio />}
+											control={<Radio style={{ color: primary }} />}
 											label={item.nombre}
 										/>
 									</Col>

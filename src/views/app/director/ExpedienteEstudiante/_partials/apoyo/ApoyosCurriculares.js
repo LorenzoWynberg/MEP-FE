@@ -33,6 +33,7 @@ import Loader from 'Components/LoaderContainer'
 import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import moment from 'moment'
+import colors from 'assets/js/colors'
 
 const categoria = {
 	id: 4,
@@ -82,6 +83,8 @@ export const ApoyosCurriculares = () => {
 		setRadioValue(0)
 		setShowFechaAprobacion(false)
 	}
+
+	const primary = colors.primary
 
 	const handleFormDataChange = event => {
 		setFormData({
@@ -167,19 +170,6 @@ export const ApoyosCurriculares = () => {
 				setLoading(false)
 			})
 	}, [])
-
-	/* useEffect(() => {
-		if (isNull(sortedYearList)) {
-			const yearList = state.activeYears.map(year => {
-				return { id: year.id, name: year.nombre }
-			})
-
-			const sortedYears = yearList.sort((a, b) => b.name.localeCompare(a.name))
-			setSortedYearList(sortedYears)
-		}
-
-		filterTiposDeApoyo(tiposApoyo, parseInt(state.activeYear.nombre))
-	}, [data]) */
 
 	const deleteApoyoById = apoyoId => {
 		setLoading(true)
@@ -420,45 +410,6 @@ export const ApoyosCurriculares = () => {
 		let create = true
 		//create
 		if (formData.id === 0) {
-			/* const existeApoyo = data.find(item => {
-				if (item.sb_TiposDeApoyoId === _data.tipoDeApoyoId) {
-					const date = new Date(item.fechaInicio)
-					const anioApoyoExistente = date.getFullYear()
-
-					let anioAprobacion = null
-
-					if (isNull(_data.fechaInicio)) {
-						anioAprobacion = parseInt(state.activeYear.nombre)
-					} else {
-						anioAprobacion = new Date(_data.fechaInicio).getFullYear()
-					}
-
-					if (anioApoyoExistente === anioAprobacion) {
-						return item
-					} else {
-						return null
-					}
-				}
-			})
-
-			if (existeApoyo) {
-				swal({
-					title: 'Error al registrar el apoyo',
-					text: 'Ya existe un apoyo para el año ingresado.',
-					icon: 'error',
-					className: 'text-alert-modal',
-					buttons: {
-						ok: {
-							text: 'Ok',
-							value: true,
-							className: 'btn-alert-color'
-						}
-					}
-				})
-				setLoading(false)
-				return
-			} */
-
 			_data = {
 				..._data,
 
@@ -599,7 +550,7 @@ export const ApoyosCurriculares = () => {
 												handleChangeItem(item)
 											}}
 											checked={radioValue == item.id}
-											control={<Radio />}
+											control={<Radio style={{ color: primary }} />}
 											label={item.nombre}
 										/>
 									</Col>
@@ -696,3 +647,7 @@ export const ApoyosCurriculares = () => {
 		</>
 	)
 }
+
+const StyledInput = styled(Input)`
+	width: 100% !important;
+`
