@@ -3,13 +3,16 @@ import axios from 'axios'
 import studentBreadcrumb from 'Constants/studentBreadcrumb'
 import { useSelector } from 'react-redux'
 import { getIdentification } from 'Redux/identificacion/actions'
-import { getStudentDataFilter, loadStudent } from 'Redux/expedienteEstudiantil/actions'
-import { getDiscapacidades } from '../../../../redux/apoyos/actions'
+import {
+	getStudentDataFilter,
+	loadStudent
+} from 'Redux/expedienteEstudiantil/actions'
+import { getDiscapacidades } from 'Redux/apoyos/actions'
 import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
 import EstudianteInformationCard from './_partials/EstudianteInformationCard'
-import Loader from '../../../../components/Loader'
-import { useActions } from '../../../../hooks/useActions'
+import Loader from 'Components/Loader'
+import { useActions } from 'Hooks/useActions'
 import AppLayout from 'Layout/AppLayout'
 import directorItems from 'Constants/directorMenu'
 import { useParams } from 'react-router-dom'
@@ -17,6 +20,10 @@ import { useTranslation } from 'react-i18next'
 import { isEmpty, rest } from 'lodash'
 import { envVariables } from 'Constants/enviroment'
 import BitacoraExpediente from './BitacoraExpediente'
+import { catalogsEnumObj } from 'Utils/catalogsEnum'
+import { getCatalogs, getCatalogsSet } from 'Redux/selects/actions'
+import { validateSelectsData } from 'Utils/ValidateSelectsData'
+import { mapOption } from 'Utils/mapeoCatalogos'
 
 const Navegacion = React.lazy(() => import('./Navegacion'))
 const Contacto = React.lazy(() => import('./Contacto'))
@@ -29,7 +36,9 @@ const Apoyo = React.lazy(() => import('./Apoyo'))
 const Salud = React.lazy(() => import('./Salud'))
 const Buscador = React.lazy(() => import('./Buscador'))
 const CuentaUsuarios = React.lazy(() => import('./CuentaUsuario'))
-const ServicioComunalEstudiantil = React.lazy(() => import('./ServicioComunalEstudiantil'))
+const ServicioComunalEstudiantil = React.lazy(
+	() => import('./ServicioComunalEstudiantil')
+)
 
 const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
@@ -50,7 +59,9 @@ const ContenedorPrincipal = props => {
 		getIdentification,
 		getStudentDataFilter,
 		loadStudent,
-		getDiscapacidades
+		getDiscapacidades,
+		getCatalogs,
+		getCatalogsSet
 	})
 
 	const state = useSelector(store => {
@@ -58,7 +69,8 @@ const ContenedorPrincipal = props => {
 			expedienteEstudiantil: store.expedienteEstudiantil,
 			identification: store.identification,
 			historialMatricula: store.identification.matriculaHistory,
-			apoyos: store.apoyos
+			apoyos: store.apoyos,
+			selects: store.selects
 		}
 	})
 
@@ -67,7 +79,9 @@ const ContenedorPrincipal = props => {
 	}
 
 	const blockeo = () => {
-		return <h3>Debe seleccionar un estudiante en el buscador de estudiantes.</h3>
+		return (
+			<h3>Debe seleccionar un estudiante en el buscador de estudiantes.</h3>
+		)
 	}
 
 	useEffect(() => {
@@ -94,11 +108,42 @@ const ContenedorPrincipal = props => {
 		setLoading(true)
 		const fetch = async () => {
 			const _id = state.expedienteEstudiantil.currentStudent.idEstudiante
-			await actions.getIdentification(_id)
+			const response = await actions.getIdentification(_id)
+
+			const catalogsNamesArray = [
+				catalogsEnumObj.GENERO.name,
+				catalogsEnumObj.NATIONALITIES.name
+			]
+
+			let nacionalidad = ''
+			let genero = ''
+
+			if (validateSelectsData(state.selects, catalogsNamesArray)) {
+				const _item = {
+					nacionalidad: mapOption(
+						response.data.data.datos,
+						state.selects,
+						catalogsEnumObj.NATIONALITIES.id,
+						catalogsEnumObj.NATIONALITIES.name
+					),
+					genero: mapOption(
+						response.data.data.datos,
+						state.selects,
+						catalogsEnumObj.GENERO.id,
+						catalogsEnumObj.GENERO.name
+					)
+				}
+
+				nacionalidad = _item.nacionalidad.label ? _item.nacionalidad.label : ''
+				genero = _item.genero.label ? _item.genero.label : ''
+			}
+
 			setInfoCard(prevState => {
 				return {
 					...prevState,
 					...state.expedienteEstudiantil.currentStudent,
+					nacionalidad: nacionalidad,
+					genero: genero,
 					datos: state.identification.data.datos
 				}
 			})
@@ -117,6 +162,7 @@ const ContenedorPrincipal = props => {
 				state.expedienteEstudiantil.currentStudent.idEstudiante
 			)
 			const tieneDiscapacidades = !isEmpty(discapacidades) ? 'SI' : 'NO'
+
 			setInfoCard(prevState => {
 				return {
 					...prevState,
@@ -137,6 +183,8 @@ const ContenedorPrincipal = props => {
 				const datosAdicionales = await axios.get(
 					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Expediente/GetDatosAdicionalesMatricula/${state.expedienteEstudiantil.currentStudent.idEstudiante}`
 				)
+
+				debugger
 
 				const esIndigena = datosAdicionales.data?.esIndigena ? 'SI' : 'NO'
 				setInfoCard(prevState => {
@@ -190,16 +238,21 @@ const ContenedorPrincipal = props => {
 
 	return (
 		<AppLayout items={directorItems}>
-			<div className='dashboard-wrapper'>
+			<div className="dashboard-wrapper">
 				<Container>
-					{active !== 0 && estudianteEnContexto() && <EstudianteInformationCard fixed data={infoCard} />}
+					{active !== 0 && estudianteEnContexto() && (
+						<EstudianteInformationCard fixed data={infoCard} />
+					)}
 
 					{/* <Row style={{ paddingTop: active !== 0 && estudianteEnContexto() ? 100 : 0 }}> */}
 					<Row>
 						{active !== 0 && estudianteEnContexto() && (
 							<Col xs={12}>
 								<Breadcrumb
-									header={t('expediente_estudiantil>titulo', 'Expediente Estudiantil')}
+									header={t(
+										'expediente_estudiantil>titulo',
+										'Expediente Estudiantil'
+									)}
 									data={breadcrumbs}
 								/>
 								<br />
@@ -218,15 +271,46 @@ const ContenedorPrincipal = props => {
 											) : (
 												blockeo()
 											),
-											2: estudianteEnContexto() ? <General {...props} /> : blockeo(),
-											3: estudianteEnContexto() ? <Contacto {...props} /> : blockeo(),
-											4: estudianteEnContexto() ? <Hogar {...props} /> : blockeo(),
-											5: estudianteEnContexto() ? <Beneficios {...props} /> : blockeo(),
-											6: estudianteEnContexto() ? <Apoyo {...props} /> : blockeo(),
-											7: estudianteEnContexto() ? <AreaCurricular {...props} /> : blockeo(),
-											8: estudianteEnContexto() ? <Salud {...props} /> : blockeo(),
+											2: estudianteEnContexto() ? (
+												<General {...props} />
+											) : (
+												blockeo()
+											),
+											3: estudianteEnContexto() ? (
+												<Contacto {...props} />
+											) : (
+												blockeo()
+											),
+											4: estudianteEnContexto() ? (
+												<Hogar {...props} />
+											) : (
+												blockeo()
+											),
+											5: estudianteEnContexto() ? (
+												<Beneficios {...props} />
+											) : (
+												blockeo()
+											),
+											6: estudianteEnContexto() ? (
+												<Apoyo {...props} />
+											) : (
+												blockeo()
+											),
+											7: estudianteEnContexto() ? (
+												<AreaCurricular {...props} />
+											) : (
+												blockeo()
+											),
+											8: estudianteEnContexto() ? (
+												<Salud {...props} />
+											) : (
+												blockeo()
+											),
 											9: estudianteEnContexto() ? (
-												<Oferta {...props} historialMatricula={state.historialMatricula} />
+												<Oferta
+													{...props}
+													historialMatricula={state.historialMatricula}
+												/>
 											) : (
 												blockeo()
 											),
@@ -245,7 +329,11 @@ const ContenedorPrincipal = props => {
 											) : (
 												blockeo()
 											),
-											12: estudianteEnContexto() ? <BitacoraExpediente {...props} /> : blockeo()
+											12: estudianteEnContexto() ? (
+												<BitacoraExpediente {...props} />
+											) : (
+												blockeo()
+											)
 										}[active]
 									}
 								</>
