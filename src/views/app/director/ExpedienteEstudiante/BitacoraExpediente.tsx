@@ -30,9 +30,15 @@ const BitacoraExpediente = props => {
 
 	return (
 		<>
-			<h4>{t('estudiantes>expediente>bitacora>titulo', 'Bitácora de expediente')}</h4>
+			<h4>
+				{t('estudiantes>expediente>bitacora>titulo', 'Bitácora de expediente')}
+			</h4>
 			<br />
-			<HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
+			<HeaderTab
+				options={optionsTab}
+				activeTab={activeTab}
+				setActiveTab={setActiveTab}
+			/>
 			<ContentTab activeTab={activeTab} numberId={activeTab}>
 				{activeTab === 0 && <AlertaTempranaExpedienteEstudiantil />}
 				{activeTab === 1 && <HistoricoCambiosIdentidadEstudiante />}
