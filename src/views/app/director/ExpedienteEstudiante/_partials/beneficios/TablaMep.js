@@ -110,7 +110,7 @@ const TablaMep = props => {
 							{`${moment(fullRow.fechaInicio).format('DD/MM/YYYY')} - ` +
 								(fullRow.fechaFinal
 									? moment(fullRow.fechaFinal).format('DD/MM/YYYY')
-									: 'Indefinido')}
+									: 'Fecha no registrada')}
 						</div>
 					)
 				}
