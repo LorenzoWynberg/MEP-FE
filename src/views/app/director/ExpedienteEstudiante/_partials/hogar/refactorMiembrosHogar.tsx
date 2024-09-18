@@ -42,6 +42,8 @@ import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import Loader from 'Components/Loader'
 import swal from 'sweetalert'
+import RequiredSpan from 'Components/Form/RequiredSpan'
+import styles from './Hogar.css'
 
 const RefactorMiembrosHogar = props => {
 	const [loadingRegistrarModal, setLoadingRegistrarModal] = useState(false)
@@ -111,10 +113,12 @@ const RefactorMiembrosHogar = props => {
 		setSnackbarContent,
 		handleClick
 	})
+
 	React.useEffect(() => {
 		if (!idEstudiante) return
 		loadFamilyMembers()
 	}, [])
+
 	const closeModalNoEncontrado = () => {
 		events.toggleShowModalBusqueda(false)
 	}
@@ -303,7 +307,7 @@ const RefactorMiembrosHogar = props => {
 	}
 
 	return (
-		<>
+		<div className={styles}>
 			{loading && (
 				<div
 					style={{
@@ -369,11 +373,11 @@ const RefactorMiembrosHogar = props => {
 
 								<Col sm="12" md="8" className="mt-sm-2">
 									<Label>
-										*
 										{t(
 											'estudiantes>expediente>info_gen>info_gen>num_id',
 											'Número de identificación'
 										)}
+										<RequiredSpan />
 									</Label>
 									<InputContainer>
 										<Input
@@ -384,8 +388,7 @@ const RefactorMiembrosHogar = props => {
 											onChange={events.onIdentificacionChange}
 										/>
 									</InputContainer>
-									<Label>
-										*
+									<Label className="mt-3">
 										{t(
 											'estudiantes>expediente>info_gen>info_gen>tipo_id',
 											'Tipo de identificación'
@@ -403,8 +406,7 @@ const RefactorMiembrosHogar = props => {
 										isDisabled
 										onChange={events.onTipoIdentificacionChange}
 									/>
-									<Label>
-										*
+									<Label className="mt-3">
 										{t(
 											'estudiantes>expediente>info_gen>info_gen>nacionalidad',
 											'Nacionalidad'
@@ -438,8 +440,7 @@ const RefactorMiembrosHogar = props => {
 									</CardTitle>
 									<Row>
 										<Col sm="12">
-											<Label>
-												*
+											<Label className="">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>nombre',
 													'Nombre'
@@ -456,8 +457,7 @@ const RefactorMiembrosHogar = props => {
 											<FormFeedback />
 										</Col>
 										<Col sm="12">
-											<Label>
-												*
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>apellido_1',
 													'Primer apellido'
@@ -473,7 +473,7 @@ const RefactorMiembrosHogar = props => {
 											<FormFeedback />
 										</Col>
 										<Col sm="12">
-											<Label>
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>apellido_2',
 													'Segundo apellido'
@@ -488,7 +488,50 @@ const RefactorMiembrosHogar = props => {
 											/>
 										</Col>
 										<Col sm="12">
-											<Label>
+											<Label className="mt-3">
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>conocido',
+													'Conocido como'
+												)}
+											</Label>
+											<Input
+												type="text"
+												name="conocidoComo"
+												value={formData.conocidoComo}
+												disabled
+												onChange={events.onConocidoComoChange}
+											/>
+											<FormFeedback />
+										</Col>
+										<Col sm="12">
+											<Label className="mt-3">
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>nacimiento',
+													'Fecha de nacimiento'
+												)}
+											</Label>
+											{
+												<DatePicker
+													style={{ paddingLeft: '0px', color: '#000' }}
+													dateFormat="dd/MM/yyyy"
+													peekNextMonth
+													showMonthDropdown
+													showYearDropdown
+													selectsStart
+													maxDate={[]}
+													disabled
+													selected={
+														formData.fechaNacimiento
+															? moment(formData.fechaNacimiento).toDate()
+															: null
+													}
+													onChange={events.onFechaNacimientoChange}
+												/>
+											}
+											<FormFeedback />
+										</Col>
+										<Col sm="12">
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>sexo',
 													'Sexo'
@@ -509,56 +552,7 @@ const RefactorMiembrosHogar = props => {
 											<FormFeedback />
 										</Col>
 										<Col sm="12">
-											<Label>
-												*
-												{t(
-													'estudiantes>expediente>hogar>miembros_hogar>agregar>nacimiento',
-													'Fecha de nacimiento'
-												)}
-											</Label>
-											{
-												<DatePicker
-													dateFormat="dd/MM/yyyy"
-													peekNextMonth
-													showMonthDropdown
-													showYearDropdown
-													selectsStart
-													maxDate={[]}
-													disabled
-													selected={
-														/* props.memberData.fechaNacimiento
-            ? moment(
-                    props.memberData
-                        .fechaNacimiento
-            ).toDate()
-            : null */
-														formData.fechaNacimiento
-															? moment(formData.fechaNacimiento).toDate()
-															: null
-													}
-													onChange={events.onFechaNacimientoChange}
-												/>
-											}
-											<FormFeedback />
-										</Col>
-										<Col sm="12">
-											<Label>
-												{t(
-													'estudiantes>expediente>hogar>miembros_hogar>agregar>conocido',
-													'Conocido como'
-												)}
-											</Label>
-											<Input
-												type="text"
-												name="conocidoComo"
-												value={formData.conocidoComo}
-												disabled
-												onChange={events.onConocidoComoChange}
-											/>
-											<FormFeedback />
-										</Col>
-										<Col sm="12">
-											<Label>
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>identidad_gen',
 													'Identidad de género'
@@ -578,8 +572,7 @@ const RefactorMiembrosHogar = props => {
 											/>
 										</Col>
 										<Col sm="12">
-											<Label>
-												*
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>escolaridad',
 													'Escolaridad'
@@ -600,8 +593,7 @@ const RefactorMiembrosHogar = props => {
 											<FormFeedback />
 										</Col>
 										<Col sm="12">
-											<Label>
-												*
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>condicion_lab',
 													'Condición laboral'
@@ -622,7 +614,7 @@ const RefactorMiembrosHogar = props => {
 											<FormFeedback />
 										</Col>
 										<Col sm="12">
-											<Label>
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>condicion_discap',
 													'Condición de discapacidad'
@@ -645,11 +637,87 @@ const RefactorMiembrosHogar = props => {
 							</Card>
 						</Colxx>
 						<Colxx xxs="12" md="6" className="mt-5">
+							<Card className="mb-5">
+								<CardBody>
+									<Row>
+										<Col sm="12" md="12">
+											<h5 className="card-title">
+												<IntlMessages id="menu.info-contacto" />
+											</h5>
+										</Col>
+										<Col sm="12" md="12">
+											<Label className="">
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>tel_prin',
+													'Teléfono principal'
+												)}
+												<RequiredSpan />
+											</Label>
+											<ReactInputMask
+												mask="9999-9999"
+												value={formData.telefonoPrincipal}
+												disabled={!formData.editable}
+												type="text"
+												name="telefono"
+												onChange={events.onTelefonoPrincipalChange}
+											>
+												{inputProps => (
+													<Input
+														{...inputProps}
+														disabled={!formData.editable}
+													/>
+												)}
+											</ReactInputMask>
+											<FormFeedback />
+										</Col>
+										<Col sm="12" md="12">
+											<Label className="mt-3">
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>tel_alt',
+													'Teléfono alternativo'
+												)}
+											</Label>
+											<ReactInputMask
+												type="text"
+												mask="9999-9999"
+												name="telefonoSecundario"
+												value={formData.telefonoAlternativo}
+												disabled={!formData.editable}
+												onChange={events.onTelefonoAlternativoChange}
+											>
+												{inputProps => (
+													<Input
+														{...inputProps}
+														disabled={!formData.editable}
+													/>
+												)}
+											</ReactInputMask>
+											<FormFeedback />
+										</Col>
+										<Col sm="12" md="12">
+											<Label className="mt-3">
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>correo',
+													'Correo electrónico'
+												)}
+											</Label>
+											<Input
+												type="email"
+												name="email"
+												value={formData.correo}
+												disabled={!formData.editable}
+												onChange={events.onCorreoChange}
+											/>
+											<FormFeedback />
+										</Col>
+									</Row>
+								</CardBody>
+							</Card>
 							<Card>
 								<CardBody>
 									<Row>
 										<Col sm="12" md="12">
-											<h5>
+											<h5 className="card-title">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>asociacion',
 													'Asociación'
@@ -657,12 +725,12 @@ const RefactorMiembrosHogar = props => {
 											</h5>
 										</Col>
 										<Col sm="12" md="12">
-											<Label>
-												*
+											<Label className="mb-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>relacion_est',
 													'Relación con estudiante'
 												)}
+												<RequiredSpan />
 											</Label>
 											<Select
 												className="react-select"
@@ -679,7 +747,7 @@ const RefactorMiembrosHogar = props => {
 											<span style={{ color: 'red' }}>
 												{/* {props.fields["ParentescoId"] && props.errors["ParentescoId"]} */}
 											</span>
-											<Label>
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>encargado_est',
 													'¿Es el encargado del estudiante?'
@@ -717,7 +785,7 @@ const RefactorMiembrosHogar = props => {
 											)}
 										</Col>
 										<Col sm="12" md="12">
-											<Label>
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>represen_legal_est',
 													'¿Es el representante legal del estudiante?'
@@ -760,7 +828,7 @@ const RefactorMiembrosHogar = props => {
 										</Col>
 
 										<Col sm="12" md="12">
-											<Label>
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>vive_est',
 													'Vive con estudiante'
@@ -788,10 +856,10 @@ const RefactorMiembrosHogar = props => {
 											</div>
 										</Col>
 										<Col sm="12" md="12">
-											<Label>
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>depende_econ_est',
-													'¿Depende economicamente del estudiante?'
+													'¿Depende económicamente del estudiante?'
 												)}
 											</Label>
 											<div>
@@ -818,81 +886,6 @@ const RefactorMiembrosHogar = props => {
 									</Row>
 								</CardBody>
 							</Card>
-							<Card className="mt-5">
-								<CardBody>
-									<Row>
-										<Col sm="12" md="12">
-											<IntlMessages id="menu.info-contacto" />
-										</Col>
-										<Col sm="12" md="12">
-											<Label>
-												*
-												{t(
-													'estudiantes>expediente>hogar>miembros_hogar>agregar>tel_prin',
-													'Teléfono principal'
-												)}
-											</Label>
-											<ReactInputMask
-												mask="9999-9999"
-												value={formData.telefonoPrincipal}
-												disabled={!formData.editable}
-												type="text"
-												name="telefono"
-												onChange={events.onTelefonoPrincipalChange}
-											>
-												{inputProps => (
-													<Input
-														{...inputProps}
-														disabled={!formData.editable}
-													/>
-												)}
-											</ReactInputMask>
-											<FormFeedback />
-										</Col>
-										<Col sm="12" md="12">
-											<Label>
-												{t(
-													'estudiantes>expediente>hogar>miembros_hogar>agregar>tel_alt',
-													'Teléfono alternativo'
-												)}
-											</Label>
-											<ReactInputMask
-												type="text"
-												mask="9999-9999"
-												name="telefonoSecundario"
-												value={formData.telefonoAlternativo}
-												disabled={!formData.editable}
-												onChange={events.onTelefonoAlternativoChange}
-											>
-												{inputProps => (
-													<Input
-														{...inputProps}
-														disabled={!formData.editable}
-													/>
-												)}
-											</ReactInputMask>
-											<FormFeedback />
-										</Col>
-										<Col sm="12" md="12">
-											<Label>
-												*
-												{t(
-													'estudiantes>expediente>hogar>miembros_hogar>agregar>correo',
-													'Correo electrónico'
-												)}
-											</Label>
-											<Input
-												type="email"
-												name="email"
-												value={formData.correo}
-												disabled={!formData.editable}
-												onChange={events.onCorreoChange}
-											/>
-											<FormFeedback />
-										</Col>
-									</Row>
-								</CardBody>
-							</Card>
 						</Colxx>
 						<div className="container-center my-5 mb-3">
 							{!formData.editable ? (
@@ -901,7 +894,12 @@ const RefactorMiembrosHogar = props => {
 								</Button>
 							) : (
 								<>
-									<Button outline color="primary" onClick={onRegresarEvent}>
+									<Button
+										className="mr-2"
+										outline
+										color="primary"
+										onClick={onRegresarEvent}
+									>
 										Cancelar
 									</Button>
 									<Button
@@ -1089,7 +1087,7 @@ const RefactorMiembrosHogar = props => {
 					</Row>
 				</Container>
 			</SimpleModal>
-		</>
+		</div>
 	)
 }
 

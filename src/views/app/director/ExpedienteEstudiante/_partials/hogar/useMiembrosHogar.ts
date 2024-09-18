@@ -245,14 +245,18 @@ const reducer = (state = initialState, action): typeof initialState => {
 		case TYPES.ADD_REPRESENTANTE_LEGAL_DOC: {
 			return {
 				...state,
-				documentosRepresentanteLegal: [...state.documentosRepresentanteLegal, payload]
+				documentosRepresentanteLegal: [
+					...state.documentosRepresentanteLegal,
+					payload
+				]
 			}
 		}
 		case TYPES.REMOVE_REPRESENTANTE_LEGAL_DOC: {
 			let newArr = [...state.documentosRepresentanteLegal]
 			const index = newArr.findIndex(i => i.id == payload.id)
 
-			if (newArr[index].action == 'add') newArr = newArr.filter(i => i.id != payload.id)
+			if (newArr[index].action == 'add')
+				newArr = newArr.filter(i => i.id != payload.id)
 			else newArr[index].action = 'remove'
 
 			return {
@@ -264,7 +268,8 @@ const reducer = (state = initialState, action): typeof initialState => {
 			let newArr = [...state.documentosEncargado]
 			const index = newArr.findIndex(i => i.id == payload.id)
 
-			if (newArr[index].action == 'add') newArr = newArr.filter(i => i.id != payload.id)
+			if (newArr[index].action == 'add')
+				newArr = newArr.filter(i => i.id != payload.id)
 			else newArr[index].action = 'remove'
 			return {
 				...state,
@@ -393,10 +398,12 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		// catalogos de Relacion con Estudiante y Discapacidades cargado
 		const { data: relacionConEstudiante } = await getCatalogs(14)(reduxDispatch)
 		const { data: discapacidades } = await getCatalogs(15)(reduxDispatch)
-		const { data: condicionesLaborales } = await getCatalogs(TIPO_CATALOGO_DATOS_ADICIONALES.CondicionLaboral)(
-			reduxDispatch
-		)
-		const { data: escolaridades } = await getCatalogs(TIPO_CATALOGO_DATOS_ADICIONALES.Escolaridad)(reduxDispatch)
+		const { data: condicionesLaborales } = await getCatalogs(
+			TIPO_CATALOGO_DATOS_ADICIONALES.CondicionLaboral
+		)(reduxDispatch)
+		const { data: escolaridades } = await getCatalogs(
+			TIPO_CATALOGO_DATOS_ADICIONALES.Escolaridad
+		)(reduxDispatch)
 		const payload = {
 			tipoIdentificacionCatalog: reduxState.tipoIdentificacion.map(mapeador),
 			nacionalidadCatalog: reduxState.nacionalidades.map(mapeador),
@@ -496,8 +503,16 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		}
 
 		payload.identidadId = obj.id
-		payload.tipoIdentificacion = findCatalogObj(obj.datos, 1, state.tipoIdentificacionCatalog)
-		payload.nacionalidad = findCatalogObj(obj.datos, 2, state.nacionalidadCatalog)
+		payload.tipoIdentificacion = findCatalogObj(
+			obj.datos,
+			1,
+			state.tipoIdentificacionCatalog
+		)
+		payload.nacionalidad = findCatalogObj(
+			obj.datos,
+			2,
+			state.nacionalidadCatalog
+		)
 		payload.imagen = obj.fotografiaUrl
 		payload.nombre = obj.nombre
 		payload.primerApellido = obj.primerApellido
@@ -505,15 +520,21 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		payload.sexo = findCatalogObj(obj.datos, 3, state.sexoCatalog)
 		payload.fechaNacimiento = obj.fechaNacimiento
 		payload.conocidoComo = obj.conocidoComo
-		payload.identidadGenero = findCatalogObj(obj.datos, 4, state.identidadGeneroCatalog)
-		payload.telefonoPrincipal = obj.telefono
-		payload.telefonoAlternativo = obj.telefonoSecundario
-		payload.correo = obj.email
+		payload.identidadGenero = findCatalogObj(
+			obj.datos,
+			4,
+			state.identidadGeneroCatalog
+		)
+		payload.telefonoPrincipal = obj.telefono ?? ''
+		payload.telefonoAlternativo = obj.telefonoSecundario ?? ''
+		payload.correo = obj.email ?? ''
 
 		dispatch({ type: TYPES.SET_IDENTIDAD_FORM_VALUES, payload })
 	}
 	const onDiscapacidadesSeleccionadasClick = obj => {
-		const index = state.condicionDiscapacidadSeleccionadas.findIndex(i => i.id == obj.id)
+		const index = state.condicionDiscapacidadSeleccionadas.findIndex(
+			i => i.id == obj.id
+		)
 		let newState = [...state.condicionDiscapacidadSeleccionadas]
 		if (index == -1) {
 			newState = [...state.condicionDiscapacidadSeleccionadas, obj]
@@ -548,7 +569,8 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 
 		if (identificacion.length >= 9) {
 			toggleLoading(true)
-			api.findIndentidadByIdentificacion(identificacion)
+			api
+				.findIndentidadByIdentificacion(identificacion)
 				.then(r => {
 					setIdentidadFormValues(r)
 					toggleLoading(false)
@@ -564,7 +586,8 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 
 		if (e.target.value.length >= 9) {
 			toggleLoading(true)
-			api.findIndentidadByIdentificacion(e.target.value)
+			api
+				.findIndentidadByIdentificacion(e.target.value)
 				.then(r => {
 					if (!r) {
 						toggleShowModalBusqueda(true)
@@ -723,12 +746,21 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 	const getRequest = (type: 'create' | 'update' = 'create') => {
 		const formBody = new FormData()
 		formBody.append('viveHogar', state.viveConEstudiante?.toString() || 'false')
-		formBody.append('esEncargado', state.esEncargadoDelEstudiante?.toString() || 'false')
-		formBody.append('esRepresentanteLegal', state.esRepresentanteLegalEstudiante?.toString() || 'false')
+		formBody.append(
+			'esEncargado',
+			state.esEncargadoDelEstudiante?.toString() || 'false'
+		)
+		formBody.append(
+			'esRepresentanteLegal',
+			state.esRepresentanteLegalEstudiante?.toString() || 'false'
+		)
 		formBody.append('emergencia', 'false')
 		formBody.append('estudianteId', reduxState.estudianteId)
 		formBody.append('esAutorizado', state.esAutorizado?.toString() || 'false')
-		formBody.append('dependenciaEconomica', state.dependeEconomicamente?.toString() || 'false')
+		formBody.append(
+			'dependenciaEconomica',
+			state.dependeEconomicamente?.toString() || 'false'
+		)
 		formBody.append('nombre', state.nombre)
 		formBody.append('primerApellido', state.primerApellido)
 		formBody.append('segundoApellido', state.segundoApellido)
@@ -806,7 +838,8 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		}
 		if (state.isNew) {
 			const request = getRequest()
-			api.createMiembroHogarRequest(request)
+			api
+				.createMiembroHogarRequest(request)
 				.then(_ => {
 					toggleEditable(false)
 					infoToast('Guardado correctamente')
@@ -821,7 +854,8 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 	}
 	const onUpdateClick = () => {
 		const request = getRequest('update')
-		api.editMiembroHogarRequest(request)
+		api
+			.editMiembroHogarRequest(request)
 			.then(_ => {
 				toggleEditable(false)
 				infoToast('Editado correctamente')
@@ -844,7 +878,14 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		dispatch({ type: TYPES.TOGGLE_FORM, payload: e })
 	}
 	const setFormValuesFromRequest = (result, catalogos) => {
-		const { identidad, miembro, recursoRepresentanteLegal, recursosEncargado, usuario, discapacidades } = result
+		const {
+			identidad,
+			miembro,
+			recursoRepresentanteLegal,
+			recursosEncargado,
+			usuario,
+			discapacidades
+		} = result
 		const imgPerfil: FILE_TYPE = {
 			src: identidad.identidad.fotografiaUrl
 		}
@@ -915,15 +956,33 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			imagen: imgPerfil,
 			documentosEncargado: mapDocumentos(recursosEncargado),
 			documentosRepresentanteLegal: mapDocumentos(recursoRepresentanteLegal),
-			tipoIdentificacion: objDatoIdentidad(TIPO_CATALOGO_DATOS_ADICIONALES.TipoIdentificación, identidad.datos),
-			identidadGenero: objDatoIdentidad(TIPO_CATALOGO_DATOS_ADICIONALES.Genero, identidad.datos),
-			nacionalidad: objDatoIdentidad(TIPO_CATALOGO_DATOS_ADICIONALES.Nacionalidad, identidad.datos),
+			tipoIdentificacion: objDatoIdentidad(
+				TIPO_CATALOGO_DATOS_ADICIONALES.TipoIdentificación,
+				identidad.datos
+			),
+			identidadGenero: objDatoIdentidad(
+				TIPO_CATALOGO_DATOS_ADICIONALES.Genero,
+				identidad.datos
+			),
+			nacionalidad: objDatoIdentidad(
+				TIPO_CATALOGO_DATOS_ADICIONALES.Nacionalidad,
+				identidad.datos
+			),
 			relacionConEstudiante: catalogos.relacionConEstudianteCatalog.find(
 				i => i.value == miembro.sb_elementosCatalogoId
 			),
-			sexo: objDatoIdentidad(TIPO_CATALOGO_DATOS_ADICIONALES.Sexo, identidad.datos),
-			escolaridad: objDatoIdentidad(TIPO_CATALOGO_DATOS_ADICIONALES.Escolaridad, identidad.datos),
-			condicionLaboral: objDatoIdentidad(TIPO_CATALOGO_DATOS_ADICIONALES.CondicionLaboral, identidad.datos),
+			sexo: objDatoIdentidad(
+				TIPO_CATALOGO_DATOS_ADICIONALES.Sexo,
+				identidad.datos
+			),
+			escolaridad: objDatoIdentidad(
+				TIPO_CATALOGO_DATOS_ADICIONALES.Escolaridad,
+				identidad.datos
+			),
+			condicionLaboral: objDatoIdentidad(
+				TIPO_CATALOGO_DATOS_ADICIONALES.CondicionLaboral,
+				identidad.datos
+			),
 			condicionDiscapacidad: discapacidades,
 			miembroId: miembro.id
 			//rol: getRoleUsuario(usuario.roles, catalogos.rolCatalog)
@@ -932,7 +991,8 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 	}
 	const onEditarClick = id => {
 		loadCatalogs().then(catalogs => {
-			api.getMiembroHogarInfoById(id)
+			api
+				.getMiembroHogarInfoById(id)
 				.then(response => {
 					console.log(response)
 					setFormValuesFromRequest(response.data, catalogs)
@@ -973,8 +1033,12 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			//rol,
 			editable,
 			condicionDiscapacidadSeleccionadas,
-			documentosEncargado: documentosEncargado.filter(i => i.action != 'remove'),
-			documentosRepresentanteLegal: documentosRepresentanteLegal.filter(i => i.action != 'remove'),
+			documentosEncargado: documentosEncargado.filter(
+				i => i.action != 'remove'
+			),
+			documentosRepresentanteLegal: documentosRepresentanteLegal.filter(
+				i => i.action != 'remove'
+			),
 			showForm,
 			showModalBusqueda,
 			loading,
