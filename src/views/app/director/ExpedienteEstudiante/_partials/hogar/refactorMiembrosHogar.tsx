@@ -10,9 +10,6 @@ import {
 	Card,
 	CardBody,
 	Label,
-	Modal,
-	ModalBody,
-	ModalHeader,
 	Button,
 	Container,
 	FormFeedback,
@@ -21,35 +18,32 @@ import {
 } from 'reactstrap'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import colors from 'Assets/js/colors'
-import PersonIcon from '@material-ui/icons/Person'
-import Avatar from '@material-ui/core/Avatar'
-import AddAPhotoIcon from '@material-ui/icons/AddAPhoto'
 import IconButton from '@material-ui/core/IconButton'
 import CustomSelectInput from 'Components/common/CustomSelectInput'
-import { makeStyles } from '@material-ui/core/styles'
 import SimpleModal from 'Components/Modal/simple'
 import WizardRegisterIdentityModal from 'Views/app/configuracion/Identidad/_partials/wizardRegisterIdentityModal'
-import { clearWizardDataStore, clearWizardNavDataStore } from 'Redux/identidad/actions'
+import {
+	clearWizardDataStore,
+	clearWizardNavDataStore
+} from 'Redux/identidad/actions'
 import { Colxx } from 'Components/common/CustomBootstrap'
 import DatePicker from 'react-datepicker'
 import IntlMessages from 'Helpers/IntlMessages'
 import ReactInputMask from 'react-input-mask'
-import RequiredLabel from '../../../../../../components/common/RequeredLabel'
-import { truncate } from 'fs/promises'
 import useMiembrosHogar from './useMiembrosHogar'
 import { IoMdTrash } from 'react-icons/io'
 import { HiPencil } from 'react-icons/hi'
 import Tooltip from '@mui/material/Tooltip'
-import { IoEyeSharp } from 'react-icons/io5'
 import useNotification from 'Hooks/useNotification'
 import UploadComponent from './UploadComponent'
-import UploadAvatar from './UploadAvatar'
+import Avatar from './Avatar'
 import { getFamilyMembers } from 'Redux/miembros/actions'
 import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import Loader from 'Components/Loader'
 import swal from 'sweetalert'
-import Score from '../../../Grupos/_partials/SubjectDetails/Score/Index'
+import RequiredSpan from 'Components/Form/RequiredSpan'
+import styles from './Hogar.css'
 
 const RefactorMiembrosHogar = props => {
 	const [loadingRegistrarModal, setLoadingRegistrarModal] = useState(false)
@@ -119,10 +113,12 @@ const RefactorMiembrosHogar = props => {
 		setSnackbarContent,
 		handleClick
 	})
+
 	React.useEffect(() => {
 		if (!idEstudiante) return
 		loadFamilyMembers()
 	}, [])
+
 	const closeModalNoEncontrado = () => {
 		events.toggleShowModalBusqueda(false)
 	}
@@ -147,19 +143,28 @@ const RefactorMiembrosHogar = props => {
 				label: ''
 			},
 			{
-				Header: t('estudiantes>expediente>hogar>miembros_hogar>col_nombre', 'Nombre'),
+				Header: t(
+					'estudiantes>expediente>hogar>miembros_hogar>col_nombre',
+					'Nombre'
+				),
 				column: 'nombre',
 				accessor: 'nombre',
 				label: ''
 			},
 			{
-				Header: t('estudiantes>expediente>hogar>miembros_hogar>col_apellido_1', 'Primer apellido'),
+				Header: t(
+					'estudiantes>expediente>hogar>miembros_hogar>col_apellido_1',
+					'Primer apellido'
+				),
 				column: 'primerApellido',
 				accessor: 'primerApellido',
 				label: ''
 			},
 			{
-				Header: t('estudiantes>expediente>hogar>miembros_hogar>col_apellido_2', 'Segundo apellido'),
+				Header: t(
+					'estudiantes>expediente>hogar>miembros_hogar>col_apellido_2',
+					'Segundo apellido'
+				),
 				column: 'segundoApellido',
 				accessor: 'segundoApellido',
 				label: ''
@@ -171,7 +176,10 @@ const RefactorMiembrosHogar = props => {
 				label: ''
 			}, */
 			{
-				Header: t('estudiantes>expediente>hogar>miembros_hogar>col_represen_legal', 'Representante legal'),
+				Header: t(
+					'estudiantes>expediente>hogar>miembros_hogar>col_represen_legal',
+					'Representante legal'
+				),
 				column: 'encargado',
 				accessor: 'encargado',
 				label: ''
@@ -209,7 +217,7 @@ const RefactorMiembrosHogar = props => {
 									// })
 								}}
 							>
-								<Tooltip title='Actualizar'>
+								<Tooltip title="Actualizar">
 									<IconButton>
 										<HiPencil style={{ fontSize: 30 }} />
 									</IconButton>
@@ -239,7 +247,11 @@ const RefactorMiembrosHogar = props => {
 									}).then(async result => {
 										if (result) {
 											const age = identification.data?.fechaNacimiento
-												? moment().diff(identification.data?.fechaNacimiento, 'years', false)
+												? moment().diff(
+														identification.data?.fechaNacimiento,
+														'years',
+														false
+												  )
 												: 0
 											if (
 												age < 18 &&
@@ -274,7 +286,7 @@ const RefactorMiembrosHogar = props => {
 									})
 								}}
 							>
-								<Tooltip title='Deshabilitar relación'>
+								<Tooltip title="Deshabilitar relación">
 									<IconButton>
 										<IoMdTrash style={{ fontSize: 30 }} />
 									</IconButton>
@@ -295,7 +307,7 @@ const RefactorMiembrosHogar = props => {
 	}
 
 	return (
-		<>
+		<div className={styles}>
 			{loading && (
 				<div
 					style={{
@@ -321,7 +333,7 @@ const RefactorMiembrosHogar = props => {
 				<>
 					<TableReactImplementation
 						showAddButton
-						msjButton='Agregar miembro'
+						msjButton="Agregar miembro"
 						onSubmitAddButton={() => onAgregarEvent()}
 						data={data}
 						columns={columns}
@@ -331,14 +343,17 @@ const RefactorMiembrosHogar = props => {
 			{formData.showForm && (
 				<>
 					<NavigationContainer goBack={() => onRegresarEvent()} />
-					<h4 className='mt-2'>
-						{t('estudiantes>expediente>hogar>miembros_hogar>agregar>info_gen', 'Información general')}
+					<h4 className="mt-2">
+						{t(
+							'estudiantes>expediente>hogar>miembros_hogar>agregar>info_gen',
+							'Información general'
+						)}
 					</h4>
 					<br />
 					<Card>
 						<CardBody>
 							<Row>
-								<Col sm='12' md='4'>
+								<Col sm="12" md="4">
 									<h4>
 										{t(
 											'estudiantes>expediente>hogar>miembros_hogar>agregar>info_personal',
@@ -346,36 +361,34 @@ const RefactorMiembrosHogar = props => {
 										)}
 									</h4>
 
-									<div className='container-center container-avatar-expediente'>
-										<div className='content-avatar-expediente mb-3' id='image_form'>
-											<UploadAvatar
-												onChange={events.onImagenChange}
-												value={formData.imagen}
-												disabled={true}
-											/>
+									<div className="container-center container-avatar-expediente">
+										<div
+											className="content-avatar-expediente mb-3"
+											id="image_form"
+										>
+											<Avatar value={formData.imagen} disabled={true} />
 										</div>
 									</div>
 								</Col>
 
-								<Col sm='12' md='8' className='mt-sm-2'>
+								<Col sm="12" md="8" className="mt-sm-2">
 									<Label>
-										*
 										{t(
 											'estudiantes>expediente>info_gen>info_gen>num_id',
 											'Número de identificación'
 										)}
+										<RequiredSpan />
 									</Label>
 									<InputContainer>
 										<Input
-											type='text'
-											name='identificacion'
+											type="text"
+											name="identificacion"
 											value={formData.identificacion}
 											disabled={formData.editable && formData.miembroId != null}
 											onChange={events.onIdentificacionChange}
 										/>
 									</InputContainer>
-									<Label>
-										*
+									<Label className="mt-3">
 										{t(
 											'estudiantes>expediente>info_gen>info_gen>tipo_id',
 											'Tipo de identificación'
@@ -385,25 +398,28 @@ const RefactorMiembrosHogar = props => {
 										components={{
 											Input: CustomSelectInput
 										}}
-										className='react-select'
-										classNamePrefix='react-select'
+										className="react-select"
+										classNamePrefix="react-select"
 										options={catalogs.tipoIdentificacionCatalog}
 										value={formData.tipoIdentificacion}
-										placeholder=''
+										placeholder=""
 										isDisabled
 										onChange={events.onTipoIdentificacionChange}
 									/>
-									<Label>
-										*{t('estudiantes>expediente>info_gen>info_gen>nacionalidad', 'Nacionalidad')}
+									<Label className="mt-3">
+										{t(
+											'estudiantes>expediente>info_gen>info_gen>nacionalidad',
+											'Nacionalidad'
+										)}
 									</Label>
 									<Select
 										components={{
 											Input: CustomSelectInput
 										}}
-										className='react-select'
-										classNamePrefix='react-select'
+										className="react-select"
+										classNamePrefix="react-select"
 										options={catalogs.nacionalidadCatalog}
-										placeholder=''
+										placeholder=""
 										value={formData.nacionalidad}
 										isDisabled
 										onChange={events.onNacionalidadChange}
@@ -413,7 +429,7 @@ const RefactorMiembrosHogar = props => {
 						</CardBody>
 					</Card>
 					<Row>
-						<Colxx xxs='12' md='6' className='mt-5'>
+						<Colxx xxs="12" md="6" className="mt-5">
 							<Card>
 								<CardBody>
 									<CardTitle>
@@ -423,9 +439,8 @@ const RefactorMiembrosHogar = props => {
 										)}
 									</CardTitle>
 									<Row>
-										<Col sm='12'>
-											<Label>
-												*
+										<Col sm="12">
+											<Label className="">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>nombre',
 													'Nombre'
@@ -433,67 +448,63 @@ const RefactorMiembrosHogar = props => {
 											</Label>
 
 											<Input
-												type='text'
-												name='nombre'
+												type="text"
+												name="nombre"
 												value={formData.nombre}
 												disabled
 												onChange={events.onNombreChange}
 											/>
 											<FormFeedback />
 										</Col>
-										<Col sm='12'>
-											<Label>
-												*
+										<Col sm="12">
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>apellido_1',
 													'Primer apellido'
 												)}
 											</Label>
 											<Input
-												type='text'
-												name='primerApellido'
+												type="text"
+												name="primerApellido"
 												value={formData.primerApellido}
 												disabled
 												onChange={events.onPrimerApellidoChange}
 											/>
 											<FormFeedback />
 										</Col>
-										<Col sm='12'>
-											<Label>
+										<Col sm="12">
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>apellido_2',
 													'Segundo apellido'
 												)}
 											</Label>
 											<Input
-												type='text'
-												name='segundoApellido'
+												type="text"
+												name="segundoApellido"
 												value={formData.segundoApellido}
 												disabled
 												onChange={events.onSegundoApellidoChange}
 											/>
 										</Col>
-										<Col sm='12'>
-											<Label>
-												{t('estudiantes>expediente>hogar>miembros_hogar>agregar>sexo', 'Sexo')}
+										<Col sm="12">
+											<Label className="mt-3">
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>conocido',
+													'Conocido como'
+												)}
 											</Label>
-											<Select
-												components={{
-													Input: CustomSelectInput
-												}}
-												className='react-select'
-												classNamePrefix='react-select'
-												options={catalogs.sexoCatalog}
-												placeholder=''
-												value={formData.sexo}
-												isDisabled
-												onChange={events.onSexoChange}
+											<Input
+												type="text"
+												name="conocidoComo"
+												value={formData.conocidoComo}
+												disabled
+												onChange={events.onConocidoComoChange}
 											/>
 											<FormFeedback />
 										</Col>
-										<Col sm='12'>
-											<Label>
-												*
+										<Col sm="12">
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>nacimiento',
 													'Fecha de nacimiento'
@@ -501,7 +512,8 @@ const RefactorMiembrosHogar = props => {
 											</Label>
 											{
 												<DatePicker
-													dateFormat='dd/MM/yyyy'
+													style={{ paddingLeft: '0px', color: '#000' }}
+													dateFormat="dd/MM/yyyy"
 													peekNextMonth
 													showMonthDropdown
 													showYearDropdown
@@ -509,12 +521,6 @@ const RefactorMiembrosHogar = props => {
 													maxDate={[]}
 													disabled
 													selected={
-														/* props.memberData.fechaNacimiento
-            ? moment(
-                    props.memberData
-                        .fechaNacimiento
-            ).toDate()
-            : null */
 														formData.fechaNacimiento
 															? moment(formData.fechaNacimiento).toDate()
 															: null
@@ -524,24 +530,29 @@ const RefactorMiembrosHogar = props => {
 											}
 											<FormFeedback />
 										</Col>
-										<Col sm='12'>
-											<Label>
+										<Col sm="12">
+											<Label className="mt-3">
 												{t(
-													'estudiantes>expediente>hogar>miembros_hogar>agregar>conocido',
-													'Conocido como'
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>sexo',
+													'Sexo'
 												)}
 											</Label>
-											<Input
-												type='text'
-												name='conocidoComo'
-												value={formData.conocidoComo}
-												disabled
-												onChange={events.onConocidoComoChange}
+											<Select
+												components={{
+													Input: CustomSelectInput
+												}}
+												className="react-select"
+												classNamePrefix="react-select"
+												options={catalogs.sexoCatalog}
+												placeholder=""
+												value={formData.sexo}
+												isDisabled
+												onChange={events.onSexoChange}
 											/>
 											<FormFeedback />
 										</Col>
-										<Col sm='12'>
-											<Label>
+										<Col sm="12">
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>identidad_gen',
 													'Identidad de género'
@@ -551,18 +562,17 @@ const RefactorMiembrosHogar = props => {
 												components={{
 													Input: CustomSelectInput
 												}}
-												className='react-select'
-												classNamePrefix='react-select'
+												className="react-select"
+												classNamePrefix="react-select"
 												options={catalogs.identidadGeneroCatalog}
-												placeholder=''
+												placeholder=""
 												value={formData.identidadGenero}
 												isDisabled
 												onChange={events.onIdentidadGeneroChange}
 											/>
 										</Col>
-										<Col sm='12'>
-											<Label>
-												*
+										<Col sm="12">
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>escolaridad',
 													'Escolaridad'
@@ -572,19 +582,18 @@ const RefactorMiembrosHogar = props => {
 												components={{
 													Input: CustomSelectInput
 												}}
-												className='react-select'
-												classNamePrefix='react-select'
+												className="react-select"
+												classNamePrefix="react-select"
 												options={catalogs.escolaridadCatalog}
-												placeholder=''
+												placeholder=""
 												value={formData.escolaridad}
 												onChange={events.onEscolaridadChange}
 												isDisabled={!formData.editable}
 											/>
 											<FormFeedback />
 										</Col>
-										<Col sm='12'>
-											<Label>
-												*
+										<Col sm="12">
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>condicion_lab',
 													'Condición laboral'
@@ -594,18 +603,18 @@ const RefactorMiembrosHogar = props => {
 												components={{
 													Input: CustomSelectInput
 												}}
-												className='react-select'
-												classNamePrefix='react-select'
+												className="react-select"
+												classNamePrefix="react-select"
 												options={catalogs.condicionLaboralCatalog}
-												placeholder=''
+												placeholder=""
 												value={formData.condicionLaboral}
 												isDisabled={!formData.editable}
 												onChange={events.onCondicionLaboralChange}
 											/>
 											<FormFeedback />
 										</Col>
-										<Col sm='12'>
-											<Label>
+										<Col sm="12">
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>condicion_discap',
 													'Condición de discapacidad'
@@ -627,29 +636,105 @@ const RefactorMiembrosHogar = props => {
 								</CardBody>
 							</Card>
 						</Colxx>
-						<Colxx xxs='12' md='6' className='mt-5'>
+						<Colxx xxs="12" md="6" className="mt-5">
+							<Card className="mb-5">
+								<CardBody>
+									<Row>
+										<Col sm="12" md="12">
+											<h5 className="card-title">
+												<IntlMessages id="menu.info-contacto" />
+											</h5>
+										</Col>
+										<Col sm="12" md="12">
+											<Label className="">
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>tel_prin',
+													'Teléfono principal'
+												)}
+												<RequiredSpan />
+											</Label>
+											<ReactInputMask
+												mask="9999-9999"
+												value={formData.telefonoPrincipal}
+												disabled={!formData.editable}
+												type="text"
+												name="telefono"
+												onChange={events.onTelefonoPrincipalChange}
+											>
+												{inputProps => (
+													<Input
+														{...inputProps}
+														disabled={!formData.editable}
+													/>
+												)}
+											</ReactInputMask>
+											<FormFeedback />
+										</Col>
+										<Col sm="12" md="12">
+											<Label className="mt-3">
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>tel_alt',
+													'Teléfono alternativo'
+												)}
+											</Label>
+											<ReactInputMask
+												type="text"
+												mask="9999-9999"
+												name="telefonoSecundario"
+												value={formData.telefonoAlternativo}
+												disabled={!formData.editable}
+												onChange={events.onTelefonoAlternativoChange}
+											>
+												{inputProps => (
+													<Input
+														{...inputProps}
+														disabled={!formData.editable}
+													/>
+												)}
+											</ReactInputMask>
+											<FormFeedback />
+										</Col>
+										<Col sm="12" md="12">
+											<Label className="mt-3">
+												{t(
+													'estudiantes>expediente>hogar>miembros_hogar>agregar>correo',
+													'Correo electrónico'
+												)}
+											</Label>
+											<Input
+												type="email"
+												name="email"
+												value={formData.correo}
+												disabled={!formData.editable}
+												onChange={events.onCorreoChange}
+											/>
+											<FormFeedback />
+										</Col>
+									</Row>
+								</CardBody>
+							</Card>
 							<Card>
 								<CardBody>
 									<Row>
-										<Col sm='12' md='12'>
-											<h5>
+										<Col sm="12" md="12">
+											<h5 className="card-title">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>asociacion',
 													'Asociación'
 												)}
 											</h5>
 										</Col>
-										<Col sm='12' md='12'>
-											<Label>
-												*
+										<Col sm="12" md="12">
+											<Label className="mb-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>relacion_est',
 													'Relación con estudiante'
 												)}
+												<RequiredSpan />
 											</Label>
 											<Select
-												className='react-select'
-												classNamePrefix='react-select'
+												className="react-select"
+												classNamePrefix="react-select"
 												components={{
 													Input: CustomSelectInput
 												}}
@@ -662,7 +747,7 @@ const RefactorMiembrosHogar = props => {
 											<span style={{ color: 'red' }}>
 												{/* {props.fields["ParentescoId"] && props.errors["ParentescoId"]} */}
 											</span>
-											<Label>
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>encargado_est',
 													'¿Es el encargado del estudiante?'
@@ -670,8 +755,8 @@ const RefactorMiembrosHogar = props => {
 											</Label>
 											<div>
 												<CustomInput
-													name='esEncargado'
-													type='radio'
+													name="esEncargado"
+													type="radio"
 													disabled={!formData.editable}
 													value
 													inline
@@ -680,8 +765,8 @@ const RefactorMiembrosHogar = props => {
 													onClick={events.onEsEncargadoDelEstudianteChange}
 												/>
 												<CustomInput
-													name='esEncargado'
-													type='radio'
+													name="esEncargado"
+													type="radio"
 													disabled={!formData.editable}
 													value={false}
 													inline
@@ -692,15 +777,15 @@ const RefactorMiembrosHogar = props => {
 											</div>
 											{formData.esEncargadoDelEstudiante && (
 												<UploadComponent
-													id='encargado'
+													id="encargado"
 													removeElement={events.onDocumentoEncargadoRemove}
 													files={formData.documentosEncargado}
 													addImage={events.onDocumentoEncargadoChange}
 												/>
 											)}
 										</Col>
-										<Col sm='12' md='12'>
-											<Label>
+										<Col sm="12" md="12">
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>represen_legal_est',
 													'¿Es el representante legal del estudiante?'
@@ -708,36 +793,42 @@ const RefactorMiembrosHogar = props => {
 											</Label>
 											<div>
 												<CustomInput
-													type='radio'
+													type="radio"
 													disabled={!formData.editable}
 													inline
 													label={t('general>si', 'Si')}
-													value='true'
+													value="true"
 													checked={formData.esRepresentanteLegalEstudiante}
-													onClick={events.onEsRepresentanteLegalEstudianteChange}
+													onClick={
+														events.onEsRepresentanteLegalEstudianteChange
+													}
 												/>
 												<CustomInput
-													type='radio'
+													type="radio"
 													disabled={!formData.editable}
 													inline
 													label={t('general>no', 'No')}
-													value='false'
+													value="false"
 													checked={!formData.esRepresentanteLegalEstudiante}
-													onClick={events.onEsRepresentanteLegalEstudianteChange}
+													onClick={
+														events.onEsRepresentanteLegalEstudianteChange
+													}
 												/>
 											</div>
 											{formData.esRepresentanteLegalEstudiante && (
 												<UploadComponent
-													id='representante'
-													removeElement={events.onDocumentoRepresentanteLegalRemove}
+													id="representante"
+													removeElement={
+														events.onDocumentoRepresentanteLegalRemove
+													}
 													files={formData.documentosRepresentanteLegal}
 													addImage={events.onDocumentoRepresentanteLegalChange}
 												/>
 											)}
 										</Col>
 
-										<Col sm='12' md='12'>
-											<Label>
+										<Col sm="12" md="12">
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>vive_est',
 													'Vive con estudiante'
@@ -745,48 +836,48 @@ const RefactorMiembrosHogar = props => {
 											</Label>
 											<div>
 												<CustomInput
-													type='radio'
+													type="radio"
 													disabled={!formData.editable}
 													inline
 													label={t('general>si', 'Si')}
-													value='true'
+													value="true"
 													checked={formData.viveConEstudiante}
 													onClick={events.onViveConEstudianteChange}
 												/>
 												<CustomInput
-													type='radio'
+													type="radio"
 													disabled={!formData.editable}
 													inline
 													label={t('general>no', 'No')}
-													value='false'
+													value="false"
 													checked={!formData.viveConEstudiante}
 													onClick={events.onViveConEstudianteChange}
 												/>
 											</div>
 										</Col>
-										<Col sm='12' md='12'>
-											<Label>
+										<Col sm="12" md="12">
+											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>depende_econ_est',
-													'¿Depende economicamente del estudiante?'
+													'¿Depende económicamente del estudiante?'
 												)}
 											</Label>
 											<div>
 												<CustomInput
-													type='radio'
+													type="radio"
 													disabled={!formData.editable}
 													inline
 													label={t('general>si', 'Si')}
-													value='true'
+													value="true"
 													checked={formData.dependeEconomicamente}
 													onClick={events.onDependeEconomicamenteChange}
 												/>
 												<CustomInput
-													type='radio'
+													type="radio"
 													disabled={!formData.editable}
 													inline
 													label={t('general>no', 'No')}
-													value='false'
+													value="false"
 													checked={!formData.dependeEconomicamente}
 													onClick={events.onDependeEconomicamenteChange}
 												/>
@@ -795,84 +886,24 @@ const RefactorMiembrosHogar = props => {
 									</Row>
 								</CardBody>
 							</Card>
-							<Card className='mt-5'>
-								<CardBody>
-									<Row>
-										<Col sm='12' md='12'>
-											<IntlMessages id='menu.info-contacto' />
-										</Col>
-										<Col sm='12' md='12'>
-											<Label>
-												*
-												{t(
-													'estudiantes>expediente>hogar>miembros_hogar>agregar>tel_prin',
-													'Teléfono principal'
-												)}
-											</Label>
-											<ReactInputMask
-												mask='9999-9999'
-												value={formData.telefonoPrincipal}
-												disabled={!formData.editable}
-												type='text'
-												name='telefono'
-												onChange={events.onTelefonoPrincipalChange}
-											>
-												{inputProps => <Input {...inputProps} disabled={!formData.editable} />}
-											</ReactInputMask>
-											<FormFeedback />
-										</Col>
-										<Col sm='12' md='12'>
-											<Label>
-												{t(
-													'estudiantes>expediente>hogar>miembros_hogar>agregar>tel_alt',
-													'Teléfono alternativo'
-												)}
-											</Label>
-											<ReactInputMask
-												type='text'
-												mask='9999-9999'
-												name='telefonoSecundario'
-												value={formData.telefonoAlternativo}
-												disabled={!formData.editable}
-												onChange={events.onTelefonoAlternativoChange}
-											>
-												{inputProps => <Input {...inputProps} disabled={!formData.editable} />}
-											</ReactInputMask>
-											<FormFeedback />
-										</Col>
-										<Col sm='12' md='12'>
-											<Label>
-												*
-												{t(
-													'estudiantes>expediente>hogar>miembros_hogar>agregar>correo',
-													'Correo electrónico'
-												)}
-											</Label>
-											<Input
-												type='email'
-												name='email'
-												value={formData.correo}
-												disabled={!formData.editable}
-												onChange={events.onCorreoChange}
-											/>
-											<FormFeedback />
-										</Col>
-									</Row>
-								</CardBody>
-							</Card>
 						</Colxx>
-						<div className='container-center my-5 mb-3'>
+						<div className="container-center my-5 mb-3">
 							{!formData.editable ? (
-								<Button color='primary' onClick={events.toggleEditable}>
+								<Button color="primary" onClick={events.toggleEditable}>
 									Editar
 								</Button>
 							) : (
 								<>
-									<Button outline color='primary' onClick={onRegresarEvent}>
+									<Button
+										className="mr-2"
+										outline
+										color="primary"
+										onClick={onRegresarEvent}
+									>
 										Cancelar
 									</Button>
 									<Button
-										color='primary'
+										color="primary"
 										onClick={async () => {
 											setLoading(true)
 											await events.onGuardarClick()
@@ -986,10 +1017,10 @@ const RefactorMiembrosHogar = props => {
 			<SimpleModal
 				openDialog={showDiscapacidadesModal}
 				onClose={() => setShowDiscapacidadesModal(false)}
-				title='Condición de discapacidad'
+				title="Condición de discapacidad"
 				actions={false}
 			>
-				<Container className='modal-detalle-subsidio'>
+				<Container className="modal-detalle-subsidio">
 					<Row>
 						<Col xs={12}>
 							{catalogs.discapacidadesCatalog.map(item => {
@@ -1000,22 +1031,26 @@ const RefactorMiembrosHogar = props => {
 											marginTop: '10px',
 											paddingBottom: '10px'
 										}}
-										onClick={_ => events.onDiscapacidadesSeleccionadasClick(item)}
+										onClick={_ =>
+											events.onDiscapacidadesSeleccionadasClick(item)
+										}
 									>
-										<Col xs={3} className='modal-detalle-subsidio-col'>
+										<Col xs={3} className="modal-detalle-subsidio-col">
 											<OnlyVert>
 												<CustomInput
-													type='checkbox'
+													type="checkbox"
 													label={item.nombre}
 													inline
-													onClick={_ => events.onDiscapacidadesSeleccionadasClick(item)}
+													onClick={_ =>
+														events.onDiscapacidadesSeleccionadasClick(item)
+													}
 													checked={formData.condicionDiscapacidadSeleccionadas.find(
 														i => i.id == item.id
 													)}
 												/>
 											</OnlyVert>
 										</Col>
-										<Col xs={9} className='modal-detalle-subsidio-col'>
+										<Col xs={9} className="modal-detalle-subsidio-col">
 											<OnlyVert>
 												{item.descripcion
 													? item.descripcion
@@ -1030,17 +1065,17 @@ const RefactorMiembrosHogar = props => {
 						</Col>
 					</Row>
 					<Row>
-						<CenteredRow xs='12'>
+						<CenteredRow xs="12">
 							<Button
 								onClick={() => setShowDiscapacidadesModal(false)}
-								color='primary'
+								color="primary"
 								outline
-								className='mr-3'
+								className="mr-3"
 							>
 								Cancelar
 							</Button>
 							<Button
-								color='primary'
+								color="primary"
 								onClick={() => {
 									events.onDiscapacidadesGuardarClick()
 									setShowDiscapacidadesModal(false)
@@ -1052,7 +1087,7 @@ const RefactorMiembrosHogar = props => {
 					</Row>
 				</Container>
 			</SimpleModal>
-		</>
+		</div>
 	)
 }
 

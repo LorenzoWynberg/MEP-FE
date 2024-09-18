@@ -1,26 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import 'react-tagsinput/react-tagsinput.css'
 import HeaderTab from 'Components/Tab/Header'
 import ContentTab from 'Components/Tab/Content'
 import { envVariables } from '../../../../../../constants/enviroment'
-import {
-	Row,
-	Col,
-	FormGroup,
-	Label,
-	Modal,
-	CustomInput,
-	Container,
-	ModalHeader,
-	ModalBody,
-	Button,
-	Form,
-	Card
-} from 'reactstrap'
-import styled from 'styled-components'
+import { Row, Col, CustomInput } from 'reactstrap'
 import { useTranslation } from 'react-i18next'
 import Loader from 'Components/LoaderContainer'
-
 import CondicionDiscapacidad from './CondicionDiscapacidad'
 import OtraCondicion from './OtraCondicion'
 import axios from 'axios'
@@ -33,11 +18,9 @@ import { getCondiciones, getDiscapacidades } from '../../../../../../redux/apoyo
 
 const ApoyoEducativo = props => {
 	const { t } = useTranslation()
-
 	const [discapacidadesHistorico, setDiscapacidadesHistorico] = useState()
 	const [condicionesHistorico, setCondicionesHistorico] = useState()
-	const [loading, setLoading] = useState()
-
+	const [loading, setLoading] = useState(true)
 	const [discapacidades, setDiscapacidades] = useState([])
 	const [condiciones, setCondiciones] = useState([])
 	const [openOptions, setOpenOptions] = useState({ open: false, type: null })
@@ -45,6 +28,7 @@ const ApoyoEducativo = props => {
 	const [activeTab, setActiveTab] = useState(0)
 
 	useEffect(() => {
+		setLoading(true)
 		const _discapacidades = []
 		const _discapacidadesIdentidad = props.discapacidadesIdentidad.map(
 			discapacidad => discapacidad.elementosCatalogosId
@@ -55,7 +39,9 @@ const ApoyoEducativo = props => {
 			}
 		})
 		setDiscapacidades(_discapacidades)
+		setLoading(false)
 	}, [props.discapacidadesIdentidad])
+
 	useEffect(() => {
 		getHistoricos()
 	}, [])
@@ -89,20 +75,23 @@ const ApoyoEducativo = props => {
 	}
 
 	useEffect(() => {
+		setLoading(true)
 		const _condiciones = []
-		const _condicionesIdentidad = props.condicionesIdentidad.map(condicion => condicion.elementosCatalogosId)
+		const _condicionesIdentidad = props.condicionesIdentidad.map(
+			condicion => condicion.elementosCatalogosId
+		)
 		props.condiciones.forEach(condicion => {
 			if (_condicionesIdentidad.includes(condicion.id)) {
 				_condiciones.push(condicion)
 			}
 		})
-
 		setCondiciones(_condiciones)
+		setLoading(false)
 	}, [props.condicionesIdentidad])
 
 	const handleOpenOptions = (options, name) => {
+		setLoading(true)
 		let _options = []
-
 		const map =
 			(name === 'discapacidades' && discapacidadesHistorico.map(item => item.elementosCatalogosId)) || condicionesHistorico.map(item => item.elementosCatalogosId)
 		_options = options.map(elem => {
@@ -114,6 +103,7 @@ const ApoyoEducativo = props => {
 		})
 		setModalOptions(_options)
 		setOpenOptions({ open: true, type: name })
+		setLoading(false)
 	}
 
 	const toggleModal = async (saveData = false) => {
@@ -141,6 +131,7 @@ const ApoyoEducativo = props => {
 					props.showsnackBar('success', 'Contenido enviado con éxito')
 				}
 				r.error && props.showsnackBar('error', 'Error agregando condición')
+				setLoading(false)
 			})
 		} else {
 			setLoading(false)
@@ -209,8 +200,14 @@ const ApoyoEducativo = props => {
 				isOpen={openOptions.open}
 				titleHeader={
 					openOptions.type === 'discapacidades'
-						? t('estudiantes>expediente>apoyos_edu>modal>tipos', 'Tipos de discapacidades')
-						: t('estudiantes>expediente>apoyos_edu>modal>otro', 'Otros tipos de condiciones')
+						? t(
+								'estudiantes>expediente>apoyos_edu>modal>tipos',
+								'Tipos de discapacidades'
+						  )
+						: t(
+								'estudiantes>expediente>apoyos_edu>modal>otro',
+								'Otros tipos de condiciones'
+						  )
 				}
 				onConfirm={() => toggleModal(true)}
 				onCancel={() => toggleModal(false)}
@@ -224,10 +221,10 @@ const ApoyoEducativo = props => {
 					.map((item, i) => {
 						return (
 							<Row key={i}>
-								<Col xs={3} className='modal-detalle-subsidio-col'>
+								<Col xs={3} className="modal-detalle-subsidio-col">
 									<div>
 										<CustomInput
-											type='checkbox'
+											type="checkbox"
 											label={item.nombre}
 											inline
 											onClick={() => handleChangeItem(item)}
@@ -235,7 +232,7 @@ const ApoyoEducativo = props => {
 										/>
 									</div>
 								</Col>
-								<Col xs={9} className='modal-detalle-subsidio-col'>
+								<Col xs={9} className="modal-detalle-subsidio-col">
 									<div>
 										<p>
 											{item.descripcion

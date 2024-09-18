@@ -5,6 +5,7 @@ import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import { IoEyeSharp } from 'react-icons/io5'
+import { IoMdTrash } from 'react-icons/io'
 import { Button } from 'reactstrap'
 import moment from 'moment'
 import swal from 'sweetalert'
@@ -13,13 +14,24 @@ import BookAvailable from 'Assets/icons/bookAvailable'
 import colors from 'Assets/js/colors'
 import BarLoader from 'Components/barLoader/barLoader.tsx'
 const TablaMep = props => {
-	const { data, loading, handlePagination, handleSearch, totalRegistros, setVisualizing } = props
+	const {
+		data,
+		loading,
+		handlePagination,
+		handleSearch,
+		totalRegistros,
+		setVisualizing
+	} = props
 
 	const actions = [
 		{
 			actionName: 'button.remove',
 			actionFunction: ids => {
-				props.authHandler('eliminar', props.handleDeleteSubsidio(ids), props.toggleSnackbar)
+				props.authHandler(
+					'eliminar',
+					props.handleDeleteSubsidio(ids),
+					props.toggleSnackbar
+				)
 			}
 		}
 	]
@@ -27,14 +39,22 @@ const TablaMep = props => {
 		{
 			actionName: 'Editar',
 			actionFunction: item => {
-				props.authHandler('modificar', props.handleViewSubsidio(item), props.toggleSnackbar)
+				props.authHandler(
+					'modificar',
+					props.handleViewSubsidio(item),
+					props.toggleSnackbar
+				)
 			},
 			actionDisplay: () => true
 		},
 		{
 			actionName: 'Eliminar',
 			actionFunction: item => {
-				props.authHandler('eliminar', props.handleDeleteSubsidio([item.id]), props.toggleSnackbar)
+				props.authHandler(
+					'eliminar',
+					props.handleDeleteSubsidio([item.id]),
+					props.toggleSnackbar
+				)
 			},
 			actionDisplay: () => true
 		}
@@ -63,7 +83,11 @@ const TablaMep = props => {
 					const fullRow = data[row.index]
 					return (
 						<div>
-							{props.beneficios.typesSubsidios.find(item => item.id === fullRow.tipoSubsidioId).detalle}
+							{
+								props.beneficios.typesSubsidios.find(
+									item => item.id === fullRow.tipoSubsidioId
+								).detalle
+							}
 						</div>
 					)
 				}
@@ -84,7 +108,9 @@ const TablaMep = props => {
 					return (
 						<div>
 							{`${moment(fullRow.fechaInicio).format('DD/MM/YYYY')} - ` +
-								(fullRow.fechaFinal ? moment(fullRow.fechaFinal).format('DD/MM/YYYY') : 'Indefinido')}
+								(fullRow.fechaFinal
+									? moment(fullRow.fechaFinal).format('DD/MM/YYYY')
+									: 'Indefinido')}
 						</div>
 					)
 				}
@@ -113,7 +139,7 @@ const TablaMep = props => {
 								alignContent: 'center'
 							}}
 						>
-							<Tooltip title='Ver'>
+							<Tooltip title="Ver">
 								<IconButton
 									onClick={() => {
 										props.handleViewSubsidio(fullRow, false)
@@ -121,11 +147,12 @@ const TablaMep = props => {
 										props.setVisualizing(true)
 									}}
 								>
-									<IoEyeSharp style={{ fontSize: 25, color: colors.darkGray }} />
+									<IoEyeSharp
+										style={{ fontSize: 25, color: colors.darkGray }}
+									/>
 								</IconButton>
 							</Tooltip>
-
-							<Tooltip title='Editar'>
+							<Tooltip title="Editar">
 								<IconButton
 									onClick={() => {
 										props.authHandler(
@@ -143,84 +170,32 @@ const TablaMep = props => {
 									<HiPencil style={{ fontSize: 25, color: colors.darkGray }} />
 								</IconButton>
 							</Tooltip>
-
-							{fullRow.activo === true ? (
-								<Tooltip title='Deshabilitar'>
-									<IconButton
-										onClick={() => {
-											swal({
-												title: ' ¿Está seguro que desea deshabilitar el beneficio del estudiante?',
-												text: 'Este cambio no puede ser revertido',
-												icon: 'warning',
-												className: 'text-alert-modal',
-												buttons: {
-													cancel: 'Cancelar',
-													ok: {
-														text: 'Aceptar',
-														value: true,
-														className: 'btn-alert-color'
-													}
+							<Tooltip title="Eliminar">
+								<IconButton
+									onClick={() => {
+										swal({
+											title: ' ¿Está seguro que desea eliminar este beneficio?',
+											text: 'Este cambio no puede ser revertido',
+											icon: 'warning',
+											className: 'text-alert-modal',
+											buttons: {
+												cancel: 'Cancelar',
+												ok: {
+													text: 'Aceptar',
+													value: true,
+													className: 'btn-alert-color'
 												}
-											}).then(result => {
-												if (result) {
-													moment(fullRow.fechaInicio).format('DD/MM/YYYY') <=
-													moment(fullRow.fechaFinal).format('DD/MM/YYYY')
-														? props.handleUpdateSubsidio(fullRow.id, 0)
-														: props.toggleSnackbar(
-																'error',
-																'La fecha inicial tiene que ser mayor o igual a la fecha final'
-														  )
-												}
-											})
-										}}
-									>
-										<BookDisabled
-											style={{
-												cursor: 'pointer',
-												color: colors.darkGray
-											}}
-										/>
-									</IconButton>
-								</Tooltip>
-							) : (
-								<Tooltip title='Habilitar'>
-									<IconButton
-										onClick={() => {
-											swal({
-												title: '¿Está seguro que desea habilitar el beneficio del estudiante?',
-												text: 'Este cambio no puede ser revertido',
-												icon: 'warning',
-												className: 'text-alert-modal',
-												buttons: {
-													cancel: 'Cancelar',
-													ok: {
-														text: 'Aceptar!',
-														value: true,
-														className: 'btn-alert-color'
-													}
-												}
-											}).then(result => {
-												if (result) {
-													moment(fullRow.fechaInicio).format('DD/MM/YYYY') <=
-													moment(fullRow.fechaFinal).format('DD/MM/YYYY')
-														? props.handleUpdateSubsidio(fullRow.id, 1)
-														: props.toggleSnackbar(
-																'error',
-																'La fecha inicial tiene que ser mayor o igual a la fecha final'
-														  )
-												}
-											})
-										}}
-									>
-										<BookAvailable
-											style={{
-												cursor: 'pointer',
-												color: colors.darkGray
-											}}
-										/>
-									</IconButton>
-								</Tooltip>
-							)}
+											}
+										}).then(result => {
+											if (result) {
+												props.handleDeleteSubsidio([fullRow.id])
+											}
+										})
+									}}
+								>
+									<IoMdTrash style={{ fontSize: 25, color: colors.darkGray }} />
+								</IconButton>
+							</Tooltip>
 						</div>
 					)
 				}
@@ -235,7 +210,7 @@ const TablaMep = props => {
 				<div />
 				<div>
 					<Button
-						color='primary'
+						color="primary"
 						onClick={() => {
 							props.handleCreateToggle()
 						}}
@@ -245,7 +220,12 @@ const TablaMep = props => {
 				</div>
 			</div>
 			<div>
-				<TableReactImplementation data={data} handleGetData={() => {}} columns={columns} orderOptions={[]} />
+				<TableReactImplementation
+					data={data}
+					handleGetData={() => {}}
+					columns={columns}
+					orderOptions={[]}
+				/>
 			</div>
 		</div>
 	)
