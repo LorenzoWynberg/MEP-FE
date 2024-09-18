@@ -106,12 +106,6 @@ const AreaCurricular = props => {
 	return (
 		<Grid container className={classes.root} spacing={2}>
 			{snackBar(snackbarContent.variant, snackbarContent.msg)}
-			<Grid item xs={12}>
-				<h4>
-					{t('estudiantes>expediente>area_curric>titulo', 'Área curricular')}
-				</h4>
-				<br />
-			</Grid>
 			<Form
 				onSubmit={handleSubmit(data =>
 					props.authHandler('modificar', () => uploadData(data), showSnackbar)
