@@ -831,7 +831,7 @@ const RefactorMiembrosHogar = props => {
 											<Label className="mt-3">
 												{t(
 													'estudiantes>expediente>hogar>miembros_hogar>agregar>vive_est',
-													'Vive con estudiante'
+													'¿Vive con estudiante?'
 												)}
 											</Label>
 											<div>
