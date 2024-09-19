@@ -56,6 +56,7 @@ interface IProps {
 	onMatricular: Function
 	onlyViewModule: boolean
 	hasAddAccess: boolean
+	// estadoCentro: boolean
 }
 
 const parseDatosToSelectValue = (datos, selects) => {
@@ -121,6 +122,7 @@ const optionsAdditionalDataAyuda = [
 
 const FormData: React.FC<IProps> = props => {
 	const { t } = useTranslation()
+	debugger
 	const { data, onMatricular, hasAddAccess, onlyViewModule } = props
 
 	const [estudiante, setEstudiante] = useState<any>({})
@@ -457,7 +459,7 @@ const handleOpenOptionsApoyosNoRecibidos = () => {
 		}
 		setLoading(false)
 	}
-
+debugger
 	return (
 		<Colxx className='mb-5' sm='12' lg='12' xl='12'>
 			{loading && <Loader />}
@@ -904,7 +906,7 @@ const handleOpenOptionsApoyosNoRecibidos = () => {
 				<Colxx sm='12' className='my-3'>
 					<InputWrapper>
 						<CenterDiv>
-							{!onlyViewModule && hasAddAccess && (
+							{!onlyViewModule && hasAddAccess &&  (
 								<Button
 									onClick={() => {
 										_onMatricular()

@@ -177,7 +177,7 @@
 									"type": "dropDown",
 									"id": "348f4d67-29f4-b254-369e-b8c5a0817025",
 									"label": "Provincia",
-									"langKey":"buscador_ce>ver_centro>ubicacion_geografica>provincia",
+									"langKey": "buscador_ce>ver_centro>ubicacion_geografica>provincia",
 									"options": [
 										{
 											"label": "",

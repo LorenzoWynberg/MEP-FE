@@ -14,10 +14,10 @@ const Index = (props) => {
 		t('menu>reportes>reportes', 'Reportes'),
 		t('reportes>tab>certificaciones', 'Certificaciones')
 	]
-	const activeYear = useSelector(store=>{
+	const activeYear = useSelector(store => {
 		return store.authUser.selectedActiveYear
 	})
-      
+
 	return (
 		<AppLayout items={directorItems}>
 			<div className="dashboard-wrapper">
@@ -45,7 +45,7 @@ const Index = (props) => {
               2: <Certificaciones />,
             }[activeTab]
           } */}
-					<Reportes />
+					<Reportes props={props} />
 				</Container>
 			</div>
 		</AppLayout>

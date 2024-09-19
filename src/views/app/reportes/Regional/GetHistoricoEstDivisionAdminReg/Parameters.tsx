@@ -2,65 +2,60 @@ import React from 'react'
 import ReportParameterCard from '../../_partials/ReportParameterCard'
 import useFiltroReportes from '../../_partials/useFiltroReportes'
 const initialState = [
-  {
-    key: 'idRegion',
-    label: 'Region',
-    items: []
-  },
-  {
-    key: 'idCircuito',
-    label: 'Circuito',
-    items: []
-  }
+	{
+		key: 'idRegion',
+		label: 'Región',
+		items: []
+	},
+	{
+		key: 'idCircuito',
+		label: 'Circuito',
+		items: []
+	}
 ]
 const Parameters = ({ showReportEvent }) => {
-  const {
-    getRegionales,
-    getCircuitosByRegionalId,
-    setSelectInitialState,
-    setSelectItems,
-    selects
-  } = useFiltroReportes()
-  console.log('regionArrselects', selects)
-  React.useEffect(() => {
-    setSelectInitialState(initialState)
-    const fetch = async () => {
-      const regionArr = await getRegionales()
-      const mapeador = (item) => {
-        return { value: item.id, label: item.nombre }
-      }
-      const onChange = (obj) => {
-        // const onChangeCircuito = (obj) => {
-        //   getInstitucionByCircuitoId(obj.value).then((institucionArr) => {
-        //     // setSelectItems(2, institucionArr.map(mapeador), null)
-        //     // alert()
-        //   })
-        // }
-        // getCircuitosByRegionalId(obj.value).then((circuitosArr) => {
-        //   setSelectItems(1, circuitosArr.map(mapeador), onChangeCircuito)
-        // })
-      }
-      setSelectItems(0, regionArr.map(mapeador), onChange)
-    }
-    fetch()
-  }, [])
+	const { getRegionales, getCircuitosByRegionalId, setSelectInitialState, setSelectItems, selects } =
+		useFiltroReportes()
+	console.log('regionArrselects', selects)
+	React.useEffect(() => {
+		setSelectInitialState(initialState)
+		const fetch = async () => {
+			const regionArr = await getRegionales()
+			const mapeador = item => {
+				return { value: item.id, label: item.nombre }
+			}
+			const onChange = obj => {
+				// const onChangeCircuito = (obj) => {
+				//   getInstitucionByCircuitoId(obj.value).then((institucionArr) => {
+				//     // setSelectItems(2, institucionArr.map(mapeador), null)
+				//     // alert()
+				//   })
+				// }
+				// getCircuitosByRegionalId(obj.value).then((circuitosArr) => {
+				//   setSelectItems(1, circuitosArr.map(mapeador), onChangeCircuito)
+				// })
+			}
+			setSelectItems(0, regionArr.map(mapeador), onChange)
+		}
+		fetch()
+	}, [])
 
-  return (
-    <div>
-      <ReportParameterCard
-        titulo='Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)
+	return (
+		<div>
+			<ReportParameterCard
+				titulo='Resumen de proyectos de Servicio Comunal Estudiantil según división administrativa MEP (DRE-circuitos)
 
 '
-        texto='Seleccione la Region
+				texto='Seleccione la Región
 
 '
-        selects={selects.filter((item) => item.key != 'idCircuito' ? item : false).filter(Boolean)}
-        onBtnGenerarEvent={(obj) => {
-          if (showReportEvent) showReportEvent(obj)
-        }}
-      />
-    </div>
-  )
+				selects={selects.filter(item => (item.key != 'idCircuito' ? item : false)).filter(Boolean)}
+				onBtnGenerarEvent={obj => {
+					if (showReportEvent) showReportEvent(obj)
+				}}
+			/>
+		</div>
+	)
 }
 
 export default Parameters

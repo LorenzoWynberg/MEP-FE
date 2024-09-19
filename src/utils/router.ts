@@ -1,102 +1,184 @@
 import React, { LazyExoticComponent } from 'react'
 
-const BuscadorCentros = React.lazy(() => import('../views/app/director/Buscadores/BuscadorCentros'))
-
-const BuscadorPersonas = React.lazy(() => import('../views/app/director/Buscadores/BuscadorPersonas'))
-const BuscadorDirecciones = React.lazy(() => import('../views/app/director/Buscadores/BuscadorDirecciones'))
-const ExpedienteDireccionRegional = React.lazy(
-	() => import('../views/app/director/ExpedienteDireccionesRegionales/ContenedorPrincipal')
+const BuscadorCentros = React.lazy(
+	() => import('../views/app/director/Buscadores/BuscadorCentros')
 )
-const FichaDirecciones = React.lazy(() => import('../views/app/director/Configuracion/_partials/Direcciones/Ficha'))
-const ExpedienteEstudiante = React.lazy(() => import('../views/app/director/ExpedienteEstudiante/ContenedorPrincipal'))
 
-const FichaEstudiante = React.lazy(() => import('../views/app/director/ExpedienteEstudiante/FichaEstudiante'))
-const FichaCentro = React.lazy(() => import('../views/app/director/ExpedienteEstudiante/FichaCentro'))
+const BuscadorPersonas = React.lazy(
+	() => import('../views/app/director/Buscadores/BuscadorPersonas')
+)
+const BuscadorDirecciones = React.lazy(
+	() => import('../views/app/director/Buscadores/BuscadorDirecciones')
+)
+const ExpedienteDireccionRegional = React.lazy(
+	() =>
+		import(
+			'../views/app/director/ExpedienteDireccionesRegionales/ContenedorPrincipal'
+		)
+)
+const FichaDirecciones = React.lazy(
+	() =>
+		import('../views/app/director/Configuracion/_partials/Direcciones/Ficha')
+)
+const ExpedienteEstudiante = React.lazy(
+	() => import('../views/app/director/ExpedienteEstudiante/ContenedorPrincipal')
+)
 
-const ExpedienteCentro = React.lazy(() => import('../views/app/director/ExpedienteCentroEducativo/ContenedorPrincipal'))
+const FichaEstudiante = React.lazy(
+	() => import('../views/app/director/ExpedienteEstudiante/FichaEstudiante')
+)
+const FichaCentro = React.lazy(
+	() => import('../views/app/director/ExpedienteEstudiante/FichaCentro')
+)
+
+const ExpedienteCentro = React.lazy(
+	() =>
+		import(
+			'../views/app/director/ExpedienteCentroEducativo/ContenedorPrincipal'
+		)
+)
 // const ServicioComunal = React.lazy(
 // 	() => import('../views/app/director/ExpedienteCentroEducativo/ServicioComunalEstudiantil')
 // )
 // const HistoricoExpediente = React.lazy(() => import('../views/app/director/Historico/HistoricoExpediente'))
 // const ServicioComunalEdit = React.lazy(() => import('../views/app/director/Historico/ServicioComunalEdit'))
 
-const MatricularEstudiantesBuscador = React.lazy(() => import('../views/app/director/MatricularEstudiantes/Buscador'))
-const MatricularEstudiantes = React.lazy(
-	() => import('../views/app/director/MatricularEstudiantes/ContenedorPrincipal')
+const MatricularEstudiantesBuscador = React.lazy(
+	() => import('../views/app/director/MatricularEstudiantes/Buscador')
 )
-const RegistroEstudiantes = React.lazy(() => import('../views/app/director/MatricularEstudiantes/registro/index'))
+const MatricularEstudiantes = React.lazy(
+	() =>
+		import('../views/app/director/MatricularEstudiantes/ContenedorPrincipal')
+)
+const RegistroEstudiantes = React.lazy(
+	() => import('../views/app/director/MatricularEstudiantes/registro/index')
+)
 
-const FormCreator = React.lazy(() => import('../views/app/creadorDeFormularios/index'))
+const FormCreator = React.lazy(
+	() => import('../views/app/creadorDeFormularios/index')
+)
 
 const FormCreatorV2 = React.lazy(() => import('../views/app/FormCreator'))
 
-const FormRespuesta = React.lazy(() => import('../views/app/FormResponse/index'))
+const FormRespuesta = React.lazy(
+	() => import('../views/app/FormResponse/index')
+)
 
 const OutOfTime = React.lazy(() => import('../views/app/FormCreator/OutOfTime'))
 
-const FormResponses = React.lazy(() => import('../views/app/FormCreator/Responses'))
+const FormResponses = React.lazy(
+	() => import('../views/app/FormCreator/Responses')
+)
 
-const FormThemes = React.lazy(() => import('../views/app/FormCreator/Themes/Edit'))
+const FormThemes = React.lazy(
+	() => import('../views/app/FormCreator/Themes/Edit')
+)
 
 const Comunidados = React.lazy(() => import('../views/app/Comunicados'))
 
 /* Administrador */
 const Admin = React.lazy(() => import('../views/app/admin/index'))
-const AdminUsuarios = React.lazy(() => import('../views/app/admin/Usuarios/main'))
+const AdminUsuarios = React.lazy(
+	() => import('../views/app/admin/Usuarios/main')
+)
 
 const App = React.lazy(() => import('../views/app'))
 
-const PrevisualiceJson = React.lazy(() => import('../views/app/creadorDeFormularios/PrevisualiceJson'))
+const PrevisualiceJson = React.lazy(
+	() => import('../views/app/creadorDeFormularios/PrevisualiceJson')
+)
 
-const AlertaTemprana = React.lazy(() => import('../views/app/director/AlertaTemprana/main'))
+const AlertaTemprana = React.lazy(
+	() => import('../views/app/director/AlertaTemprana/main')
+)
 
-const AlertaTempranaAdmin = React.lazy(() => import('../views/app/admin/AlertaTemprana/main'))
+const AlertaTempranaAdmin = React.lazy(
+	() => import('../views/app/admin/AlertaTemprana/main')
+)
 
-const Configuracion = React.lazy(() => import('../views/app/director/Configuracion/Main'))
+const Configuracion = React.lazy(
+	() => import('../views/app/director/Configuracion/Main')
+)
 
-const Identidad = React.lazy(() => import('../views/app/configuracion/Identidad/main'))
+const Identidad = React.lazy(
+	() => import('../views/app/configuracion/Identidad/main')
+)
 
 const Groups = React.lazy(() => import('../views/app/director/Grupos/main'))
 
-const GestorUsuarios = React.lazy(() => import('../views/app/director/GestorUsuarios/GestorUsuarios'))
-const GestorRoles = React.lazy(() => import('../views/app/director/GestorUsuarios/Roles/index'))
-const AnioEducativo = React.lazy(() => import('../views/app/admin/AnioEducativo/Main'))
+const GestorUsuarios = React.lazy(
+	() => import('../views/app/director/GestorUsuarios/GestorUsuarios')
+)
+const GestorRoles = React.lazy(
+	() => import('../views/app/director/GestorUsuarios/Roles/index')
+)
+const AnioEducativo = React.lazy(
+	() => import('../views/app/admin/AnioEducativo/Main')
+)
 
-const Traslados = React.lazy(() => import('../views/app/director/Traslados/Main'))
+const Traslados = React.lazy(
+	() => import('../views/app/director/Traslados/Main')
+)
 
 const AyudaDirector = React.lazy(() => import('../views/app/director/ayuda'))
 
-const CensoIntermedio = React.lazy(() => import('../views/app/director/CensoIntermedio'))
+const CensoIntermedio = React.lazy(
+	() => import('../views/app/director/CensoIntermedio')
+)
 
 const CensoFinal = React.lazy(() => import('../views/app/director/CensoFinal'))
 
-const PrintGroupStudents = React.lazy(() => import('../views/app/publicComponents/AllEstudentsPrint'))
+const PrintGroupStudents = React.lazy(
+	() => import('../views/app/publicComponents/AllEstudentsPrint')
+)
 
 const GroupMembers = React.lazy(
-	() => import('../views/app/director/ExpedienteCentroEducativo/_partials/ofertas/EstudiantesGrupo')
+	() =>
+		import(
+			'../views/app/director/ExpedienteCentroEducativo/_partials/ofertas/EstudiantesGrupo'
+		)
 )
 
-const GestorFormulario = React.lazy(() => import('../views/app/gestorFormulario/index'))
+const GestorFormulario = React.lazy(
+	() => import('../views/app/gestorFormulario/index')
+)
 
-const GestorCatalogo = React.lazy(() => import('../views/app/admin/GestorCatalogos/main'))
+const GestorCatalogo = React.lazy(
+	() => import('../views/app/director/GestorCatalogos/main')
+)
 
-const VistaEstudiante = React.lazy(() => import('../views/app/VistasUsuarios/Estudiante'))
+const VistaEstudiante = React.lazy(
+	() => import('../views/app/VistasUsuarios/Estudiante')
+)
 
-const VistaEncargado = React.lazy(() => import('../views/app/VistasUsuarios/Encargado'))
+const VistaEncargado = React.lazy(
+	() => import('../views/app/VistasUsuarios/Encargado')
+)
 
-const AreaCurricular = React.lazy(() => import('../views/app/VistasUsuarios/Estudiante/AreaCurricular'))
+const AreaCurricular = React.lazy(
+	() => import('../views/app/VistasUsuarios/Estudiante/AreaCurricular')
+)
 
 const ExpedienteEstudianteParaExternos = React.lazy(
-	() => import('../views/app/VistasUsuarios/Estudiante/ExpedienteEstudiante/ContenedorPrincipal')
+	() =>
+		import(
+			'../views/app/VistasUsuarios/Estudiante/ExpedienteEstudiante/ContenedorPrincipal'
+		)
 )
 
-const BuscadorSupervisiones = React.lazy(() => import('../views/app/SupervisionesCircuitales/BuscadorSupervisiones'))
+const BuscadorSupervisiones = React.lazy(
+	() => import('../views/app/SupervisionesCircuitales/BuscadorSupervisiones')
+)
 
-const ExpedienteSupervision = React.lazy(() => import('../views/app/SupervisionesCircuitales/ExpedienteSupervision'))
+const ExpedienteSupervision = React.lazy(
+	() => import('../views/app/SupervisionesCircuitales/ExpedienteSupervision')
+)
 
 const EditUser = React.lazy(() => import('../views/app/EditUser'))
 
-const BuscadorInstitucion = React.lazy(() => import('../views/app/BuscadorInstitucion'))
+const BuscadorInstitucion = React.lazy(
+	() => import('../views/app/BuscadorInstitucion')
+)
 
 const Reportes = React.lazy(() => import('../views/app/reportes'))
 
@@ -516,7 +598,7 @@ const routes: Route[] = [
 	{
 		component: ExpedienteEstudiante,
 		exact: true,
-		route: '/director/expediente-estudiante/servicio-comunal',
+		route: '/director/expediente-estudiante/sce',
 		isAuthenticated: true,
 		routeProps: {
 			active: 11
@@ -728,7 +810,7 @@ const routes: Route[] = [
 	{
 		component: ExpedienteCentro,
 		exact: true,
-		route: '/director/expediente-centro/servicio-comunal',
+		route: '/director/expediente-centro/sce',
 		isAuthenticated: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
@@ -739,7 +821,7 @@ const routes: Route[] = [
 	{
 		component: ExpedienteCentro,
 		isAuthenticated: true,
-		route: '/director/expediente-centro/servicio-comunal/registro',
+		route: '/director/expediente-centro/sce/registro',
 		exact: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
@@ -750,7 +832,7 @@ const routes: Route[] = [
 	{
 		component: ExpedienteCentro,
 		isAuthenticated: true,
-		route: '/director/expediente-centro/servicio-comunal/editar/:id',
+		route: '/director/expediente-centro/sce/editar/:id',
 		exact: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
@@ -761,7 +843,7 @@ const routes: Route[] = [
 	{
 		component: ExpedienteCentro,
 		isAuthenticated: true,
-		route: '/director/expediente-centro/servicio-comunal/actas',
+		route: '/director/expediente-centro/sce/actas',
 		exact: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
@@ -772,7 +854,7 @@ const routes: Route[] = [
 	{
 		component: ExpedienteCentro,
 		isAuthenticated: true,
-		route: '/director/expediente-centro/servicio-comunal/certificados',
+		route: '/director/expediente-centro/sce/certificados',
 		exact: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
@@ -946,9 +1028,15 @@ const routes: Route[] = [
 		exact: true
 	},
 	{
-		component: GestorCatalogo, // to use IntlMessages
+		component: GestorCatalogo, //  to use IntlMessages
 		isAuthenticated: true,
-		route: '/admin/GestorCatalogos'
+		accessRoles: ['ADMIN', 'GESTOR'],
+		route: '/director/GestorCatalogos',
+		section: 'gestioncatalogos',
+		routeProps: {
+			active: 1
+		},
+		exact: true
 	},
 	{
 		component: GroupMembers, // to use IntlMessages
@@ -1217,7 +1305,8 @@ const routes: Route[] = [
 	{
 		component: PrintGroupStudents,
 		isAuthenticated: false,
-		route: '/print/institucion/:institucion/ofertaNivel/:ofertaNivel/grupo/:grupo'
+		route:
+			'/print/institucion/:institucion/ofertaNivel/:ofertaNivel/grupo/:grupo'
 	},
 	{
 		component: FormCreatorV2,
@@ -1344,6 +1433,30 @@ const routes: Route[] = [
 		route: '/reportes/tablero',
 		routeProps: {
 			activeTab: 0
+		}
+	},
+
+	{
+		component: Reportes,
+		exact: true,
+		isAuthenticated: true,
+		section: 'menureporte',
+		route: '/reportes/sce',
+		routeProps: {
+			activeTab: 0,
+			tipo: 'sce'
+		}
+	},
+
+	{
+		component: Reportes,
+		exact: true,
+		isAuthenticated: true,
+		section: 'menureporte',
+		route: '/reportes/matricula',
+		routeProps: {
+			activeTab: 0,
+			tipo: 'matricula'
 		}
 	},
 	{

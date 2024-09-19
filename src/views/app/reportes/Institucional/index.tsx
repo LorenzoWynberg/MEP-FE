@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import GetHistoricoEstByInstitucionId from './GetHistoricoEstByInstitucionId'
 import GetListaEstudSinReqSCEByInstitucionId from './GetListaEstudSinReqSCEByInstitucionId'
 
-const ReporteInstitucional = () => {
+const ReporteInstitucional = props => {
   const { t } = useTranslation()
 
   const stateRedux = useSelector((store: any) => {
@@ -18,58 +18,62 @@ const ReporteInstitucional = () => {
     }
   })
 
-  const reportes = [
-    /* {
-      titulo: 'Docentes por persona estudiante por asignatura',
-      descripcion:
-        'Este reporte se utliza para visualizar los docentes que imparten asignaturas por persona estudiante.',
-    },
-    {
-      titulo: 'LISTADO DE PERSONAS ESTUDIANTES POR INSTITUCIÓN, NIVEL Y GRUPO',
-      descripcion:
-        'Este reporte se utiliza para visualizar la lista de todas las personas estudiantes de la institución',
-    },
-    {
-      titulo: 'Asistencia por fecha',
-      descripcion:
-        'Este reporte se utiliza para visualizar la asistencia de las personas estudiantes en la institución',
-    },
-    {
-      titulo: 'REPORTE DE MATRÍCULA ACTUAL',
-      descripcion:
-        'Este reporte se utiliza para visualizar la matrícula por oferta, modalidad, nivel y especialidad',
-    }, */
-    {
-      titulo: t('reportes>institucional>reporte_registro_de_estudiantes', 'REPORTE REGISTRO DE ESTUDIANTES'),
-      descripcion: t('reportes>institucional>registro_de_estudiantes', 'Registro de estudiantes')
-    },
-    {
-      titulo: t('reportes>institucional>reporte_resumen_de_registro_de_matricula', 'REPORTE Resumen de registro de matrícula'),
-      descripcion: t('reportes>institucional>resumen_de_registro_de_matricula', 'Resumen de registro de matrícula')
-    },
-    {
-      titulo: t('reportes>institucional>reporte_historicoSCE', 'Reporte Historico Servicio Comunitario'),
-      descripcion: t('reportes>institucional>resumen_de_reporte_historicoSCE', 'Resumen de proyectos de Servicio Comunal Estudiantil en el centro educativo por año.')
-    },
-    {
-      titulo: t('reportes>institucional>reporte_historicoSCE', 'Reporte De Estudiantes Sin Requisito De SCE'),
-      descripcion: t('reportes>institucional>resumen_de_reporte_historicoSCE', 'Listado de estudiantes del centro educativo, que tienen pendiente el cumplimiento del Servicio Comunal Estudiantil.')
-    },
-    // {
-    //   titulo: t('reportes>institucional>reporte_conducta', 'REPORTE de conducta'),
-    //   descripcion: t('reportes>institucional>resumen_de_conducta', 'Resumen de conducta')
-    // },
-    // {
-    //   titulo: t('reportes>institucional>reporte_asistencia', 'REPORTE de calificaciones'),
-    //   descripcion: t('reportes>institucional>resumen_de_asistencia', 'Resumen de calificaciones')
-    // }
-  ]
+  const reportes =
+    props.props.tipo == 'sce'
+      ? [
+          {
+            titulo: t(
+              'reportes>institucional>reporte_historicoSC',
+              'Reporte Histórico Servicio Comunal Estudiantil'
+            ),
+            descripcion: t(
+              'reportes>institucional>resumen_de_reporte_historicoSCE',
+              'Resumen de proyectos de Servicio Comunal Estudiantil en el centro educativo por año.'
+            ),
+            id: 3
+          },
+          {
+            titulo: t(
+              'reportes>institucional>reporte_historicoSCE',
+              'Reporte De Estudiantes Sin Requisito De SCE'
+            ),
+            descripcion: t(
+              'reportes>institucional>resumen_de_reporte_historicoSCE',
+              'Listado de estudiantes del centro educativo, que tienen pendiente el cumplimiento del Servicio Comunal Estudiantil.'
+            ),
+            id: 4
+          }
+        ]
+      : [
+          {
+            titulo: t(
+              'reportes>institucional>reporte_registro_de_estudiantes',
+              'REPORTE REGISTRO DE ESTUDIANTES'
+            ),
+            descripcion: t(
+              'reportes>institucional>registro_de_estudiantes',
+              'Registro de estudiantes'
+            ),
+            id: 1
+          },
+          {
+            titulo: t(
+              'reportes>institucional>reporte_resumen_de_registro_de_matricula',
+              'REPORTE Resumen de registro de matrícula'
+            ),
+            descripcion: t(
+              'reportes>institucional>resumen_de_registro_de_matricula',
+              'Resumen de registro de matrícula'
+            ),
+            id: 2
+          }
+        ]
 
   const [state, setState] = React.useState(0)
   const Cards = () => {
     return reportes?.map((reporte, index) => (
       <ReportCard
-        onClick={() => setState(index + 1)}
+        onClick={() => setState(reporte.id)}
         titulo={reporte.titulo}
         descripcion={reporte.descripcion}
       />
@@ -80,7 +84,10 @@ const ReporteInstitucional = () => {
     return (
       <>
         <h3>
-          {t("estudiantes>traslados>gestion_traslados>seleccionar", "Debe seleccionar un centro educativo en el buscador de centros educativos.")}
+          {t(
+            'estudiantes>traslados>gestion_traslados>seleccionar',
+            'Debe seleccionar un centro educativo en el buscador de centros educativos.'
+          )}
         </h3>
       </>
     )
@@ -105,12 +112,14 @@ const ReporteInstitucional = () => {
         )}
         {state == 2 && (
           <ReporteResumenRegistroMatricula regresarEvent={() => setState(0)} />
-        )} 
+        )}
         {state == 3 && (
           <GetHistoricoEstByInstitucionId regresarEvent={() => setState(0)} />
         )}
         {state == 4 && (
-          <GetListaEstudSinReqSCEByInstitucionId regresarEvent={() => setState(0)} />
+          <GetListaEstudSinReqSCEByInstitucionId
+            regresarEvent={() => setState(0)}
+          />
         )}
       </>
     )

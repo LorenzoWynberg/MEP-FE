@@ -43,7 +43,7 @@ import {
 } from '../../../../../redux/elementos/actions'
 
 import { getEstructuraCatalogo } from '../../../../../redux/estructuraCatalogos/actions'
-import { ProfileFormGroup } from '../../_partials/Roles/ProfileFormGroup'
+import { ProfileFormGroup } from '../../../admin/_partials/Roles/ProfileFormGroup'
 import { cloneDeep } from 'lodash'
 import HTMLTable from '../../../../../components/HTMLTable/single'
 import SearchIcon from '@material-ui/icons/Search'

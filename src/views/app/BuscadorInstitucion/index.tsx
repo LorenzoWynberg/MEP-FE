@@ -602,7 +602,8 @@ debugger
 
         <Footer>
           <Center style={{ justifyContent: 'flex-start' }}>
-            <IconMEP />
+            {/* <IconMEP /> */}
+            <img alt='Profile' height='43px' src='/assets/img/LogoMepRep.jpg' />
           </Center>
           <Center style={{ justifyContent: 'flex-start' }}>
             <MdLocationOn

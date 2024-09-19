@@ -11,11 +11,11 @@ const ReporteMatriculaPorCircuito = ({ regresarEvent }) => {
 	const [reportParameters, setReportParameters] = React.useState<any>()
 	const printRef = React.useRef()
 	const [loader, setLoader] = React.useState(false)
-	const loadReportData = async (idRegion,idCircuito) => {
+	const loadReportData = async (regionId) => {
 		try {
 			setLoader(true)
 			const response = await axios.get(
-				`${envVariables.BACKEND_URL}/api/ServicioComunal/Reportes/GetHistoricoEstDivisionAdmin/${0}/${0}`
+				`${envVariables.BACKEND_URL}/api/Areas/Reportes/ReportesGenerales/GetInstitucionesbyRegionalId/${regionId}`
 			)
 			setLoader(false)
 			setReportData(response.data)

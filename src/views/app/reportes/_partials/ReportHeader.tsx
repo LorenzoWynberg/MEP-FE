@@ -5,185 +5,174 @@ import axios from 'axios'
 import { envVariables } from 'Constants/enviroment'
 import { useTranslation } from 'react-i18next'
 interface IProps {
-  mostrarContactoInstitucion?: boolean
-  regionId?: number
-  circuitoId?: number
-  estadoProp?: string
-  regionNombreProp?: string
-  geoValues?: object
+	mostrarContactoInstitucion?: boolean
+	regionId?: number
+	circuitoId?: number
+	estadoProp?: string
+	regionNombreProp?: string
+	geoValues?: object
 }
 
 const initialState = {
-  regionNombre: '',
-  circuitoNombre: ''
+	regionNombre: '',
+	circuitoNombre: ''
 }
 
-const ReportHeader: React.FC<IProps> = (
-  props = { mostrarContactoInstitucion: true }
-) => {
-  const { t } = useTranslation()
-  const { mostrarContactoInstitucion, regionId, circuitoId, geoValues } = props
+const ReportHeader: React.FC<IProps> = (props = { mostrarContactoInstitucion: true }) => {
+	const { t } = useTranslation()
+	const { mostrarContactoInstitucion, regionId, circuitoId, geoValues } = props
 
-  const [estado, setEstado] = React.useState(initialState)
-  const state = useSelector<any, any>((store) => {
-    return {
-      currentInstituion: store.authUser.currentInstitution
-    }
-  })
+	const [estado, setEstado] = React.useState(initialState)
+	const state = useSelector<any, any>(store => {
+		return {
+			currentInstituion: store.authUser.currentInstitution
+		}
+	})
 
-  const isNull = (str, msg) => {
-    if (str) return <>{msg + str} </>
-    else return <></>
-  }
+	const isNull = (str, msg) => {
+		if (str) return <>{msg + str} </>
+		else return <></>
+	}
 
+	React.useMemo(() => {
+		const fetch = async () => {
+			const regionByCircuitoEndpoint = `${envVariables.BACKEND_URL}/api/Areas/Reportes/ReportesGenerales/GetRegionByCircuitoId?circuitoId=${circuitoId}`
+			const regionByIdEndpoint = `${envVariables.BACKEND_URL}/api/Admin/Regional/GetById/${regionId}`
+			const circuitoByIdEnpoint = `${envVariables.BACKEND_URL}/api/Admin/Circuito/GetById/${circuitoId}`
+			try {
+				const retorno: any = {}
+				if (circuitoId) {
+					const r1 = await axios.get(regionByCircuitoEndpoint)
+					retorno.regionByCircuitoData = r1.data
+					const r2 = await axios.get(circuitoByIdEnpoint)
+					retorno.circuitoByIdData = r2.data
+				}
+				if (regionId) {
+					const response = await axios.get(regionByIdEndpoint)
+					retorno.regionByIdData = response.data
+				}
+				console.log('retorno', retorno)
+				return retorno
+			} catch (e) {
+				console.log('retorno error', e)
+			}
+		}
+		console.log('regionId', { regionId, circuitoId })
+		if (!regionId && !circuitoId) {
+			setEstado({
+				regionNombre: state.currentInstituion.regionNombre,
+				circuitoNombre: state.currentInstituion.circuitoNombre
+			})
+		}
+		if (geoValues?.idProvincia) {
+			console.log('geoValues', geoValues)
+			const str =
+				geoValues?.length == 0
+					? 'Reporte nacional'
+					: geoValues.idProvincia.label + geoValues.idCanton.label
+					? ','
+					: '' + geoValues.idCanton.label
+			setEstado({
+				regionNombre: str,
+				circuitoNombre: `${geoValues.idDistrito.label}`
+			})
+		} else {
+			fetch().then((data: any) => {
+				const regionNombre = data?.regionByIdData
+					? data.regionByIdData.nombre
+					: data.regionByCircuitoData.nombre
+				const circuitoNombre = data?.circuitoByIdData ? data.circuitoByIdData.nombre : undefined
+				console.log('regionNombre', {
+					regionNombre,
+					circuitoNombre
+				})
+				setEstado({
+					regionNombre,
+					circuitoNombre
+				})
+			})
+		}
+	}, [regionId, circuitoId, geoValues])
 
-
-  React.useMemo(() => {
-    const fetch = async () => {
-      const regionByCircuitoEndpoint = `${envVariables.BACKEND_URL}/api/Areas/Reportes/ReportesGenerales/GetRegionByCircuitoId?circuitoId=${circuitoId}`
-      const regionByIdEndpoint = `${envVariables.BACKEND_URL}/api/Admin/Regional/GetById/${regionId}`
-      const circuitoByIdEnpoint = `${envVariables.BACKEND_URL}/api/Admin/Circuito/GetById/${circuitoId}`
-      try {
-        const retorno: any = {}
-        if (circuitoId) {
-          const r1 = await axios.get(regionByCircuitoEndpoint)
-          retorno.regionByCircuitoData = r1.data
-          const r2 = await axios.get(circuitoByIdEnpoint)
-          retorno.circuitoByIdData = r2.data
-        }
-        if (regionId) {
-          const response = await axios.get(regionByIdEndpoint)
-          retorno.regionByIdData = response.data
-        }
-        console.log('retorno', retorno)
-        return retorno
-      } catch (e) { console.log('retorno error', e) }
-    }
-    console.log('regionId', { regionId, circuitoId })
-    if (!regionId && !circuitoId) {
-      setEstado({
-        regionNombre: state.currentInstituion.regionNombre,
-        circuitoNombre: state.currentInstituion.circuitoNombre
-      })
-    } if (geoValues?.idProvincia) {
-      console.log('geoValues', geoValues)
-      setEstado({
-        regionNombre: `${geoValues.idProvincia.label}, ${geoValues.idCanton.label}`,
-        circuitoNombre: `${geoValues.idDistrito.label}`
-      })
-    } else {
-      fetch().then((data: any) => {
-        const regionNombre = data?.regionByIdData
-          ? data.regionByIdData.nombre
-          : data.regionByCircuitoData.nombre
-        const circuitoNombre = data?.circuitoByIdData
-          ? data.circuitoByIdData.nombre
-          : undefined
-        console.log('regionNombre', {
-          regionNombre,
-          circuitoNombre
-        })
-        setEstado({
-          regionNombre,
-          circuitoNombre
-        })
-      })
-    }
-  }, [regionId, circuitoId, geoValues])
-
-  return (
-    <HeaderContainer>
-      <HeaderSide>
-        <img alt='Profile' height='43px' src='/assets/img/LogoMepRep.jpg' />
-      </HeaderSide>
-      <HeaderCenter>
-        <ParrafoMEP>
-          {t('reportes>institucional>ministro_educacion', 'MINISTERIO DE EDUCACIÓN PÚBLICA')}
-          <br />
-          {estado.regionNombre}
-          <br />
-          {estado.circuitoNombre}
-        </ParrafoMEP>
-        {mostrarContactoInstitucion
-          ? (
-            <>
-              <Linea />
-              <Parrafo>
-                {state.currentInstituion?.codigo +
-                  ' ' +
-                  state.currentInstituion?.nombre}
-                <br />
-                {isNull(
-                  state.currentInstitution?.telefonoCentroEducativo,
-                  'Teléfono: '
-                )}
-                {isNull(
-                  state.currentInstitution?.correoInstitucional,
-                  'Correo institucional: '
-                )}
-              </Parrafo>
-            </>
-          )
-          : (
-            ''
-          )}
-      </HeaderCenter>
-      <HeaderSide>
-        <img
-          alt='saber'
-          height='60px'
-          src='/assets/img/saber-logo.svg'
-        />
-      </HeaderSide>
-    </HeaderContainer>
-  )
+	return (
+		<HeaderContainer>
+			<HeaderSide>
+				<img alt='Profile' height='43px' src='/assets/img/LogoMepRep.jpg' />
+			</HeaderSide>
+			<HeaderCenter>
+				<ParrafoMEP>
+					{t('reportes>institucional>ministro_educacion', 'MINISTERIO DE EDUCACIÓN PÚBLICA')}
+					<br />
+					{estado.regionNombre}
+					<br />
+					{estado.circuitoNombre}
+				</ParrafoMEP>
+				{mostrarContactoInstitucion ? (
+					<>
+						<Linea />
+						<Parrafo>
+							{state.currentInstituion?.codigo + ' ' + state.currentInstituion?.nombre}
+							<br />
+							{isNull(state.currentInstitution?.telefonoCentroEducativo, 'Teléfono: ')}
+							{isNull(state.currentInstitution?.correoInstitucional, 'Correo institucional: ')}
+						</Parrafo>
+					</>
+				) : (
+					''
+				)}
+			</HeaderCenter>
+			<HeaderSide>
+				<img alt='saber' height='60px' src='/assets/img/saber-logo.svg' />
+			</HeaderSide>
+		</HeaderContainer>
+	)
 }
 const ParrafoMEP = styled.p`
-  font-size: 14px;
-  line-height: 13px;
-  font-weight: bold;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+	font-size: 14px;
+	line-height: 13px;
+	font-weight: bold;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
 `
 const Parrafo = styled.p`
-  font-size: 14px;
-  line-height: 13px;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+	font-size: 14px;
+	line-height: 13px;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
 `
 const Linea = styled.hr`
-  width: 100%;
-  background-color: black;
-  height: 1px;
-  border: none;
-  margin: 0;
+	width: 100%;
+	background-color: black;
+	height: 1px;
+	border: none;
+	margin: 0;
 `
 
 const HeaderContainer = styled.div`
-  display: flex;
-  width: 100%;
+	display: flex;
+	width: 100%;
 
-  justify-content: center;
-  text-align: center;
+	justify-content: center;
+	text-align: center;
 `
 const HeaderSide = styled.div`
-  display: flex;
-  width: 20%;
-  border: solid 1px;
-  justify-content: center;
-  justify-items: center;
-  align-content: center;
-  align-items: center;
+	display: flex;
+	width: 20%;
+	border: solid 1px;
+	justify-content: center;
+	justify-items: center;
+	align-content: center;
+	align-items: center;
 `
 const HeaderCenter = styled.div`
-  display: flex;
-  width: 60%;
-  flex-direction: column;
-  border-top: solid 1px;
-  border-bottom: solid 1px;
-  justify-content: center;
-  justify-items: center;
-  align-content: center;
-  align-items: center;
+	display: flex;
+	width: 60%;
+	flex-direction: column;
+	border-top: solid 1px;
+	border-bottom: solid 1px;
+	justify-content: center;
+	justify-items: center;
+	align-content: center;
+	align-items: center;
 `
 export default ReportHeader
