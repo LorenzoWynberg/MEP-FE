@@ -3,11 +3,18 @@ import { TableReactImplementationServicio } from 'Components/TableReactImplement
 import { Card, CardBody } from 'reactstrap'
 import colors from 'Assets/js/colors'
 import { useTranslation } from 'react-i18next'
-import { Button } from '@material-ui/core'
+import { Button } from 'Components/CommonComponents'
 
 interface IProps {
+	onlyViewModule: any
+	avoidSearch: any
+	hasEditAccess: any
+	setEstudiantes: any
+	estudiantes: any
+	closeContextualMenu: any
 	data: Array<any>
 	handleGetData?: Function
+	button: any
 }
 
 const ComunalTabla: React.FC<IProps> = props => {
@@ -64,7 +71,10 @@ const ComunalTabla: React.FC<IProps> = props => {
 				column: ''
 			},
 			{
-				Header: t('servicio_comunal>registro_servicio_comunal>genero', 'genero'),
+				Header: t(
+					'servicio_comunal>registro_servicio_comunal>genero',
+					'genero'
+				),
 				accessor: 'genero',
 				label: '',
 				column: ''
@@ -86,21 +96,27 @@ const ComunalTabla: React.FC<IProps> = props => {
 			},
 
 			{
-				Header: t('servicio_comunal>registro_servicio_comunal>discapacidad', 'Discapacidad'),
+				Header: t(
+					'servicio_comunal>registro_servicio_comunal>discapacidad',
+					'Discapacidad'
+				),
 				accessor: 'discapacidad',
 				label: '',
 				column: ''
 			},
 			{
-				Header: t('servicio_comunal>registro_servicio_comunal>acciones', 'Acciones'),
+				Header: t(
+					'servicio_comunal>registro_servicio_comunal>acciones',
+					'Acciones'
+				),
 				column: '',
 				accessor: '',
 				label: '',
 				Cell: ({ cell, row, data }) => {
 					return (
 						<Button
-							class='sc-iqcoie bQFwPO cursor-pointer'
-							primary
+							color="primary"
+							style={{ cursor: 'pointer' }}
 							onClick={() => {
 								const _row = data[row.index]
 								let newEstudiantes = [...props.estudiantes]
@@ -122,10 +138,25 @@ const ComunalTabla: React.FC<IProps> = props => {
 	}, [students])
 
 	return (
-		<Card className='my-3'>
+		<Card className="my-3">
 			<CardBody>
-				<h4>{t('servicio_comunal>registro_servicio_comunal>titulo', 'título')}</h4>
-
+				{/* <h4>
+					{t('servicio_comunal>registro_servicio_comunal>titulo', 'título')}
+					<span style={{ textAlign: 'right' }}>{props.button ?? props.button}</span>
+				</h4> */}
+				<h4
+					style={{
+						display: 'flex',
+						justifyContent: 'space-between',
+						alignItems: 'center'
+					}}
+				>
+					<span>
+						{t('servicio_comunal>registro_servicio_comunal>titulo', 'título')}{' '}
+						<span style={{ color: 'red' }}>*</span>
+					</span>
+					<p className="m-0">{props.button ?? props.button}</p>
+				</h4>
 				<TableReactImplementationServicio
 					avoidSearch={props.avoidSearch}
 					handleGetData={() => {

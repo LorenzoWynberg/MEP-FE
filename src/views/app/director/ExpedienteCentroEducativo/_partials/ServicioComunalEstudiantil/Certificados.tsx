@@ -4,78 +4,44 @@ import { useActions } from 'Hooks/useActions'
 import { useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { envVariables } from 'Constants/enviroment'
-import { formatoOracion } from 'utils/utils'
-import {
-	filterInstitutionsPaginated,
-	cleanInstitutions,
-	GetServicioComunalByInstitucionId,
-	getCertificadosByInstitucionFiltered
-} from 'Redux/configuracion/actions'
-// import { Page, Text, View, Document, StyleSheet, BlobProvider, PDFDownloadLink } from '@react-pdf/renderer';
+import { getCertificadosByInstitucionFiltered } from 'Redux/configuracion/actions'
 import withRouter from 'react-router-dom/withRouter'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
-import CancelIcon from '@mui/icons-material/RemoveCircle'
 import Tooltip from '@mui/material/Tooltip'
 import styles from './ServicioComunal.css'
-import { handleChangeInstitution, updatePeriodosLectivos, desactivarServicioComunal } from 'Redux/auth/actions'
 import BarLoader from 'Components/barLoader/barLoader'
-import { useHistory } from 'react-router-dom'
 import colors from 'assets/js/colors'
 import { useTranslation } from 'react-i18next'
-import { RemoveRedEyeRounded, Edit } from '@material-ui/icons'
+import { RemoveRedEyeRounded } from '@material-ui/icons'
 import SimpleModal from 'Components/Modal/simple'
-import ModalSCE from './_partials/ModalSCE'
-import { Delete } from '@material-ui/icons'
 import ReportHeader from 'Views/app/reportes/_partials/ReportHeader'
 import axios from 'axios'
-import { BiExport } from 'react-icons/bi'
 import { useReactToPrint } from 'react-to-print'
-import style from 'styled-components'
 
 const Certificados = props => {
 	const printRef = useRef()
 	const [data, setData] = useState([])
-	const [publicos, setPublicos] = useState(true)
-	const [dropdownToggle, setDropdownToggle] = useState(false)
 	const [firstCalled, setFirstCalled] = useState(false)
 	const [studentId, setStudentId] = useState()
 	const [certData, setCertData] = useState({})
 	const [loading, setLoading] = useState(true)
-	const [expediente, setExpediente] = useState(null)
 	const { t } = useTranslation()
-	const history = useHistory()
-	const { hasAddAccess = true, hasEditAccess = true, hasDeleteAccess = true } = props
-
-	const toggle = () => {
-		setDropdownToggle(!dropdownToggle)
-	}
-	const { authUser } = useSelector(store => store.authUser)
-	const { accessRole } = useSelector((state: any) => state?.authUser?.currentRoleOrganizacion)
 	const idInstitucion = localStorage.getItem('idInstitucion')
 
 	const state = useSelector((store: any) => {
 		return {
-			centros: store.configuracion.instituciones,
-			totalCount: store.configuracion.instituciones.totalCount,
-			selects: store.selects,
-			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
-			permisos: store.authUser.rolPermisos
+			permisos: store.authUser.rolPermisos,
+			selectedYear: store.authUser.selectedActiveYear.id
 		}
 	})
 
 	const actions = useActions({
-		filterInstitutionsPaginated,
-		cleanInstitutions,
-		GetServicioComunalByInstitucionId,
-		handleChangeInstitution,
-		updatePeriodosLectivos,
-		desactivarServicioComunal,
 		getCertificadosByInstitucionFiltered
 	})
 
 	useEffect(() => {
 		actions
-			.getCertificadosByInstitucionFiltered(idInstitucion)
+			.getCertificadosByInstitucionFiltered(idInstitucion, ' ', 1, 250, state.selectedYear)
 			.then(data => {
 				setData(data.options)
 				setLoading(false)
@@ -85,6 +51,19 @@ const Certificados = props => {
 				setLoading(false)
 			})
 	}, [])
+
+	useEffect(() => {
+		actions
+			.getCertificadosByInstitucionFiltered(idInstitucion, ' ', 1, 250, state.selectedYear)
+			.then(data => {
+				setData(data.options)
+				setLoading(false)
+			})
+			.catch(error => {
+				console.log('error', error)
+				setLoading(false)
+			})
+	}, [state.selectedYear])
 
 	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'certificadosSCE')
 
@@ -188,18 +167,6 @@ const Certificados = props => {
 		orientation: ''
 	})
 
-	useEffect(() => {
-		setFirstCalled(true)
-		return () => {
-			actions.cleanInstitutions()
-		}
-	}, [])
-
-	const setInstitution = async id => {
-		await actions.handleChangeInstitution(id)
-		await actions.updatePeriodosLectivos(id)
-	}
-
 	if (!tienePermiso || tienePermiso?.leer == 0) {
 		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
 	}
@@ -222,7 +189,7 @@ const Certificados = props => {
 					txtBtnCancel='Cerrar'
 					txtBtn='Imprimir'
 					onConfirm={handlePrint}
-					title='Certificado'
+					title='Registro'
 					onClose={() => setStudentId(null)}
 					stylesContent={{}}
 					openDialog={studentId && true}
@@ -255,10 +222,10 @@ const Certificados = props => {
 							</tr>
 							<tr>
 								<td style={{ paddingTop: 100, paddingBottom: 100 }}>
-									Desarrollo el proyecto del Servicio Comunal Estudiantil en el Área de proyecto:{' '}
+									Desarrolló el proyecto del Servicio Comunal Estudiantil en el Área de proyecto:{' '}
 									{certData.areaProyecto}, Nombre del proyecto: {certData.nombreProyecto} , Tipo de
-									proyecto: {certData.tipoProyecto}, Características: {certData.caracteristicas}, con
-									una duración de 30 horas, en el Año: {certData.anio}.
+									proyecto: {certData.tipoProyecto}, con una duración de 30 horas, en el Año:{' '}
+									{certData.anio}.
 								</td>
 							</tr>
 							<tr>
@@ -312,14 +279,17 @@ const Certificados = props => {
 									column,
 									searchValue
 								})
-
-								if (firstCalled) {
-									setLoading(true)
-									await actions
-										.getCertificadosByInstitucionFiltered(idInstitucion, searchValue, 1, 250)
-										.then(res => setData(res.options))
-									setLoading(false)
-								}
+								setLoading(true)
+								await actions
+									.getCertificadosByInstitucionFiltered(
+										idInstitucion,
+										searchValue,
+										1,
+										250,
+										state.selectedYear
+									)
+									.then(res => setData(res.options))
+								setLoading(false)
 							}}
 							columns={columns}
 							orderOptions={[]}
@@ -351,23 +321,4 @@ const Table = styled.table`
 		border: solid 1px;
 		padding: 16px;
 	}
-`
-
-const Card = styled.div`
-	border-radius: 15px;
-	min-width: 100%;
-	min-height: 100%;
-	border-color: gray;
-	background: white;
-	padding: 15px;
-`
-const Linea = styled.hr`
-	width: 100%;
-	background-color: black;
-	height: 1px;
-	border: none;
-	margin: 0;
-`
-const Seccion = styled.section`
-	text-align: center;
 `

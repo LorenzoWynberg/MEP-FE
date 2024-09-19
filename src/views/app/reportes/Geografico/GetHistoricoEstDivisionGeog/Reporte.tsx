@@ -4,24 +4,6 @@ import { TableReactImplementation } from 'Components/TableReactImplementation'
 
 const Reporte = ({ innerRef, reportData, reportParameters }) => {
 	const tableMetadata = React.useMemo(() => {
-		/*
- "annoParticipacion": 0,
-    "nombreAreaProyecto": "string",
-    "descripcion": "string",
-    "nombreProyecto": "string",
-    "nombreModalidad": "string",
-    "caracteristicas": "string",
-    "nombreOrgContraparte": "string",
-    "cedulaCount": 0,
-    "dimexCount": 0,
-    "yisRoCount": 0,
-    "discapacidadCount": 0,
-    "hombreCount": 0,
-    "mujerCount": 0,
-    "indigenaCount": 0,
-    "refugiadoCount": 0,
-    "totalEstudiantes": 0
-    */
 		const columns = [
 			{
 				Header: 'Nombre Oferta',
@@ -54,13 +36,7 @@ const Reporte = ({ innerRef, reportData, reportParameters }) => {
 				column: ''
 			},
 			{
-				Header: 'Características',
-				accessor: 'caracteristicas',
-				label: '',
-				column: ''
-			},
-			{
-				Header: 'Nombre de la organización contraparte',
+				Header: 'Organización contraparte',
 				accessor: 'nombreOrgContraparte',
 				label: '',
 				column: ''
@@ -84,31 +60,31 @@ const Reporte = ({ innerRef, reportData, reportParameters }) => {
 				column: ''
 			},
 			{
-				Header: 'Cantidad de discapacitados',
+				Header: 'Personas con discapacidad',
 				accessor: 'discapacidadCount',
 				label: '',
 				column: ''
 			},
 			{
-				Header: 'Cantidad de hombres',
+				Header: 'Hombres',
 				accessor: 'hombreCount',
 				label: '',
 				column: ''
 			},
 			{
-				Header: 'Cantidad de mujeres',
+				Header: 'Mujeres',
 				accessor: 'mujerCount',
 				label: '',
 				column: ''
 			},
 			{
-				Header: 'Cantidad de indígenas',
+				Header: 'Indígenas',
 				accessor: 'indigenaCount',
 				label: '',
 				column: ''
 			},
 			{
-				Header: 'Cantidad de refugiados',
+				Header: 'Refugiados',
 				accessor: 'refugiadoCount',
 				label: '',
 				column: ''
@@ -128,7 +104,6 @@ const Reporte = ({ innerRef, reportData, reportParameters }) => {
 			}
 		}
 		const data = reportData ? reportData.map(mapeador) : []
-		// console.log(reportParameters)
 		return {
 			columns,
 			data
@@ -139,9 +114,6 @@ const Reporte = ({ innerRef, reportData, reportParameters }) => {
 			<Card>
 				<h3>Reporte de SCE Historico por Division Geografica</h3>
 				<p>AÑO EDUCATIVO: {new Date().getFullYear()}</p>
-				{/* <p>DIRECCIÓN REGIONAL:{reportParameters.regionalId.label} </p>
-        <p>CIRCUITO: {reportParameters.circuitoId.label}</p>
-        <p>CENTRO EDUCATIVO: {reportParameters.institucionId.label}</p> */}
 				<TableReactImplementation avoidSearch columns={tableMetadata.columns} data={reportData} />
 			</Card>
 		</div>

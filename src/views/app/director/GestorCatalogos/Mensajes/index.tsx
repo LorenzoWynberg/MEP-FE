@@ -29,7 +29,7 @@ import {
   saveMensajes,
   updateMensajes
 } from '../../../../../redux/mensajes/actions'
-import { ProfileFormGroup } from '../../_partials/Roles/ProfileFormGroup'
+import { ProfileFormGroup } from '../../../admin/_partials/Roles/ProfileFormGroup'
 import { cloneDeep } from 'lodash'
 import SearchIcon from '@material-ui/icons/Search'
 import { Paginationtype } from '../../../../../types/pagination'

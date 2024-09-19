@@ -4,24 +4,6 @@ import { TableReactImplementation } from 'Components/TableReactImplementation'
 
 const Reporte = ({ innerRef, reportData, reportParameters }) => {
 	const tableMetadata = React.useMemo(() => {
-		/*
-      "annoParticipacion": 0,
-      "nombreAreaProyecto": "string",
-      "descripcion": "string",
-      "nombreProyecto": "string",
-      "nombreModalidad": "string",
-      "caracteristicas": "string",
-      "nombreOrgContraparte": "string",
-      "cedulaCount": 0,
-      "dimexCount": 0,
-      "yisRoCount": 0,
-      "discapacidadCount": 0,
-      "hombreCount": 0,
-      "mujerCount": 0,
-      "indigenaCount": 0,
-      "refugiadoCount": 0,
-      "totalEstudiantes": 0
-    */
 		const columns = [
 			{
 				Header: 'Oferta',
@@ -54,13 +36,7 @@ const Reporte = ({ innerRef, reportData, reportParameters }) => {
 				column: ''
 			},
 			{
-				Header: 'Características',
-				accessor: 'caracteristicas',
-				label: '',
-				column: ''
-			},
-			{
-				Header: 'Nombre de la organización contraparte',
+				Header: 'Organización contraparte',
 				accessor: 'nombreOrgContraparte',
 				label: '',
 				column: ''
@@ -84,31 +60,31 @@ const Reporte = ({ innerRef, reportData, reportParameters }) => {
 				column: ''
 			},
 			{
-				Header: 'Cantidad de discapacitados',
+				Header: 'Personas con discapacidad',
 				accessor: 'discapacidadCount',
 				label: '',
 				column: ''
 			},
 			{
-				Header: 'Cantidad de hombres',
+				Header: 'Hombres',
 				accessor: 'hombreCount',
 				label: '',
 				column: ''
 			},
 			{
-				Header: 'Cantidad de mujeres',
+				Header: 'Mujeres',
 				accessor: 'mujerCount',
 				label: '',
 				column: ''
 			},
 			{
-				Header: 'Cantidad de indígenas',
+				Header: 'Indígenas',
 				accessor: 'indigenaCount',
 				label: '',
 				column: ''
 			},
 			{
-				Header: 'Cantidad de refugiados',
+				Header: 'Refugiados',
 				accessor: 'refugiadoCount',
 				label: '',
 				column: ''

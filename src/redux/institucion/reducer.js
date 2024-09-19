@@ -58,7 +58,8 @@ const INITIAL_STATE = {
   identidadMember: {},
   currentAuxOrganization: {},
   members: [],
-  institutionStates: []
+  institutionStates: [],
+  estadoCentro:[]
 }
 
 export default (state = INITIAL_STATE, { type, payload }) => {

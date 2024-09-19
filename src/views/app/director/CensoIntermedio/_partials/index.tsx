@@ -4,7 +4,7 @@ import useNotification from 'Hooks/useNotification'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useParams,useHistory } from 'react-router-dom'
-import { Col, Row } from 'reactstrap'
+import { Col, Row, Button } from 'reactstrap'
 import {
   getEstudiantesCensoByNivelOferta,
   createCenso,
@@ -25,6 +25,8 @@ import SimpleModal from 'Components/Modal/simple'
 import ConfirmModal from 'Components/Modal/ConfirmModal'
 import { uniqBy } from 'lodash'
 import { usePrevious } from 'Hooks'
+import PrintIcon from '@material-ui/icons/Print'
+import ReportCensoIntermedio from 'Views/app/reportes/Censo/censoIntermedio'
 
 interface IProps {
 	dataNivel: any
@@ -46,6 +48,7 @@ const RegisterStudentForm: React.FC<IProps> = (props) => {
   const [modalAlertas, setModalAlertas] = useState<any>(false)
   const [alerta, setAlerta] = useState<any>(false)
 	const history = useHistory()
+  const [printModal, setPrintModal] = useState(false)
   
   const ACTIVE_YEAR = useSelector((store: any) => store.authUser.selectedActiveYear)
 
@@ -421,6 +424,18 @@ const RegisterStudentForm: React.FC<IProps> = (props) => {
             </InputWrapper>
           </Card>
         </Col>
+        <Col xs={12} md={6}>
+						<div className="d-flex justify-content-end">
+							<Button
+								onClick={() => setPrintModal(true)}
+								variant="contained"
+								color="primary"
+								style={{ display: 'flex', alignItems: 'center' }}
+							>
+								<PrintIcon className="mr-1" /> Imprimir Censo
+							</Button>
+						</div>
+					</Col>
         <TableStudents
           onConfirm={firewallRegistrarCenso}
           data={estudiantes}
@@ -433,6 +448,21 @@ const RegisterStudentForm: React.FC<IProps> = (props) => {
           <Loader />
         </Row>
       )}
+      <SimpleModal
+					openDialog={printModal}
+					title="Censo intermedio"
+					actions={false}
+					onClose={() => {
+						setPrintModal(false)
+					}}
+				>
+					<div style={{ minWidth: '500px' }}>
+						<ReportCensoIntermedio
+							nivelOfertaId={nivelOfertaId}
+							dataNivel={dataNivel}
+						/>
+					</div>
+				</SimpleModal>
     </>
   )
 }

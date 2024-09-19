@@ -19,7 +19,19 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
 
   const columns = [
     {
-      Header: 'Codigo Institución',
+      Header: 'Dirección Regional',
+      accessor: 'direccionRegional',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Circuito',
+      accessor: 'circuito',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Código Institución',
       accessor: 'codigoInstitucion',
       label: '',
       column: 'codigoInstitucion'
@@ -45,14 +57,12 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
       column: 'mujerCount'
     },
 
-
     {
       Header: 'Total Estudiantes',
       accessor: 'totalEstudiantes',
       label: '',
       column: 'nombreInstitucion'
-    },
-
+    }
   ]
 
   const loadReportData = async (circuitoId, regionId) => {
@@ -68,7 +78,7 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
     }
   }
 
-  const onShowReportEvent = (parametros) => {
+  const onShowReportEvent = parametros => {
     // setState(1)
     const { circuitoId, regionId } = parametros
     if (!circuitoId || !regionId) return
@@ -81,12 +91,17 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
     })
   }
   const onExcelEvent = () => {
-    const workbook = GenerateExcelObject(reportData)
+    const dataToPrint = []
+    reportData.forEach(d => {
+      d.datos.forEach(d2 => {
+        dataToPrint.push(d2)
+      })
+    })
+    const workbook = GenerateExcelObject(dataToPrint)
     SendWorkbookToDownload(workbook, `ReporteUltimoNivelSinSCE.xlsx`)
   }
-
   return (
-    <div> 
+    <div>
       <ReportBar
         regresarEvent={() => {
           regresarEvent()
@@ -97,14 +112,20 @@ const ReporteUltimoNivelSinSCE = ({ regresarEvent }) => {
         showBtn={state === 1}
       />
       {state === 0 && (
-        <Parameters
-          showReportEvent={onShowReportEvent}
-          reportLoader={loader}
-        />
+        <Parameters showReportEvent={onShowReportEvent} reportLoader={loader} />
       )}
       {state === 1 && (
-        <ReporteStyledTableCircuitos innerRef={printRef} data={reportData} idCircuito={idCircuitoSent} idRegion={idRegionSent} columns={columns} title={'Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil'}
-        />)}
+        <ReporteStyledTableCircuitos
+          innerRef={printRef}
+          data={reportData}
+          idCircuito={idCircuitoSent}
+          idRegion={idRegionSent}
+          columns={columns}
+          title={
+            'Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil'
+          }
+        />
+      )}
     </div>
   )
 }

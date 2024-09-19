@@ -38,6 +38,18 @@ const GetListaEstudSinReqSCEByInstitucionId = ({ regresarEvent }) => {
 
   const columns = [
     {
+      Header: 'Dirección Regional',
+      accessor: 'direccionRegional',
+      label: '',
+      column: ''
+    },
+    {
+      Header: 'Circuito',
+      accessor: 'circuito',
+      label: '',
+      column: ''
+    },
+    {
       Header: 'ID',
       accessor: 'identificacion',
       label: '',
@@ -66,7 +78,7 @@ const GetListaEstudSinReqSCEByInstitucionId = ({ regresarEvent }) => {
       accessor: 'genero',
       label: '',
       column: ''
-    },
+    }
   ]
 
   const onExcelEvent = () => {
@@ -75,21 +87,27 @@ const GetListaEstudSinReqSCEByInstitucionId = ({ regresarEvent }) => {
   }
   return (
     <div>
-      {!loader && <ReportBar onExcelBtnEvent={onExcelEvent}
-        regresarEvent={() => {
-          regresarEvent()
-          setState(0)
-        }} imprimirRef={printRef} showBtn={state === 0}
-      />}
+      {!loader && (
+        <ReportBar
+          onExcelBtnEvent={onExcelEvent}
+          regresarEvent={() => {
+            regresarEvent()
+            setState(0)
+          }}
+          imprimirRef={printRef}
+          showBtn={state === 0}
+        />
+      )}
       {loader ? (
-        <div style={{
-          height: '100%',
-          width: '100%',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          zIndex: 20
-        }}
+        <div
+          style={{
+            height: '100%',
+            width: '100%',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            zIndex: 20
+          }}
         >
           <div
             style={{
@@ -102,8 +120,16 @@ const GetListaEstudSinReqSCEByInstitucionId = ({ regresarEvent }) => {
             <Loader />
           </div>
         </div>
-      ) : <ReporteStyledTable innerRef={printRef} data={reportData} columns={columns} title={'Listado de estudiantes del centro educativo, que tienen pendiente el cumplimiento del Servicio Comunal Estudiantil.'} />}
-
+      ) : (
+        <ReporteStyledTable
+          innerRef={printRef}
+          data={reportData}
+          columns={columns}
+          title={
+            'Listado de estudiantes del centro educativo, que tienen pendiente el cumplimiento del Servicio Comunal Estudiantil.'
+          }
+        />
+      )}
     </div>
   )
 }

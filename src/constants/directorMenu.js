@@ -147,7 +147,7 @@ const data = [
         section: 'menualertatemprana',
         to: '/director/alerta-estudiantes'
       }
-      
+
     ]
   },
   {
@@ -155,7 +155,21 @@ const data = [
     icon: 'iconsminds-notepad',
     label: 'menu>reportes>reportes',
     section: 'menureporte',
-    to: '/reportes'
+    to: '/reportes',
+    subs: [
+      {
+        icon: 'iconsminds-notepad',
+        label: 'menu>reportes>matricula',
+        to: '/reportes/matricula',
+        section: 'menureporte'
+      },
+      {
+        icon: 'iconsminds-notepad',
+        label: 'menu>reportes>sce',
+        to: '/reportes/sce',
+        section: 'menureporte'
+      }, 
+    ]
   },
 
   {
@@ -170,19 +184,19 @@ const data = [
         label: 'menu>usuarios>usuarios',
         to: '/director/usuarios',
         section: 'menuusuarios'
-      },  
-        {
-          icon: 'iconsminds-check',
-          label: 'menu>gestionusuarios',
-          to: '/view/gestionusuarios',
-          section: 'menuusuarios',
-        },
-        {
-          icon: 'iconsminds-check',
-          label: 'menu>roles',
-          to: '/director/usuarios/roles',
-          section: 'menuroles',
-        }
+      },
+      {
+        icon: 'iconsminds-check',
+        label: 'menu>gestionusuarios',
+        to: '/view/gestionusuarios',
+        section: 'menuusuarios',
+      },
+      {
+        icon: 'iconsminds-check',
+        label: 'menu>roles',
+        to: '/director/usuarios/roles',
+        section: 'menuroles',
+      }
     ]
   },
   {
@@ -239,8 +253,14 @@ const data = [
         label: 'menu>configuracion>idioma',
         section: 'modulomallascurriculares',
         to: '/idiomaeditor'
+      },
+      {
+        icon: 'simple-icon-book-open',
+        label: 'menu>configuracion>gestorCatalogo',
+        section: 'gestioncatalogos',
+         to: '/director/GestorCatalogos'
       }
-      
+
     ]
   },
   {

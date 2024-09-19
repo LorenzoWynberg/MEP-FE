@@ -100,8 +100,8 @@ const Navigator = props => {
 				'SOLICITUDES DE TRASLADOS'
 			),
 			description: t(
-				'estudiantes>traslados>gestion_traslados>solicitar_desde_mi_centro>mensaje',
-				'El estudiante se encuentra en mi centro educativo y requiero trasladarlo a otro centro educativo'
+				'estudiantes>traslados>gestion_traslados>solicitudes>mensaje',
+				'Permite dar seguimiento a las solicitudes que se realicen o que se han recibido'
 			),
 			link: '/director/traslados/solicitudes',
 			icon: <i className='far fa-pause-circle icon-3-fs' />
