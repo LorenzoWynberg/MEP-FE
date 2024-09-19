@@ -18,14 +18,14 @@ export class WebMapView extends React.Component {
         'esri/widgets/Search',
         'esri/layers/FeatureLayer',
         'esri/config',
-        'esri/rest/locator'
       ],
       {
         css: true
       }
     ).then(
-      ([ArcGISMap, MapView, Search, FeatureLayer, esriConfig, EsriLocator]) => {
+      ([ArcGISMap, MapView, Search, FeatureLayer, esriConfig]) => {
 
+        const props = this.props
         esriConfig.request.interceptors.push({
           before(params) {
             if (params.url.includes('query')) {
@@ -57,8 +57,10 @@ export class WebMapView extends React.Component {
           container: this.mapRef.current,
           map,
           center: [-84, 9],
-          zoom: 8
+          zoom: 8,
+          popupEnabled: false, 
         })
+        this.view.popup = null;
 
         const search = new Search({
           view: this.view,
@@ -66,11 +68,8 @@ export class WebMapView extends React.Component {
           content: { f: 'json' }
         })
 
-        this.view.ui.add(search, 'top-right')
         this.search = search
-        this.props.setSearch(search)
-
-        const props = this.props
+        props.setSearch(search)
         this.view.on('mouse-wheel', function (event) {
           self.disableMap(event)
         })
@@ -94,54 +93,8 @@ export class WebMapView extends React.Component {
           self.disableMap(event)
         })
         this.view.on('click', async function (evt) {
-    
-        //  props.setLocation({
-        //     latitude: evt.mapPoint.latitude.toFixed(6),
-        //     longitude: evt.mapPoint.longitude.toFixed(6)
-        //   })
-          self.disableMap(evt, async () => {
-            self.search.clear()
-            self.view.popup.clear()
 
-            let ubicacionResponse = await self.queryFeatureLayer(
-              evt.mapPoint,
-              1500,
-              'intersects',
-              self.distritosLayer
-            )
 
-            ubicacionResponse = ubicacionResponse[0].attributes
-
-            if (self.search.activeSource) {
-              const params = {
-                location: evt.mapPoint
-              }
-              const locatorUrl =
-                'https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer'
-              EsriLocator.locationToAddress(
-                locatorUrl,
-                params
-              ).then(
-                function (response) {
-                  // Show the address found
-                  const address = response.address
-                  self.showPopup(
-                    address,
-                    evt.mapPoint,
-                    ubicacionResponse
-                  )
-                },
-                function (err) {
-                  // Show no address found
-                  self.showPopup(
-                    'No address found.',
-                    evt.mapPoint,
-                    ubicacionResponse
-                  )
-                }
-              )
-            }
-          })
         })
         if (props.onMount) {
           props.onMount()
@@ -179,22 +132,18 @@ export class WebMapView extends React.Component {
       content: address,
       location: pt
     }
-
     this.view.popup.open({
       title: +pt.longitude + ',' + pt.latitude,
       content: address,
       location: pt
     })
-    // this.props.setLocation({
-    //   latitude: pt.latitude.toFixed(6),
-    //   longitude: pt.longitude.toFixed(6)
-    // })
+
     this.props.setUbicacion({
       canton: attributes?.NCANTON,
       provincia: attributes?.PROVINCIA,
       distrito: attributes?.NDISTRITO
     })
-    
+
   }
 
   showPopup = this.showPopup.bind(this)
