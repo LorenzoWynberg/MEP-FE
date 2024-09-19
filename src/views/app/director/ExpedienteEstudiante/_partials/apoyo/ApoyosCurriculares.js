@@ -1,15 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import {
-	Row,
-	Col,
-	Form,
-	FormGroup,
-	Label,
-	Input,
-	CustomInput
-} from 'reactstrap'
+import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap'
 import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
 import useNotification from 'Hooks/useNotification'
 import styled from 'styled-components'
@@ -25,7 +17,6 @@ import {
 import {
 	FormControl,
 	FormControlLabel,
-	FormLabel,
 	Radio,
 	RadioGroup
 } from '@material-ui/core'
@@ -42,7 +33,6 @@ import IconButton from '@mui/material/IconButton'
 import { HiPencil } from 'react-icons/hi'
 import swal from 'sweetalert'
 import { isNull, isUndefined, isEmpty } from 'lodash'
-import BarLoader from 'Components/barLoader/barLoader'
 import Loader from 'Components/LoaderContainer'
 import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
@@ -196,13 +186,13 @@ export const ApoyosCurriculares = () => {
 				.delete(
 					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`
 				)
-				.then(response => {
+				.then(() => {
 					axios
 						.get(
 							`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
 						)
-						.then(response => {
-							setData(response.data.entityList)
+						.then(res => {
+							setData(res.data.entityList)
 							setLoading(false)
 							setSnackbarContent({
 								msg: 'Se ha eliminado el registro',
@@ -676,7 +666,7 @@ export const ApoyosCurriculares = () => {
 						<Col md={12}>
 							<FormGroup>
 								<Label for="detalleDelApoyo">
-									Detalle del apoyo (opcional)
+									Detalle del apoyo <RequiredSpan />
 								</Label>
 								<Input
 									type="textarea"
