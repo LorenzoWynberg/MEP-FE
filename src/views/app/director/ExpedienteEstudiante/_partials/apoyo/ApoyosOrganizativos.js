@@ -49,7 +49,7 @@ const tituloModal = 'Registro de apoyos organizativos'
 
 const condicionSeRecibeNombre = 'Se recibe'
 
-export const ApoyosOrganizativos = () => {
+export const ApoyosOrganizativos = props => {
 	const [loading, setLoading] = useState(true)
 	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
 	const [data, setData] = useState([])

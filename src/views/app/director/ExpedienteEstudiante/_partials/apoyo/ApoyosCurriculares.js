@@ -49,7 +49,7 @@ const tituloModal = 'Registro de apoyo curricular'
 
 const condicionSeRecibeNombre = 'Se recibe'
 
-export const ApoyosCurriculares = () => {
+export const ApoyosCurriculares = props => {
 	const [loading, setLoading] = useState(true)
 	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
 	const [data, setData] = useState([])

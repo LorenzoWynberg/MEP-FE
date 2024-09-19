@@ -14,7 +14,10 @@ import { ApoyosPersonales } from './ApoyosPersonales'
 import { ApoyosOrganizativos } from './ApoyosOrganizativos'
 import OptionModal from '../../../../../../components/Modal/OptionModal'
 import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
-import { getCondiciones, getDiscapacidades } from '../../../../../../redux/apoyos/actions'
+import {
+	getCondiciones,
+	getDiscapacidades
+} from '../../../../../../redux/apoyos/actions'
 
 const ApoyoEducativo = props => {
 	const { t } = useTranslation()
@@ -48,7 +51,6 @@ const ApoyoEducativo = props => {
 	const getHistoricos = () => {
 		getHistoricosDiscapacidades()
 		getHistoricosCondiciones()
-
 	}
 	const getHistoricosDiscapacidades = () => {
 		setLoading(true)
@@ -60,7 +62,6 @@ const ApoyoEducativo = props => {
 				setDiscapacidadesHistorico(r.data)
 				setLoading(false)
 			}, [])
-
 	}
 
 	const getHistoricosCondiciones = () => {
@@ -93,7 +94,9 @@ const ApoyoEducativo = props => {
 		setLoading(true)
 		let _options = []
 		const map =
-			(name === 'discapacidades' && discapacidadesHistorico.map(item => item.elementosCatalogosId)) || condicionesHistorico.map(item => item.elementosCatalogosId)
+			(name === 'discapacidades' &&
+				discapacidadesHistorico.map(item => item.elementosCatalogosId)) ||
+			condicionesHistorico.map(item => item.elementosCatalogosId)
 		_options = options.map(elem => {
 			if (map.includes(elem.id)) {
 				return { ...elem, checked: true }
@@ -114,8 +117,11 @@ const ApoyoEducativo = props => {
 			modalOptions.forEach(el => {
 				if (el.checked) options.push(el)
 			})
-			const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${openOptions.type === 'discapacidades' ? 'DiscapacidadesPorUsuario' : 'CondicionesPorUsuario'
-				}/CreateMultiple/${props.identidadId}`
+			const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${
+				openOptions.type === 'discapacidades'
+					? 'DiscapacidadesPorUsuario'
+					: 'CondicionesPorUsuario'
+			}/CreateMultiple/${props.identidadId}`
 			const optionsMap = options.map(d => {
 				return {
 					id: 0,
@@ -156,44 +162,63 @@ const ApoyoEducativo = props => {
 		{ title: 'Apoyos personales' },
 		{ title: 'Apoyos organizativos' }
 	]
-	const deleteCondicion = (id) => {
-		axios.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/${id}`).then(() => {
-			getHistoricosCondiciones()
-			getCondiciones(id)
-		})
+	const deleteCondicion = id => {
+		axios
+			.delete(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/${id}`
+			)
+			.then(() => {
+				getHistoricosCondiciones()
+				getCondiciones(id)
+			})
 	}
-	const deleteDiscapacidad = (id) => {
-		axios.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/${id}`).then(() => {
-		
-			getDiscapacidades(id)
-			getHistoricosDiscapacidades()
-		})
+	const deleteDiscapacidad = id => {
+		axios
+			.delete(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/${id}`
+			)
+			.then(() => {
+				getDiscapacidades(id)
+				getHistoricosDiscapacidades()
+			})
 	}
 	return (
 		<>
 			{loading && <Loader />}
 			<Row>
-				<HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
+				<HeaderTab
+					options={optionsTab}
+					activeTab={activeTab}
+					setActiveTab={setActiveTab}
+				/>
 				<ContentTab activeTab={activeTab} numberId={activeTab}>
 					{activeTab === 0 && (
-						<CondicionDiscapacidad 
+						<CondicionDiscapacidad
 							discapacidadesHistorico={discapacidadesHistorico}
 							delete={deleteDiscapacidad}
 							handleOpenOptions={handleOpenOptions}
 							discapacidades={props.discapacidades}
+							validations={props.validations}
 						/>
 					)}
 					{activeTab === 1 && (
-						<OtraCondicion 
+						<OtraCondicion
 							condicionesHistorico={condicionesHistorico}
 							handleOpenOptions={handleOpenOptions}
 							delete={deleteCondicion}
 							condiciones={props.condiciones}
+							validations={props.validations}
 						/>
 					)}
-					{activeTab === 2 && <ApoyosCurriculares />}
-					{activeTab === 3 && <ApoyosPersonales />}
-					{activeTab === 4 && <ApoyosOrganizativos />}
+					{activeTab === 2 && (
+						<ApoyosCurriculares validations={props.validations} />
+					)}
+					{activeTab === 3 && (
+						<ApoyosPersonales validations={props.validations} />
+					)}
+					{activeTab === 4 && (
+						<ApoyosOrganizativos validations={props.validations} />
+					)}
 				</ContentTab>
 			</Row>
 			<OptionModal
@@ -238,8 +263,8 @@ const ApoyoEducativo = props => {
 											{item.descripcion
 												? item.descripcion
 												: item.detalle
-													? item.detalle
-													: 'Elemento sin detalle actualmente'}
+												? item.detalle
+												: 'Elemento sin detalle actualmente'}
 										</p>
 									</div>
 								</Col>

@@ -49,7 +49,7 @@ const tituloModal = 'Registro de apoyo personal'
 
 const condicionSeRecibeNombre = 'Se recibe'
 
-export const ApoyosPersonales = () => {
+export const ApoyosPersonales = props => {
 	const [loading, setLoading] = useState(true)
 	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
 	const [data, setData] = useState([])
