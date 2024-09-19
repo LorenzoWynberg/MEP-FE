@@ -63,7 +63,7 @@ const TablaMep = props => {
 	const columns = useMemo(() => {
 		return [
 			{
-				Header: 'Dependecia',
+				Header: 'Dependencia',
 				column: 'nombreDependecia',
 				accessor: 'nombreDependecia',
 				label: ''
@@ -99,7 +99,7 @@ const TablaMep = props => {
 				label: ''
 			},
 			{
-				Header: 'Periodo activo',
+				Header: 'Periodo activo (Inicio - Fin)',
 				column: 'periodo',
 				accessor: 'periodo',
 				label: '',
@@ -115,13 +115,6 @@ const TablaMep = props => {
 					)
 				}
 			},
-			{
-				Header: 'Estado',
-				column: 'activoTxt',
-				accessor: 'activoTxt',
-				label: ''
-			},
-
 			{
 				Header: 'Acciones',
 				column: '',
@@ -221,6 +214,7 @@ const TablaMep = props => {
 			</div>
 			<div>
 				<TableReactImplementation
+					placeholderText={props.placeholderText}
 					data={data}
 					handleGetData={() => {}}
 					columns={columns}
@@ -231,6 +225,7 @@ const TablaMep = props => {
 	)
 }
 TablaMep.prototype = {
+	placeholderText: PropTypes.string,
 	data: PropTypes.array,
 	loading: PropTypes.bool,
 	handlePagination: PropTypes.func,
@@ -242,7 +237,8 @@ TablaMep.defaultProps = {
 	loading: false,
 	handlePagination: () => {},
 	handleSearch: () => {},
-	totalRegistros: 0
+	totalRegistros: 0,
+	placeholderText: ''
 }
 
 export default TablaMep

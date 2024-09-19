@@ -9,7 +9,6 @@ import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
 
 function OtraCondicion(props) {
-
 	const columns = useMemo(() => {
 		return [
 			{
@@ -35,13 +34,13 @@ function OtraCondicion(props) {
 				column: 'usuarioRegistro',
 				accessor: 'usuarioRegistro',
 				label: ''
-			}, {
+			},
+			{
 				Header: 'Acciones',
 				column: '',
 				accessor: '',
 				label: '',
 				Cell: ({ _, row, data }) => {
-
 					return (
 						<div
 							style={{
@@ -58,8 +57,8 @@ function OtraCondicion(props) {
 									cursor: 'pointer',
 									color: 'grey'
 								}}
-								color='primary'
-								onClick={() => { 
+								color="primary"
+								onClick={() => {
 									swal({
 										title: 'Eliminar Condición',
 										text: '¿Esta seguro de que desea eliminar la condición?',
@@ -73,12 +72,10 @@ function OtraCondicion(props) {
 												className: 'btn-alert-color'
 											}
 										}
-									}).then(() =>
-										props.delete(row.original.id)
-									)
+									}).then(() => props.delete(row.original.id))
 								}}
 							>
-								<Tooltip title='Eliminar'>
+								<Tooltip title="Eliminar">
 									<IconButton>
 										<IoMdTrash style={{ fontSize: 30 }} />
 									</IconButton>
@@ -93,10 +90,11 @@ function OtraCondicion(props) {
 	return (
 		<>
 			<Row>
-				<Col md='12'>
+				<Col md="12">
 					<TableReactImplementation
 						data={props.condicionesHistorico || []}
 						showAddButton
+						placeholderText="Buscar por nombre"
 						key={props.condicionesHistorico}
 						// avoidSearch
 						onSubmitAddButton={() => {

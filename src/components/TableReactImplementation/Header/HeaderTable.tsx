@@ -4,13 +4,19 @@ import { useTranslation } from 'react-i18next'
 import Search from './Search'
 import CloseIcon from '@mui/icons-material/Close'
 import IconButton from '@mui/material/IconButton'
-import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
+import {
+	Dropdown,
+	DropdownToggle,
+	DropdownMenu,
+	DropdownItem
+} from 'reactstrap'
 
 interface OptionFilter {
 	label: string
 	value: string | number
 }
 interface IProps {
+	placeholderText?: string
 	onSearch: Function
 	onFilter: Function
 	selectedFilter: any
@@ -28,16 +34,21 @@ const HeaderTable: FC<IProps> = props => {
 	}
 	return (
 		<CustomRow>
-			<Search onSearch={onSearch} />
+			<Search onSearch={onSearch} placeholderText={props.placeholderText} />
 			<Dropdown
-				className='btn-search-table-heading'
+				className="btn-search-table-heading"
 				isOpen={dropdownOpen}
 				toggle={() => {
 					toggleDropDown()
 				}}
 			>
-				<DropdownToggleStyled color={`${filterSelected ? 'primary' : 'secondary'} dropdown-toggle-split`}>
-					Filtrar por: {filterSelected?.toLowerCase()} <span className='caret-down' />
+				<DropdownToggleStyled
+					color={`${
+						filterSelected ? 'primary' : 'secondary'
+					} dropdown-toggle-split`}
+				>
+					Filtrar por: {filterSelected?.toLowerCase()}{' '}
+					<span className="caret-down" />
 				</DropdownToggleStyled>
 				<DropdownMenu>
 					{optionsFilter.map((filter, i) => {
@@ -59,14 +70,14 @@ const HeaderTable: FC<IProps> = props => {
 				</DropdownMenu>
 				{filterSelected && (
 					<IconButton
-						aria-label='clear-filter'
-						size='small'
+						aria-label="clear-filter"
+						size="small"
 						onClick={() => {
 							setFilterSelected(null)
 							onFilter(1)
 						}}
 					>
-						<CloseIcon fontSize='inherit' />
+						<CloseIcon fontSize="inherit" />
 					</IconButton>
 				)}
 			</Dropdown>

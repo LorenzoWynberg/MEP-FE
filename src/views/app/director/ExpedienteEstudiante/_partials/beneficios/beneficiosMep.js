@@ -341,12 +341,13 @@ const BeneficiosMEP = props => {
 					<Grid item xs={12} className={classes.control}>
 						<FormGroup>
 							<Label for="dependencia">
-								Dependecia <RequiredSpan />{' '}
+								Dependencia <RequiredSpan />{' '}
 							</Label>
 							<Select
 								name="dependencia"
 								className="react-select"
 								classNamePrefix="react-select"
+								placeholder="Seleccione una dependencia"
 								value={isEmpty(dependencia) ? '' : dependencia}
 								options={dependencias.map(item => ({
 									...item,
@@ -443,7 +444,11 @@ const BeneficiosMEP = props => {
 								</Label>
 								<Input
 									type="date"
-									min={moment().startOf('year').format('YYYY-MM-DD')}
+									min={moment()
+										.subtract(1, 'year')
+										.month(5)
+										.date(1)
+										.format('YYYY-MM-DD')}
 									max={moment().format('YYYY-MM-DD')}
 									name="dateFrom"
 									style={{
@@ -474,7 +479,11 @@ const BeneficiosMEP = props => {
 								<Label for="dateTo">Fecha final</Label>
 								<Input
 									min={moment().startOf('year').format('YYYY-MM-DD')}
-									max={moment().format('YYYY-MM-DD')}
+									max={moment()
+										.add(1, 'year')
+										.month(6)
+										.date(1)
+										.format('YYYY-MM-DD')}
 									type="date"
 									name="dateTo"
 									style={{
@@ -499,6 +508,7 @@ const BeneficiosMEP = props => {
 			<div>
 				<h5>Por parte del MEP</h5>
 				<Tabla
+					placeholder="Buscar por nombre"
 					beneficios={state.beneficios}
 					handlePagination={handlePagination}
 					toggleSnackbar={toggleSnackbar}

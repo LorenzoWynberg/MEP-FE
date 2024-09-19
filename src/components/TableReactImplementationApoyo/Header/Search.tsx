@@ -7,28 +7,21 @@ import { useTranslation } from 'react-i18next'
 interface IProps {
 	onSearch: Function
 	yearList?: []
+	placeholderText?: string
 }
 const Search: FC<IProps> = props => {
 	const { t } = useTranslation()
-
 	const { onSearch } = props
 	const [text, setText] = React.useState<string>('')
-
-	/* const yearList = [
-		{ id: 1, name: '2022' },
-		{ id: 2, name: '2023' },
-		{ id: 3, name: '2024' }
-	] */
-
 	const handleChangeSelectAll = e => {}
 
 	return (
-		<SearchContainer className='mr-4'>
+		<SearchContainer className="mr-4">
 			<InputSearchDiv>
 				<Input
-					type='text'
-					name='keyword'
-					id='search'
+					type="text"
+					name="keyword"
+					id="search"
 					value={text}
 					onKeyPress={e => {
 						if (e.key === 'Enter') {
@@ -38,14 +31,17 @@ const Search: FC<IProps> = props => {
 					onChange={e => {
 						setText(e.target.value)
 					}}
-					placeholder={t('place_holder>general>buscar_en_tabla', 'Buscar en tabla')}
+					placeholder={
+						props.placeholderText ??
+						t('place_holder>general>buscar_en_tabla', 'Buscar en tabla')
+					}
 				/>
-				<StyledInputGroupAddon style={{ zIndex: 2 }} addonType='append'>
+				<StyledInputGroupAddon style={{ zIndex: 2 }} addonType="append">
 					<Button
-						color='primary'
-						className='buscador-table-btn-search'
+						color="primary"
+						className="buscador-table-btn-search"
 						onClick={() => onSearch(text)}
-						id='buttonSearchTable'
+						id="buttonSearchTable"
 					>
 						{t('general>buscar', 'Buscar')}
 					</Button>
@@ -60,9 +56,9 @@ const Search: FC<IProps> = props => {
 								marginLeft: 10
 							}}
 							onChange={e => onSearch(e.target.value)}
-							className='custom-checkbox mb-0 d-inline-block'
-							type='select'
-							id='checkAll'
+							className="custom-checkbox mb-0 d-inline-block"
+							type="select"
+							id="checkAll"
 							onClick={e => {
 								handleChangeSelectAll(!e.target.checked)
 							}}
@@ -74,7 +70,7 @@ const Search: FC<IProps> = props => {
 						</CustomInput>
 					)}
 				</StyledInputGroupAddon>
-				<StyledInputGroupAddon addonType='append'></StyledInputGroupAddon>
+				<StyledInputGroupAddon addonType="append"></StyledInputGroupAddon>
 			</InputSearchDiv>
 		</SearchContainer>
 	)

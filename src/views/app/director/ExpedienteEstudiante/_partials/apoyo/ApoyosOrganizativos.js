@@ -1,7 +1,15 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { Row, Col, Form, FormGroup, Label, Input, CustomInput } from 'reactstrap'
+import {
+	Row,
+	Col,
+	Form,
+	FormGroup,
+	Label,
+	Input,
+	CustomInput
+} from 'reactstrap'
 import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
 import useNotification from 'Hooks/useNotification'
 import styled from 'styled-components'
@@ -14,7 +22,13 @@ import {
 	deleteApoyo,
 	editApoyo
 } from 'Redux/apoyos/actions'
-import { FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from '@material-ui/core'
+import {
+	FormControl,
+	FormControlLabel,
+	FormLabel,
+	Radio,
+	RadioGroup
+} from '@material-ui/core'
 import styles from './apoyos.css'
 import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
@@ -97,7 +111,9 @@ export const ApoyosOrganizativos = () => {
 
 		const condicionesApoyo = state.selects.tipoCondicionApoyo
 
-		const condicionSeRecibe = condicionesApoyo.find(o => o.nombre === condicionSeRecibeNombre)
+		const condicionSeRecibe = condicionesApoyo.find(
+			o => o.nombre === condicionSeRecibeNombre
+		)
 
 		if (value === condicionSeRecibe.id) {
 			setShowFechaAprobacion(true)
@@ -140,7 +156,9 @@ export const ApoyosOrganizativos = () => {
 				setLoading(true)
 				await actions.getTiposApoyos()
 
-				const tiposDeApoyo = state.apoyos.tipos.filter(tipo => tipo.categoriaApoyoId === categoria.id)
+				const tiposDeApoyo = state.apoyos.tipos.filter(
+					tipo => tipo.categoriaApoyoId === categoria.id
+				)
 
 				setTiposApoyo(tiposDeApoyo)
 
@@ -187,7 +205,9 @@ export const ApoyosOrganizativos = () => {
 		setLoading(true)
 		try {
 			axios
-				.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`)
+				.delete(
+					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`
+				)
 				.then(response => {
 					axios
 						.get(
@@ -230,7 +250,11 @@ export const ApoyosOrganizativos = () => {
 		setEditable(true)
 		setShowNuevoApoyoModal(true)
 
-		if (!isNull(row.fechaInicio) && !isUndefined(row.fechaInicio) && !isEmpty(row.fechaInicio)) {
+		if (
+			!isNull(row.fechaInicio) &&
+			!isUndefined(row.fechaInicio) &&
+			!isEmpty(row.fechaInicio)
+		) {
 			setShowFechaAprobacion(true)
 		}
 
@@ -310,7 +334,7 @@ export const ApoyosOrganizativos = () => {
 									onEditarEvent(row.original)
 								}}
 							>
-								<Tooltip title='Actualizar'>
+								<Tooltip title="Actualizar">
 									<IconButton>
 										<HiPencil style={{ fontSize: 30 }} />
 									</IconButton>
@@ -344,7 +368,7 @@ export const ApoyosOrganizativos = () => {
 									})
 								}}
 							>
-								<Tooltip title='Eliminar'>
+								<Tooltip title="Eliminar">
 									<IconButton>
 										<IoMdTrash style={{ fontSize: 30 }} />
 									</IconButton>
@@ -400,7 +424,9 @@ export const ApoyosOrganizativos = () => {
 		let _data = {
 			//
 			detalle: formData.detalleApoyo,
-			fechaInicio: formData.fechaDeAprobacion ? formData.fechaDeAprobacion : null,
+			fechaInicio: formData.fechaDeAprobacion
+				? formData.fechaDeAprobacion
+				: null,
 			fechaFin: null,
 			dependenciasApoyosId: null,
 			sb_TiposDeApoyoId: parseInt(formData.tipoDeApoyo),
@@ -469,7 +495,12 @@ export const ApoyosOrganizativos = () => {
 		}
 
 		if (create) {
-			const response = await actions.addApoyo(_data, categoria, categoria.addDispatchName, 1)
+			const response = await actions.addApoyo(
+				_data,
+				categoria,
+				categoria.addDispatchName,
+				1
+			)
 			if (response.error) {
 				setSnackbarContent({
 					msg: 'Hubo un error al crear el registro',
@@ -484,7 +515,12 @@ export const ApoyosOrganizativos = () => {
 				handleClick()
 			}
 		} else {
-			const response = await actions.editApoyo(_data, categoria, categoria.addDispatchName, 1)
+			const response = await actions.editApoyo(
+				_data,
+				categoria,
+				categoria.addDispatchName,
+				1
+			)
 			if (response.error) {
 				setSnackbarContent({
 					msg: 'Hubo un error al editar',
@@ -532,7 +568,8 @@ export const ApoyosOrganizativos = () => {
 					!data.some(
 						apoyoEstudiante =>
 							apoyoEstudiante.sb_TiposDeApoyoId === tipoApoyo.id &&
-							new Date(apoyoEstudiante.fechaInsercion).getFullYear() === parseInt(currentYear)
+							new Date(apoyoEstudiante.fechaInsercion).getFullYear() ===
+								parseInt(currentYear)
 					)
 			)
 		}
@@ -555,8 +592,9 @@ export const ApoyosOrganizativos = () => {
 			{loading && <Loader />}
 			{snackbar(snackbarContent.type, snackbarContent.msg)}
 			<TableReactImplementationApoyo
+				placeholderText="Buscar por nombre"
 				showAddButton
-				msjButton='Agregar'
+				msjButton="Agregar"
 				onSubmitAddButton={() => onAgregarEvent()}
 				data={data || []}
 				columns={columns}
@@ -570,8 +608,8 @@ export const ApoyosOrganizativos = () => {
 				<div>
 					<FormControl>
 						<RadioGroup
-							aria-labelledby='demo-radio-buttons-group-label'
-							name='radio-buttons-group'
+							aria-labelledby="demo-radio-buttons-group-label"
+							name="radio-buttons-group"
 							value={radioValue}
 						>
 							{tiposApoyoFilter.map((item, i) => (
@@ -612,14 +650,14 @@ export const ApoyosOrganizativos = () => {
 				<Form onSubmit={onConfirmSaveApoyo}>
 					<Row>
 						<Col md={6}>
-							<Label for='tipoDeApoyo'>
+							<Label for="tipoDeApoyo">
 								Tipo de apoyo <RequiredSpan />{' '}
 							</Label>
 							<StyledInput
-								id='tipoDeApoyo'
-								name='tipoDeApoyo'
-								type='text'
-								placeholder='Seleccionar'
+								id="tipoDeApoyo"
+								name="tipoDeApoyo"
+								type="text"
+								placeholder="Seleccionar"
 								onClick={() => {
 									setShowModalTiposApoyo(true)
 								}}
@@ -628,18 +666,20 @@ export const ApoyosOrganizativos = () => {
 						</Col>
 						<Col md={6}>
 							<FormGroup>
-								<Label for='condicionDeApoyo'>
+								<Label for="condicionDeApoyo">
 									Condición del apoyo <RequiredSpan />{' '}
 								</Label>
 								<StyledInput
-									id='condicionApoyo'
-									name='condicionApoyo'
-									type='select'
+									id="condicionApoyo"
+									name="condicionApoyo"
+									type="select"
 									onChange={handleFechaAprobacionOnChange}
-									placeholder='Seleccionar'
+									placeholder="Seleccionar"
 									value={formData.condicionApoyo}
 								>
-									<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
+									<option value={null}>
+										{t('general>seleccionar', 'Seleccionar')}
+									</option>
 									{state.selects.tipoCondicionApoyo.map(tipo => {
 										return <option value={tipo.id}>{tipo.nombre}</option>
 									})}
@@ -651,14 +691,14 @@ export const ApoyosOrganizativos = () => {
 						<Row>
 							<Col md={6}>
 								<FormGroup>
-									<Label for='fechaDeAprobacion'>
+									<Label for="fechaDeAprobacion">
 										Fecha de aprobación <RequiredSpan />{' '}
 									</Label>
 									<Input
-										type='date'
+										type="date"
 										min={moment().startOf('year').format('YYYY-MM-DD')}
 										max={moment().format('YYYY-MM-DD')}
-										name='fechaDeAprobacion'
+										name="fechaDeAprobacion"
 										style={{
 											paddingRight: '12%'
 										}}
@@ -672,12 +712,14 @@ export const ApoyosOrganizativos = () => {
 					<Row>
 						<Col md={12}>
 							<FormGroup>
-								<Label for='detalleDelApoyo'>Detalle del apoyo (opcional)</Label>
+								<Label for="detalleDelApoyo">
+									Detalle del apoyo (opcional)
+								</Label>
 								<Input
-									type='textarea'
-									id='detalleApoyo'
-									name='detalleApoyo'
-									rows='5'
+									type="textarea"
+									id="detalleApoyo"
+									name="detalleApoyo"
+									rows="5"
 									onChange={handleFormDataChange}
 									value={formData.detalleApoyo}
 								/>
