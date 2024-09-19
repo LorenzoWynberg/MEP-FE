@@ -119,9 +119,9 @@ const InformacionResidenciaSaber = (props) => {
 		if (currentPoblado?.label && search?.searchTerm && !location?.latitude) {
 			handleSearchBySelects(currentPoblado, 'poblado')
 		}
-	}, [currentPoblado, search,location])
+	}, [currentPoblado, search, location])
 	const loadData = useCallback(async () => {
-		if (ubicacion.provincia  ) {
+		if (ubicacion.provincia) {
 			const _direccionArray = [
 				ubicacion.provincia,
 				ubicacion.canton,
@@ -150,7 +150,7 @@ const InformacionResidenciaSaber = (props) => {
 				longitude: location.longitude
 			})
 		}
-	}, [ubicacion ])
+	}, [ubicacion])
 	useEffect(() => {
 
 		loadData()
@@ -187,7 +187,7 @@ const InformacionResidenciaSaber = (props) => {
 			}
 			setEditDirection(item)
 			setDirection(item.direccionExacta)
-		    setLocation({
+			setLocation({
 				latitude: item.latitud,
 				longitude: item.longitud
 			})
@@ -196,7 +196,7 @@ const InformacionResidenciaSaber = (props) => {
 			setLoading(false)
 			setInitiaState()
 		}
-	}, [props?.identification.data, editable ])
+	}, [props?.identification.data, editable])
 	//this effects parse the data when comes from the backend
 	useEffect(() => {
 
@@ -551,12 +551,38 @@ const InformacionResidenciaSaber = (props) => {
 									>
 										<h4>Información de residencia</h4>
 									</Grid>
+									
 									<Grid
 										item
 										xs={12}
 										md={6}
 										className={classes.control}
 									>
+										{props.temporal && ( 
+											<FormGroup>
+												<Label for="razon">
+													Razón <RequiredSpan />
+												</Label>
+												<Input
+													type="textarea"
+													style={{
+														resize: 'none',
+														height: 80
+													}}
+													name="razon"
+													id="razon"
+													placeholder="Razón"
+													disabled={!editable}
+													onChange={(e) => {
+														handleChange(e)
+													}}
+													value={razon}
+												/>
+												<FormSpan>
+													{errors['razon']}
+												</FormSpan>
+											</FormGroup> 
+									)}
 										<FormGroup>
 											<Label for="provincia">
 												Provincia <RequiredSpan />
@@ -854,31 +880,7 @@ const InformacionResidenciaSaber = (props) => {
 												</FormGroup>
 											</Grid>
 										</Grid>
-										{props.temporal && (
-											<FormGroup>
-												<Label for="razon">
-													Razón <RequiredSpan />
-												</Label>
-												<Input
-													type="textarea"
-													style={{
-														resize: 'none',
-														height: 80
-													}}
-													name="razon"
-													id="razon"
-													placeholder="Razón"
-													disabled={!editable}
-													onChange={(e) => {
-														handleChange(e)
-													}}
-													value={razon}
-												/>
-												<FormSpan>
-													{errors['razon']}
-												</FormSpan>
-											</FormGroup>
-										)}
+
 									</Grid>
 								</>
 							)}
@@ -893,7 +895,7 @@ const InformacionResidenciaSaber = (props) => {
 									setLocation={setLocation}
 									setSearch={setSearch}
 									setUbicacion={setUbicacion}
-									editable={editable} 
+									editable={editable}
 								/>
 							</MapContainer>
 
