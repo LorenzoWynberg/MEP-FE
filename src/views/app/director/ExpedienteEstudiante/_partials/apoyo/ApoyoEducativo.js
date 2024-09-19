@@ -11,6 +11,7 @@ import OtraCondicion from './OtraCondicion'
 import axios from 'axios'
 import { ApoyosCurriculares } from './ApoyosCurriculares'
 import { ApoyosPersonales } from './ApoyosPersonales'
+import { AltoPotencial } from './AltoPotencial'
 import { ApoyosOrganizativos } from './ApoyosOrganizativos'
 import OptionModal from '../../../../../../components/Modal/OptionModal'
 import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
@@ -150,11 +151,12 @@ const ApoyoEducativo = props => {
 	}
 
 	const optionsTab = [
-		{ title: 'Condición de discapacidad' },
-		{ title: 'Otras condiciones' },
 		{ title: 'Apoyos curriculares' },
 		{ title: 'Apoyos personales' },
-		{ title: 'Apoyos organizativos' }
+		{ title: 'Apoyos organizativos' },
+		{ title: 'Alto Potencial' },
+		{ title: 'Condición de discapacidad' },
+		{ title: 'Otras condiciones' },
 	]
 	const deleteCondicion = (id) => {
 		axios.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/${id}`).then(() => {
@@ -164,7 +166,7 @@ const ApoyoEducativo = props => {
 	}
 	const deleteDiscapacidad = (id) => {
 		axios.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/${id}`).then(() => {
-		
+
 			getDiscapacidades(id)
 			getHistoricosDiscapacidades()
 		})
@@ -175,25 +177,26 @@ const ApoyoEducativo = props => {
 			<Row>
 				<HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
 				<ContentTab activeTab={activeTab} numberId={activeTab}>
-					{activeTab === 0 && (
-						<CondicionDiscapacidad 
-							discapacidadesHistorico={discapacidadesHistorico}
-							delete={deleteDiscapacidad}
-							handleOpenOptions={handleOpenOptions}
-							discapacidades={props.discapacidades}
-						/>
+					{activeTab === 0 && (<ApoyosCurriculares />
+
 					)}
-					{activeTab === 1 && (
-						<OtraCondicion 
-							condicionesHistorico={condicionesHistorico}
-							handleOpenOptions={handleOpenOptions}
-							delete={deleteCondicion}
-							condiciones={props.condiciones}
-						/>
+					{activeTab === 1 && (<ApoyosPersonales />
+
 					)}
-					{activeTab === 2 && <ApoyosCurriculares />}
-					{activeTab === 3 && <ApoyosPersonales />}
-					{activeTab === 4 && <ApoyosOrganizativos />}
+					{activeTab === 2 && <ApoyosOrganizativos />}
+					{activeTab === 3 && <AltoPotencial />}
+					{activeTab === 4 && <CondicionDiscapacidad
+						discapacidadesHistorico={discapacidadesHistorico}
+						delete={deleteDiscapacidad}
+						handleOpenOptions={handleOpenOptions}
+						discapacidades={props.discapacidades}
+					/>}
+					{activeTab === 5 && <OtraCondicion
+						condicionesHistorico={condicionesHistorico}
+						handleOpenOptions={handleOpenOptions}
+						delete={deleteCondicion}
+						condiciones={props.condiciones}
+					/>}
 				</ContentTab>
 			</Row>
 			<OptionModal
@@ -201,13 +204,13 @@ const ApoyoEducativo = props => {
 				titleHeader={
 					openOptions.type === 'discapacidades'
 						? t(
-								'estudiantes>expediente>apoyos_edu>modal>tipos',
-								'Tipos de discapacidades'
-						  )
+							'estudiantes>expediente>apoyos_edu>modal>tipos',
+							'Tipos de discapacidades'
+						)
 						: t(
-								'estudiantes>expediente>apoyos_edu>modal>otro',
-								'Otros tipos de condiciones'
-						  )
+							'estudiantes>expediente>apoyos_edu>modal>otro',
+							'Otros tipos de condiciones'
+						)
 				}
 				onConfirm={() => toggleModal(true)}
 				onCancel={() => toggleModal(false)}
