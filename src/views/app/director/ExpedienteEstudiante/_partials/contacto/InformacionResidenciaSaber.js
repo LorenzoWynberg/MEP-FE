@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
@@ -35,6 +35,8 @@ import Loader from '../../../../../../components/Loader'
 import { EditButton } from '../../../../../../components/EditButton'
 import RequiredLabel from '../../../../../../components/common/RequeredLabel'
 import { useForm } from 'react-hook-form'
+import _ from 'lodash'
+import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -53,11 +55,11 @@ const InformacionResidenciaSaber = (props) => {
 	const { handleSubmit } = useForm()
 	const initialSelectOption = {
 		value: null,
-		label: 'seleccionar'
+		label: 'Seleccionar'
 	}
 	const initialLocationCoordinates = {
-		latitude: 'No seleccionado',
-		longitude: 'No seleccionado'
+		latitude: null,
+		longitude: null
 	}
 	const [currentProvince, setCurrentProvince] = useState(initialSelectOption)
 	const [currentCanton, setCurrentCanton] = useState(initialSelectOption)
@@ -73,7 +75,7 @@ const InformacionResidenciaSaber = (props) => {
 	const [razon, setRazon] = useState('')
 	const [snackbarMsg, setSnackbarMsg] = useState('')
 	const [snackbarVariant, setSnackbarVariant] = useState('')
-	const [location, setLocation] = useState(initialLocationCoordinates)
+	const [location, setLocation] = useState({ latitude: 0, longitude: 0 })
 	const [editDirection, setEditDirection] = useState({})
 	const [editable, setEditable] = useState(false)
 	const [loading, setLoading] = useState(true)
@@ -88,6 +90,13 @@ const InformacionResidenciaSaber = (props) => {
 		setSnackbarVariant('error')
 		handleClick()
 	}
+	const shiftedTerritories = [...props.selects.territoriosIndigenas]
+	shiftedTerritories.forEach(function (item, i) {
+		if (item.id === 144) {
+			shiftedTerritories.splice(i, 1);
+			shiftedTerritories.unshift(item);
+		}
+	});
 	const toggleModal = () => {
 		setOpenViewMap(!openViewMap)
 	}
@@ -99,32 +108,72 @@ const InformacionResidenciaSaber = (props) => {
 		setCurrentPoblado(initialSelectOption)
 		setCurrentTerritory(initialSelectOption)
 		setDirection('')
-		setLocation(initialLocationCoordinates)
+		setLocation({ latitude: null, longitude: null })
 	}
 
 	useEffect(() => {
 		props.getProvincias()
 		props.getCatalogs(catalogsEnumObj.TERRITORIOINDIGENA?.id)
 	}, [])
-
 	useEffect(() => {
-		const loadData = async () => {
-			if (ubicacion.provincia && editable) {
-				//[provincia, canton, distrito, poblado, ...]
-				const _direccionArray = [
-					ubicacion.provincia,
-					ubicacion.canton,
-					ubicacion.distrito
-				]
-				setDireccionArray(_direccionArray)
-				setLoadLocation(true)
-				const _province = props.provinces.provincias.find(
-					(provincia) =>
-						{
-							const stringCompare = provincia?.nombre.normalize("NFD").replace(/\p{Diacritic}/gu, "")
-							return stringCompare == _direccionArray[0].trim()
-						}
-				)
+		if (currentPoblado?.label && search?.searchTerm && !location?.latitude) {
+			handleSearchBySelects(currentPoblado, 'poblado')
+		}
+	}, [currentPoblado, search, location])
+	const loadData = useCallback(async () => {
+		if (ubicacion.provincia) {
+			const _direccionArray = [
+				ubicacion.provincia,
+				ubicacion.canton,
+				ubicacion.distrito
+			]
+			setDireccionArray(_direccionArray)
+			setLoadLocation(true)
+			const _province = props.provinces.provincias.find(
+				(provincia) => {
+					const stringCompare = provincia?.nombre.normalize("NFD").replace(/\p{Diacritic}/gu, "")
+					return stringCompare == _direccionArray[0].trim()
+				}
+			)
+			const provinceResponse = await props.getCantonesByProvincia(
+				_province?.id
+			)
+			if (provinceResponse.error) {
+				return handleError()
+			}
+			setCurrentProvince({
+				label: _province?.nombre,
+				value: _province?.id
+			})
+			setLocation({
+				latitude: location.latitude,
+				longitude: location.longitude
+			})
+		}
+	}, [ubicacion])
+	useEffect(() => {
+
+		loadData()
+	}, [ubicacion])
+	const loadDataBac = useCallback(async () => {
+		const item = props?.identification.data.direcciones.find(
+			(item) => item.temporal === props.temporal
+		)
+		if (item) {
+			//[provincia, canton, distrito, poblado, ...]
+			const _direccionArray = [
+				item.provinciasId,
+				item.cantonesId,
+				item.distritosId,
+				item.pobladosId
+			]
+
+			setDireccionArray(_direccionArray)
+			setLoadLocation(true)
+			const _province = props.provinces.provincias.find(
+				(item) => item?.id == _direccionArray[0]
+			)
+			if (_province) {
 				const provinceResponse = await props.getCantonesByProvincia(
 					_province?.id
 				)
@@ -135,64 +184,27 @@ const InformacionResidenciaSaber = (props) => {
 					label: _province?.nombre,
 					value: _province?.id
 				})
-				setLocation({
-					latitude: location.latitude,
-					longitude: location.longitude
-				})
 			}
+			setEditDirection(item)
+			setDirection(item.direccionExacta)
+			setLocation({
+				latitude: item.latitud,
+				longitude: item.longitud
+			})
+			setRazon(item.razon)
+		} else {
+			setLoading(false)
+			setInitiaState()
 		}
-		loadData()
-	}, [ubicacion])
-
+	}, [props?.identification.data, editable])
 	//this effects parse the data when comes from the backend
 	useEffect(() => {
-		const loadData = async () => {
-			const item = props?.identification.data.direcciones.find(
-				(item) => item.temporal === props.temporal
-			)
-			if (item) {
-				//[provincia, canton, distrito, poblado, ...]
-				const _direccionArray = [
-					item.provinciasId,
-					item.cantonesId,
-					item.distritosId,
-					item.pobladoId
-				]
 
-				setDireccionArray(_direccionArray)
-				setLoadLocation(true)
-				const _province = props.provinces.provincias.find(
-					(item) => item?.id == _direccionArray[0]
-				)
-				if (_province) {
-					const provinceResponse = await props.getCantonesByProvincia(
-						_province?.id
-					)
-					if (provinceResponse.error) {
-						return handleError()
-					}
-					setCurrentProvince({
-						label: _province?.nombre,
-						value: _province?.id
-					})
-				}
-				setEditDirection(item)
-				setDirection(item.direccionExacta)
-				setLocation({
-					latitude: item.latitud,
-					longitude: item.longitud
-				})
-				setRazon(item.razon)
-			} else {
-				setLoading(false)
-				setInitiaState()
-			}
-		}
 		if (
 			props?.identification.data.direcciones &&
 			props?.identification.data.direcciones.length > 0
 		) {
-			loadData()
+			loadDataBac()
 		} else {
 			setLoading(false)
 			setInitiaState()
@@ -200,7 +212,7 @@ const InformacionResidenciaSaber = (props) => {
 	}, [props?.identification.data, editable])
 
 	useEffect(() => {
-		const loadData = async () => {
+		const loadDataC = async () => {
 			const _canton = props.cantones.cantones.find((item) => {
 				if (isNaN(direccionArray[1])) {
 					const stringCompare = item?.nombre.normalize("NFD").replace(/\p{Diacritic}/gu, "")
@@ -220,12 +232,12 @@ const InformacionResidenciaSaber = (props) => {
 			}
 		}
 		if (loadLocation && props.cantones.cantones.length > 0) {
-			loadData()
+			loadDataC()
 		}
 	}, [props.cantones.cantones])
 
 	useEffect(() => {
-		const loadData = async () => {
+		const loadData2 = async () => {
 			const _distrito = props.distritos.distritos.find((item) => {
 				if (isNaN(direccionArray[2])) {
 					const stringCompare = item?.nombre.normalize("NFD").replace(/\p{Diacritic}/gu, "")
@@ -248,12 +260,12 @@ const InformacionResidenciaSaber = (props) => {
 			}
 		}
 		if (loadLocation && props.distritos.distritos.length > 1) {
-			loadData()
+			loadData2()
 		}
 	}, [props.distritos.distritos])
 
 	useEffect(() => {
-		const loadData = async () => {
+		const loadData3 = async () => {
 			if (direccionArray[3]) {
 				const _poblado = props.poblados.poblados.find((item) => {
 					if (isNaN(direccionArray[3])) {
@@ -270,16 +282,15 @@ const InformacionResidenciaSaber = (props) => {
 			setLoadLocation(false)
 		}
 		if (loadLocation && props.poblados.poblados.length > 1) {
-			loadData()
+			loadData3()
 			setLoading(false)
 		}
 	}, [props.poblados.poblados])
 
 	useEffect(() => {
+
 		if (
-			location.latitude !== 'No seleccionado' &&
-			location.longitude !== 'No seleccionado' &&
-			search
+			search && location.latitude !== '' && location.longitude !== ''
 		) {
 			search.searchTerm = 'CRI'
 			search
@@ -292,7 +303,7 @@ const InformacionResidenciaSaber = (props) => {
 							if (
 								!(
 									firstResultArray[
-										firstResultArray.length - 1
+									firstResultArray.length - 1
 									] === ' CRI'
 								)
 							) {
@@ -338,6 +349,7 @@ const InformacionResidenciaSaber = (props) => {
 	}
 
 	const handleSearchBySelects = (data, name) => {
+
 		if (search) {
 			search.clear()
 		}
@@ -386,28 +398,22 @@ const InformacionResidenciaSaber = (props) => {
 		if (!currentPoblado.value) {
 			_errors['poblado'] = 'Debe tener un poblado seleccionado'
 		}
-		if (!currentPoblado.direccionExacta) {
+		if (!direction) {
 			_errors['direccionExacta'] = 'Debe tener una dirección'
 		}
 		if (props.temporal && !data.razon) {
 			_errors['razon'] =
 				'Debe tener una razón para su residencia temporal'
 		}
-		if (
-			data.latitud === 'No seleccionado' ||
-			data.longitud === 'No seleccionado'
-		) {
-			_errors['location'] =
-				'Debe seleccionar coordenadas para su ubicación'
-		}
+
 
 		let error = _errors['poblado']
 			? true
 			: _errors['razon']
-			? true
-			: _errors['location']
-			? true
-			: false
+				? true
+				: _errors['direccionExacta']
+					? true
+					: false
 		setErrors(_errors)
 
 		if (error) {
@@ -427,6 +433,7 @@ const InformacionResidenciaSaber = (props) => {
 				latitud: location.latitude,
 				longitud: location.longitude,
 				pobladoId: currentPoblado.value,
+				pobladosId: currentPoblado.value,
 				cantonesId: currentCanton.value,
 				provinciasId: currentProvince.value,
 				distritosId: currentDistrito.value,
@@ -470,6 +477,7 @@ const InformacionResidenciaSaber = (props) => {
 				latitud: location.latitude,
 				longitud: location.longitude,
 				pobladoId: currentPoblado.value,
+				pobladosId: currentPoblado.value,
 				cantonesId: currentCanton.value,
 				provinciasId: currentProvince.value,
 				distritosId: currentDistrito.value,
@@ -510,6 +518,7 @@ const InformacionResidenciaSaber = (props) => {
 	}
 
 	const setLocationIfEditable = (value) => {
+
 		if (editable) {
 			setLocation(value)
 		}
@@ -542,16 +551,42 @@ const InformacionResidenciaSaber = (props) => {
 									>
 										<h4>Información de residencia</h4>
 									</Grid>
+									
 									<Grid
 										item
 										xs={12}
 										md={6}
 										className={classes.control}
 									>
+										{props.temporal && ( 
+											<FormGroup>
+												<Label for="razon">
+													Razón <RequiredSpan />
+												</Label>
+												<Input
+													type="textarea"
+													style={{
+														resize: 'none',
+														height: 80
+													}}
+													name="razon"
+													id="razon"
+													placeholder="Razón"
+													disabled={!editable}
+													onChange={(e) => {
+														handleChange(e)
+													}}
+													value={razon}
+												/>
+												<FormSpan>
+													{errors['razon']}
+												</FormSpan>
+											</FormGroup> 
+									)}
 										<FormGroup>
-											<RequiredLabel for="provincia">
-												Provincia
-											</RequiredLabel>
+											<Label for="provincia">
+												Provincia <RequiredSpan />
+											</Label>
 											<Select
 												components={{
 													Input: CustomSelectInput
@@ -590,9 +625,9 @@ const InformacionResidenciaSaber = (props) => {
 											/>
 										</FormGroup>
 										<FormGroup>
-											<RequiredLabel for="canton">
-												Cantón
-											</RequiredLabel>
+											<Label for="canton">
+												Cantón <RequiredSpan />
+											</Label>
 											<Select
 												components={{
 													Input: CustomSelectInput,
@@ -638,9 +673,9 @@ const InformacionResidenciaSaber = (props) => {
 											/>
 										</FormGroup>
 										<FormGroup>
-											<RequiredLabel for="distrito">
-												Distrito
-											</RequiredLabel>
+											<Label for="distrito">
+												Distrito <RequiredSpan />
+											</Label>
 											<Select
 												components={{
 													Input: CustomSelectInput,
@@ -681,11 +716,12 @@ const InformacionResidenciaSaber = (props) => {
 													})
 												)}
 											/>
+
 										</FormGroup>
 										<FormGroup>
-											<RequiredLabel for="poblado">
-												Poblado
-											</RequiredLabel>
+											<Label for="poblado">
+												Poblado <RequiredSpan />
+											</Label>
 											<Select
 												components={{
 													Input: CustomSelectInput,
@@ -725,9 +761,9 @@ const InformacionResidenciaSaber = (props) => {
 											</FormSpan>
 										</FormGroup>
 										<FormGroup>
-											<RequiredLabel for="dirExacta">
-												Dirección exacta
-											</RequiredLabel>
+											<Label for="dirExacta">
+												Dirección exacta <RequiredSpan />
+											</Label>
 											<Input
 												type="textarea"
 												style={{
@@ -767,7 +803,13 @@ const InformacionResidenciaSaber = (props) => {
 												id="indigena"
 												isDisabled={!editable}
 												value={currentTerritory}
-												options={props.selects.territoriosIndigenas.map(
+												options={shiftedTerritories.sort((a, b) => {
+													if (a.id < b.id)
+														return -1;
+													if (a.id > b.id)
+														return 1;
+													return 0;
+												}).map(
 													(item) => ({
 														...item,
 														label: item?.nombre,
@@ -795,14 +837,18 @@ const InformacionResidenciaSaber = (props) => {
 												style={{ paddingRight: 10 }}
 											>
 												<FormGroup>
-													<RequiredLabel for="latitud">
+													<Label for="latitud">
 														Latitud
-													</RequiredLabel>
+													</Label>
 													<Input
 														type="text"
 														name="latitud"
 														id="latitud"
-														disabled
+														onChange={(e) => {
+															const locationActual = { ...location, latitude: e.target.value }
+															_.debounce(setLocationIfEditable(locationActual), 1500)
+														}}
+														disabled={!editable}
 														value={
 															location.latitude
 														}
@@ -815,14 +861,18 @@ const InformacionResidenciaSaber = (props) => {
 												style={{ paddingLeft: 10 }}
 											>
 												<FormGroup>
-													<RequiredLabel for="longitud">
+													<Label for="longitud">
 														Longitud
-													</RequiredLabel>
+													</Label>
 													<Input
 														type="text"
 														name="longitud"
 														id="longitud"
-														disabled
+														onChange={(e) => {
+															const locationActual = { ...location, longitude: e.target.value }
+															_.debounce(setLocationIfEditable(locationActual), 1500)
+														}}
+														disabled={!editable}
 														value={
 															location.longitude
 														}
@@ -830,31 +880,7 @@ const InformacionResidenciaSaber = (props) => {
 												</FormGroup>
 											</Grid>
 										</Grid>
-										{props.temporal && (
-											<FormGroup>
-												<RequiredLabel for="razon">
-													Razón
-												</RequiredLabel>
-												<Input
-													type="textarea"
-													style={{
-														resize: 'none',
-														height: 80
-													}}
-													name="razon"
-													id="razon"
-													placeholder="Razón"
-													disabled={!editable}
-													onChange={(e) => {
-														handleChange(e)
-													}}
-													value={razon}
-												/>
-												<FormSpan>
-													{errors['razon']}
-												</FormSpan>
-											</FormGroup>
-										)}
+
 									</Grid>
 								</>
 							)}
@@ -866,25 +892,13 @@ const InformacionResidenciaSaber = (props) => {
 								className={classes.control}
 							>
 								<WebMapView
-									setLocation={setLocationIfEditable}
+									setLocation={setLocation}
 									setSearch={setSearch}
 									setUbicacion={setUbicacion}
 									editable={editable}
 								/>
 							</MapContainer>
 
-							{!props.temporal && (
-								<div style={{ paddingLeft: 40 }}>
-									<Input
-										type="checkbox"
-										onClick={() => {
-											props.toggleAddress()
-										}}
-										checked={props.tempAddress}
-									/>
-									<Label>Domicilio temporal</Label>
-								</div>
-							)}
 						</Grid>
 						<Grid
 							item

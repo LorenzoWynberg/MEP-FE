@@ -21,7 +21,7 @@ const listSexo = [
 	{ value: 1, label: 'Masculino', key: 1 },
 	{ value: 2, label: 'Femenino', key: 2 }
 ]
-const PersonalDataForm = (props) => {
+const PersonalDataForm = props => {
 	const { t } = useTranslation()
 	return (
 		<Card>
@@ -63,48 +63,7 @@ const PersonalDataForm = (props) => {
 								</FormGroup>
 							</Col>
 						)}
-						<Col sm="12">
-							<FormGroup>
-								<Label>
-									{t(
-										'estudiantes>expediente>info_gen>datos_adicionales>conocido',
-										'Conocido como'
-									)}
-								</Label>
-								<Input
-									type="text"
-									name="conocidoComo"
-									value={props.personalData.conocidoComo}
-									onChange={props.handleChange}
-									disabled={props.disabled}
-								/>
-							</FormGroup>
-						</Col>
-						<Col sm="12">
-							<FormGroup>
-								<Label>
-									{t(
-										'estudiantes>expediente>info_gen>datos_adicionales>genero',
-										'Género'
-									)}
-								</Label>
-								<SelectCatalogo
-									components={{ Input: CustomSelectInput }}
-									className="react-select"
-									classNamePrefix="react-select"
-									/* options={props.selects.genderTypes.map((item) => {
-                    return { ...item, label: item.nombre, value: item.id };
-                  })} */
-									catalogo="genderTypes"
-									placeholder=""
-									value={props.personalData.genero}
-									onChange={(data) => {
-										props.handleChange(data, 'genero')
-									}}
-									isDisabled={!props.editable}
-								/>
-							</FormGroup>
-						</Col>
+
 						<Col sm="12">
 							<FormGroup>
 								<Label>
@@ -123,16 +82,10 @@ const PersonalDataForm = (props) => {
 									catalogo="migrationTypes"
 									placeholder=""
 									value={props.personalData.migracionStatus}
-									onChange={(data) => {
-										props.handleChange(
-											data,
-											'migracionStatus'
-										)
+									onChange={data => {
+										props.handleChange(data, 'migracionStatus')
 									}}
-									isDisabled={
-										!props.editable ||
-										props.disableMigrationStatus
-									}
+									isDisabled={!props.editable || props.disableMigrationStatus}
 								/>
 							</FormGroup>
 						</Col>
@@ -141,7 +94,7 @@ const PersonalDataForm = (props) => {
 								<Label>
 									{t(
 										'estudiantes>expediente>info_gen>datos_adicionales>etnia_ind',
-										'Etnia indígena'
+										'Pueblo indígena'
 									)}
 								</Label>
 								<SelectCatalogo
@@ -154,7 +107,7 @@ const PersonalDataForm = (props) => {
 									catalogo="etnias"
 									placeholder=""
 									value={props.personalData.etnia}
-									onChange={(data) => {
+									onChange={data => {
 										props.handleChange(data, 'etnia')
 									}}
 									isDisabled={!props.editable}
@@ -179,11 +132,8 @@ const PersonalDataForm = (props) => {
 									catalogo="lenguasIndigenas"
 									placeholder=""
 									value={props.personalData.lenguaIndigena}
-									onChange={(data) => {
-										props.handleChange(
-											data,
-											'lenguaIndigena'
-										)
+									onChange={data => {
+										props.handleChange(data, 'lenguaIndigena')
 									}}
 									isDisabled={!props.editable}
 								/>
@@ -241,7 +191,7 @@ const PersonalDataForm = (props) => {
 								<Label>
 									{t(
 										'estudiantes>expediente>info_gen>datos_adicionales>lengua_mater',
-										'Lengua materna'
+										'Idioma materno'
 									)}
 								</Label>
 								<SelectCatalogo
@@ -254,11 +204,8 @@ const PersonalDataForm = (props) => {
 									catalogo="lenguasMaternas"
 									placeholder=""
 									value={props.personalData.lenguaMaterna}
-									onChange={(data) => {
-										props.handleChange(
-											data,
-											'lenguaMaterna'
-										)
+									onChange={data => {
+										props.handleChange(data, 'lenguaMaterna')
 									}}
 									isDisabled={!props.editable}
 								/>
@@ -282,7 +229,7 @@ const PersonalDataForm = (props) => {
 									catalogo="estadosCiviles"
 									placeholder=""
 									value={props.personalData.estadoCivil}
-									onChange={(data) => {
+									onChange={data => {
 										props.handleChange(data, 'estadoCivil')
 									}}
 									isDisabled={!props.editable}

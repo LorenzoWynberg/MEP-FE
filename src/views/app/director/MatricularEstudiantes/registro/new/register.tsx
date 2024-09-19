@@ -14,8 +14,13 @@ import { Col, Container, Row, Modal } from 'reactstrap'
 import { getDiscapacidades } from 'Redux/apoyos/actions'
 import { getEstudiantesByNivelOferta } from 'Redux/grupos/actions'
 import { clearWizardDataStore, clearWizardNavDataStore } from 'Redux/identidad/actions'
-import { clearCurrentDiscapacidades,clearCurrentApoyosRecibidos,clearCurrentApoyosNoRecibidos, getTiposApoyosRecibidos,
-	getTiposApoyosNoRecibidos} from 'Redux/matricula/apoyos/actions'
+import {
+	clearCurrentDiscapacidades,
+	clearCurrentApoyosRecibidos,
+	clearCurrentApoyosNoRecibidos,
+	getTiposApoyosRecibidos,
+	getTiposApoyosNoRecibidos
+} from 'Redux/matricula/apoyos/actions'
 import {
 	actualizarEstadoMatricula,
 	clearEstudianteMatricula,
@@ -23,7 +28,7 @@ import {
 	getEstudianteMatricula,
 	removerEstudianteMatricula,
 	updateMatriculaWithAdditionalData,
-	updateEstadoMatriculaWithAlertas,
+	updateEstadoMatriculaWithAlertas
 } from 'Redux/matricula/actions'
 import { getCatalogs } from 'Redux/selects/actions'
 import styled from 'styled-components'
@@ -127,7 +132,7 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 		clearCurrentDiscapacidades,
 		getCantidadTrasladosByMatriculaId,
 		clearCurrentApoyosRecibidos,
-		clearCurrentApoyosNoRecibidos,
+		clearCurrentApoyosNoRecibidos
 	})
 
 	useEffect(() => {
@@ -161,7 +166,7 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 		}
 		fetch()
 	}, [student])
-	
+
 	useEffect(() => {
 		const fetch = async () => {
 			debugger
@@ -208,7 +213,7 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 				numeroAyudaConectividad: data.numeroAyudaConectividad,
 				DiscapacidadesId: data.discapacidades,
 				TiposApoyosId: data.tiposApoyos,
-				TiposApoyosNoRecibidosId:data.tiposApoyosNoRecibidos,
+				TiposApoyosNoRecibidosId: data.tiposApoyosNoRecibidos,
 				InstitucionId: state.institution.id,
 				estadosDeMatriculaId: 1, // Estado interno del sistema
 				condicionEstudianteCursoId: 1 // Condición Regular al matricular
@@ -241,10 +246,7 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 					})
 					setConfirmModal(true)
 				} else {
-					showNotification(
-						'error',
-						'Este estudiante ya esta matriculado en otro centro educativo'
-					)
+					showNotification('error', 'Este estudiante ya esta matriculado en otro centro educativo')
 				}
 				return false
 			}
@@ -266,10 +268,7 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 				setDataSend(null)
 				setSelectedStudent(null)
 				setContentModal({
-					title: t(
-						'estudiantes>registro_matricula>desmatricular>titulo',
-						'Estudiante removido'
-					),
+					title: t('estudiantes>registro_matricula>desmatricular>titulo', 'Estudiante removido'),
 					type: 1,
 					description: t(
 						'estudiantes>registro_matricula>desmatricular>texto',
@@ -489,8 +488,8 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 				txtBtn='Aceptar'
 			>
 				<Typography variant='body1' className='my-4'>
-					Cualquier alerta temprana registrada no será eliminada, éstas deben ser
-					atendidas desde el módulo de alerta temprana.
+					Cualquier alerta temprana registrada no será eliminada, éstas deben ser atendidas desde el módulo de
+					alerta temprana.
 				</Typography>
 			</ConfirmModal>
 			<SimpleModal
@@ -514,7 +513,6 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 					onConfirm={saveAlertasCenso}
 				/>
 			</SimpleModal>
-
 			<Row>
 				<GoBack onClick={() => goBack()} />
 			</Row>
@@ -540,7 +538,6 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 					closeContextualMenu={verEstudianteModal}
 				/>
 			</Row>
-
 			<SimpleModal
 				openDialog={noEncontradoModal}
 				onClose={closeModalNoEncontrado}
@@ -596,6 +593,7 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 					</span>
 				</TextModal>
 			</SimpleModal>
+
 			<SimpleModal
 				openDialog={registrarModal}
 				onClose={() => closeRegistrarPersona()}
@@ -620,9 +618,9 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 					<Row>
 						<Col lg='12'>
 							<h5>
-								Está intentando registrar un estudiante, que ya se encuentra
-								matriculado en otro Centro Educativo, a continuación, le brindamos
-								más información sobre el estudiante para su consideración.
+								Está intentando registrar un estudiante, que ya se encuentra matriculado en otro Centro
+								Educativo, a continuación, le brindamos más información sobre el estudiante para su
+								consideración.
 							</h5>
 						</Col>
 						<Col lg='12'>
@@ -650,9 +648,7 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 								<Col lg='4'>
 									<LabelAzul>EDAD</LabelAzul>
 									<span>
-										{dataModalDuplicado.Edad
-											? getYearsOld(dataModalDuplicado.Edad)
-											: '--------'}
+										{dataModalDuplicado.Edad ? getYearsOld(dataModalDuplicado.Edad) : '--------'}
 									</span>
 								</Col>
 							</RowStyled>
@@ -669,9 +665,7 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 									<div>
 										<LabelAzul>CÓDIGO</LabelAzul>
 										<span>
-											{dataModalDuplicado.Codigo
-												? dataModalDuplicado.Codigo
-												: '--------'}
+											{dataModalDuplicado.Codigo ? dataModalDuplicado.Codigo : '--------'}
 										</span>
 									</div>
 									<div>
@@ -685,9 +679,7 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 									<div>
 										<LabelAzul>TIPO DE CENTRO</LabelAzul>
 										<span>
-											{dataModalDuplicado.TipoCentro
-												? dataModalDuplicado.TipoCentro
-												: '--------'}
+											{dataModalDuplicado.TipoCentro ? dataModalDuplicado.TipoCentro : '--------'}
 										</span>
 									</div>
 									<div>
@@ -711,25 +703,19 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 									<div>
 										<LabelAzul>DIRECTOR</LabelAzul>
 										<span>
-											{dataModalDuplicado.Director
-												? dataModalDuplicado.Director
-												: '--------'}
+											{dataModalDuplicado.Director ? dataModalDuplicado.Director : '--------'}
 										</span>
 									</div>
 									<div>
 										<LabelAzul>TELÉFONO</LabelAzul>
 										<span>
-											{dataModalDuplicado.Telefono
-												? dataModalDuplicado.Telefono
-												: '--------'}
+											{dataModalDuplicado.Telefono ? dataModalDuplicado.Telefono : '--------'}
 										</span>
 									</div>
 									<div>
 										<LabelAzul>CORREO</LabelAzul>
 										<span>
-											{dataModalDuplicado.Correo
-												? dataModalDuplicado.Correo
-												: '--------'}
+											{dataModalDuplicado.Correo ? dataModalDuplicado.Correo : '--------'}
 										</span>
 									</div>
 								</Col>
@@ -738,7 +724,6 @@ const RegisterStudentForm: React.FC<IProps> = props => {
 					</Row>
 				</div>
 			</SimpleModal>
-
 			<SimpleModal
 				openDialog={verEstudianteModal}
 				onClose={() => closeVerEstudianteModal()}

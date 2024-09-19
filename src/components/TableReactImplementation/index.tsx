@@ -8,6 +8,7 @@ interface paginatedTableObject {
 }
 
 interface IProps {
+	placeholderText?: string
 	columns: column[]
 	data: any[]
 	handleGetData?: (
@@ -51,7 +52,9 @@ export const TableReactImplementation: React.FC<IProps> = React.memo(props => {
 	const [selectedPageSize, setSelectedPageSize] = useState<number>(0)
 	const [items, setItems] = useState<any[]>([])
 	const [selectedColumn, setSelectedColumn] = useState<column>(
-		props.columns ? props.columns[0] : { Header: '', accessor: 'no', column: 'no', label: '' }
+		props.columns
+			? props.columns[0]
+			: { Header: '', accessor: 'no', column: 'no', label: '' }
 	)
 	const [searchValue, setSearchValue] = useState<string>()
 	const [totalPage, setTotalPage] = useState<number>(0)
@@ -63,10 +66,11 @@ export const TableReactImplementation: React.FC<IProps> = React.memo(props => {
 	)
 
 	const { triggerParams = [] } = props
-
 	useMemo(() => {
 		setCols(props.columns || [])
-		setColumnsToShow(props.columns ? props.columns.map(item => item.column) : [])
+		setColumnsToShow(
+			props.columns ? props.columns.map(item => item.column) : []
+		)
 	}, [props.columns])
 
 	useMemo(() => {
@@ -76,8 +80,12 @@ export const TableReactImplementation: React.FC<IProps> = React.memo(props => {
 	useEffect(() => {
 		if (props.backendPaginated) {
 			props.handleGetData(
-				selectedColumn?.filterAction ? selectedColumn.filterAction(searchValue) : searchValue,
-				selectedColumn.filterColumn ? selectedColumn.filterColumn : selectedColumn.column,
+				selectedColumn?.filterAction
+					? selectedColumn.filterAction(searchValue)
+					: searchValue,
+				selectedColumn.filterColumn
+					? selectedColumn.filterColumn
+					: selectedColumn.column,
 				props.pageSize ? props.pageSize : selectedPageSize,
 				currentPage,
 				selectedColumn.column,
@@ -139,7 +147,9 @@ export const TableReactImplementation: React.FC<IProps> = React.memo(props => {
 		}
 
 		if (Array.isArray(props.orderOptions) && isFilterColumn) {
-			const _selectedColumn = props.orderOptions.find(item => item.column === column.column)
+			const _selectedColumn = props.orderOptions.find(
+				item => item.column === column.column
+			)
 			setSelectedColumn(_selectedColumn)
 		}
 
@@ -158,7 +168,9 @@ export const TableReactImplementation: React.FC<IProps> = React.memo(props => {
 			if (props.handleGetData) {
 				await props.handleGetData(
 					column.filterAction ? column.filterAction(searchValue) : searchValue,
-					selectedColumn.filterColumn ? selectedColumn.filterColumn : selectedColumn.column,
+					selectedColumn.filterColumn
+						? selectedColumn.filterColumn
+						: selectedColumn.column,
 					props.pageSize ? props.pageSize : selectedPageSize,
 					1,
 					column.column,
@@ -212,6 +224,7 @@ export const TableReactImplementation: React.FC<IProps> = React.memo(props => {
 		<>
 			{!props?.backendPaginated ? (
 				<TableDataFrontPaginated
+					placeholderText={props.placeholderText}
 					handleGetData={props.handleGetData}
 					pageSize={props.pageSize}
 					selectedColumn={selectedColumn}
@@ -237,6 +250,7 @@ export const TableReactImplementation: React.FC<IProps> = React.memo(props => {
 				/>
 			) : (
 				<TableDataBackendPaginated
+					placeholderText={props.placeholderText}
 					autoResetPage={props.autoResetPage}
 					columns={cols}
 					items={items}
@@ -259,7 +273,9 @@ export const TableReactImplementation: React.FC<IProps> = React.memo(props => {
 						setSearchValue(value)
 						props.handleGetData(
 							value,
-							selectedColumn.filterColumn ? selectedColumn.filterColumn : selectedColumn.column,
+							selectedColumn.filterColumn
+								? selectedColumn.filterColumn
+								: selectedColumn.column,
 							props.pageSize ? props.pageSize : selectedPageSize,
 							currentPage,
 							selectedColumn.column,

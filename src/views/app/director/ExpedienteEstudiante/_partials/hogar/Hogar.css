@@ -1,0 +1,4 @@
+.react-datepicker__input-container input[type='text'] {
+	padding-left: 0.75rem !important;
+	color: #000 !important;
+}

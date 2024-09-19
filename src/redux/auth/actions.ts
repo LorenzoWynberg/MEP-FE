@@ -383,7 +383,6 @@ export const loginUser = (user, history) => {
 		dispatch(loginUserLoading())
 
 		try {
-			console.log('_user', _user)
 			const loggedUser = await axios.post(
 				`${envVariables.BACKEND_URL}/api/Authentication/login`,
 				_user

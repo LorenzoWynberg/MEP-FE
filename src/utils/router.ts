@@ -605,6 +605,15 @@ const routes: Route[] = [
 		}
 	},
 	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route: '/director/expediente-estudiante/BitacoraExpediente',
+		isAuthenticated: true,
+		routeProps: {
+			active: 12
+		}
+	},
+	{
 		component: AlertaTemprana,
 		exact: true,
 		route: '/director/alerta-estudiantes',
