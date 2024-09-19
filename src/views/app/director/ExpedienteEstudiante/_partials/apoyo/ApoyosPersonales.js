@@ -656,7 +656,7 @@ export const ApoyosPersonales = () => {
 					<Row>
 						<Col md={6}>
 							<Label for="tipoDeApoyo">
-								Tipo de apoyo <RequiredSpan />{' '}
+								Tipo de apoyo <RequiredSpan />
 							</Label>
 							<StyledInput
 								id="tipoDeApoyo"
@@ -672,7 +672,7 @@ export const ApoyosPersonales = () => {
 						<Col md={6}>
 							<FormGroup>
 								<Label for="condicionDeApoyo">
-									Condición del apoyo <RequiredSpan />{' '}
+									Condición del apoyo <RequiredSpan />
 								</Label>
 								<StyledInput
 									id="condicionApoyo"
@@ -697,7 +697,7 @@ export const ApoyosPersonales = () => {
 							<Col md={6}>
 								<FormGroup>
 									<Label for="fechaDeAprobacion">
-										Fecha de aprobación <RequiredSpan />{' '}
+										Fecha de aprobación <RequiredSpan />
 									</Label>
 									<Input
 										type="date"
@@ -718,7 +718,7 @@ export const ApoyosPersonales = () => {
 						<Col md={12}>
 							<FormGroup>
 								<Label for="detalleDelApoyo">
-									Detalle del apoyo (opcional)
+									Detalle del apoyo <RequiredSpan />
 								</Label>
 								<Input
 									type="textarea"

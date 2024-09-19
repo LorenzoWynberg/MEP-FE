@@ -604,7 +604,7 @@ export const ApoyosCurriculares = () => {
 					<Row>
 						<Col md={6}>
 							<Label for="tipoDeApoyo">
-								Tipo de apoyo <RequiredSpan />{' '}
+								Tipo de apoyo <RequiredSpan />
 							</Label>
 							<StyledInput
 								id="tipoDeApoyo"
@@ -620,7 +620,7 @@ export const ApoyosCurriculares = () => {
 						<Col md={6}>
 							<FormGroup>
 								<Label for="condicionDeApoyo">
-									Condición del apoyo <RequiredSpan />{' '}
+									Condición del apoyo <RequiredSpan />
 								</Label>
 								<StyledInput
 									id="condicionApoyo"
@@ -645,7 +645,7 @@ export const ApoyosCurriculares = () => {
 							<Col md={6}>
 								<FormGroup>
 									<Label for="fechaDeAprobacion">
-										Fecha de aprobación <RequiredSpan />{' '}
+										Fecha de aprobación <RequiredSpan />
 									</Label>
 									<Input
 										type="date"
