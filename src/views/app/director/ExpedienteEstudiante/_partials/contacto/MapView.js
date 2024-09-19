@@ -25,7 +25,8 @@ export class WebMapView extends React.Component {
     ).then(
       ([ArcGISMap, MapView, Search, FeatureLayer, esriConfig]) => {
 
-         esriConfig.request.interceptors.push({
+        const props = this.props
+        esriConfig.request.interceptors.push({
           before(params) {
             if (params.url.includes('query')) {
               params.requestOptions.query.f = 'json'
@@ -56,18 +57,19 @@ export class WebMapView extends React.Component {
           container: this.mapRef.current,
           map,
           center: [-84, 9],
-          zoom: 8
+          zoom: 8,
+          popupEnabled: false, 
         })
-    
+        this.view.popup = null;
+
         const search = new Search({
           view: this.view,
           handleAs: 'json',
           content: { f: 'json' }
         })
 
-         this.search = search
-        this.props.setSearch(search)
-        const props = this.props
+        this.search = search
+        props.setSearch(search)
         this.view.on('mouse-wheel', function (event) {
           self.disableMap(event)
         })
@@ -92,11 +94,11 @@ export class WebMapView extends React.Component {
         })
         this.view.on('click', async function (evt) {
 
-        
+
         })
         if (props.onMount) {
           props.onMount()
-        } 
+        }
       }
     )
   }
@@ -135,7 +137,7 @@ export class WebMapView extends React.Component {
       content: address,
       location: pt
     })
- 
+
     this.props.setUbicacion({
       canton: attributes?.NCANTON,
       provincia: attributes?.PROVINCIA,
