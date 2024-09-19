@@ -10,7 +10,6 @@ import { useTranslation } from 'react-i18next'
 import { useActions } from 'Hooks/useActions'
 
 type AlertaProps = {
-	active: number
 	verificarAcceso: any
 }
 
@@ -22,7 +21,6 @@ type IState = {
 
 const AlertaTempranaExpedienteEstudiantil: React.FC<AlertaProps> = props => {
 	const { t } = useTranslation()
-	const [activeTab, setActiveTab] = React.useState<number>(0)
 	const [currentAlert, setCurrentAlert] = React.useState<any>(null)
 	const [currentStudent, setCurrentStudent] = React.useState<any>(null)
 
@@ -42,11 +40,6 @@ const AlertaTempranaExpedienteEstudiantil: React.FC<AlertaProps> = props => {
 		await actions.getEstadosAlerta()
 	}
 
-	React.useEffect(() => {
-		setActiveTab(props.active)
-		fetch()
-	}, [props.active])
-
 	const handleCurrentAlert = (alert: any) => {
 		setCurrentAlert(alert)
 	}
@@ -56,7 +49,10 @@ const AlertaTempranaExpedienteEstudiantil: React.FC<AlertaProps> = props => {
 			'alerta_temprana>mostrar_alerta_estudiante',
 			'Muestra el detalle de las alertas de un estudiante. independientemente del centro educativo que las registrará'
 		),
-		main: t('alerta_temprana>mostrar_alerta', 'Muestra las alertas tempranas del centro educativo seleccionado'),
+		main: t(
+			'alerta_temprana>mostrar_alerta',
+			'Muestra las alertas tempranas del centro educativo seleccionado'
+		),
 		detail: t(
 			'alerta_temprana>mostrar_alerta_detalle',
 			'Muestra el estado y las acciones de seguimiento de la alerta temprana seleccionada'
@@ -72,23 +68,20 @@ const AlertaTempranaExpedienteEstudiantil: React.FC<AlertaProps> = props => {
 	return (
 		<Wrapper>
 			<Title>
-				{t('estudiantes>expediente>bitacora>alerta_temprana>sub_titulo', 'Histórico de alertas tempranas')}
+				{t(
+					'estudiantes>expediente>bitacora>alerta_temprana>sub_titulo',
+					'Histórico de alertas tempranas'
+				)}
 			</Title>
 			{state.identification.loading ? (
 				<Loader />
 			) : (
-				<ContentTab activeTab={activeTab} numberId={activeTab}>
-					<HistoricoAlertaDetail studentId={state.identification.data.id} />
-				</ContentTab>
+				<HistoricoAlertaDetail studentId={state.identification.data.id} />
 			)}
 		</Wrapper>
 	)
 }
 
-const TitleBread = styled.h2`
-	color: #000;
-	margin-bottom: 15px;
-`
 const Wrapper = styled.div`
 	margin-top: 20px;
 `
