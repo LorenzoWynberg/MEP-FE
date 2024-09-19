@@ -1,15 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import {
-	Row,
-	Col,
-	Form,
-	FormGroup,
-	Label,
-	Input,
-	CustomInput
-} from 'reactstrap'
+import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap'
 import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
 import useNotification from 'Hooks/useNotification'
 import styled from 'styled-components'
@@ -25,7 +17,6 @@ import {
 import {
 	FormControl,
 	FormControlLabel,
-	FormLabel,
 	Radio,
 	RadioGroup
 } from '@material-ui/core'
@@ -58,7 +49,7 @@ const tituloModal = 'Registro de apoyos organizativos'
 
 const condicionSeRecibeNombre = 'Se recibe'
 
-export const ApoyosOrganizativos = () => {
+export const ApoyosOrganizativos = props => {
 	const [loading, setLoading] = useState(true)
 	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
 	const [data, setData] = useState([])
@@ -150,24 +141,25 @@ export const ApoyosOrganizativos = () => {
 		}
 	})
 
-	useEffect(() => {
-		const loadData = async () => {
-			try {
-				setLoading(true)
-				await actions.getTiposApoyos()
+	const loadData = async () => {
+		try {
+			setLoading(true)
+			await actions.getTiposApoyos()
 
-				const tiposDeApoyo = state.apoyos.tipos.filter(
-					tipo => tipo.categoriaApoyoId === categoria.id
-				)
+			const tiposDeApoyo = state.apoyos.tipos.filter(
+				tipo => tipo.categoriaApoyoId === categoria.id
+			)
 
-				setTiposApoyo(tiposDeApoyo)
+			setTiposApoyo(tiposDeApoyo)
 
-				!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
-					(await actions.getCatalogs(catalogsEnumObj.TIPOCONDICIONAPOYO.id))
-			} finally {
-				setLoading(false)
-			}
+			!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
+				(await actions.getCatalogs(catalogsEnumObj.TIPOCONDICIONAPOYO.id))
+		} finally {
+			setLoading(false)
 		}
+	}
+
+	useEffect(() => {
 		loadData()
 	}, [])
 
@@ -208,13 +200,14 @@ export const ApoyosOrganizativos = () => {
 				.delete(
 					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`
 				)
-				.then(response => {
+				.then(() => {
+					loadData()
 					axios
 						.get(
 							`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
 						)
-						.then(response => {
-							setData(response.data.entityList)
+						.then(res => {
+							setData(res.data.entityList)
 							setLoading(false)
 							setSnackbarContent({
 								msg: 'Se ha eliminado el registro',
@@ -543,6 +536,7 @@ export const ApoyosOrganizativos = () => {
 			.then(response => {
 				setLoading(false)
 				setData(response.data.entityList)
+				loadData()
 			})
 			.catch(error => {
 				setLoading(false)
@@ -651,7 +645,7 @@ export const ApoyosOrganizativos = () => {
 					<Row>
 						<Col md={6}>
 							<Label for="tipoDeApoyo">
-								Tipo de apoyo <RequiredSpan />{' '}
+								Tipo de apoyo <RequiredSpan />
 							</Label>
 							<StyledInput
 								id="tipoDeApoyo"
@@ -667,7 +661,7 @@ export const ApoyosOrganizativos = () => {
 						<Col md={6}>
 							<FormGroup>
 								<Label for="condicionDeApoyo">
-									Condición del apoyo <RequiredSpan />{' '}
+									Condición del apoyo <RequiredSpan />
 								</Label>
 								<StyledInput
 									id="condicionApoyo"
@@ -692,7 +686,7 @@ export const ApoyosOrganizativos = () => {
 							<Col md={6}>
 								<FormGroup>
 									<Label for="fechaDeAprobacion">
-										Fecha de aprobación <RequiredSpan />{' '}
+										Fecha de aprobación <RequiredSpan />
 									</Label>
 									<Input
 										type="date"
@@ -713,7 +707,7 @@ export const ApoyosOrganizativos = () => {
 						<Col md={12}>
 							<FormGroup>
 								<Label for="detalleDelApoyo">
-									Detalle del apoyo (opcional)
+									Detalle del apoyo <RequiredSpan />
 								</Label>
 								<Input
 									type="textarea"
