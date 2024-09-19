@@ -41,20 +41,13 @@ const Certificados = props => {
 
 	useEffect(() => {
 		actions
-			.getCertificadosByInstitucionFiltered(idInstitucion, ' ', 1, 250, state.selectedYear)
-			.then(data => {
-				setData(data.options)
-				setLoading(false)
-			})
-			.catch(error => {
-				console.log('error', error)
-				setLoading(false)
-			})
-	}, [])
-
-	useEffect(() => {
-		actions
-			.getCertificadosByInstitucionFiltered(idInstitucion, ' ', 1, 250, state.selectedYear)
+			.getCertificadosByInstitucionFiltered(
+				idInstitucion,
+				' ',
+				1,
+				250,
+				state.selectedYear
+			)
 			.then(data => {
 				setData(data.options)
 				setLoading(false)
@@ -65,7 +58,9 @@ const Certificados = props => {
 			})
 	}, [state.selectedYear])
 
-	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'certificadosSCE')
+	const tienePermiso = state.permisos.find(
+		permiso => permiso.codigoSeccion == 'certificadosSCE'
+	)
 
 	const columns = useMemo(() => {
 		return [
@@ -88,7 +83,10 @@ const Certificados = props => {
 				label: ''
 			},
 			{
-				Header: t('expediente_estudiantil>fechaNacimiento', 'Fecha de Nacimiento'),
+				Header: t(
+					'expediente_estudiantil>fechaNacimiento',
+					'Fecha de Nacimiento'
+				),
 				column: 'fechaNacimiento',
 				accessor: 'fechaNacimiento',
 				label: ''
@@ -132,7 +130,9 @@ const Certificados = props => {
 								alignItems: 'center'
 							}}
 						>
-							<Tooltip title={t('buscador_ce>buscador>columna_acciones>ver', 'Ver')}>
+							<Tooltip
+								title={t('buscador_ce>buscador>columna_acciones>ver', 'Ver')}
+							>
 								<RemoveRedEyeRounded
 									onClick={() => {
 										axios
@@ -186,10 +186,10 @@ const Certificados = props => {
 			{studentId && (
 				<SimpleModal
 					addMarginTitle
-					txtBtnCancel='Cerrar'
-					txtBtn='Imprimir'
+					txtBtnCancel="Cerrar"
+					txtBtn="Imprimir"
 					onConfirm={handlePrint}
-					title='Registro'
+					title="Registro"
 					onClose={() => setStudentId(null)}
 					stylesContent={{}}
 					openDialog={studentId && true}
@@ -198,7 +198,7 @@ const Certificados = props => {
 					<Page size="A4" style={stylesSheet.page}>
 						<View> */}
 
-					<div ref={printRef} className='container'>
+					<div ref={printRef} className="container">
 						<style>
 							{`
 								@media print {
@@ -215,21 +215,25 @@ const Certificados = props => {
 
 						<Table>
 							<tr>
-								<td className='py-4'>
-									Confieren el presente certificado a: {certData.nombreEstudiante},{' '}
-									{certData.tipoIdentificacion}, {certData.identificacion}.
+								<td className="py-4">
+									Confieren el presente certificado a:{' '}
+									{certData.nombreEstudiante}, {certData.tipoIdentificacion},{' '}
+									{certData.identificacion}.
 								</td>
 							</tr>
 							<tr>
 								<td style={{ paddingTop: 100, paddingBottom: 100 }}>
-									Desarrolló el proyecto del Servicio Comunal Estudiantil en el Área de proyecto:{' '}
-									{certData.areaProyecto}, Nombre del proyecto: {certData.nombreProyecto} , Tipo de
-									proyecto: {certData.tipoProyecto}, con una duración de 30 horas, en el Año:{' '}
-									{certData.anio}.
+									Desarrolló el proyecto del Servicio Comunal Estudiantil en el
+									Área de proyecto: {certData.areaProyecto}, Nombre del
+									proyecto: {certData.nombreProyecto} , Tipo de proyecto:{' '}
+									{certData.tipoProyecto}, con una duración de 30 horas, en el
+									Año: {certData.anio}.
 								</td>
 							</tr>
 							<tr>
-								<td className='py-4'>Fecha: {new Date(Date.now()).toLocaleString().split(',')[0]}</td>
+								<td className="py-4">
+									Fecha: {new Date(Date.now()).toLocaleString().split(',')[0]}
+								</td>
 							</tr>
 							<tr>
 								<td style={{ paddingTop: 60 }}>
@@ -258,7 +262,7 @@ const Certificados = props => {
 			) : (
 				<Row>
 					<Col xs={12}>
-						<h3 className='mt-2 mb-3'>
+						<h3 className="mt-2 mb-3">
 							{/* {t('expediente_ce>titulo', 'Expediente Centro Educativo')} */}
 							Certificados
 						</h3>

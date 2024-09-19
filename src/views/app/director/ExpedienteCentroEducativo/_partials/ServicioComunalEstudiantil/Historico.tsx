@@ -88,12 +88,6 @@ const Historico = props => {
 		fetch(idInstitucion, value)
 	}, [idInstitucion, value, filterText, state.selectedYear])
 
-	// TODO: Arreglar
-	// useEffect(() => {
-	// 	console.log('LORE', state.selectedYear)
-	// 	fetch(idInstitucion, value)
-	// }, [state.selectedYear])
-
 	useEffect(() => {
 		ObtenerInfoCatalogos().then(response => {
 			setCatalogos(response)
