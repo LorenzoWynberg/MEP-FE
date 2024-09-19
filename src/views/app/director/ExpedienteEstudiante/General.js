@@ -214,6 +214,7 @@ const General = props => {
 	}, [identidadData.id, editable])
 
 	const sendData = async () => {
+		
 		const datos = parseOptions(identidadData, [
 			'genero',
 			'migracionStatus',
@@ -236,9 +237,10 @@ const General = props => {
 			nacionalidadId: identidadData.nacionalidad.value,
 			tipoIdentificacionId: identidadData.idType.value
 		}
-		let response
-		response = await actions.updateIdentity(_data)
-		//setIdentidadData(_data)
+		setPrevIdentidadData(_data)
+		setIdentidadData(_data)
+		let response  = await actions.updateIdentity(_data)
+		
 		if (response.data.error) {
 			setSnackbarContent({
 				variant: 'error',
