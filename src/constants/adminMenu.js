@@ -193,12 +193,13 @@ const data = [
         section: 'menuadministrador',
         to: '/admin/configuracion/agrupaciones'
       },
-      {
+     /*  {
         icon: 'simple-icon-book-open',
         label: 'menu>configuracion>gestorCatalogo',
-        section: 'menuadministrador',
-        to: '/admin/GestorCatalogos'
-      }
+        //section: 'menuadministrador',
+        section: 'main',
+        to: '/admin/GestorCatalogos/main'
+      } */
     ]
   }
 ]

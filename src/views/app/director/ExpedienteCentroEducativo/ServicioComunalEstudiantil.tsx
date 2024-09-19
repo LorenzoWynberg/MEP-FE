@@ -18,12 +18,10 @@ const ServicioComunalEstudiantil = props => {
 	const { t } = useTranslation()
 	const [aplicaSCE, setAplicaSCE] = useState(true)
 	const [loading, setLoading] = useState(true)
-	const [activeTab, setActiveTab] = useState(0)
 	const idInstitucion = localStorage.getItem('idInstitucion')
 
 	const state = useSelector((store: any) => {
 		return {
-			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
 			permisos: store.authUser.rolPermisos
 		}
 	})
@@ -66,6 +64,10 @@ const ServicioComunalEstudiantil = props => {
 		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
 	}
 
+	if (!aplicaSCE) {
+		return <h4>{t('Esta institución no cuenta con servicio comunal estudiantil.')}</h4>
+	}
+
 	return (
 		<Notification>
 			{showSnackbar => {
@@ -74,11 +76,7 @@ const ServicioComunalEstudiantil = props => {
 						<Helmet>
 							<title>Historico SCE</title>
 						</Helmet>
-						{aplicaSCE ? (
-							<h4>Servicio comunal estudiantil</h4>
-						) : (
-							<h4>Esta institución no cuenta con servicio comunal estudiantil.</h4>
-						)}
+						<h4>Servicio comunal estudiantil</h4>
 						<div>
 							{loading ?? <Loader />}
 							{!loading && aplicaSCE && (

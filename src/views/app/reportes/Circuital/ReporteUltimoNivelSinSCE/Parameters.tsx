@@ -13,20 +13,23 @@ const Parameters = ({ showReportEvent, reportLoader = false }) => {
   const initialState = [
     {
       key: 'regionId',
-      label: t("gestion_usuario>usuarios>regional", "Regional"),
+      label: t('gestion_usuario>usuarios>regional', 'Regional'),
       items: [],
       onChange: null
     },
     {
       key: 'circuitoId',
-      label: t("buscador_ce>ver_centro>ubicacion_administrativa>circuito", "Circuito"),
+      label: t(
+        'buscador_ce>ver_centro>ubicacion_administrativa>circuito',
+        'Circuito'
+      ),
       items: [],
       onChange: null
     }
   ]
   const [loader, setLoader] = React.useState(false)
   const { setSelectInitialState, setSelectItems, selects } = useFiltroReportes()
-  const selectedYear = useSelector(store=>store.authUser.selectedActiveYear)
+  const selectedYear = useSelector((store) => store.authUser.selectedActiveYear)
   const fetch = async () => {
     try {
       setLoader(true)
@@ -66,8 +69,11 @@ const Parameters = ({ showReportEvent, reportLoader = false }) => {
   return (
     <div>
       <ReportParameterCard
-        titulo={t("reportes>circuital>resumen_de_estudiantes_matriculados_por_centro_educativo", "Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil")}
-        texto={'Seleccione la Region y el Circuito'}
+        titulo={t(
+          'reportes>circuital>resumen_de_estudiantes_matriculados_por_centro_educativ',
+          'Resumen de cantidad de estudiantes de último nivel que no han concluido el Servicio Comunal Estudiantil'
+        )}
+        texto={'Seleccione la Región y el Circuito'}
         selects={selects}
         loader={loader || reportLoader}
         onBtnGenerarEvent={(obj) => {

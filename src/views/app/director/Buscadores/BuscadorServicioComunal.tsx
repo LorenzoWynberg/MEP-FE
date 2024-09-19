@@ -25,8 +25,8 @@ import {
 	GetServicioComunalByInstitucionId,
 	getTablaEstudiantesServicioComunalById
 } from '../../../../redux/configuracion/actions'
-import { Button } from '@material-ui/core'
 
+import { Button } from 'Components/CommonComponents'
 const BuscadorPersonasServicioComunal = props => {
 	const [t] = useTranslation()
 	const [fallecidos, setFallecidos] = useState<boolean>(false)
@@ -117,8 +117,11 @@ const BuscadorPersonasServicioComunal = props => {
 					return (
 						<div className='d-flex justify-content-center align-items-center'>
 							<Button
-								class='sc-iqcoie bQFwPO cursor-pointer'
-								primary
+								
+								color='primary'
+
+								style={{ cursor: 'pointer' }}
+								 
 								onClick={() => {
 									let array = [...props.estudiantes]
 									const studentExists = array.some(
@@ -183,15 +186,6 @@ const BuscadorPersonasServicioComunal = props => {
 		}
 	}, [state.estudiantes])
 
-	useEffect(() => {
-		setLoading(true)
-		let val = document.getElementById('servicioComunalSearch').value
-		if (val != '') {
-			actions.getStudentsSCE(val, idInstitucion, 1, 30).then(() => setLoading(false))
-		} else {
-			setLoading(false)
-		}
-	}, [])
 
 	return (
 		<Container>

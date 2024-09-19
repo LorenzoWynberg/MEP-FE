@@ -70,7 +70,7 @@ const data = [
 	},
 	{
 		label: 'estudiantes>expediente>nav>servicio_comunal',
-		to: '/director/expediente-estudiante/servicio-comunal',
+		to: '/director/expediente-estudiante/sce',
 		active: false
 	},
 	{

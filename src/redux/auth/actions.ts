@@ -93,15 +93,15 @@ export const loginUserSuccess = (loggedUser, history) => {
 		primerApellido: loggedUser.data.primerApellido,
 		segundoApellido: loggedUser.data.segundoApellido
 	}
-	localStorage.setItem(
-		'persist:auth-refreshToken',
-		loggedUser.data.refreshToken
-	)
 	localStorage.setItem('persist:auth-accessToken', loggedUser.data.accessToken)
 	localStorage.setItem('persist:expiration', loggedUser.data.expiration)
 	localStorage.setItem('persist:u', loggedUser.data.userName)
 	localStorage.setItem('persist:uid', loggedUser.data.userId)
 	localStorage.setItem('persist:uNombre', loggedUser.data.nombre)
+	localStorage.setItem(
+		'persist:auth-refreshToken',
+		loggedUser.data.refreshToken
+	)
 	localStorage.setItem(
 		'persist:uPrimerApellido',
 		loggedUser.data.primerApellido
@@ -185,6 +185,7 @@ export const setUserInstitution =
 			)
 
 			dispatch(setPeriodosLectivosDispatch(response.data))
+			localStorage.setItem('idInstitucion', institution.id)
 		} catch (e) {
 			return { data: { message: e.message, error: true } }
 		}
@@ -260,7 +261,7 @@ export const desactivarServicioComunal = (id, history) => async dispatch => {
 		`${envVariables.BACKEND_URL}/api/ServicioComunal/DesactivarServicioComunal?idServicioComunal=${id}`
 	)
 
-	history.push('/director/expediente-centro/servicio-comunal')
+	history.push('/director/expediente-centro/sce')
 }
 
 export const createPassword = (user, history) => async dispatch => {

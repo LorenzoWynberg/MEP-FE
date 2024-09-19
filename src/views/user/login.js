@@ -243,7 +243,7 @@ class Login extends Component {
               </>
               <br />
               <div className='d-flex'>
-              <a href='SABER- Manual de usuario v3.0.pdf' download>
+              <a href='SABER- Manual de usuario v3.1.pdf' download>
                
                 <Grid item xs={9} className='d-flex'>
                  <img

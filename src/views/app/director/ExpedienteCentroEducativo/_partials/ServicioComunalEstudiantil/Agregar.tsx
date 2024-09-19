@@ -4,9 +4,13 @@ import { Row, Col, Input as ReactstrapInput } from 'reactstrap'
 import colors from 'Assets/js/colors'
 import withRouter from 'react-router-dom/withRouter'
 import Grid from '@material-ui/core/Grid'
-import { crearServicioComunal, getTablaEstudiantesServicioComunalById } from 'Redux/configuracion/actions'
+import {
+	crearServicioComunal,
+	getTablaEstudiantesServicioComunalById
+} from 'Redux/configuracion/actions'
 import styles from './ServicioComunal.css'
 import BuscadorServicioComunal from '../../../Buscadores/BuscadorServicioComunal'
+import { Button } from 'Components/CommonComponents'
 import {
 	Checkbox,
 	FormControl,
@@ -15,7 +19,6 @@ import {
 	Radio,
 	RadioGroup,
 	Chip,
-	Button,
 	Typography
 } from '@material-ui/core'
 import { ObtenerInfoCatalogos } from 'Redux/formularioCentroResponse/actions'
@@ -30,6 +33,7 @@ import { useSelector } from 'react-redux'
 import { Search } from 'Components/TableReactImplementationServicio/Header'
 import zIndex from '@material-ui/core/styles/zIndex'
 import { isEmpty } from 'lodash'
+import { useHistory } from 'react-router'
 
 export const Agregar: React.FC<IProps> = props => {
 	const { t } = useTranslation()
@@ -40,9 +44,6 @@ export const Agregar: React.FC<IProps> = props => {
 	const [objetivoNombre, setObjetivoNombre] = React.useState([])
 	const [busqueda, setBusqueda] = React.useState()
 	const [estudiantes, setEstudiantes] = React.useState([])
-	const [caracteristicas, setCaracteristicas] = React.useState()
-	const [caracteristicasIdSeleccionados, setCaracteristicasIdSeleccionados] = React.useState([])
-	const [caracteristicasSeleccionados, setCaracteristicasSeleccionados] = React.useState([])
 	const [nombresSeleccionados, setNombresSeleccionados] = React.useState([])
 	const [nombreSend, setNombreSend] = React.useState()
 	const [nombreId, setNombreId] = React.useState()
@@ -54,19 +55,17 @@ export const Agregar: React.FC<IProps> = props => {
 	const [showModalidades, setShowModalidades] = React.useState(false)
 	const [modalidadId, setModalidadId] = React.useState()
 	const [modalidad, setModalidad] = React.useState()
-	const [showCaracteristicas, setShowCaracteristicas] = React.useState(false)
-	const [caracteristicaId, setCaracteristicaId] = React.useState()
-	const [caracteristica, setCaracteristica] = React.useState()
 	const [institutionImage, setInstitutionImage] = React.useState(null)
-	const [loading, setLoading] = React.useState<boolean>(false)
-	const [value, setValue] = React.useState(catalogos.areasProyecto && catalogos.areasProyecto[0].id)
+	const [loading, setLoading] = React.useState<boolean>(true)
+	const [value, setValue] = React.useState(
+		catalogos.areasProyecto && catalogos.areasProyecto[0].id
+	)
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setValue((event.target as HTMLInputElement).value)
 	}
 	const [Cdate, setCDate] = useState(new Date().toLocaleDateString('fr-FR'))
 	const [date, setDate] = useState(new Date())
 	const [valueModalidad, setValueModalidad] = React.useState('')
-	const [valueCaracteristicas, setValueCaracteristicas] = React.useState('')
 	const [valueOrg, setValueOrg] = React.useState('')
 	const [acompanante, setValueAcompanante] = React.useState('')
 	const [descripcion, setValueDescripcion] = React.useState('')
@@ -76,15 +75,17 @@ export const Agregar: React.FC<IProps> = props => {
 	const [selectedDate, setSelectedDate] = useState(null)
 	const [formattedDate, setFormattedDate] = useState('')
 	const today = new Date()
-
+	const history = useHistory()
 	const state = useSelector((store: any) => {
 		return {
-			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
+			selectedYear: store.authUser.selectedActiveYear,
 			permisos: store.authUser.rolPermisos
 		}
 	})
 
-	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
+	const tienePermiso = state.permisos.find(
+		permiso => permiso.codigoSeccion == 'registrosSCE'
+	)
 
 	const isValid = () => {
 		if (
@@ -95,9 +96,8 @@ export const Agregar: React.FC<IProps> = props => {
 			!organizacionId ||
 			!acompanante ||
 			!formattedDate ||
-			!descripcion ||
 			!localStorage.getItem('loggedUser') ||
-			isEmpty(caracteristicasSeleccionados) ||
+			// isEmpty(caracteristicasSeleccionados) ||
 			isEmpty(estudiantes)
 		) {
 			return false
@@ -130,21 +130,34 @@ export const Agregar: React.FC<IProps> = props => {
 	})
 
 	useEffect(() => {
-		ObtenerInfoCatalogos().then(response => {
-			setCatalogos(response)
-		})
+		ObtenerInfoCatalogos()
+			.then(response => {
+				setCatalogos(response)
+			})
+			.finally(() => {
+				setLoading(false)
+			})
 	}, [])
 
 	if (!tienePermiso || tienePermiso?.agregar == 0) {
 		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
 	}
 
+	if (!state.selectedYear.esActivo) {
+		return (
+			<h4>{t('No se puede agregar registros en un año lectivo no activo')}</h4>
+		)
+	}
+
+	if (loading) {
+		return <BarLoader />
+	}
+
 	return (
 		<div className={styles}>
-			{loading && <BarLoader />}
 			{showAreaProyecto && catalogos.areasProyecto && (
 				<SimpleModal
-					title='Selección de áreas de proyecto'
+					title="Área de proyecto"
 					openDialog={showAreaProyecto}
 					onConfirm={() => {
 						setShowAreaProyecto(false)
@@ -153,23 +166,24 @@ export const Agregar: React.FC<IProps> = props => {
 				>
 					<FormControl>
 						<RadioGroup
-							aria-labelledby='demo-radio-buttons-group-label'
-							name='radio-buttons-group'
+							aria-labelledby="demo-radio-buttons-group-label"
+							name="radio-buttons-group"
 							value={value}
 						>
 							{catalogos?.areasProyecto &&
 								catalogos.areasProyecto.map(item => (
-									<Row>
-										<Col
-											style={{
-												display: 'flex',
-												textAlign: 'left',
-												justifyContent: 'left',
-												alignItems: 'left'
-											}}
-											sm={3}
-										>
+									<Row
+										className="py-2"
+										style={{
+											display: 'flex',
+											justifyContent: 'center',
+											alignItems: 'center',
+											borderBottom: '1px solid #d7d7d7'
+										}}
+									>
+										<Col sm={4}>
 											<FormControlLabel
+												style={{ margin: '0 0 0 -11px' }}
 												value={item.id}
 												onClick={(e, v) => {
 													e.persist()
@@ -183,85 +197,20 @@ export const Agregar: React.FC<IProps> = props => {
 												label={item.nombre}
 											/>
 										</Col>
-										<Col sm={9}>{item.descripcion}</Col>
+										<Col sm={8}>{item.descripcion}</Col>
 									</Row>
 								))}
 						</RadioGroup>
-						{checkedValid && !value && <span style={{ color: 'red' }}>Campo requerido</span>}
+						{checkedValid && !value && (
+							<span style={{ color: 'red' }}>Campo requerido</span>
+						)}
 					</FormControl>
 				</SimpleModal>
 			)}
-			{showCaracteristicas && (
-				<SimpleModal
-					title='Selección de caracteristicas'
-					openDialog={showCaracteristicas}
-					onConfirm={() => {
-						setShowCaracteristicas(false)
-					}}
-					onClose={() => setShowCaracteristicas(false)}
-				>
-					<FormControl>
-						{catalogos.caracteristicas.map((item, index) => (
-							<Row>
-								<Col
-									style={{
-										display: 'flex',
-										textAlign: 'left',
-										justifyContent: 'left',
-										alignItems: 'left'
-									}}
-									sm={3}
-								>
-									<FormControlLabel
-										control={
-											<Checkbox
-												checked={caracteristicasSeleccionados.map(v => v.id).includes(item.id)}
-												value={item.id}
-											/>
-										}
-										label={
-											<div
-												onClick={async () => {
-													let caracteristicas = [...caracteristicasSeleccionados]
-													let caracteristicasId = [...caracteristicasIdSeleccionados]
-													if (!caracteristicasId.includes(item.id)) {
-														caracteristicas.push(item)
-														caracteristicasId.push(item.id)
-													} else {
-														caracteristicas = caracteristicas.filter(n => n.id != item.id)
-														caracteristicasId = caracteristicasId.filter(n => n != item.id)
-													}
-													setCaracteristicasSeleccionados(caracteristicas)
-													setCaracteristicasIdSeleccionados(caracteristicasId)
-												}}
-											>
-												{item.nombre}
-											</div>
-										}
-										onClick={async () => {
-											let caracteristicas = [...caracteristicasSeleccionados]
-											let caracteristicasId = [...caracteristicasIdSeleccionados]
-											if (!caracteristicasId.includes(item.id)) {
-												caracteristicas.push(item)
-												caracteristicasId.push(item.id)
-											} else {
-												caracteristicas = caracteristicas.filter(n => n.id != item.id)
-												caracteristicasId = caracteristicasId.filter(n => n != item.id)
-											}
-											setCaracteristicasSeleccionados(caracteristicas)
-											setCaracteristicasIdSeleccionados(caracteristicasId)
-										}}
-									/>
-								</Col>
-								<Col sm={9}>{item.descripcion}</Col>
-							</Row>
-						))}
-					</FormControl>
-				</SimpleModal>
-			)}
+
 			{showModalidades && (
 				<SimpleModal
-					title='Tipo de proyecto'
+					title="Tipo de proyecto"
 					value={value}
 					openDialog={showModalidades}
 					onConfirm={() => {
@@ -269,43 +218,45 @@ export const Agregar: React.FC<IProps> = props => {
 					}}
 					onClose={() => setShowModalidades(false)}
 				>
-					<Row>
-						<FormControl>
-							<RadioGroup aria-labelledby='demo-radio-buttons-group-label' name='radio-buttons-group'>
-								{catalogos.modalidades &&
-									catalogos.modalidades.map(item => (
-										<Row>
-											<Col
-												style={{
-													display: 'flex',
-													justifyContent: 'left',
-													alignItems: 'left'
+					<FormControl>
+						<RadioGroup
+							aria-labelledby="demo-radio-buttons-group-label"
+							name="radio-buttons-group"
+						>
+							{catalogos.modalidades &&
+								catalogos.modalidades.map(item => (
+									<Row
+										className="py-2"
+										style={{
+											display: 'flex',
+											justifyContent: 'center',
+											alignItems: 'center',
+											borderBottom: '1px solid #d7d7d7'
+										}}
+									>
+										<Col sm={4}>
+											<FormControlLabel
+												value={item.id}
+												onClick={(e, v) => {
+													e.persist()
+													setModalidadId(e.target.value)
+													setModalidad(item.nombre)
 												}}
-												sm={3}
-											>
-												<FormControlLabel
-													value={item.id}
-													onClick={(e, v) => {
-														e.persist()
-														setModalidadId(e.target.value)
-														setModalidad(item.nombre)
-													}}
-													checked={modalidadId == item.id}
-													control={<Radio />}
-													label={item.nombre}
-												/>
-											</Col>
-											<Col sm={9}>{item.descripcion}</Col>
-										</Row>
-									))}
-							</RadioGroup>
-						</FormControl>
-					</Row>
+												checked={modalidadId == item.id}
+												control={<Radio />}
+												label={item.nombre}
+											/>
+										</Col>
+										<Col sm={8}>{item.descripcion}</Col>
+									</Row>
+								))}
+						</RadioGroup>
+					</FormControl>
 				</SimpleModal>
 			)}
 			{showTipoOrganizacion && (
 				<SimpleModal
-					title='Organización'
+					title="Organización Contraparte"
 					openDialog={showTipoOrganizacion}
 					onConfirm={() => {
 						setShowTipoOrganizacion(false)
@@ -314,12 +265,20 @@ export const Agregar: React.FC<IProps> = props => {
 				>
 					<FormControl>
 						<RadioGroup
-							aria-labelledby='demo-radio-buttons-group-label'
-							name='radio-buttons-group'
+							aria-labelledby="demo-radio-buttons-group-label"
+							name="radio-buttons-group"
 							value={value}
 						>
 							{catalogos.tipoOrganizacion.map(item => (
-								<Row>
+								<Row
+									className="py-2"
+									style={{
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center',
+										borderBottom: '1px solid #d7d7d7'
+									}}
+								>
 									<Col sm={12}>
 										<FormControlLabel
 											value={item.id}
@@ -341,7 +300,7 @@ export const Agregar: React.FC<IProps> = props => {
 			)}
 			{showBuscador && (
 				<SimpleModal
-					title='Estudiantes'
+					title="Estudiantes"
 					openDialog={showBuscador}
 					onConfirm={() => {
 						setShowBuscador(false)
@@ -355,100 +314,142 @@ export const Agregar: React.FC<IProps> = props => {
 					/>
 				</SimpleModal>
 			)}
-			{nombresSeleccionados && value && !showBuscador && showNombre && catalogos.nombresProyecto && (
-				<SimpleModal
-					title='Nombre Proyecto'
-					openDialog={showNombre}
-					onConfirm={() => {
-						setShowNombre(false)
-					}}
-					onClose={() => setShowNombre(false)}
-				>
-					<FormControl>
-						<FormLabel id='demo-radio-buttons-group-label'>Tipo Organizacion</FormLabel>
-						<RadioGroup
-							aria-labelledby='demo-radio-buttons-group-label'
-							name='radio-buttons-group'
-							value={value}
-						>
-							{catalogos.nombresProyecto
-								.filter(item => parseInt(item.codigo) == parseInt(value))
-								.map(item => (
-									<Row>
-										<Col sm={12}>
-											<FormControlLabel
-												value={item.id}
-												onClick={(e, v) => {
-													e.persist()
-													setNombreId(e.target.value)
-													setNombreSend(item.nombre)
-												}}
-												checked={nombreId == item.id}
-												control={<Radio />}
-												label={item.nombre}
-											/>
-										</Col>
-									</Row>
-								))}
-						</RadioGroup>
-					</FormControl>
-				</SimpleModal>
-			)}
-			<h3 className='mt-2 mb-3'>
+			{nombresSeleccionados &&
+				value &&
+				!showBuscador &&
+				showNombre &&
+				catalogos.nombresProyecto && (
+					<SimpleModal
+						title="Nombre de proyecto"
+						openDialog={showNombre}
+						onConfirm={() => {
+							setShowNombre(false)
+						}}
+						onClose={() => setShowNombre(false)}
+					>
+						<FormControl>
+							<RadioGroup
+								aria-labelledby="demo-radio-buttons-group-label"
+								name="radio-buttons-group"
+								value={value}
+							>
+								{catalogos.nombresProyecto
+									.filter(item => parseInt(item.codigo) == parseInt(value))
+									.map(item => (
+										<Row
+											className="py-2"
+											style={{
+												display: 'flex',
+												justifyContent: 'center',
+												alignItems: 'center',
+												borderBottom: '1px solid #d7d7d7'
+											}}
+										>
+											<Col sm={4}>
+												<FormControlLabel
+													value={item.id}
+													onClick={(e, v) => {
+														e.persist()
+														setNombreId(e.target.value)
+														setNombreSend(item.nombre)
+													}}
+													checked={nombreId == item.id}
+													control={<Radio />}
+													label={item.nombre}
+												/>
+											</Col>
+											<Col sm={8}>{item.descripcion}</Col>
+										</Row>
+									))}
+							</RadioGroup>
+						</FormControl>
+					</SimpleModal>
+				)}
+			<h3 className="mt-2 mb-3">
 				{/* TODO: i18n */}
 				{/* {t('servicio_comunal_title', 'Servicio Comunal')} */}
-				Agregar servicio comunal estudiantil
+				Agregar Servicio comunal estudiantil
 			</h3>
 			<Row>
 				<Col sm={12}>
-					<Card className='bg-white__radius mb-3'>
-						<CardTitle>{t('registro_servicio_comunal', 'Registro Servicio Comunal')}</CardTitle>
+					<Card className="bg-white__radius mb-2">
+						<CardTitle>
+							{t('registro_servicio_comunal', 'Registro Servicio Comunal')}
+						</CardTitle>
 						<Form>
-							<Row className='mb-2'>
-								<Col md={3}>
+							<Row className="mb-2 mt-3">
+								<Col md={4}>
 									<FormGroup>
 										<Label>
-											{t('registro_servicio_comunal>area_proyecto', 'Area de proyecto')}
+											{t(
+												'registro_servicio_comunal>area_proyecto',
+												'Area de proyecto'
+											)}{' '}
+											<span style={{ color: 'red' }}>*</span>
 										</Label>
 										<Input
-											style={{ border: checkedValid && !areaProyecto ? '1px solid red' : '' }}
+											style={{
+												border:
+													checkedValid && !areaProyecto ? '1px solid red' : ''
+											}}
 											key={areaProyecto}
-											name='areaProyecto'
+											name="areaProyecto"
 											value={areaProyecto ? areaProyecto : ''}
 											readOnly
-											onClick={() => !showAreaProyecto && setShowAreaProyecto(true)}
+											onClick={() =>
+												!showAreaProyecto && setShowAreaProyecto(true)
+											}
 										/>
 										{checkedValid && !areaProyecto && (
 											<span style={{ color: 'red' }}>Campo requerido</span>
 										)}
 									</FormGroup>
 								</Col>
-								<Col md={6}>
+								<Col md={4}>
 									<FormGroup>
-										<Label>{t('registro_servicio_comunal>objetivonombre', 'objetivo')}</Label>
+										<Label>
+											{t(
+												'registro_servicio_comunal>objetivo',
+												'Nombre de proyecto'
+											)}{' '}
+											<span style={{ color: 'red' }}>*</span>
+										</Label>
 										<Input
-											style={{ border: checkedValid && !nombreSend ? '1px solid red' : '' }}
+											style={{
+												border:
+													checkedValid && !nombreSend ? '1px solid red' : ''
+											}}
 											key={nombreSend}
-											name='objetivo'
+											name="objetivo"
 											value={nombreSend ? nombreSend : ''}
 											readOnly
-											onClick={() => !showNombre && setShowNombre(true)}
+											onClick={() =>
+												areaProyecto && !showNombre && setShowNombre(true)
+											}
 										/>{' '}
 										{checkedValid && !nombreSend && (
 											<span style={{ color: 'red' }}>Campo requerido</span>
 										)}
 									</FormGroup>
 								</Col>
-								<Col sm={3}>
+								<Col sm={4}>
 									<FormGroup>
-										<Label>{t('registro_servicio_comunal>modalidad', 'Modalidad')}</Label>
+										<Label>
+											{t('registro_servicio_comunal>modalidad', 'Modalidad')}{' '}
+											<span style={{ color: 'red' }}>*</span>
+										</Label>
 										<Input
-											style={{ border: checkedValid && !modalidad ? '1px solid red' : '' }}
-											name='modalidad'
-											type='text'
+											style={{
+												border:
+													checkedValid && !modalidad ? '1px solid red' : ''
+											}}
+											name="modalidad"
+											type="text"
 											value={modalidad}
 											readOnly
-											onClick={() => !showModalidades && setShowModalidades(true)}
+											onClick={() =>
+												!showModalidades && setShowModalidades(true)
+											}
 											autoFocus={true}
 										/>
 										{checkedValid && !modalidad && (
@@ -457,82 +458,65 @@ export const Agregar: React.FC<IProps> = props => {
 									</FormGroup>
 								</Col>
 							</Row>
-							<Row className='mb-2'>
-								<Col sm={3}>
-									<Label>{t('registro_servicio_comunal>caracteristicas', 'Caracteristicas')}</Label>
-
-									{caracteristicasSeleccionados.length == 0 && (
-										<FormGroup>
-											<Input
-												style={{
-													border:
-														checkedValid && isEmpty(caracteristicasSeleccionados)
-															? '1px solid red'
-															: ''
-												}}
-												name='caracteristicas'
-												value={''}
-												readOnly
-												onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
-											/>
-											{checkedValid && isEmpty(caracteristicasSeleccionados) && (
-												<span style={{ color: 'red' }}>Campo requerido</span>
-											)}
-										</FormGroup>
-									)}
-									{caracteristicasSeleccionados.length > 0 && (
-										<div
-											className='caracteristicas'
-											onClick={() => !showCaracteristicas && setShowCaracteristicas(true)}
-										>
-											{caracteristicasSeleccionados.map(n => (
-												<Chip label={n.nombre} />
-											))}
-										</div>
-									)}
-								</Col>
-								<Col sm={3}>
+							<Row className="mb-2">
+								<Col sm={4}>
 									<FormGroup>
 										<Label>
-											{t('registro_servicio_comunal>fecha_conclusion', 'Fecha de conclusión SCE')}
+											{t(
+												'registro_servicio_comunal>fecha_conclusion',
+												'Fecha de conclusión SCE'
+											)}{' '}
+											<span style={{ color: 'red' }}>*</span>
 										</Label>
 										<DatePicker
 											style={{
 												zIndex: 99999
 											}}
 											popperPlacement={'right'}
-											dateFormat='dd/MM/yyyy'
+											dateFormat="dd/MM/yyyy"
 											customInput={
-												<input className={checkedValid && !formattedDate ? 'invalid' : ''} />
+												<input
+													className={
+														checkedValid && !formattedDate ? 'invalid' : ''
+													}
+												/>
 											}
 											selected={selectedDate}
 											onChange={date => {
 												const d = new Date(date)
 												setSelectedDate(d)
+												setDate(d)
 												setFormattedDate(d.toLocaleDateString('fr-FR'))
 											}}
-											maxDate={today} // Set the maximum selectable date to today
+											minDate={new Date(new Date().getFullYear(), 0, 1)}
+											maxDate={today}
 										/>
 									</FormGroup>
 									{checkedValid && !formattedDate && (
 										<span style={{ color: 'red' }}>Campo requerido</span>
 									)}
 								</Col>
-								<Col sm={3}>
+								<Col sm={4}>
 									<FormGroup>
 										<Label>
 											{t(
 												'registro_servicio_comunal>organizacion_contraparte',
 												'Organización contraparte'
-											)}
+											)}{' '}
+											<span style={{ color: 'red' }}>*</span>
 										</Label>
 										<Input
-											style={{ border: checkedValid && !organizacion ? '1px solid red' : '' }}
-											name='organizacionContraparte'
-											type='text'
+											style={{
+												border:
+													checkedValid && !organizacion ? '1px solid red' : ''
+											}}
+											name="organizacionContraparte"
+											type="text"
 											value={organizacion ? organizacion : ''}
 											readOnly
-											onClick={() => !showTipoOrganizacion && setShowTipoOrganizacion(true)}
+											onClick={() =>
+												!showTipoOrganizacion && setShowTipoOrganizacion(true)
+											}
 											autoFocus={true}
 										/>
 										{checkedValid && !organizacion && (
@@ -541,15 +525,22 @@ export const Agregar: React.FC<IProps> = props => {
 									</FormGroup>
 									{valueOrg}
 								</Col>
-								<Col sm={3}>
+								<Col sm={4}>
 									<FormGroup>
 										<Label>
-											{t('registro_servicio_comunal>docente_acompaña', 'Acompañante de proyecto')}
+											{t(
+												'registro_servicio_comunal>docente_acompaña',
+												'Persona tutor/a'
+											)}{' '}
+											<span style={{ color: 'red' }}>*</span>
 										</Label>
 										<Input
-											style={{ border: checkedValid && !acompanante ? '1px solid red' : '' }}
-											name='acompanante'
-											type='text'
+											style={{
+												border:
+													checkedValid && !acompanante ? '1px solid red' : ''
+											}}
+											name="acompanante"
+											type="text"
 											value={acompanante}
 											onChange={e => {
 												setValueAcompanante(e.target.value)
@@ -562,22 +553,6 @@ export const Agregar: React.FC<IProps> = props => {
 									</FormGroup>
 								</Col>
 							</Row>
-
-							<FormGroup>
-								<Label>{t('registro_servicio_comunal>descripcion', 'Descripción')}</Label>
-
-								<Input
-									style={{ border: checkedValid && !descripcion ? '1px solid red' : '' }}
-									name='descripcion'
-									type='text'
-									value={descripcion}
-									onChange={e => {
-										setValueDescripcion(e.target.value)
-									}}
-									autoFocus={true}
-								/>
-								{checkedValid && !descripcion && <span style={{ color: 'red' }}>Campo requerido</span>}
-							</FormGroup>
 						</Form>
 					</Card>
 				</Col>
@@ -585,19 +560,22 @@ export const Agregar: React.FC<IProps> = props => {
 
 			<Row>
 				<Col sm={12}>
-					<div>
-						<Search
-							newId='servicioComunalSearch'
-							onSearch={() => {
-								showBuscador ? setShowBuscador(false) : setShowBuscador(true)
-							}}
-						/>
-					</div>
 					{checkedValid && isEmpty(estudiantes) && (
 						<span style={{ color: 'red' }}>Debe agregar estudiantes</span>
 					)}
 					<TableStudents
 						onlyViewModule={true}
+						button={
+							<Button
+								onClick={() => {
+									showBuscador ? setShowBuscador(false) : setShowBuscador(true)
+								}}
+								color="primary"
+								style={{ cursor: 'pointer' }}
+							>
+								Agregar estudiantes
+							</Button>
+						}
 						data={estudiantes}
 						avoidSearch={true}
 						hasEditAccess={true}
@@ -612,12 +590,18 @@ export const Agregar: React.FC<IProps> = props => {
 				<Col sm={12}>
 					<p style={{ textAlign: 'center' }}>
 						<Button
-							class={
-								isValid()
-									? 'sc-iqcoie bQFwPO cursor-pointer'
-									: 'sc-iqcoie bQFwPO cursor-pointer disabled'
-							}
-							primary
+							outline={true}
+							color="secondary"
+							style={{ cursor: 'pointer', marginRight: '5px' }}
+							onClick={() => {
+								history.push('/director/expediente-centro/sce')
+							}}
+						>
+							Cancelar
+						</Button>
+						<Button
+							color="primary"
+							style={{ cursor: 'pointer' }}
 							onClick={() => {
 								setLoading(true)
 								if (idInstitucion) {
@@ -636,11 +620,11 @@ export const Agregar: React.FC<IProps> = props => {
 												descripcion,
 												fechaConclusionSCE: date.toISOString(),
 												insertadoPor: localStorage.getItem('loggedUser'),
-												caracteristicas: caracteristicasSeleccionados.map(e => e.id),
+												caracteristicas: [],
 												estudiantes: estudiantes.map(e => e.idEstudiante)
 											})
 											.then(() => {
-												props.history.push('/director/expediente-centro/servicio-comunal')
+												props.history.push('/director/expediente-centro/sce')
 											})
 									}
 								} else {

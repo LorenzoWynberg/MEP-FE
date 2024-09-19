@@ -92,6 +92,11 @@ const IdentidadForm: React.FC<FormProps> = (props) => {
     let tipoDimex: any = {}
     let tipoYisro: any = {}
 
+    if (userAge<0)
+    {
+
+    }
+
     if (typeId.elementoId === 3) {
       tipoDimex =
         userDatos &&
@@ -375,6 +380,7 @@ const IdentidadForm: React.FC<FormProps> = (props) => {
                 autoComplete='off'
                 value={formState.userAge}
                 readOnly={props.disabled}
+                
               />
             </FormGroup>
             <FormGroup>

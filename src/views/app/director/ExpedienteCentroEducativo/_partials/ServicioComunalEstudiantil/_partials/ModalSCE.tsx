@@ -18,23 +18,6 @@ const ModalSCE = props => {
 
 	useEffect(() => {
 		actions.GetServicioComunalInfoById(parseInt(props.servicioComunalId), parseInt(idInstitucion)).then(res => {
-			if (res[0]?.caracteristicas) {
-				setCaracteristicasString(() => {
-					return res[0]?.caracteristicas
-						.map(item => <span>{item.nombre}</span>)
-						.reduce(
-							(acc, x) =>
-								acc === null ? (
-									x
-								) : (
-									<>
-										{acc}, {x}
-									</>
-								),
-							null
-						)
-				})
-			}
 			setSCE(res[0])
 			setLoading(false)
 			setShowProyecto(true)
@@ -66,14 +49,14 @@ const ModalSCE = props => {
 				'Nacionalidad'
 			),
 			accessor: 'nacionalidad',
-			label: '',
-			column: ''
+			label: 'Nacionalidad',
+			column: 'nacionalidad'
 		},
 		{
 			Header: t('servicio_comunal>registro_servicio_comunal>genero', 'genero'),
 			accessor: 'genero',
-			label: '',
-			column: ''
+			label: 'Género',
+			column: 'genero'
 		},
 		{
 			Header: t(
@@ -81,21 +64,21 @@ const ModalSCE = props => {
 				'Fecha de nacimiento'
 			),
 			accessor: 'fechaNacimiento',
-			label: '',
-			column: ''
+			label: 'Fecha de nacimiento',
+			column: 'fechaNacimiento'
 		},
 		{
 			Header: t('servicio_comunal>registro_servicio_comunal>edad', 'Edad'),
 			accessor: 'edad',
-			label: '',
-			column: ''
+			label: 'Edad',
+			column: 'edad'
 		},
 
 		{
-			Header: t('servicio_comunal>registro_servicio_comunal>discapacidad', 'Discapacidad'),
+			Header: t('servicio_comunal>registro_servicio_comunal>discapacidad', 'Tiene discapacidades'),
 			accessor: 'discapacidad',
-			label: '',
-			column: ''
+			label: 'Condición de discapacidad',
+			column: 'discapacidad'
 		}
 	]
 
@@ -120,38 +103,29 @@ const ModalSCE = props => {
 							<br />
 							<span>{sce.nombreModalidad && sce.nombreModalidad}</span>
 						</Col>
-						<Col sm={4} className='mb-3'>
-							<strong>{t('informationcarddetalle>caracteristicas', 'Características')}:</strong>
-							<br />
-							{<span>{sce.caracteristicas && caracteristicasString}</span>}
-						</Col>
+
 						<Col sm={4} className='mb-3'>
 							<strong>
-								{t(
-									'informationcarddetalle>organizaciónContraParte',
-									'Tipo de organización contraparte'
-								)}
-								:
+								{t('informationcarddetalle>organizaciónContraPart', 'Organización contraparte')}:
 							</strong>
 							<br />
 							<span>{sce.nombreOrganizacionContraparte && sce.nombreOrganizacionContraparte}</span>
 						</Col>
 						<Col sm={4} className='mb-3'>
-							<strong>
-								{t('informationcarddetalle>docenteAcompana', 'Docente que acompaña el proyecto')}:
-							</strong>
+							{/* TODO: i18n */}
+							<strong>{t('informationcarddetalle>docenteAcompan', 'Persona tutor/a')}:</strong>
 							<br />
 							<span>{sce.nombreDocente && sce.nombreDocente}</span>
-						</Col>
-						<Col sm={4} className='mb-3'>
-							<strong>{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:</strong>
-							<br />
-							<span>{sce.fechaConclusion && sce.fechaConclusion}</span>
 						</Col>
 						<Col sm={4} className='mb-3'>
 							<strong>{t('informationcarddetalle>quienRegistra', 'Quién registra')}:</strong>
 							<br />
 							<span>{sce.usuarioFechaRegistro && sce.usuarioFechaRegistro}</span>
+						</Col>
+						<Col sm={4} className='mb-3'>
+							<strong>{t('informationcarddetalle>fechaConclusion', 'Fecha de Conclusión')}:</strong>
+							<br />
+							<span>{sce.fechaConclusion && sce.fechaConclusion}</span>
 						</Col>
 						<Col sm={4} className='mb-3'>
 							<strong>

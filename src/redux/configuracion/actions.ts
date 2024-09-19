@@ -401,12 +401,12 @@ export const getInstitucionesFinder =
 	}
 
 export const getCertificadosByInstitucionFiltered =
-	(institucionId, filter = ' ', page = 1, size = 100) =>
+	(institucionId, filter = ' ', page = 1, size = 100, idAnio) =>
 	async dispatch => {
 		try {
 			showProgress()
 			const response: any = await axios.get(
-				`${envVariables.BACKEND_URL}/api/ServicioComunal/BuscadorCertificadoByStudent/${filter}/${institucionId}/${page}/${size}`
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/BuscadorCertificadoByStudent/${filter}/${institucionId}/${page}/${size}/${idAnio}`
 			)
 			const result = {
 				entityList: response.data,

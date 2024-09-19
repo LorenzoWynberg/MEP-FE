@@ -445,7 +445,7 @@ export const FichaCentro: React.FC<IProps> = (props) => {
         label: ''
       },
       {
-        Header: 'Acciones',
+        Header: 'Extensiones',
         columns: '',
         accessor: '',
         label: '',
