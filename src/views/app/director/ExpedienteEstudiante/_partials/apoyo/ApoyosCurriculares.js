@@ -135,9 +135,7 @@ export const ApoyosCurriculares = () => {
 			expedienteEstudiantil: store.expedienteEstudiantil,
 			identification: store.identification,
 			apoyos: store.apoyos,
-			selects: store.selects,
-			activeYear: store.authUser.selectedActiveYear,
-			activeYears: store.authUser.activeYears
+			selects: store.selects
 		}
 	})
 

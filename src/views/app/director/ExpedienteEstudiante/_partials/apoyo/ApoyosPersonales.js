@@ -141,24 +141,25 @@ export const ApoyosPersonales = () => {
 		}
 	})
 
-	useEffect(() => {
-		const loadData = async () => {
-			try {
-				setLoading(true)
-				await actions.getTiposApoyos()
+	const loadData = async () => {
+		try {
+			setLoading(true)
+			await actions.getTiposApoyos()
 
-				const tiposDeApoyo = state.apoyos.tipos.filter(
-					tipo => tipo.categoriaApoyoId === categoria.id
-				)
+			const tiposDeApoyo = state.apoyos.tipos.filter(
+				tipo => tipo.categoriaApoyoId === categoria.id
+			)
 
-				setTiposApoyo(tiposDeApoyo)
+			setTiposApoyo(tiposDeApoyo)
 
-				!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
-					(await actions.getCatalogs(catalogsEnumObj.TIPOCONDICIONAPOYO.id))
-			} finally {
-				setLoading(false)
-			}
+			!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
+				(await actions.getCatalogs(catalogsEnumObj.TIPOCONDICIONAPOYO.id))
+		} finally {
+			setLoading(false)
 		}
+	}
+
+	useEffect(() => {
 		loadData()
 	}, [])
 
@@ -200,6 +201,7 @@ export const ApoyosPersonales = () => {
 					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`
 				)
 				.then(() => {
+					loadData()
 					axios
 						.get(
 							`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
@@ -548,6 +550,7 @@ export const ApoyosPersonales = () => {
 			.then(response => {
 				setLoading(false)
 				setData(response.data.entityList)
+				loadData()
 			})
 			.catch(error => {
 				setLoading(false)
