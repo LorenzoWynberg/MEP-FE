@@ -21,6 +21,7 @@ import { useForm } from 'react-hook-form'
 import withAuthorization from 'Hoc/withAuthorization'
 import { getYearsOld } from 'Utils/years'
 import { useTranslation } from 'react-i18next'
+import { isEmpty, set } from 'lodash'
 
 const listSexo = [
 	{ value: 1, label: 'Masculino', key: 1 },
@@ -31,6 +32,7 @@ const General = props => {
 	const { t } = useTranslation()
 	const { authHandler } = props
 	const [identidadData, setIdentidadData] = useState({})
+	const [prevIdentidadData, setPrevIdentidadData] = useState({})
 	const [disableMigrationStatus, setDisableMigrationStatus] = useState(false)
 	const submitData = data => authHandler('modificar', sendData, toggleSnackbar)
 	const [loading, setLoading] = useState(true)
@@ -236,14 +238,14 @@ const General = props => {
 		}
 		let response
 		response = await actions.updateIdentity(_data)
-		setIdentidadData(_data)
+		//setIdentidadData(_data)
 		if (response.data.error) {
 			setSnackbarContent({
 				variant: 'error',
 				msg: response.data.message
 			})
 			handleClick()
-			setEditable(true)
+			handleCancelEdit(true)
 		} else {
 			setSnackbarContent({
 				variant: 'success',
@@ -251,6 +253,18 @@ const General = props => {
 			})
 			handleClick()
 			setEditable(false)
+			setPrevIdentidadData(null)
+		}
+	}
+
+	const handleCancelEdit = isEditable => {
+		if (isEditable) {
+			setPrevIdentidadData(identidadData)
+			setEditable(true)
+		} else {
+			setIdentidadData(prevIdentidadData)
+			setEditable(false)
+			return
 		}
 	}
 
@@ -276,6 +290,7 @@ const General = props => {
 				[e.target.name]: e.target.value
 			}
 		}
+
 		setIdentidadData(_data)
 	}
 
@@ -339,7 +354,7 @@ const General = props => {
 								setEditable={value => {
 									authHandler(
 										'modificar',
-										() => setEditable(value),
+										() => handleCancelEdit(value),
 										toggleSnackbar
 									)
 								}}
