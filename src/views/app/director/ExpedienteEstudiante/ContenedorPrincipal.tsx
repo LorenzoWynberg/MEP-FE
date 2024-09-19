@@ -184,8 +184,6 @@ const ContenedorPrincipal = props => {
 					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Expediente/GetDatosAdicionalesMatricula/${state.expedienteEstudiantil.currentStudent.idEstudiante}`
 				)
 
-				debugger
-
 				const esIndigena = datosAdicionales.data?.esIndigena ? 'SI' : 'NO'
 				setInfoCard(prevState => {
 					return {
