@@ -1,6 +1,11 @@
 import '../../assets/css/sass/containerStyles/Comunicado.scss'
 
-import { HttpTransportType, HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr'
+import {
+	HttpTransportType,
+	HubConnection,
+	HubConnectionBuilder,
+	LogLevel
+} from '@microsoft/signalr'
 import colors from 'Assets/js/colors'
 import SimpleModal from 'Components/Modal/simple'
 import SessionExpired from 'Components/SessionExpired'
@@ -9,7 +14,14 @@ import Helmet from 'react-helmet'
 import { injectIntl } from 'react-intl'
 import { connect } from 'react-redux'
 import { NavLink, withRouter } from 'react-router-dom'
-import { Button, DropdownItem, DropdownMenu, DropdownToggle, Input, UncontrolledDropdown } from 'reactstrap'
+import {
+	Button,
+	DropdownItem,
+	DropdownMenu,
+	DropdownToggle,
+	Input,
+	UncontrolledDropdown
+} from 'reactstrap'
 
 import ChangePasswordForm from '../../components/ChangePasswordForm'
 import { Separator } from '../../components/common/CustomBootstrap'
@@ -25,17 +37,30 @@ import {
 	setContainerClassnames,
 	setSelectedActiveYear
 } from '../../redux/actions'
-import { changePasswordbyCurrentUser, handleChangeRole, setUserInstitution } from '../../redux/auth/actions.ts'
+import {
+	changePasswordbyCurrentUser,
+	handleChangeRole,
+	setUserInstitution
+} from '../../redux/auth/actions.ts'
 import { getRealtimeComunicados } from '../../redux/comunicados/actions'
-import { GetComunicadosPaginados, MarcarComoLeidos } from '../../redux/notificaciones/actions'
+import {
+	GetComunicadosPaginados,
+	MarcarComoLeidos
+} from '../../redux/notificaciones/actions'
 import InstitutionSwitch from './InstitutionSwitch'
-import { OutlinedSelect, OutlinedReactSelect } from '../../components/CommonComponents'
+import {
+	OutlinedSelect,
+	OutlinedReactSelect
+} from '../../components/CommonComponents'
 import styled from 'styled-components'
 import StoreConfigurator from '../../redux/StoreConfigurator'
 import { toggleMenuState } from '../../redux/menu/actions'
 
 import { withTranslation } from 'react-i18next'
-import { LanguageSelector, AnioEducativoSelect } from 'Components/CommonComponents'
+import {
+	LanguageSelector,
+	AnioEducativoSelect
+} from 'Components/CommonComponents'
 
 import FormulariosIcon from '../../components/svg/Formularios'
 import ComunicadosIcon from '../../components/svg/Comunicados'
@@ -89,7 +114,8 @@ class TopNav extends Component {
 		this.setState({ connection: connect })
 		const self = this
 		if (connect) {
-			const connetionNotificationOn = 'RecibirNotificacion-' + localStorage.getItem('persist:uid')
+			const connetionNotificationOn =
+				'RecibirNotificacion-' + localStorage.getItem('persist:uid')
 			connect.on(connetionNotificationOn, data => {
 				self.setState({
 					data: [
@@ -103,12 +129,15 @@ class TopNav extends Component {
 				})
 			})
 
-			const connetionOn = 'RecibirComunicado-' + localStorage.getItem('persist:uid')
+			const connetionOn =
+				'RecibirComunicado-' + localStorage.getItem('persist:uid')
 			connect.on(connetionOn, message => {
 				this.props.getRealtimeComunicados(message)
 			})
 
-			connect.start().catch(err => console.log('Error while starting connection: ' + err))
+			connect
+				.start()
+				.catch(err => console.log('Error while starting connection: ' + err))
 		}
 	}
 
@@ -151,7 +180,9 @@ class TopNav extends Component {
 			if (!e.target.classList.contains('search')) {
 				if (e.target.parentElement.classList.contains('search')) {
 					elem = e.target.parentElement
-				} else if (e.target.parentElement.parentElement.classList.contains('search')) {
+				} else if (
+					e.target.parentElement.parentElement.classList.contains('search')
+				) {
 					elem = e.target.parentElement.parentElement
 				}
 			}
@@ -182,7 +213,8 @@ class TopNav extends Component {
 		if (
 			e.target &&
 			e.target.classList &&
-			(e.target.classList.contains('navbar') || e.target.classList.contains('simple-icon-magnifier'))
+			(e.target.classList.contains('navbar') ||
+				e.target.classList.contains('simple-icon-magnifier'))
 		) {
 			isSearchClick = true
 			if (e.target.classList.contains('simple-icon-magnifier')) {
@@ -219,7 +251,9 @@ class TopNav extends Component {
 	}
 
 	search = () => {
-		this.props.history.push(envVariables.SEARCH_PATH + '/' + this.state.searchKeyword)
+		this.props.history.push(
+			envVariables.SEARCH_PATH + '/' + this.state.searchKeyword
+		)
 		this.setState({
 			searchKeyword: ''
 		})
@@ -244,13 +278,19 @@ class TopNav extends Component {
 			window.dispatchEvent(event)
 		}, 350)
 
-		this.props.setContainerClassnames(++menuClickCount, containerClassnames, this.props.selectedMenuHasSubItems)
+		this.props.setContainerClassnames(
+			++menuClickCount,
+			containerClassnames,
+			this.props.selectedMenuHasSubItems
+		)
 
 		if (isComunicado !== undefined) {
 			if (containerClassnames === 'menu-sub-hidden') {
-				document.getElementsByClassName('main-menu')[0].style.transform = 'translateX(-250px)'
+				document.getElementsByClassName('main-menu')[0].style.transform =
+					'translateX(-250px)'
 			} else {
-				document.getElementsByClassName('main-menu')[0].style.transform = 'translateX(0px)'
+				document.getElementsByClassName('main-menu')[0].style.transform =
+					'translateX(0px)'
 			}
 		}
 	}
@@ -259,9 +299,11 @@ class TopNav extends Component {
 		this.props.clickOnMobileMenu(containerClassnames)
 		if (isComunicado !== undefined) {
 			if (containerClassnames === 'menu-sub-hidden menu-mobile') {
-				document.getElementsByClassName('main-menu')[0].style.transform = 'translateX(-250px)'
+				document.getElementsByClassName('main-menu')[0].style.transform =
+					'translateX(-250px)'
 			} else {
-				document.getElementsByClassName('main-menu')[0].style.transform = 'translateX(0px)'
+				document.getElementsByClassName('main-menu')[0].style.transform =
+					'translateX(0px)'
 			}
 		}
 	}
@@ -308,7 +350,9 @@ class TopNav extends Component {
 		const token = authObject.user.token
 		const { data } = this.state
 		const isEncargadoOrEstudiante = authObject.user.rolesOrganizaciones?.find(
-			rol => rol.rolNombre.toLowerCase() === 'estudiante' || rol.rolNombre.toLowerCase() === 'encargado'
+			rol =>
+				rol.rolNombre.toLowerCase() === 'estudiante' ||
+				rol.rolNombre.toLowerCase() === 'encargado'
 		)
 
 		const institutionsArray = isEncargadoOrEstudiante
@@ -323,29 +367,41 @@ class TopNav extends Component {
 		return (
 			<div>
 				<Helmet htmlAttributes={{ lang: locale }} />
-				{this.props.serverUnauthorized && <SessionExpired onConfirm={this.handleLogout.bind(this)} />}
+				{this.props.serverUnauthorized && (
+					<SessionExpired onConfirm={this.handleLogout.bind(this)} />
+				)}
 				<nav
-					className='navbar fixed-top'
+					className="navbar fixed-top"
 					style={{
 						minHeight: this.props.isComunicado ? '150px' : '',
 						height: this.props.isComunicado ? 'auto' : '',
 						display: 'flex',
 						justifyContent: 'space-between',
-						alignItems: this.props.currentInstitution?.id > 0 ? 'flex-start' : '',
+						alignItems:
+							this.props.currentInstitution?.id > 0 ? 'flex-start' : '',
 						padding: '1.2rem 2rem'
 					}}
 				>
-					<div className={`d-flex align-items-center ${this.props.isComunicado ? '' : 'navbar-left'}`}>
+					<div
+						className={`d-flex align-items-center ${
+							this.props.isComunicado ? '' : 'navbar-left'
+						}`}
+					>
 						{iconMenu && (
 							<NavLink
-								to='#'
-								className='menu-button d-none d-md-block'
+								to="#"
+								className="menu-button d-none d-md-block"
 								style={{
 									width: 'auto',
 									margin: '0 2rem 0 0'
 								}}
 								onClick={e =>
-									this.menuButtonClick(e, menuClickCount, containerClassnames, isComunicado)
+									this.menuButtonClick(
+										e,
+										menuClickCount,
+										containerClassnames,
+										isComunicado
+									)
 								}
 							>
 								<MenuIcon />
@@ -353,28 +409,41 @@ class TopNav extends Component {
 						)}
 						{iconMenu && (
 							<NavLink
-								to='#'
-								className='menu-button-mobile d-xs-block d-sm-block d-md-none'
-								onClick={e => this.mobileMenuButtonClick(e, containerClassnames, isComunicado)}
+								to="#"
+								className="menu-button-mobile d-xs-block d-sm-block d-md-none"
+								onClick={e =>
+									this.mobileMenuButtonClick(
+										e,
+										containerClassnames,
+										isComunicado
+									)
+								}
 							>
 								<MobileMenuIcon />
 							</NavLink>
 						)}
 
-						<div className='d-inline-block'>
+						<div className="d-inline-block">
 							{/* SE ESTA COMENTANDO ESTE CODIGO PARA LA FASE DE REGISTRO,
               CUANDO SALGAMOS DE ELLA, VA A SER RELEVANTE DE NUEVO. */}
 							{/* ========================= */}
 							{!true && (
-								<UncontrolledDropdown className='ml-2'>
-									<DropdownToggle caret color='light' size='sm' className='language-button'>
-										<span className='name'>{locale.toUpperCase()}</span>
+								<UncontrolledDropdown className="ml-2">
+									<DropdownToggle
+										caret
+										color="light"
+										size="sm"
+										className="language-button"
+									>
+										<span className="name">{locale.toUpperCase()}</span>
 									</DropdownToggle>
-									<DropdownMenu className='mt-3' right>
+									<DropdownMenu className="mt-3" right>
 										{envVariables.LOCALE_OPTIONS.map(l => {
 											return (
 												<DropdownItem
-													onClick={() => this.handleChangeLocale(l.id, l.direction)}
+													onClick={() =>
+														this.handleChangeLocale(l.id, l.direction)
+													}
 													key={l.id}
 												>
 													{l.name}
@@ -386,7 +455,7 @@ class TopNav extends Component {
 							)}
 							{/* ========================= */}
 						</div>
-						<div className='d-inline-block'>
+						<div className="d-inline-block">
 							<div style={{ display: 'flex' }}>
 								<AnioEducativoSelect />
 								<LanguageSelector />
@@ -440,7 +509,7 @@ class TopNav extends Component {
               )} */}
 							{JSON.parse(sessionStorage.getItem('adminHasAcces')) && (
 								<Button
-									color='primary'
+									color="primary"
 									onClick={async () => {
 										await this.props.impersonarInstitución()
 										this.props.history.push('/app/admin')
@@ -500,25 +569,25 @@ class TopNav extends Component {
             )} */}
 					{this.props.isComunicado && (
 						<a
-							className='navbar-logo l-Logo'
+							className="navbar-logo l-Logo"
 							style={{
 								width: '150px',
 								position: 'relative',
 								margin: 0,
 								float: 'left'
 							}}
-							href='/'
+							href="/"
 						>
 							<>
-								<span className='logo-saber d-none d-xs-block' />
-								<span className='logo-mobile-saber d-block d-xs-none' />
+								<span className="logo-saber d-none d-xs-block" />
+								<span className="logo-mobile-saber d-block d-xs-none" />
 							</>
 						</a>
 					)}
 					{!this.props.isComunicado && (
 						<a
-							className='navbar-logo l-Logo'
-							href='/'
+							className="navbar-logo l-Logo"
+							href="/"
 							style={{
 								width: '150px',
 								position: 'relative',
@@ -527,8 +596,8 @@ class TopNav extends Component {
 							}}
 						>
 							<>
-								<span className='logo-saber d-none d-xs-block' />
-								<span className='logo-mobile-saber d-block d-xs-none' />
+								<span className="logo-saber d-none d-xs-block" />
+								<span className="logo-mobile-saber d-block d-xs-none" />
 							</>
 						</a>
 					)}
@@ -574,7 +643,7 @@ class TopNav extends Component {
                   onClick={this.openApplications}
               /> */}
 							<StyledPopover
-								id='mouse-over-popover'
+								id="mouse-over-popover"
 								open={Boolean(this.state.anchorEl)}
 								anchorEl={this.state.anchorEl}
 								anchorOrigin={{
@@ -588,7 +657,7 @@ class TopNav extends Component {
 									horizontal: 'right'
 								}}
 							>
-								<div class='addTop' align='center'>
+								<div class="addTop" align="center">
 									<div
 										style={{
 											display: 'flex',
@@ -600,7 +669,9 @@ class TopNav extends Component {
 											<ModuleIconContainer
 												onClick={() => {
 													if (
-														window.location.href.toString().indexOf('#/comunicados') == -1
+														window.location.href
+															.toString()
+															.indexOf('#/comunicados') == -1
 													) {
 														const url = `#/comunicados/recibidos`
 														window.open(url)
@@ -615,7 +686,10 @@ class TopNav extends Component {
 										}
 										<ModuleIconContainer
 											onClick={() => {
-												if (window.location.href.toString().indexOf('#/forms') == -1) {
+												if (
+													window.location.href.toString().indexOf('#/forms') ==
+													-1
+												) {
 													const url = `#/forms`
 													window.open(url)
 												} else {
@@ -629,108 +703,129 @@ class TopNav extends Component {
 									</div>
 								</div>
 							</StyledPopover>
-							{authObject.user.rolesOrganizaciones.length > 0 && this.props.currentInstitution && (
-								<UncontrolledDropdown className='ml-2'>
-									{authObject.user.rolesOrganizaciones.length < 2 ? (
-										<UserDiv>
-											<span className='name'>
-												{isEncargadoOrEstudiante
-													? isEncargadoOrEstudiante.rolNombre
-													: this.props.currentRoleOrganizacion.accessRole.rolNombre &&
-													  `${this.props.currentRoleOrganizacion.accessRole.rolNombre} ${
-															this.props.currentRoleOrganizacion.accessRole
-																.nivelAccesoId > 1
-																? this.props.currentRoleOrganizacion.accessRole
-																		.organizacionNombre === null
-																	? ''
-																	: ' - ' +
-																	  this.props.currentRoleOrganizacion.accessRole
-																			.organizacionNombre
-																: this.props.currentInstitution?.codigo +
-																  ' - ' +
-																  this.props.currentInstitution?.nombre?.toUpperCase()
-													  }`}
-											</span>
-										</UserDiv>
-									) : (
-										<DropdownToggle
-											caret
-											color='light'
-											size='sm'
-											className='language-button'
-											style={{
-												minWidth: '170px',
-												whiteSpace: 'unset'
-											}}
-											disabled={authObject.user.rolesOrganizaciones.length < 2}
-										>
-											<span className='name'>
-												{isEncargadoOrEstudiante
-													? isEncargadoOrEstudiante.rolNombre
-													: this.props.currentRoleOrganizacion.accessRole.rolNombre &&
-													  `${this.props.currentRoleOrganizacion.accessRole.rolNombre} ${
-															this.props.currentRoleOrganizacion.accessRole
-																.nivelAccesoId > 1
-																? this.props.currentRoleOrganizacion.accessRole
-																		.organizacionNombre === null
-																	? ''
-																	: ' - ' +
-																	  this.props.currentRoleOrganizacion.accessRole
-																			.organizacionNombre
-																: this.props.currentInstitution?.codigo +
-																  ' - ' +
-																  this.props.currentInstitution.nombre?.toUpperCase()
-													  } 
-                              `}
-											</span>
-										</DropdownToggle>
-									)}
-
-									<DropdownMenu className='mt-3' right>
-										{institutionsArray &&
-											institutionsArray.map(role => {
-												return (
-													<DropdownItem
-														onClick={() => {
-															localStorage.setItem(
-																'selectedRolInstitution',
-																JSON.stringify(role)
-															)
-															this.props.handleChangeRole(role)
-															this.props.setUserInstitution(role.institutionObject, true)
-														}}
-														key={role.rolId}
-													>
-														{!isEncargadoOrEstudiante
-															? `${role.rolNombre} ${
-																	role.organizacionNombre?.toUpperCase() === undefined
+							{authObject.user.rolesOrganizaciones.length > 0 &&
+								this.props.currentInstitution && (
+									<UncontrolledDropdown className="ml-2">
+										{authObject.user.rolesOrganizaciones.length < 2 ? (
+											<UserDiv>
+												<span className="name">
+													{isEncargadoOrEstudiante
+														? isEncargadoOrEstudiante.rolNombre
+														: this.props.currentRoleOrganizacion.accessRole
+																.rolNombre &&
+														  `${
+																this.props.currentRoleOrganizacion.accessRole
+																	.rolNombre
+														  } ${
+																this.props.currentRoleOrganizacion.accessRole
+																	.nivelAccesoId > 1
+																	? this.props.currentRoleOrganizacion
+																			.accessRole.organizacionNombre === null
 																		? ''
-																		: ' - ' + role.organizacionNombre?.toUpperCase()
-															  }`
-															: `${role.rolNombre} - ${
-																	role.institutionObject?.codigo
-															  } - ${role.institutionObject?.nombre.toUpperCase()}`}
-													</DropdownItem>
-												)
-											})}
-									</DropdownMenu>
-								</UncontrolledDropdown>
-							)}
-							<div className='user'>
-								<UncontrolledDropdown className='dropdown-menu-right'>
-									<DropdownToggle className='p-0' color='empty'>
-										<span className='name mr-1'>{this.props.userEmail}</span>
+																		: ' - ' +
+																		  this.props.currentRoleOrganizacion
+																				.accessRole.organizacionNombre
+																	: this.props.currentInstitution?.codigo +
+																	  ' - ' +
+																	  this.props.currentInstitution?.nombre?.toUpperCase()
+														  }`}
+												</span>
+											</UserDiv>
+										) : (
+											<DropdownToggle
+												caret
+												color="light"
+												size="sm"
+												className="language-button"
+												style={{
+													minWidth: '170px',
+													whiteSpace: 'unset'
+												}}
+												disabled={
+													authObject.user.rolesOrganizaciones.length < 2
+												}
+											>
+												<span className="name">
+													{isEncargadoOrEstudiante
+														? isEncargadoOrEstudiante.rolNombre
+														: this.props.currentRoleOrganizacion.accessRole
+																.rolNombre &&
+														  `${
+																this.props.currentRoleOrganizacion.accessRole
+																	.rolNombre
+														  } ${
+																this.props.currentRoleOrganizacion.accessRole
+																	.nivelAccesoId > 1
+																	? this.props.currentRoleOrganizacion
+																			.accessRole.organizacionNombre === null
+																		? ''
+																		: ' - ' +
+																		  this.props.currentRoleOrganizacion
+																				.accessRole.organizacionNombre
+																	: this.props.currentInstitution?.codigo +
+																	  ' - ' +
+																	  this.props.currentInstitution.nombre?.toUpperCase()
+														  } 
+                              `}
+												</span>
+											</DropdownToggle>
+										)}
+
+										<DropdownMenu className="mt-3" right>
+											{institutionsArray &&
+												institutionsArray.map(role => {
+													return (
+														<DropdownItem
+															onClick={() => {
+																localStorage.setItem(
+																	'selectedRolInstitution',
+																	JSON.stringify(role)
+																)
+																this.props.handleChangeRole(role)
+																this.props.setUserInstitution(
+																	role.institutionObject,
+																	true
+																)
+															}}
+															key={role.rolId}
+														>
+															{!isEncargadoOrEstudiante
+																? `${role.rolNombre} ${
+																		role.organizacionNombre?.toUpperCase() ===
+																		undefined
+																			? ''
+																			: ' - ' +
+																			  role.organizacionNombre?.toUpperCase()
+																  }`
+																: `${role.rolNombre} - ${
+																		role.institutionObject?.codigo
+																  } - ${role.institutionObject?.nombre.toUpperCase()}`}
+														</DropdownItem>
+													)
+												})}
+										</DropdownMenu>
+									</UncontrolledDropdown>
+								)}
+							<div className="user">
+								<UncontrolledDropdown className="dropdown-menu-right">
+									<DropdownToggle className="p-0" color="empty">
+										<span className="name mr-1">{this.props.userEmail}</span>
 										<span>
-											<img alt='Profile' src='/assets/img/profile-pic-generic.png' />
+											<img
+												alt="Profile"
+												src="/assets/img/profile-pic-generic.png"
+											/>
 										</span>
 									</DropdownToggle>
-									<DropdownMenu className='mt-3' right>
+									<DropdownMenu className="mt-3" right>
 										{authObject.userData.identidad?.identificacion && (
 											<>
 												<DropdownItem
-													className='cursor-pointer'
+													className="cursor-pointer"
 													onClick={() =>
-														this.toEditUser(authObject.userData.identidad?.identificacion)
+														this.toEditUser(
+															authObject.userData.identidad?.identificacion
+														)
 													}
 												>
 													Perfil
@@ -738,16 +833,19 @@ class TopNav extends Component {
 												<Separator />
 											</>
 										)}
-										<DropdownItem className='cursor-pointer' onClick={() => this.setModalOpen()}>
-											<IntlMessages id='user.changePassword' />
+										<DropdownItem
+											className="cursor-pointer"
+											onClick={() => this.setModalOpen()}
+										>
+											<IntlMessages id="user.changePassword" />
 										</DropdownItem>
 										<DropdownItem
-											className='cursor-pointer'
+											className="cursor-pointer"
 											onClick={() => {
 												this.handleLogout()
 											}}
 										>
-											<IntlMessages id='user.logout' />
+											<IntlMessages id="user.logout" />
 										</DropdownItem>
 									</DropdownMenu>
 								</UncontrolledDropdown>
@@ -766,8 +864,8 @@ class TopNav extends Component {
 					</div>
 					{this.props.isComunicado && (
 						<div
-							className='d-inline-block'
-							id='container-search'
+							className="d-inline-block"
+							id="container-search"
 							style={{
 								margin: '0',
 								width: '100%',
@@ -776,7 +874,7 @@ class TopNav extends Component {
 							}}
 						>
 							<i
-								className='fas fa-search'
+								className="fas fa-search"
 								style={{
 									position: 'absolute',
 									fontSize: 16,
@@ -787,12 +885,12 @@ class TopNav extends Component {
 								}}
 							/>
 							<Input
-								id='txtSearch'
-								type='text'
-								name='txtSearch'
+								id="txtSearch"
+								type="text"
+								name="txtSearch"
 								onKeyPress={this.props.onKeyPress}
 								onChange={this.props.onChangeInput}
-								placeholder='Buscar correo'
+								placeholder="Buscar correo"
 								style={{
 									paddingLeft: 35,
 									background: '#f3f3f3',
@@ -806,7 +904,7 @@ class TopNav extends Component {
 				<SimpleModal
 					openDialog={this.state.modalOpen}
 					onClose={() => this.setModalOpen()}
-					title='Cambiar contraseña'
+					title="Cambiar contraseña"
 					actions={false}
 				>
 					<ChangePasswordForm
