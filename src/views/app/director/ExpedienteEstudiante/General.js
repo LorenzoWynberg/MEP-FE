@@ -38,7 +38,6 @@ const General = props => {
 	const [editable, setEditable] = useState(false)
 	const [snackBar, handleClick] = useNotification()
 	const { handleSubmit } = useForm()
-	console.log('LORE', props.validations.modificar)
 
 	const [snackbarContent, setSnackbarContent] = useState({
 		msg: 'welcome',
