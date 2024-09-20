@@ -21,7 +21,6 @@ import { useForm } from 'react-hook-form'
 import withAuthorization from 'Hoc/withAuthorization'
 import { getYearsOld } from 'Utils/years'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, set } from 'lodash'
 
 const listSexo = [
 	{ value: 1, label: 'Masculino', key: 1 },
@@ -39,6 +38,7 @@ const General = props => {
 	const [editable, setEditable] = useState(false)
 	const [snackBar, handleClick] = useNotification()
 	const { handleSubmit } = useForm()
+	console.log('LORE', props.validations.modificar)
 
 	const [snackbarContent, setSnackbarContent] = useState({
 		msg: 'welcome',
@@ -214,7 +214,6 @@ const General = props => {
 	}, [identidadData.id, editable])
 
 	const sendData = async () => {
-		
 		const datos = parseOptions(identidadData, [
 			'genero',
 			'migracionStatus',
@@ -239,8 +238,8 @@ const General = props => {
 		}
 		setPrevIdentidadData(_data)
 		setIdentidadData(_data)
-		let response  = await actions.updateIdentity(_data)
-		
+		let response = await actions.updateIdentity(_data)
+
 		if (response.data.error) {
 			setSnackbarContent({
 				variant: 'error',
@@ -313,7 +312,7 @@ const General = props => {
 				<>
 					<br />
 					{snackBar(snackbarContent.variant, snackbarContent.msg)}
-					<Form onSubmit={handleSubmit(submitData)}>
+					<Form className="mb-3" onSubmit={handleSubmit(submitData)}>
 						<Row>
 							<Colxx lg="6">
 								<PersonalDataForm
@@ -349,7 +348,10 @@ const General = props => {
 								/>
 							</Colxx>
 						</Row>
-						<div className="container-center my-3">
+						<div
+							className="container-center mt-3"
+							style={props.validations.modificar ? {} : { display: 'none' }}
+						>
 							<EditButton
 								loading={state.identification.loading}
 								editable={editable}
