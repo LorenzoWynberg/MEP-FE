@@ -2,13 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 import { Row, Col } from 'reactstrap'
 import moment from 'moment'
-import colors from '../../../../../../assets/js/colors'
-import HTMLTable from '../../../../../../components/HTMLTable'
+import HTMLTable from 'Components/HTMLTable'
 import {
 	getBitacorasIdentidad,
 	getIdentificacionPersona,
 	getBitacorasFilter
-} from '../../../../../../redux/identidad/actions'
+} from 'Redux/identidad/actions'
 import { useSelector } from 'react-redux'
 import { useActions } from 'Hooks/useActions'
 import useNotification from 'Hooks/useNotification'
@@ -38,10 +37,8 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 	const [t] = useTranslation()
 
 	const [data, setData] = React.useState<any[]>([])
-	const [modalVisible, setModalVisible] = React.useState<boolean>(false)
 	const [identidad, setIdentidad] = React.useState<any>(null)
 	const [previewUser, setPreviewUser] = React.useState<any>(null)
-	const [search, setSearch] = React.useState<string>('')
 	const [filter, setFilter] = React.useState<string>('')
 	const [random, setRandom] = React.useState<number>(-1)
 	const [snackbar, handleClick] = useNotification()
@@ -113,11 +110,6 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 		handleClick()
 	}
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setSearch(e.target.value)
-	}
-
-	//const handleInputSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
 	const handleInputSearch = async () => {
 		const { data } = await actions.getIdentificacionPersona(
 			state.identification.data.identificacion
@@ -309,55 +301,10 @@ const Title = styled.h4`
 	color: #000;
 `
 
-const Form = styled.form`
-	margin-top: 30px;
-	width: 40%;
-`
-
-const FormRow = styled.div`
-	display: grid;
-	grid-template-columns: 50% 30%;
-	align-items: flex-end;
-	grid-column-gap: 10px;
-	margin-bottom: 13px;
-`
-
-const FormInline = styled.div`
-	flex-direction: column;
-`
-
-const Label = styled.label`
-	color: #000;
-	display: block;
-`
-
-const Input = styled.input`
-	padding: 10px;
-	width: 100%;
-	border: 1px solid #d7d7d7;
-	background-color: #e9ecef;
-	outline: 0;
-	&:focus {
-		background: #fff;
-	}
-`
-
 const ContentPicker = styled.div`
 	& .react-datepicker__input-container input {
 		border-radius: 5px !important;
 	}
-`
-
-const Search = styled.div``
-
-const Button = styled.button`
-	background: ${colors.primary};
-	color: #fff;
-	border: 0;
-	min-height: 43px;
-	padding: 0 20px;
-	border-radius: 25px;
-	cursor: pointer;
 `
 
 const Card = styled.div`
