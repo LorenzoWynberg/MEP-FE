@@ -191,9 +191,7 @@ const Salud = props => {
 	const onConfirmDialogDelete = () => {
 		setLoading(true)
 		setOpenConFirm(false)
-		setTimeout(() => {
-			onSelectRowDelete()
-		}, 500)
+		onSelectRowDelete()
 	}
 
 	const onSelectRowDelete = async () => {
