@@ -83,7 +83,7 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 		),
 		matriculaActiva: t(
 			'estudiantes>expediente>header>matricula_activa',
-			'Matrícula activa'
+			'Estado de matrícula'
 		),
 		condicionDiscapacidad: t(
 			'estudiantes>expediente>header>condicion_discapacidad',
@@ -182,7 +182,7 @@ const EstudianteInformationCard = ({ data, fixed }) => {
 					>
 						<span className={`${classes.information}`}>
 							<strong>{hardCodedData.matriculaActiva}:</strong>{' '}
-							{data.estadoMatricula === 'Regular' ? 'SI' : 'NO'}
+							{data.estadoMatricula}
 						</span>
 						<span className={`${classes.information}`}>
 							<strong>{hardCodedData.condicionDiscapacidad}:</strong>{' '}

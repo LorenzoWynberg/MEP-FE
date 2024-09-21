@@ -253,10 +253,11 @@ const RefactorMiembrosHogar = props => {
 														false
 												  )
 												: 0
+											debugger
 											if (
 												age < 18 &&
 												fullRow.encargado &&
-												data.filter(el => el?.encargado).length === 1
+												data.filter(el => el?.encargado === 'Sí').length === 1
 											) {
 												setSnackbarContent({
 													msg: 'No se puede eliminar la relación de encargado con el estudiante, hasta que incluya un nuevo encargado',
