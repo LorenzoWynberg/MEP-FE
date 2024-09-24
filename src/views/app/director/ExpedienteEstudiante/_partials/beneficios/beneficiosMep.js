@@ -183,14 +183,9 @@ const BeneficiosMEP = props => {
 		}
 
 		if (formData.dateFrom === '') {
-			validationMessage += '\nLa fecha de inicio es requerida'
+			validationMessage += '\nLa fecha de aprobación es requerida'
 			isInvalid = true
 		}
-
-		// if (formData.dateTo === '') {
-		// 	validationMessage += '\nLa fecha de fin es requerida'
-		// 	isInvalid = true
-		// }
 
 		if (isInvalid) {
 			swal({
@@ -525,6 +520,7 @@ const BeneficiosMEP = props => {
 					handleDeleteSubsidio={handleDeleteSubsidio}
 					handleUpdateSubsidio={handleUpdateSubsidio}
 					setVisualizing={setVisualizing}
+					{...props}
 				/>
 			</div>
 			<Subsidio

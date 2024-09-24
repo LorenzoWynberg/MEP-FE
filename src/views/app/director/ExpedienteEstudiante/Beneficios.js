@@ -5,8 +5,12 @@ import BeneficiosMEP from './_partials/beneficios/beneficiosMep'
 import BeneficiosSinirube from './_partials/beneficios/beneficiosSinirube'
 import { connect } from 'react-redux'
 import BarLoader from 'Components/barLoader/barLoader'
-import Loader from '../../../../components/Loader'
-import { GetTypes, GetSubsidiosMEP, GetSubsidiosFilterMEP, GetDependencias } from 'Redux/beneficios/actions'
+import {
+	GetTypes,
+	GetSubsidiosMEP,
+	GetSubsidiosFilterMEP,
+	GetDependencias
+} from 'Redux/beneficios/actions'
 import moment from 'moment'
 import './style.scss'
 import withAuthorization from '../../../../Hoc/withAuthorization'
@@ -26,7 +30,15 @@ const BeneficiosSinirubeWithAuth = withAuthorization({
 })(BeneficiosSinirube)
 
 const Expediente = props => {
-	const { dataMEP, dataSINIRUBE, typesSubsidios, data, dependencias, errors, error } = props
+	const {
+		dataMEP,
+		dataSINIRUBE,
+		typesSubsidios,
+		data,
+		dependencias,
+		errors,
+		error
+	} = props
 	const [activeTab, setActiveTab] = useState(0)
 	const [listMep, setListMep] = useState([])
 	const [totalRegitroMEP, setTotalRegitroMEP] = useState([])
@@ -41,7 +53,11 @@ const Expediente = props => {
 				dataMEP.entityList.map(item => {
 					return {
 						...item,
-						periodo: moment().isBefore(item.fechaFinal) && moment().isAfter(item.fechaInicio) ? 'Si' : 'No'
+						periodo:
+							moment().isBefore(item.fechaFinal) &&
+							moment().isAfter(item.fechaInicio)
+								? 'Si'
+								: 'No'
 					}
 				})
 			)
@@ -58,7 +74,12 @@ const Expediente = props => {
 
 	const handleSearch = async (FilterText, cantidadPagina, pagina) => {
 		setLoading(true)
-		const res = await props.GetSubsidiosFilterMEP(data.id, FilterText, pagina, cantidadPagina)
+		const res = await props.GetSubsidiosFilterMEP(
+			data.id,
+			FilterText,
+			pagina,
+			cantidadPagina
+		)
 		setLoading(false)
 		return res
 	}
@@ -82,7 +103,11 @@ const Expediente = props => {
 		<>
 			<h4>Información de beneficios</h4>
 			<br />
-			<HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
+			<HeaderTab
+				options={optionsTab}
+				activeTab={activeTab}
+				setActiveTab={setActiveTab}
+			/>
 			<ContentTab activeTab={activeTab} numberId={activeTab}>
 				{
 					{

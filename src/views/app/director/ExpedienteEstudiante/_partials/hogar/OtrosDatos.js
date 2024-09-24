@@ -1,8 +1,17 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react'
-import { Button, CardTitle, Row, Card, CardBody, FormGroup, Label, Col, Form } from 'reactstrap'
+import React, { useState, useEffect } from 'react'
+import {
+	Button,
+	CardTitle,
+	Row,
+	Card,
+	CardBody,
+	FormGroup,
+	Label,
+	Col,
+	Form
+} from 'reactstrap'
 import { envVariables } from 'Constants/enviroment'
 import Select from 'react-select'
-import AsyncSelect from 'react-select/async'
 import CustomSelectInput from 'Components/common/CustomSelectInput'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
@@ -16,13 +25,18 @@ import { AsyncPaginate } from 'react-select-async-paginate'
 import axios from 'axios'
 const OtrosDatos = props => {
 	const { t } = useTranslation()
-
 	const [editable, setEditable] = useState(false)
 	const [hasCurrentCondicionL, setHasCurrentCondicionL] = useState(false)
-	const [currentCondicionL, setCurrentCondicionL] = useState({ label: '', value: '' })
+	const [currentCondicionL, setCurrentCondicionL] = useState({
+		label: '',
+		value: ''
+	})
 	const [currentOcupacion, setCurrentOcupacion] = useState(null)
-	const [currentEscolaridad, setCurrentEscolaridad] = useState({ label: '', value: '' })
-	const [snakbar, handleClick, handleClose] = useNotification()
+	const [currentEscolaridad, setCurrentEscolaridad] = useState({
+		label: '',
+		value: ''
+	})
+	const [snakbar, handleClick] = useNotification()
 	const [snackbarMsg, setSnackbarMsg] = useState('')
 	const [snackbarVariant, setSnackbarVariant] = useState('success')
 
@@ -32,11 +46,14 @@ const OtrosDatos = props => {
 		}
 
 		const fetchData = async () => {
-			!props.condicionLaboral[0] && (await props.getCatalogs(catalogsEnumObj.CONDICIONLABORAL.id))
+			!props.condicionLaboral[0] &&
+				(await props.getCatalogs(catalogsEnumObj.CONDICIONLABORAL.id))
 
-			!props.ocupaciones[0] && (await props.getCatalogs(catalogsEnumObj.OCUPACIONES.id, 1, 10))
+			!props.ocupaciones[0] &&
+				(await props.getCatalogs(catalogsEnumObj.OCUPACIONES.id, 1, 10))
 
-			!props.escolaridades[0] && (await props.getCatalogs(catalogsEnumObj.ESCOLARIDADES.id))
+			!props.escolaridades[0] &&
+				(await props.getCatalogs(catalogsEnumObj.ESCOLARIDADES.id))
 		}
 
 		fetchData()
@@ -46,7 +63,9 @@ const OtrosDatos = props => {
 
 	useEffect(() => {
 		getAditionalItem('condicionL', 11, (actionCatalogo, result) => {
-			const condTemp = props.condicionLaboral.find(x => x.id == result?.elementoId)
+			const condTemp = props.condicionLaboral.find(
+				x => x.id == result?.elementoId
+			)
 			handleInputChange(actionCatalogo, {
 				label: condTemp?.nombre,
 				value: condTemp?.id
@@ -79,7 +98,9 @@ const OtrosDatos = props => {
 			return -1
 		}
 
-		let tempAditional = props.expediente.datos.find(x => x.catalogoId == catalogoId)
+		let tempAditional = props.expediente.datos.find(
+			x => x.catalogoId == catalogoId
+		)
 
 		tempAditional = tempAditional || { label: '', value: '' }
 
@@ -140,10 +161,16 @@ const OtrosDatos = props => {
 		let response = {}
 		if (searchQuery && searchQuery != '') {
 			response = await axios.get(
-				`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyTypeByText/${12}/${searchQuery}/${page}/${20}`
+				`${
+					envVariables.BACKEND_URL
+				}/api/Catalogo/GetAllbyTypeByText/${12}/${searchQuery}/${page}/${20}`
 			)
 		} else {
-			response = await axios.get(`${envVariables.BACKEND_URL}/api/Catalogo/GetAllByType/${12}/${page}/${20}`)
+			response = await axios.get(
+				`${
+					envVariables.BACKEND_URL
+				}/api/Catalogo/GetAllByType/${12}/${page}/${20}`
+			)
 		}
 
 		let filteredOptions = {
@@ -152,7 +179,8 @@ const OtrosDatos = props => {
 					label: item.nombre,
 					value: item.id
 				})) || [],
-			hasMore: searchQuery && searchQuery != '' ? false : response.data?.length >= 1,
+			hasMore:
+				searchQuery && searchQuery != '' ? false : response.data?.length >= 1,
 			additional: {
 				page: searchQuery && searchQuery != '' ? page : page + 1
 			}
@@ -161,12 +189,15 @@ const OtrosDatos = props => {
 	}
 
 	return (
-		<Col sm='12' md='8' className='m-0 p-0'>
+		<Col sm="12" md="8" className="m-0 p-0 mb-3">
 			{snakbar(snackbarVariant, snackbarMsg)}
 			<Card>
 				<CardBody>
 					<CardTitle>
-						{t('estudiantes>expediente>hogar>otros_datos>titulo', 'Otros datos del estudiante')}
+						{t(
+							'estudiantes>expediente>hogar>otros_datos>titulo',
+							'Otros datos del estudiante'
+						)}
 					</CardTitle>
 					<Form>
 						<Row>
@@ -182,16 +213,16 @@ const OtrosDatos = props => {
 										components={{
 											Input: CustomSelectInput
 										}}
-										className='react-select'
-										classNamePrefix='react-select'
-										name='condicionLaboral'
-										id='condicionLaboral'
+										className="react-select"
+										classNamePrefix="react-select"
+										name="condicionLaboral"
+										id="condicionLaboral"
 										value={currentCondicionL}
 										isDisabled={!editable}
 										onChange={data => {
 											handleInputChange('condicionL', data)
 										}}
-										placeholder=''
+										placeholder=""
 										//TODO: Agregar N/A
 										options={props.condicionLaboral.map(item => ({
 											label: item.nombre,
@@ -203,17 +234,20 @@ const OtrosDatos = props => {
 							<Col sm={{ size: 10, offset: 1 }}>
 								<FormGroup>
 									<Label>
-										{t('estudiantes>expediente>hogar>otros_datos>ocupacion', 'Ocupación')}
+										{t(
+											'estudiantes>expediente>hogar>otros_datos>ocupacion',
+											'Ocupación'
+										)}
 									</Label>
 									<AsyncPaginate
 										components={{
 											Input: CustomSelectInput
 										}}
-										key='async-ocupaciones'
-										className='react-select'
-										classNamePrefix='react-select'
-										name='ocupacion'
-										id='ocupacion'
+										key="async-ocupaciones"
+										className="react-select"
+										classNamePrefix="react-select"
+										name="ocupacion"
+										id="ocupacion"
 										value={currentOcupacion}
 										isDisabled={!editable}
 										onChange={data => {
@@ -223,7 +257,7 @@ const OtrosDatos = props => {
 											page: 1
 										}}
 										loadOptions={loadOptions}
-										placeholder=''
+										placeholder=""
 										cacheUniqs={[currentOcupacion]}
 									/>
 								</FormGroup>
@@ -231,22 +265,25 @@ const OtrosDatos = props => {
 							<Col sm={{ size: 10, offset: 1 }}>
 								<FormGroup>
 									<Label>
-										{t('estudiantes>expediente>hogar>otros_datos>escolaridad', 'Escolaridad')}
+										{t(
+											'estudiantes>expediente>hogar>otros_datos>escolaridad',
+											'Escolaridad'
+										)}
 									</Label>
 									<Select
 										components={{
 											Input: CustomSelectInput
 										}}
-										className='react-select'
-										classNamePrefix='react-select'
-										name='escolaridad'
-										id='escolaridad'
+										className="react-select"
+										classNamePrefix="react-select"
+										name="escolaridad"
+										id="escolaridad"
 										value={currentEscolaridad}
 										isDisabled={!editable}
 										onChange={data => {
 											handleInputChange('escolaridad', data)
 										}}
-										placeholder=''
+										placeholder=""
 										options={props.escolaridades.map(item => ({
 											label: item.nombre,
 											value: item.id
@@ -258,14 +295,17 @@ const OtrosDatos = props => {
 					</Form>
 				</CardBody>
 			</Card>
-			<div className='container-center mt-2'>
+			<div
+				className="container-center mt-3"
+				style={props.validations.modificar ? {} : { display: 'none' }}
+			>
 				{editable ? (
 					<>
 						<Button
-							className='btn-shadow m-0'
+							className="btn-shadow m-0"
 							outline
-							color='primary'
-							type='button'
+							color="primary"
+							type="button"
 							onClick={() => {
 								setEditable(false)
 							}}
@@ -273,9 +313,9 @@ const OtrosDatos = props => {
 							{t('general>cancelar', 'Cancelar')}
 						</Button>
 						<Button
-							color='primary'
-							className='btn-shadow m-0'
-							type='button'
+							color="primary"
+							className="btn-shadow m-0"
+							type="button"
 							onClick={() => {
 								props.authHandler('modificar', sendData)
 							}}
@@ -285,9 +325,9 @@ const OtrosDatos = props => {
 					</>
 				) : (
 					<Button
-						color='primary'
-						className='btn-shadow m-0'
-						type='button'
+						color="primary"
+						className="btn-shadow m-0"
+						type="button"
 						onClick={() => {
 							props.authHandler('modificar', () => setEditable(true))
 						}}
