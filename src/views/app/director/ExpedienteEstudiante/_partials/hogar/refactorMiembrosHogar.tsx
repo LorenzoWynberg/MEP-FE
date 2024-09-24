@@ -44,11 +44,12 @@ import Loader from 'Components/Loader'
 import swal from 'sweetalert'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import styles from './Hogar.css'
+import withAuthorization from '../../../../../../Hoc/withAuthorization'
+import { withRouter } from 'react-router-dom'
 
 const RefactorMiembrosHogar = props => {
 	const [loadingRegistrarModal, setLoadingRegistrarModal] = useState(false)
 	const [loading, setLoading] = useState(false)
-	const [memberDetailOpen, setMemberDetailOpen] = useState(false)
 	const [showDiscapacidadesModal, setShowDiscapacidadesModal] = useState(false)
 	const [showRegisterModal, setShowRegisterModal] = useState(false)
 	const [snackbarContent, setSnackbarContent] = useState({
@@ -202,12 +203,16 @@ const RefactorMiembrosHogar = props => {
 							}}
 						>
 							<button
-								style={{
-									border: 'none',
-									background: 'transparent',
-									cursor: 'pointer',
-									color: 'grey'
-								}}
+								style={
+									props.validations.modificar
+										? {
+												border: 'none',
+												background: 'transparent',
+												cursor: 'pointer',
+												color: 'grey'
+										  }
+										: { display: 'none' }
+								}
 								onClick={async () => {
 									setLoading(true)
 									await events.onEditarClick(fullRow.id)
@@ -224,12 +229,16 @@ const RefactorMiembrosHogar = props => {
 								</Tooltip>
 							</button>
 							<button
-								style={{
-									border: 'none',
-									background: 'transparent',
-									cursor: 'pointer',
-									color: 'grey'
-								}}
+								style={
+									props.validations.eliminar
+										? {
+												border: 'none',
+												background: 'transparent',
+												cursor: 'pointer',
+												color: 'grey'
+										  }
+										: { display: 'none' }
+								}
 								onClick={() => {
 									swal({
 										title: 'Eliminar Miembro',
@@ -333,7 +342,7 @@ const RefactorMiembrosHogar = props => {
 			{!formData.showForm && (
 				<>
 					<TableReactImplementation
-						showAddButton
+						showAddButton={props.validations.agregar}
 						msjButton="Agregar miembro"
 						onSubmitAddButton={() => onAgregarEvent()}
 						data={data}
@@ -1092,7 +1101,12 @@ const RefactorMiembrosHogar = props => {
 	)
 }
 
-export default RefactorMiembrosHogar
+export default withAuthorization({
+	id: 6,
+	Modulo: 'Expediente Estudiantil',
+	Apartado: 'Informacion del Hogar',
+	Seccion: 'Miembros del hogar'
+})(withRouter(RefactorMiembrosHogar))
 
 const InputContainer = styled.div`
 	display: flex;
@@ -1109,16 +1123,6 @@ const Input = styled.input`
 	background: ${props => (props.disabled == true ? '#e9ecef' : 'white')};
 	width: 100%;
 	color: #000;
-`
-
-const StyledIconButton = styled(IconButton)`
-	cursor: ${props => (props.isDisabled ? 'auto' : 'pointer')} !important;
-	background: ${props => (props.isDisabled ? 'grey' : colors.primary)};
-	width: 150px;
-	height: 150px;
-	&:hover {
-		background-color: ${props => (props.isDisabled ? 'grey' : '#0c3253')};
-	}
 `
 
 const CenteredRow = styled(Col)`
@@ -1158,32 +1162,4 @@ const ItemSpan = styled.span`
 	margin-top: 0.25rem;
 	border-radius: 15px;
 	padding: 2px;
-`
-
-const ButtonsContainer = styled.div`
-	display: flex;
-	margin-top: 1rem;
-	justify-content: space-around;
-	align-items: center;
-`
-
-const FileLabel = styled.div`
-	background-color: white;
-	color: ${props => (props.disabled ? '#636363' : colors.primary)};
-	border: 1.5px solid ${props => (props.disabled ? '#636363' : colors.primary)};
-	width: 7rem;
-	height: 2.7rem;
-	text-align: center;
-	justify-content: center;
-	align-items: center;
-	display: flex;
-	border-radius: 26px;
-	&:hover {
-		background-color: ${props => (props.disabled ? '' : colors.primary)};
-		color: ${props => (props.disabled ? '' : 'white')};
-	}
-`
-
-const DownloadIconContainer = styled.span`
-	font-size: 35px;
 `
