@@ -34,6 +34,7 @@ const HistoricoResidencia = ({ identidadId }) => {
 	})
 	const classes = useStyles()
 	const [search, setSearch] = useState(null)
+	const [showCoordinates, setShowCoordinates] = useState(false)
 	const [selectedRow, setSelectedRow] = useState(false)
 	const { bitacoraResidencia } = useSelector((state: any) => state.bitacora)
 	const columns = useMemo(
@@ -102,7 +103,14 @@ const HistoricoResidencia = ({ identidadId }) => {
 		}))
 	}, [bitacoraResidencia])
 	useEffect(() => {
-		selectedRow?.json?.latitude && selectedRow?.json?.longitude && search?.search([selectedRow.json?.longitude, selectedRow.json?.latitude])
+		if (selectedRow?.json?.latitude && selectedRow?.json?.longitude && selectedRow?.json?.longitude != "" && selectedRow?.json?.latitude != "") {
+			search?.search([selectedRow.json?.longitude, selectedRow.json?.latitude])
+			setShowCoordinates(true)
+		} else if (selectedRow?.json?.province?.label && selectedRow?.json?.canton?.label && selectedRow?.json?.distrito.label) {
+			search.searchTerm = `${selectedRow?.json?.province?.label}, ${selectedRow?.json?.canton?.label}, ${selectedRow?.json?.distrito.label}`
+			search.search(`${search.searchTerm}, CRI`)
+			setShowCoordinates(false)
+		}
 	}, [search, selectedRow])
 	return (
 		<>
@@ -178,7 +186,7 @@ const HistoricoResidencia = ({ identidadId }) => {
 								/>
 							</Col>
 
-							<Col xs={6} style={{
+							{showCoordinates && (<><Col xs={6} style={{
 
 								textAlign: 'left',
 								justifyContent: 'left',
@@ -194,21 +202,21 @@ const HistoricoResidencia = ({ identidadId }) => {
 									/>
 								</FormGroup></Col>
 
-							<Col xs={6} style={{
+								<Col xs={6} style={{
 
-								textAlign: 'left',
-								justifyContent: 'left',
-								alignItems: 'left'
-							}}><FormGroup>
-									<Label for='longitude'>Longitud</Label>
-									<Input
-										type='text'
-										name='longitude'
-										value={selectedRow?.json?.longitude}
-										id='longitude'
-										disabled
-									/>
-								</FormGroup></Col>
+									textAlign: 'left',
+									justifyContent: 'left',
+									alignItems: 'left'
+								}}><FormGroup>
+										<Label for='longitude'>Longitud</Label>
+										<Input
+											type='text'
+											name='longitude'
+											value={selectedRow?.json?.longitude}
+											id='longitude'
+											disabled
+										/>
+									</FormGroup></Col></>)}
 
 						</Row>
 					</OptionModal>
