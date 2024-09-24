@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {
 	Input,
 	Label,
@@ -20,9 +20,6 @@ import { useTranslation } from 'react-i18next'
 const SaludForm = props => {
 	const { t } = useTranslation()
 	const { handleSubmit } = useForm()
-	useEffect(() => {
-		console.log('initialProps', props)
-	}, [])
 
 	return (
 		<>
@@ -81,13 +78,10 @@ const SaludForm = props => {
 														name="peso"
 														value={props.data.peso ? props.data.peso : ''}
 														disabled={!props.editable}
-														pattern="^\d*(\.\d{0,1})?$"
 														placeholder={t(
 															'estudiantes>expediente>salud>peso',
 															'Peso (kg)'
 														)}
-														max={250}
-														min={0}
 														step=".1"
 														onKeyPress={e => onlyNumbers(e)}
 														onChange={e => {
@@ -112,14 +106,11 @@ const SaludForm = props => {
 														name="talla"
 														value={props.data.talla ? props.data.talla : ''}
 														disabled={!props.editable}
-														min={1}
 														placeholder={t(
 															'estudiantes>expediente>salud>talla',
 															'Talla (cm)'
 														)}
-														max={250}
 														step="1"
-														pattern="[0-9]"
 														onKeyPress={e => onlyNumbers(e)}
 														onChange={e => {
 															const newValue = parseInt(e.target.value)

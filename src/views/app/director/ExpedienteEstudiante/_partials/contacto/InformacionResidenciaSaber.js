@@ -2,25 +2,13 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Paper from '@material-ui/core/Paper'
-
-import {
-	FormGroup,
-	Label,
-	Input,
-	Form,
-	Button,
-	Modal,
-	ModalHeader,
-	ModalBody
-} from 'reactstrap'
-
+import { FormGroup, Label, Input, Form, Button } from 'reactstrap'
 import { connect } from 'react-redux'
 import { getCantonesByProvincia } from '../../../../../../redux/cantones/actions'
 import { getDistritosByCanton } from '../../../../../../redux/distritos/actions'
 import { getPobladosByDistrito } from '../../../../../../redux/poblados/actions'
 import { WebMapView } from './MapView'
 import CustomSelectInput from 'Components/common/CustomSelectInput'
-
 import Select from 'react-select'
 import styled from 'styled-components'
 import useNotification from '../../../../../../hooks/useNotification'
@@ -33,12 +21,11 @@ import { getProvincias } from '../../../../../../redux/provincias/actions'
 import { catalogsEnumObj } from '../../../../../../utils/catalogsEnum'
 import Loader from '../../../../../../components/Loader'
 import { EditButton } from '../../../../../../components/EditButton'
-import RequiredLabel from '../../../../../../components/common/RequeredLabel'
 import { useForm } from 'react-hook-form'
 import _ from 'lodash'
 import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
 	root: {
 		flexGrow: 1
 	},
@@ -51,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
 	}
 }))
 
-const InformacionResidenciaSaber = (props) => {
+const InformacionResidenciaSaber = props => {
 	const { handleSubmit } = useForm()
 	const initialSelectOption = {
 		value: null,
@@ -65,8 +52,7 @@ const InformacionResidenciaSaber = (props) => {
 	const [currentCanton, setCurrentCanton] = useState(initialSelectOption)
 	const [currentDistrito, setCurrentDistrito] = useState(initialSelectOption)
 	const [currentPoblado, setCurrentPoblado] = useState(initialSelectOption)
-	const [currentTerritory, setCurrentTerritory] =
-		useState(initialSelectOption)
+	const [currentTerritory, setCurrentTerritory] = useState(initialSelectOption)
 	const [errors, setErrors] = useState(initialSelectOption)
 	const [search, setSearch] = useState(null)
 	const [loadLocation, setLoadLocation] = useState(false)
@@ -81,7 +67,6 @@ const InformacionResidenciaSaber = (props) => {
 	const [loading, setLoading] = useState(true)
 	const [ubicacion, setUbicacion] = useState({})
 	let timeOut
-	const time = 300
 	const classes = useStyles()
 	const [sanackBar, handleClick] = useNotification()
 	const [openViewMap, setOpenViewMap] = useState(false)
@@ -93,13 +78,10 @@ const InformacionResidenciaSaber = (props) => {
 	const shiftedTerritories = [...props.selects.territoriosIndigenas]
 	shiftedTerritories.forEach(function (item, i) {
 		if (item.id === 144) {
-			shiftedTerritories.splice(i, 1);
-			shiftedTerritories.unshift(item);
+			shiftedTerritories.splice(i, 1)
+			shiftedTerritories.unshift(item)
 		}
-	});
-	const toggleModal = () => {
-		setOpenViewMap(!openViewMap)
-	}
+	})
 
 	const setInitiaState = () => {
 		setCurrentProvince(initialSelectOption)
@@ -129,15 +111,13 @@ const InformacionResidenciaSaber = (props) => {
 			]
 			setDireccionArray(_direccionArray)
 			setLoadLocation(true)
-			const _province = props.provinces.provincias.find(
-				(provincia) => {
-					const stringCompare = provincia?.nombre.normalize("NFD").replace(/\p{Diacritic}/gu, "")
-					return stringCompare == _direccionArray[0].trim()
-				}
-			)
-			const provinceResponse = await props.getCantonesByProvincia(
-				_province?.id
-			)
+			const _province = props.provinces.provincias.find(provincia => {
+				const stringCompare = provincia?.nombre
+					.normalize('NFD')
+					.replace(/\p{Diacritic}/gu, '')
+				return stringCompare == _direccionArray[0].trim()
+			})
+			const provinceResponse = await props.getCantonesByProvincia(_province?.id)
 			if (provinceResponse.error) {
 				return handleError()
 			}
@@ -152,15 +132,13 @@ const InformacionResidenciaSaber = (props) => {
 		}
 	}, [ubicacion])
 	useEffect(() => {
-
 		loadData()
 	}, [ubicacion])
 	const loadDataBac = useCallback(async () => {
 		const item = props?.identification.data.direcciones.find(
-			(item) => item.temporal === props.temporal
+			item => item.temporal === props.temporal
 		)
 		if (item) {
-			//[provincia, canton, distrito, poblado, ...]
 			const _direccionArray = [
 				item.provinciasId,
 				item.cantonesId,
@@ -171,7 +149,7 @@ const InformacionResidenciaSaber = (props) => {
 			setDireccionArray(_direccionArray)
 			setLoadLocation(true)
 			const _province = props.provinces.provincias.find(
-				(item) => item?.id == _direccionArray[0]
+				item => item?.id == _direccionArray[0]
 			)
 			if (_province) {
 				const provinceResponse = await props.getCantonesByProvincia(
@@ -199,7 +177,6 @@ const InformacionResidenciaSaber = (props) => {
 	}, [props?.identification.data, editable])
 	//this effects parse the data when comes from the backend
 	useEffect(() => {
-
 		if (
 			props?.identification.data.direcciones &&
 			props?.identification.data.direcciones.length > 0
@@ -213,9 +190,11 @@ const InformacionResidenciaSaber = (props) => {
 
 	useEffect(() => {
 		const loadDataC = async () => {
-			const _canton = props.cantones.cantones.find((item) => {
+			const _canton = props.cantones.cantones.find(item => {
 				if (isNaN(direccionArray[1])) {
-					const stringCompare = item?.nombre.normalize("NFD").replace(/\p{Diacritic}/gu, "")
+					const stringCompare = item?.nombre
+						.normalize('NFD')
+						.replace(/\p{Diacritic}/gu, '')
 					return stringCompare === direccionArray[1].trim()
 				} else {
 					return item?.id === direccionArray[1]
@@ -223,9 +202,7 @@ const InformacionResidenciaSaber = (props) => {
 			})
 			if (_canton) {
 				setCurrentCanton({ label: _canton?.nombre, value: _canton?.id })
-				const cantonResponse = await props.getDistritosByCanton(
-					_canton?.id
-				)
+				const cantonResponse = await props.getDistritosByCanton(_canton?.id)
 				if (cantonResponse.error) {
 					return handleError()
 				}
@@ -238,9 +215,11 @@ const InformacionResidenciaSaber = (props) => {
 
 	useEffect(() => {
 		const loadData2 = async () => {
-			const _distrito = props.distritos.distritos.find((item) => {
+			const _distrito = props.distritos.distritos.find(item => {
 				if (isNaN(direccionArray[2])) {
-					const stringCompare = item?.nombre.normalize("NFD").replace(/\p{Diacritic}/gu, "")
+					const stringCompare = item?.nombre
+						.normalize('NFD')
+						.replace(/\p{Diacritic}/gu, '')
 					return stringCompare === direccionArray[1].trim()
 				} else {
 					return item?.id === direccionArray[2]
@@ -267,7 +246,7 @@ const InformacionResidenciaSaber = (props) => {
 	useEffect(() => {
 		const loadData3 = async () => {
 			if (direccionArray[3]) {
-				const _poblado = props.poblados.poblados.find((item) => {
+				const _poblado = props.poblados.poblados.find(item => {
 					if (isNaN(direccionArray[3])) {
 						return item?.nombre === direccionArray[3].trim()
 					} else {
@@ -288,42 +267,29 @@ const InformacionResidenciaSaber = (props) => {
 	}, [props.poblados.poblados])
 
 	useEffect(() => {
-
-		if (
-			search && location.latitude !== '' && location.longitude !== ''
-		) {
+		if (search && location.latitude !== '' && location.longitude !== '') {
 			search.searchTerm = 'CRI'
-			search
-				.search([location.longitude, location.latitude])
-				.then((response) => {
-					search.suggest().then((res) => {
-						const result = res?.results[0].results[0]
-						if (result) {
-							const firstResultArray = result.text.split(',')
-							if (
-								!(
-									firstResultArray[
-									firstResultArray.length - 1
-									] === ' CRI'
-								)
-							) {
-								setSnackbarVariant('error')
-								setSnackbarMsg(
-									'La ubicacion debe de estar dentro de costa rica'
-								)
-								handleClick()
-								setLocation(initialLocationCoordinates)
-							}
+			search.search([location.longitude, location.latitude]).then(response => {
+				search.suggest().then(res => {
+					const result = res?.results[0].results[0]
+					if (result) {
+						const firstResultArray = result.text.split(',')
+						if (!(firstResultArray[firstResultArray.length - 1] === ' CRI')) {
+							setSnackbarVariant('error')
+							setSnackbarMsg('La ubicacion debe de estar dentro de costa rica')
+							handleClick()
+							setLocation(initialLocationCoordinates)
 						}
-					})
+					}
 				})
+			})
 		}
 	}, [location.latitude, location.longitude, search])
 
 	useEffect(() => {
 		if (props.selects.territoriosIndigenas[0] && editDirection?.id) {
 			let territory = props.selects.territoriosIndigenas.find(
-				(element) => element?.id === editDirection.territorioIndigenaId
+				element => element?.id === editDirection.territorioIndigenaId
 			)
 			territory &&
 				setCurrentTerritory({
@@ -344,12 +310,11 @@ const InformacionResidenciaSaber = (props) => {
 		}
 	}, [editable])
 
-	const handleSearchDirection = (e) => {
+	const handleSearchDirection = e => {
 		setDirection(e.target.value)
 	}
 
 	const handleSearchBySelects = (data, name) => {
-
 		if (search) {
 			search.clear()
 		}
@@ -383,7 +348,7 @@ const InformacionResidenciaSaber = (props) => {
 		search.suggest()
 	}
 
-	const handleChange = (e) => {
+	const handleChange = e => {
 		setRazon(e.target.value)
 	}
 
@@ -393,7 +358,7 @@ const InformacionResidenciaSaber = (props) => {
 		handleClick()
 	}
 
-	const validateData = (data) => {
+	const validateData = data => {
 		let _errors = []
 		if (!currentPoblado.value) {
 			_errors['poblado'] = 'Debe tener un poblado seleccionado'
@@ -402,18 +367,16 @@ const InformacionResidenciaSaber = (props) => {
 			_errors['direccionExacta'] = 'Debe tener una dirección'
 		}
 		if (props.temporal && !data.razon) {
-			_errors['razon'] =
-				'Debe tener una razón para su residencia temporal'
+			_errors['razon'] = 'Debe tener una razón para su residencia temporal'
 		}
-
 
 		let error = _errors['poblado']
 			? true
 			: _errors['razon']
-				? true
-				: _errors['direccionExacta']
-					? true
-					: false
+			? true
+			: _errors['direccionExacta']
+			? true
+			: false
 		setErrors(_errors)
 
 		if (error) {
@@ -439,9 +402,7 @@ const InformacionResidenciaSaber = (props) => {
 				distritosId: currentDistrito.value,
 				identidadId: props?.identification.data?.id,
 				direccionExacta: direction,
-				territorioId: currentTerritory.value
-					? currentTerritory.value
-					: 0,
+				territorioId: currentTerritory.value ? currentTerritory.value : 0,
 				estado: true
 			}
 			if (!validateData(_data).error) {
@@ -483,9 +444,7 @@ const InformacionResidenciaSaber = (props) => {
 				distritosId: currentDistrito.value,
 				identidadId: props?.identification.data?.id,
 				direccionExacta: direction,
-				territorioId: currentTerritory.value
-					? currentTerritory.value
-					: 0,
+				territorioId: currentTerritory.value ? currentTerritory.value : 0,
 				estado: true
 			}
 			if (!validateData(_data).error) {
@@ -517,8 +476,7 @@ const InformacionResidenciaSaber = (props) => {
 		}
 	}
 
-	const setLocationIfEditable = (value) => {
-
+	const setLocationIfEditable = value => {
 		if (editable) {
 			setLocation(value)
 		}
@@ -531,6 +489,7 @@ const InformacionResidenciaSaber = (props) => {
 	const LoadingMessage = () => {
 		return <LoadingLabel>Cargando...</LoadingLabel>
 	}
+
 	return (
 		<Grid container className={classes.root} spacing={2}>
 			{sanackBar(snackbarVariant, snackbarMsg)}
@@ -544,21 +503,12 @@ const InformacionResidenciaSaber = (props) => {
 								</LoaderContainer>
 							) : (
 								<>
-									<Grid
-										item
-										xs={12}
-										className={classes.control}
-									>
+									<Grid item xs={12} className={classes.control}>
 										<h4>Información de residencia</h4>
 									</Grid>
-									
-									<Grid
-										item
-										xs={12}
-										md={6}
-										className={classes.control}
-									>
-										{props.temporal && ( 
+
+									<Grid item xs={12} md={6} className={classes.control}>
+										{props.temporal && (
 											<FormGroup>
 												<Label for="razon">
 													Razón <RequiredSpan />
@@ -573,16 +523,14 @@ const InformacionResidenciaSaber = (props) => {
 													id="razon"
 													placeholder="Razón"
 													disabled={!editable}
-													onChange={(e) => {
+													onChange={e => {
 														handleChange(e)
 													}}
 													value={razon}
 												/>
-												<FormSpan>
-													{errors['razon']}
-												</FormSpan>
-											</FormGroup> 
-									)}
+												<FormSpan>{errors['razon']}</FormSpan>
+											</FormGroup>
+										)}
 										<FormGroup>
 											<Label for="provincia">
 												Provincia <RequiredSpan />
@@ -596,32 +544,19 @@ const InformacionResidenciaSaber = (props) => {
 												name="provincia"
 												id="provincia"
 												isDisabled={!editable}
-												onChange={(data) => {
-													props.getCantonesByProvincia(
-														data?.value
-													)
-													handleSearchBySelects(
-														data,
-														'provincia'
-													)
-													setCurrentCanton(
-														initialSelectOption
-													)
-													setCurrentDistrito(
-														initialSelectOption
-													)
-													setCurrentPoblado(
-														initialSelectOption
-													)
+												onChange={data => {
+													props.getCantonesByProvincia(data?.value)
+													handleSearchBySelects(data, 'provincia')
+													setCurrentCanton(initialSelectOption)
+													setCurrentDistrito(initialSelectOption)
+													setCurrentPoblado(initialSelectOption)
 												}}
 												value={currentProvince}
 												placeholder="Seleccionar"
-												options={props.provinces.provincias.map(
-													(item) => ({
-														label: item?.nombre,
-														value: item?.id
-													})
-												)}
+												options={props.provinces.provincias.map(item => ({
+													label: item?.nombre,
+													value: item?.id
+												}))}
 											/>
 										</FormGroup>
 										<FormGroup>
@@ -631,45 +566,27 @@ const InformacionResidenciaSaber = (props) => {
 											<Select
 												components={{
 													Input: CustomSelectInput,
-													LoadingIndicator:
-														LoadingIndicator,
+													LoadingIndicator: LoadingIndicator,
 													LoadingMessage
 												}}
 												className="react-select"
 												classNamePrefix="react-select"
 												name="canton"
 												id="canton"
-												isDisabled={
-													!currentProvince.value ||
-													!editable
-												}
-												onChange={(data) => {
-													props.getDistritosByCanton(
-														data.value
-													)
-													handleSearchBySelects(
-														data,
-														'canton'
-													)
-													setCurrentDistrito(
-														initialSelectOption
-													)
-													setCurrentPoblado(
-														initialSelectOption
-													)
+												isDisabled={!currentProvince.value || !editable}
+												onChange={data => {
+													props.getDistritosByCanton(data.value)
+													handleSearchBySelects(data, 'canton')
+													setCurrentDistrito(initialSelectOption)
+													setCurrentPoblado(initialSelectOption)
 												}}
 												value={currentCanton}
 												placeholder="Seleccionar"
-												options={props.cantones.cantones.map(
-													(item) => ({
-														label: item?.nombre,
-														value: item?.id
-													})
-												)}
-												isLoading={
-													props.cantones
-														.loadingCantones
-												}
+												options={props.cantones.cantones.map(item => ({
+													label: item?.nombre,
+													value: item?.id
+												}))}
+												isLoading={props.cantones.loadingCantones}
 											/>
 										</FormGroup>
 										<FormGroup>
@@ -679,44 +596,27 @@ const InformacionResidenciaSaber = (props) => {
 											<Select
 												components={{
 													Input: CustomSelectInput,
-													LoadingIndicator:
-														LoadingIndicator,
+													LoadingIndicator: LoadingIndicator,
 													LoadingMessage
 												}}
 												className="react-select"
 												classNamePrefix="react-select"
 												name="distrito"
 												id="distrito"
-												isDisabled={
-													!currentCanton.value ||
-													!editable
-												}
+												isDisabled={!currentCanton.value || !editable}
 												value={currentDistrito}
-												onChange={(data) => {
-													props.getPobladosByDistrito(
-														data.value
-													)
-													handleSearchBySelects(
-														data,
-														'distrito'
-													)
-													setCurrentPoblado(
-														initialSelectOption
-													)
+												onChange={data => {
+													props.getPobladosByDistrito(data.value)
+													handleSearchBySelects(data, 'distrito')
+													setCurrentPoblado(initialSelectOption)
 												}}
 												placeholder="Seleccionar"
-												isLoading={
-													props.distritos
-														.loadingDistritos
-												}
-												options={props.distritos.distritos.map(
-													(item) => ({
-														label: item?.nombre,
-														value: item?.id
-													})
-												)}
+												isLoading={props.distritos.loadingDistritos}
+												options={props.distritos.distritos.map(item => ({
+													label: item?.nombre,
+													value: item?.id
+												}))}
 											/>
-
 										</FormGroup>
 										<FormGroup>
 											<Label for="poblado">
@@ -725,40 +625,26 @@ const InformacionResidenciaSaber = (props) => {
 											<Select
 												components={{
 													Input: CustomSelectInput,
-													LoadingIndicator:
-														LoadingIndicator,
+													LoadingIndicator: LoadingIndicator,
 													LoadingMessage
 												}}
 												className="react-select"
 												classNamePrefix="react-select"
 												name="poblado"
 												id="poblado"
-												isDisabled={
-													!currentDistrito.value ||
-													!editable
-												}
+												isDisabled={!currentDistrito.value || !editable}
 												value={currentPoblado}
-												onChange={(data) => {
-													handleSearchBySelects(
-														data,
-														'poblado'
-													)
+												onChange={data => {
+													handleSearchBySelects(data, 'poblado')
 												}}
 												placeholder="Seleccionar"
-												isLoading={
-													props.poblados
-														.loadingPoblados
-												}
-												options={props.poblados.poblados.map(
-													(item) => ({
-														label: item?.nombre,
-														value: item?.id
-													})
-												)}
+												isLoading={props.poblados.loadingPoblados}
+												options={props.poblados.poblados.map(item => ({
+													label: item?.nombre,
+													value: item?.id
+												}))}
 											/>
-											<FormSpan>
-												{errors['poblado']}
-											</FormSpan>
+											<FormSpan>{errors['poblado']}</FormSpan>
 										</FormGroup>
 										<FormGroup>
 											<Label for="dirExacta">
@@ -772,29 +658,21 @@ const InformacionResidenciaSaber = (props) => {
 												}}
 												name="dirExacta"
 												id="dirExacta"
-												disabled={
-													!currentPoblado.value ||
-													!editable
-												}
-												onChange={(e) => {
+												disabled={!currentPoblado.value || !editable}
+												onChange={e => {
 													clearTimeout(timeOut)
 													handleSearchDirection(e)
 												}}
 												value={direction}
 											/>
-											<FormSpan>
-												{errors['direccionExacta']}
-											</FormSpan>
+											<FormSpan>{errors['direccionExacta']}</FormSpan>
 										</FormGroup>
 										<FormGroup>
-											<Label for="indigena">
-												Territorio indígena
-											</Label>
+											<Label for="indigena">Territorio indígena</Label>
 											<Select
 												components={{
 													Input: CustomSelectInput,
-													LoadingIndicator:
-														LoadingIndicator,
+													LoadingIndicator: LoadingIndicator,
 													LoadingMessage
 												}}
 												className="react-select"
@@ -803,94 +681,76 @@ const InformacionResidenciaSaber = (props) => {
 												id="indigena"
 												isDisabled={!editable}
 												value={currentTerritory}
-												options={shiftedTerritories.sort((a, b) => {
-													if (a.id < b.id)
-														return -1;
-													if (a.id > b.id)
-														return 1;
-													return 0;
-												}).map(
-													(item) => ({
+												options={shiftedTerritories
+													.sort((a, b) => {
+														if (a.id < b.id) return -1
+														if (a.id > b.id) return 1
+														return 0
+													})
+													.map(item => ({
 														...item,
 														label: item?.nombre,
 														value: item?.id
-													})
-												)}
-												onChange={(data) => {
+													}))}
+												onChange={data => {
 													setCurrentTerritory(data)
 												}}
 											/>
 										</FormGroup>
 										<Grid container>
-											<Grid
-												item
-												xs={12}
-												style={{ paddingRight: 10 }}
-											>
-												<FormSpan>
-													{errors['location']}
-												</FormSpan>
+											<Grid item xs={12} style={{ paddingRight: 10 }}>
+												<FormSpan>{errors['location']}</FormSpan>
 											</Grid>
-											<Grid
-												item
-												xs={6}
-												style={{ paddingRight: 10 }}
-											>
+											<Grid item xs={6} style={{ paddingRight: 10 }}>
 												<FormGroup>
-													<Label for="latitud">
-														Latitud
-													</Label>
+													<Label for="latitud">Latitud</Label>
 													<Input
 														type="text"
 														name="latitud"
 														id="latitud"
-														onChange={(e) => {
-															const locationActual = { ...location, latitude: e.target.value }
-															_.debounce(setLocationIfEditable(locationActual), 1500)
+														onChange={e => {
+															const locationActual = {
+																...location,
+																latitude: e.target.value
+															}
+															_.debounce(
+																setLocationIfEditable(locationActual),
+																1500
+															)
 														}}
 														disabled={!editable}
-														value={
-															location.latitude
-														}
+														value={location.latitude}
 													/>
 												</FormGroup>
 											</Grid>
-											<Grid
-												item
-												xs={6}
-												style={{ paddingLeft: 10 }}
-											>
+											<Grid item xs={6} style={{ paddingLeft: 10 }}>
 												<FormGroup>
-													<Label for="longitud">
-														Longitud
-													</Label>
+													<Label for="longitud">Longitud</Label>
 													<Input
 														type="text"
 														name="longitud"
 														id="longitud"
-														onChange={(e) => {
-															const locationActual = { ...location, longitude: e.target.value }
-															_.debounce(setLocationIfEditable(locationActual), 1500)
+														onChange={e => {
+															const locationActual = {
+																...location,
+																longitude: e.target.value
+															}
+															_.debounce(
+																setLocationIfEditable(locationActual),
+																1500
+															)
 														}}
 														disabled={!editable}
-														value={
-															location.longitude
-														}
+														value={location.longitude}
 													/>
 												</FormGroup>
 											</Grid>
 										</Grid>
-
 									</Grid>
 								</>
 							)}
 
-							<MapContainer
-								item
-								md={6}
-								xs={12}
-								className={classes.control}
-							>
+							<MapContainer item md={6} xs={12} className={classes.control}>
 								<WebMapView
 									setLocation={setLocation}
 									setSearch={setSearch}
@@ -898,12 +758,15 @@ const InformacionResidenciaSaber = (props) => {
 									editable={editable}
 								/>
 							</MapContainer>
-
 						</Grid>
 						<Grid
 							item
 							xs={12}
-							style={{ textAlign: 'center' }}
+							style={
+								props.validations.modificar
+									? { textAlign: 'center' }
+									: { display: 'none' }
+							}
 							className={classes.control}
 						>
 							{editable ? (
@@ -923,10 +786,8 @@ const InformacionResidenciaSaber = (props) => {
 									props.authHandler('modificar', sendData)
 								}}
 								editable={editable}
-								setEditable={(value) => {
-									props.authHandler('modificar', () =>
-										setEditable(value)
-									)
+								setEditable={value => {
+									props.authHandler('modificar', () => setEditable(value))
 								}}
 								loading={props.direccion.loading}
 							/>
@@ -959,16 +820,12 @@ const MapContainer = styled(Grid)`
 		height: 29rem;
 	}
 `
-const StyledModalBody = styled(ModalBody)`
-	height: 86vh;
-	padding: 0 !important;
-`
 
 const FormSpan = styled.span`
 	color: red;
 `
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	return {
 		provinces: state.provincias,
 		cantones: state.cantones,
