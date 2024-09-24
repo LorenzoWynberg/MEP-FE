@@ -103,12 +103,12 @@ const HistoricoResidencia = ({ identidadId }) => {
 		}))
 	}, [bitacoraResidencia])
 	useEffect(() => {
-		if (selectedRow?.json?.latitude && selectedRow?.json?.longitude && selectedRow?.json?.longitude != "" && selectedRow?.json?.latitude != "") {
+		if (selectedRow?.json?.latitude && selectedRow?.json?.longitude && selectedRow?.json?.longitude != "" && selectedRow?.json?.latitude != ""  && search) {
 			search?.search([selectedRow.json?.longitude, selectedRow.json?.latitude])
 			setShowCoordinates(true)
-		} else if (selectedRow?.json?.province?.label && selectedRow?.json?.canton?.label && selectedRow?.json?.distrito.label) {
-			search.searchTerm = `${selectedRow?.json?.province?.label}, ${selectedRow?.json?.canton?.label}, ${selectedRow?.json?.distrito.label}`
-			search.search(`${search.searchTerm}, CRI`)
+		} else if (selectedRow?.json?.province?.label && selectedRow?.json?.canton?.label && selectedRow?.json?.distrito.label && search) {
+			search?.searchTerm = `${selectedRow?.json?.province?.label}, ${selectedRow?.json?.canton?.label}, ${selectedRow?.json?.distrito.label}`
+			search?.search(`${search.searchTerm}, CRI`)
 			setShowCoordinates(false)
 		}
 	}, [search, selectedRow])
