@@ -1,24 +1,40 @@
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useActions } from 'Hooks/useActions'
-
+import { makeStyles } from '@material-ui/core/styles'
+import Grid from '@material-ui/core/Grid'
+import {
+	Input,
+	Label,
+	Row,
+	Col, FormGroup, Form
+} from 'reactstrap'
+import { WebMapView } from './MapView'
+import OptionModal from 'Components/Modal/OptionModal'
 import { Card, CardBody, Modal, ModalBody } from 'reactstrap'
 import { getBitacoraResidenciaByIdentidad } from 'Redux/Bitacora/actions'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import Tooltip from '@mui/material/Tooltip'
 import colors from 'Assets/js/colors'
+import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 
 import moment from 'moment'
 import { useTranslation } from 'react-i18next'
-import Selectors from 'Components/GoogleMapsLocation/Selectors'
+const useStyles = makeStyles((theme) => ({
 
+	control: {
+		padding: theme.spacing(2)
+	},
+}))
 const HistoricoResidencia = ({ identidadId }) => {
 	const { t } = useTranslation()
 	const actions = useActions({
 		getBitacoraResidenciaByIdentidad
 	})
-	const [selectedRow, setSelectedRow] = useState(null)
+	const classes = useStyles()
+	const [search, setSearch] = useState(null)
+	const [selectedRow, setSelectedRow] = useState(false)
 	const { bitacoraResidencia } = useSelector((state: any) => state.bitacora)
 	const columns = useMemo(
 		() => [
@@ -85,41 +101,133 @@ const HistoricoResidencia = ({ identidadId }) => {
 			json: JSON.parse(el.json)
 		}))
 	}, [bitacoraResidencia])
+	useEffect(() => {
+		selectedRow?.json?.latitude && selectedRow?.json?.longitude && search?.search([selectedRow.json?.longitude, selectedRow.json?.latitude])
+	}, [search, selectedRow])
 	return (
 		<>
 			<Card>
 				<CardBody>
-					<Modal
+					<OptionModal
 						size='xl'
-						isOpen={selectedRow}
-						toggle={() => {
-							setSelectedRow(null)
-						}}
+						hideCancel
+						isOpen={selectedRow && true}
+						titleHeader={'Historico de residencia'}
+						onConfirm={() =>
+							setSelectedRow(false)}
 					>
-						<ModalBody>
-							<Selectors
-								readOnly
-								editable={false}
-								initialValues={{
-									countryId: selectedRow?.json?.paisId,
-									administrativeAreaLevel1: selectedRow?.json?.areaAdministrativaNivel1,
-									administrativeAreaLevel2: selectedRow?.json?.areaAdministrativaNivel2,
-									direction: selectedRow?.json?.direccionExacta,
-									longitude: selectedRow?.json?.longitud,
-									latitude: selectedRow?.json?.latitud
-								}}
-							/>
-						</ModalBody>
-					</Modal>
+						<Row>
+							<Col xs={4}>
+
+								<FormGroup>
+									<Label for='province'>Provincia</Label>
+									<Input
+										type='text'
+										name='province'
+										value={selectedRow?.json?.province.label}
+										id='province'
+										disabled
+									/>
+								</FormGroup>
+
+								<FormGroup>
+									<Label for='distrito'>Distrito</Label>
+									<Input
+										type='text'
+										name='distrito'
+										value={selectedRow?.json?.distrito.label}
+										id='distrito'
+										disabled
+									/>
+								</FormGroup>
+
+								<FormGroup>
+									<Label for='poblado'>Poblado</Label>
+									<Input
+										type='text'
+										name='poblado'
+										value={selectedRow?.json?.poblado.label}
+										id='poblado'
+										disabled
+									/>
+								</FormGroup>
+
+
+								<FormGroup>
+									<Label for='canton'>Cantón</Label>
+									<Input
+										type='text'
+										name='canton'
+										value={selectedRow?.json?.canton.label}
+										id='canton'
+										disabled
+									/>
+								</FormGroup>
+
+							</Col>
+							<Col xs={8}
+								style={{
+
+									textAlign: 'left',
+									justifyContent: 'left',
+									alignItems: 'left'
+								}}>
+
+								<WebMapView
+									setSearch={setSearch}
+								/>
+							</Col>
+
+							<Col xs={6} style={{
+
+								textAlign: 'left',
+								justifyContent: 'left',
+								alignItems: 'left'
+							}}><FormGroup>
+									<Label for='latitude'>Latitud</Label>
+									<Input
+										type='text'
+										name='latitude'
+										value={selectedRow?.json?.latitude}
+										id='latitude'
+										disabled
+									/>
+								</FormGroup></Col>
+
+							<Col xs={6} style={{
+
+								textAlign: 'left',
+								justifyContent: 'left',
+								alignItems: 'left'
+							}}><FormGroup>
+									<Label for='longitude'>Longitud</Label>
+									<Input
+										type='text'
+										name='longitude'
+										value={selectedRow?.json?.longitude}
+										id='longitude'
+										disabled
+									/>
+								</FormGroup></Col>
+
+						</Row>
+					</OptionModal>
+
 
 					<h1>
 						{t('estudiantes>expediente>contacto>historico_residencia>titulo', 'Histórico de residencias')}
 					</h1>
 					<TableReactImplementation columns={columns} data={data} />
 				</CardBody>
-			</Card>
+			</Card >
 		</>
 	)
 }
 
 export default HistoricoResidencia
+
+const MapContainer = styled(Grid)`
+	@media (max-width: 870px) {
+		height: 29rem;
+	}
+`

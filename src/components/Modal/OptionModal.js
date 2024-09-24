@@ -5,7 +5,7 @@ function OptionModal({
 	isOpen,
 	titleHeader,
 	onConfirm,
-	onCancel,
+	onCancel = () => { },
 	hideCancel = false,
 	textCancel = 'Cancelar',
 	textConfirm = 'Confirmar',
