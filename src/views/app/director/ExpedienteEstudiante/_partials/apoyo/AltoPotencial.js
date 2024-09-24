@@ -34,7 +34,7 @@ import {
 import styles from './apoyos.css'
 import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
-import { getCatalogs } from 'Redux/selects/actions'
+import { getCatalogs, getCatalogsByCode } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
 import { catalogsEnumObj } from 'Utils/catalogsEnum'
 import axios from 'axios'
@@ -51,18 +51,22 @@ import moment from 'moment'
 import colors from 'assets/js/colors'
 
 const categoria = {
-	id: 1,
-	nombre: 'Apoyos personales',
-	addDispatchName: 'apoyospersonales1'
+	id: 5,
+	nombre: 'Condición alto potencial',
+	addDispatchName: 'condiciónaltopotencial5'
 }
 
-const tituloModal = 'Registro de apoyo personal'
+const tituloModal = 'Registro de apoyo alto potencial'
 
 const condicionSeRecibeNombre = 'Se recibe'
+
+const IdTalentoCatalog = 81
+const IdEstrategiaCatalog = 82
 
 export const AltoPotencial = () => {
 	const [loading, setLoading] = useState(true)
 	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
+	const [showModalTalento, setShowModalTalento] = useState(false)
 	const [data, setData] = useState([])
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
 	const [enriquecimiento, setEnriquecimiento] = useState(false)
@@ -71,6 +75,8 @@ export const AltoPotencial = () => {
 	const [actividades, setActividades] = useState(false)
 	const [tiposApoyo, setTiposApoyo] = useState([])
 	const [tiposApoyoFilter, setTiposApoyoFilter] = useState([])
+	const [talentos, setTalentos] = useState([])
+	const [estrategias, setEstrategias] = useState([])
 	const [sortedYearList, setSortedYearList] = useState(null)
 	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
 	const [editable, setEditable] = useState(false)
@@ -80,10 +86,15 @@ export const AltoPotencial = () => {
 		msg: '',
 		type: ''
 	})
+	const [aniosDeteccion, setAnionsDeteccion] = useState([])
 	const [formData, setFormData] = useState({
 		id: 0,
 		tipoDeApoyo: 0,
 		condicionApoyo: '',
+		talentoId: '',
+		nombreTalento: '',
+		anioAprobacion: 0,
+		estrategias: [],
 		detalleApoyo: '',
 		nombreApoyo: '',
 		fechaDeAprobacion: ''
@@ -93,7 +104,11 @@ export const AltoPotencial = () => {
 		const data = {
 			id: 0,
 			tipoDeApoyo: 0,
+			talentoId: '',
+			nombreTalento: '',
+			anioAprobacion: 0,
 			condicionApoyo: '',
+			estrategias: [],
 			detalleApoyo: '',
 			nombreApoyo: '',
 			fechaDeAprobacion: ''
@@ -113,22 +128,14 @@ export const AltoPotencial = () => {
 	}
 
 	const handleFechaAprobacionOnChange = event => {
-		const value = Number(event.target.value)
+		const anio = Number(event.target.value)
 
-		const condicionesApoyo = state.selects.tipoCondicionApoyo
+		const fechaInicio = '01/01/' + anio
 
-		const condicionSeRecibe = condicionesApoyo.find(
-			o => o.nombre === condicionSeRecibeNombre
-		)
-
-		if (value === condicionSeRecibe.id) {
-			setShowFechaAprobacion(true)
-		} else {
-			setShowFechaAprobacion(false)
-		}
 		setFormData({
 			...formData,
-			condicionApoyo: value
+			fechaDeAprobacion: fechaInicio,
+			anioAprobacion: anio
 		})
 	}
 
@@ -142,7 +149,8 @@ export const AltoPotencial = () => {
 		addApoyo,
 		deleteApoyo,
 		editApoyo,
-		getCatalogs
+		getCatalogs,
+		getCatalogsByCode
 	})
 
 	const state = useSelector(store => {
@@ -157,19 +165,77 @@ export const AltoPotencial = () => {
 	})
 
 	useEffect(() => {
+		const loadTalentos = async () => {
+			try {
+				axios
+					.get(
+						`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyCodeType/${IdTalentoCatalog}`
+					)
+					.then(response => {
+						const data = response.data
+						console.log('data JP', data)
+						setTalentos(data)
+					})
+					.catch(error => {
+						console.log(error)
+					})
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		loadTalentos()
+	}, [])
+
+	useEffect(() => {
+		const loadEstrategias = async () => {
+			try {
+				axios
+					.get(
+						`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyCodeType/${IdEstrategiaCatalog}`
+					)
+					.then(response => {
+						const data = response.data
+						console.log('data JP', data)
+						setEstrategias(data)
+					})
+					.catch(error => {
+						console.log(error)
+					})
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		loadEstrategias()
+	}, [])
+
+	useEffect(() => {
+		const currentYear = new Date().getFullYear()
+		let anios = []
+		for (let i = 2015; i <= currentYear; i++) {
+			anios.push({
+				id: i,
+				nombre: i
+			})
+		}
+		setAnionsDeteccion(anios)
+	}, [])
+
+	useEffect(() => {
 		const loadData = async () => {
 			try {
 				setLoading(true)
 				await actions.getTiposApoyos()
-
 				const tiposDeApoyo = state.apoyos.tipos.filter(
 					tipo => tipo.categoriaApoyoId === categoria.id
 				)
 
+				console.log('Tipos de apoyo alto potencial JP', tiposDeApoyo)
 				setTiposApoyo(tiposDeApoyo)
 
-				!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
-					(await actions.getCatalogs(catalogsEnumObj.TIPOCONDICIONAPOYO.id))
+				/* !state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
+					(await actions.getCatalogs(catalogsEnumObj.TIPOCONDICIONAPOYO.id)) */
 			} finally {
 				setLoading(false)
 			}
@@ -305,7 +371,7 @@ export const AltoPotencial = () => {
 				column: 'fechaRegistro',
 				accessor: 'fechaRegistro',
 				label: ''
-			}, 
+			},
 			{
 				Header: t('general>acciones', 'Acciones'),
 				column: '',
@@ -583,7 +649,7 @@ export const AltoPotencial = () => {
 						apoyoEstudiante =>
 							apoyoEstudiante.sb_TiposDeApoyoId === tipoApoyo.id &&
 							new Date(apoyoEstudiante.fechaInsercion).getFullYear() ===
-							parseInt(currentYear)
+								parseInt(currentYear)
 					)
 			)
 		}
@@ -597,6 +663,15 @@ export const AltoPotencial = () => {
 			...formData,
 			tipoDeApoyo: item.id,
 			nombreApoyo: item.nombre
+		})
+	}
+
+	const handleChangeTalento = item => {
+		setRadioValue(item.id)
+		setFormData({
+			...formData,
+			talentoId: item.id,
+			nombreTalento: item.nombre
 		})
 	}
 
@@ -627,7 +702,7 @@ export const AltoPotencial = () => {
 							value={radioValue}
 						>
 							{tiposApoyoFilter.map((item, i) => (
-								<Row key={i}>
+								<Row key={i} style={{ marginTop: '10px' }}>
 									<Col
 										style={{
 											display: 'flex',
@@ -655,6 +730,50 @@ export const AltoPotencial = () => {
 					</FormControl>
 				</div>
 			</OptionModal>
+			{/* Talentos */}
+			<OptionModal
+				isOpen={showModalTalento}
+				titleHeader={'Talentos'}
+				onConfirm={() => setShowModalTalento(false)}
+				onCancel={() => setShowModalTalento(false)}
+			>
+				<div>
+					<FormControl>
+						<RadioGroup
+							aria-labelledby="demo-radio-buttons-group-label"
+							name="radio-buttons-group"
+							value={radioValue}
+						>
+							{talentos.map((item, i) => (
+								<Row key={i} style={{ marginTop: '10px' }}>
+									<Col
+										style={{
+											display: 'flex',
+											textAlign: 'left',
+											justifyContent: 'left',
+											alignItems: 'left'
+										}}
+										sm={7}
+									>
+										<FormControlLabel
+											value={formData.talentoId}
+											onClick={(e, v) => {
+												e.persist()
+												handleChangeTalento(item)
+											}}
+											checked={radioValue == item.id}
+											control={<Radio style={{ color: primary }} />}
+											label={item.nombre}
+										/>
+									</Col>
+									<Col sm={5}>{item.descripcion}</Col>
+								</Row>
+							))}
+						</RadioGroup>
+					</FormControl>
+				</div>
+			</OptionModal>
+
 			<OptionModal
 				isOpen={showNuevoApoyoModal && !showModalTiposApoyo}
 				titleHeader={tituloModal}
@@ -664,9 +783,7 @@ export const AltoPotencial = () => {
 				<Form onSubmit={onConfirmSaveApoyo}>
 					<Row>
 						<Col md={4}>
-							<Label for="tipoDeApoyo">
-								Condición de alto potencial
-							</Label>
+							<Label for="tipoDeApoyo">Condición de alto potencial</Label>
 							<StyledInput
 								id="tipoDeApoyo"
 								name="tipoDeApoyo"
@@ -679,90 +796,119 @@ export const AltoPotencial = () => {
 							></StyledInput>
 						</Col>
 						<Col md={4}>
-							<Label for="tipoDeApoyo">
-								Talentos
-							</Label>
+							<Label for="talentoId">Talentos</Label>
 							<StyledInput
-								id="tipoDeApoyo"
-								name="tipoDeApoyo"
+								id="talentoId"
+								name="talentoId"
 								type="text"
 								placeholder="Seleccionar"
 								onClick={() => {
-									setShowModalTiposApoyo(true)
+									setShowModalTalento(true)
 								}}
-								value={formData.nombreApoyo || 'Seleccionar'}
+								value={formData.nombreTalento || 'Seleccionar'}
 							></StyledInput>
 						</Col>
+
 						<Col md={4}>
-							<Label for="tipoDeApoyo">
+							<Label for="anioIdentificacion">
 								Año de identificación de la condición
 							</Label>
 							<StyledInput
-								id="tipoDeApoyo"
-								name="tipoDeApoyo"
-								type="text"
+								id="anioIdentificacion"
+								name="anioIdentificacion"
+								type="select"
+								onChange={handleFechaAprobacionOnChange}
 								placeholder="Seleccionar"
-								onClick={() => {
-									setShowModalTiposApoyo(true)
-								}}
-								value={formData.nombreApoyo || 'Seleccionar'}
-							></StyledInput>
+								value={formData.anioAprobacion}
+							>
+								<option value={null}>
+									{t('general>seleccionar', 'Seleccionar')}
+								</option>
+								{aniosDeteccion.map(tipo => {
+									return <option value={tipo.id}>{tipo.nombre}</option>
+								})}
+							</StyledInput>
 						</Col>
 					</Row>
 
 					<Row className="mt-4">
+						{/*
 						<Col md={3}>
 							<FormGroup>
-								<FormControlLabel control={<Checkbox id="enriquecimiento"
-									color='primary'
-									checked={enriquecimiento}
-									onClick={() =>
-										setEnriquecimiento(!enriquecimiento)
+								<FormControlLabel
+									control={
+										<Checkbox
+											id="enriquecimiento"
+											color="primary"
+											checked={enriquecimiento}
+											onClick={() => setEnriquecimiento(!enriquecimiento)}
+										/>
 									}
-								/>} label={<Typography variant="body2">Enriquecimiento cultural</Typography>} />
-
+									label={
+										<Typography variant="body2">
+											Enriquecimiento cultural
+										</Typography>
+									}
+								/>
 							</FormGroup>
 						</Col>
 						<Col md={3}>
 							<FormGroup>
-								<FormControlLabel control={<Checkbox id="trabajo"
-									color='primary'
-									checked={trabajo}
-									onClick={() =>
-										setTrabajo(!trabajo)
+								<FormControlLabel
+									control={
+										<Checkbox
+											id="trabajo"
+											color="primary"
+											checked={trabajo}
+											onClick={() => setTrabajo(!trabajo)}
+										/>
 									}
-								/>} label={<Typography variant="body2">Trabajo Colaborativo</Typography>} />
-
-
-
+									label={
+										<Typography variant="body2">
+											Trabajo Colaborativo
+										</Typography>
+									}
+								/>
 							</FormGroup>
 						</Col>
 						<Col md={3}>
 							<FormGroup>
-								<FormControlLabel control={<Checkbox id="agrupamiento"
-									color='primary'
-									checked={agrupamiento}
-									onClick={() =>
-										setAgrupamiento(!agrupamiento)
+								<FormControlLabel
+									control={
+										<Checkbox
+											id="agrupamiento"
+											color="primary"
+											checked={agrupamiento}
+											onClick={() => setAgrupamiento(!agrupamiento)}
+										/>
 									}
-								/>} label={<Typography variant="body2">Agrupamiento por Capacidad</Typography>}/>
-
-
+									label={
+										<Typography variant="body2">
+											Agrupamiento por Capacidad
+										</Typography>
+									}
+								/>
 							</FormGroup>
 						</Col>
 						<Col md={3}>
 							<FormGroup>
-								<FormControlLabel   control={<Checkbox id="actividades"
-									color='primary'
-									checked={actividades}
-									onClick={() =>
-										setActividades(!actividades)
+								<FormControlLabel
+									control={
+										<Checkbox
+											id="actividades"
+											color="primary"
+											checked={actividades}
+											onClick={() => setActividades(!actividades)}
+										/>
 									}
-								/>} label={<Typography variant="body2">Actividades Curriculares</Typography>} />
-
-
+									label={
+										<Typography variant="body2">
+											Actividades Curriculares
+										</Typography>
+									}
+								/>
 							</FormGroup>
-						</Col>
+						</Col> */}
 					</Row>
 				</Form>
 			</OptionModal>
