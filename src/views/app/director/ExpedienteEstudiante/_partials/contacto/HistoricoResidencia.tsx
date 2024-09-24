@@ -185,7 +185,19 @@ const HistoricoResidencia = ({ identidadId }) => {
 									setSearch={setSearch}
 								/>
 							</Col>
+							<Col xs={12}>
 
+								<FormGroup>
+									<Label for='direccion'>Dirección</Label>
+									<Input
+										type='textarea'
+										name='direccion'
+										value={selectedRow?.json?.direccionExacta}
+										id='direccion'
+										disabled
+									/>
+								</FormGroup>
+							</Col>
 							{showCoordinates && (<><Col xs={6} style={{
 
 								textAlign: 'left',
