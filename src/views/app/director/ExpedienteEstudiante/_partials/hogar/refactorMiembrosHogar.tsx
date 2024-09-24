@@ -256,7 +256,7 @@ const RefactorMiembrosHogar = props => {
 											debugger
 											if (
 												age < 18 &&
-												fullRow.encargado &&
+												fullRow.encargado === 'Sí' &&
 												data.filter(el => el?.encargado === 'Sí').length === 1
 											) {
 												setSnackbarContent({
