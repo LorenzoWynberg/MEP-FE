@@ -115,13 +115,12 @@ const ApoyoEducativo = props => {
 		if (saveData) {
 			options = []
 			modalOptions.forEach(el => {
-				if (el.checked) options.push(el)
+				if (el.newChecked) options.push(el)
 			})
-			const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${
-				openOptions.type === 'discapacidades'
-					? 'DiscapacidadesPorUsuario'
-					: 'CondicionesPorUsuario'
-			}/CreateMultiple/${props.identidadId}`
+			const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${openOptions.type === 'discapacidades'
+				? 'DiscapacidadesPorUsuario'
+				: 'CondicionesPorUsuario'
+				}/AddMultiple/${props.identidadId}`
 			const optionsMap = options.map(d => {
 				return {
 					id: 0,
@@ -148,10 +147,11 @@ const ApoyoEducativo = props => {
 	const handleChangeItem = item => {
 		const newItems = modalOptions.map(element => {
 			if (element.id === item.id) {
-				return { ...element, checked: !element.checked }
+				return { ...element, newChecked: !element.newChecked }
 			}
 			return element
 		})
+		console.log('newItems', newItems)
 		setModalOptions(newItems)
 	}
 
@@ -226,13 +226,13 @@ const ApoyoEducativo = props => {
 				titleHeader={
 					openOptions.type === 'discapacidades'
 						? t(
-								'estudiantes>expediente>apoyos_edu>modal>tipos',
-								'Tipos de discapacidades'
-						  )
+							'estudiantes>expediente>apoyos_edu>modal>tipos',
+							'Tipos de discapacidades'
+						)
 						: t(
-								'estudiantes>expediente>apoyos_edu>modal>otro',
-								'Otros tipos de condiciones'
-						  )
+							'estudiantes>expediente>apoyos_edu>modal>otro',
+							'Otros tipos de condiciones'
+						)
 				}
 				onConfirm={() => toggleModal(true)}
 				onCancel={() => toggleModal(false)}
@@ -242,34 +242,32 @@ const ApoyoEducativo = props => {
 						openOptions.type === 'discapacidades'
 							? !discapacidadesHistorico?.some(di => di.id == d.id)
 							: !condicionesHistorico?.some(di => di.id == d.id)
-					)
+					).filter(d=>!d.checked )
 					.map((item, i) => {
-						return (
-							<Row key={i}>
-								<Col xs={3} className="modal-detalle-subsidio-col">
-									<div>
-										<CustomInput
-											type="checkbox"
-											label={item.nombre}
-											inline
-											onClick={() => handleChangeItem(item)}
-											checked={item.checked}
-										/>
-									</div>
-								</Col>
-								<Col xs={9} className="modal-detalle-subsidio-col">
-									<div>
-										<p>
-											{item.descripcion
-												? item.descripcion
-												: item.detalle
+						return (<Row key={i}>
+							<Col xs={3} className="modal-detalle-subsidio-col">
+								<div>
+									<CustomInput
+										type="checkbox"
+										label={item.nombre}
+										inline
+										onClick={() => handleChangeItem(item)}
+										checked={item.newChecked}
+									/>
+								</div>
+							</Col>
+							<Col xs={9} className="modal-detalle-subsidio-col">
+								<div>
+									<p>
+										{item.descripcion
+											? item.descripcion
+											: item.detalle
 												? item.detalle
 												: 'Elemento sin detalle actualmente'}
-										</p>
-									</div>
-								</Col>
-							</Row>
-						)
+									</p>
+								</div>
+							</Col>
+						</Row>)
 					})}
 			</OptionModal>
 		</>
