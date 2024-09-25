@@ -338,13 +338,13 @@ const General = props => {
 						options={optionsTab}
 						activeTab={activeTab}
 						setActiveTab={setActiveTab}
-						marginTop="5"
+						marginTop="3"
 					/>
 					<ContentTab activeTab={activeTab} numberId={activeTab}>
 						{activeTab === 0 && (
-							<Form className="mb-3" onSubmit={handleSubmit(submitData)}>
+							<Form onSubmit={handleSubmit(submitData)}>
 								<Row>
-									<Colxx lg="6">
+									<Colxx lg="6" className="mb-3">
 										<PersonalDataForm
 											personalData={identidadData}
 											disabled={
@@ -361,7 +361,7 @@ const General = props => {
 										/>
 									</Colxx>
 
-									<Colxx lg="6">
+									<Colxx lg="6" className="mb-3">
 										<DataForm
 											selects={props.selects}
 											identification={state.identification}
@@ -379,12 +379,13 @@ const General = props => {
 									</Colxx>
 								</Row>
 								<div
-									className="container-center mt-3"
+									className="container-center"
 									style={props.validations.modificar ? {} : { display: 'none' }}
 								>
 									<EditButton
 										loading={state.identification.loading}
 										editable={editable}
+										marginY="mb-3"
 										setEditable={value => {
 											authHandler(
 												'modificar',
@@ -398,8 +399,8 @@ const General = props => {
 							</Form>
 						)}
 						{activeTab === 1 && (
-							<Row className="mb-5">
-								<Col xs={12} sm={6}>
+							<Row className="mb-3">
+								<Col lg={6}>
 									<FormProgenitor
 										nombre={progenitor.nombreMadrePadreRegistral1}
 										cedula={progenitor.idMadrePadreRegistral1}
@@ -409,7 +410,7 @@ const General = props => {
 										)}
 									/>
 								</Col>
-								<Col xs={12} sm={6}>
+								<Col lg={6}>
 									<FormProgenitor
 										nombre={progenitor.nombreMadrePadreRegistral2}
 										cedula={progenitor.idMadrePadreRegistral2}
