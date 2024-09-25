@@ -11,7 +11,7 @@ function FormProgenitor({ cedula }) {
             setProgenitor(r.data)
         }
         )
-    }, [cedula])
+    }, [cedula]) 
     return progenitor && progenitor.fechaNacimiento && <Form>
         <Row>
             <Col sm="12" >
