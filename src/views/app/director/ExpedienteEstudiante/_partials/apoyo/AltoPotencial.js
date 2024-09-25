@@ -211,9 +211,9 @@ export const AltoPotencial = () => {
 			try {
 				setLoading(true)
 				await actions.getTiposApoyos()
-				const tiposDeApoyo = state.apoyos.tipos.filter(
-					tipo => tipo.categoriaApoyoId === categoria.id
-				)
+				const tiposDeApoyo = state.apoyos.tipos.filter(tipo => {
+					tipo.categoriaApoyoId === categoria.id
+				})
 
 				setTiposApoyo(tiposDeApoyo)
 
@@ -253,7 +253,7 @@ export const AltoPotencial = () => {
 			setSortedYearList(sortedYears)
 		}
 
-		filterTiposDeApoyo(tiposApoyo, parseInt(state.activeYear.nombre))
+		filterTiposDeApoyo(tiposApoyo, parseInt(sortedYearList[0]?.nombre))
 	}, [data])
 
 	const handleClickEstrategias = item => {

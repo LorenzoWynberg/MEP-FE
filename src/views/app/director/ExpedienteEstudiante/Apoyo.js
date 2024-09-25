@@ -80,12 +80,17 @@ const Apoyo = props => {
 			await actions.getTiposApoyos()
 			await actions.getDependenciasApoyos()
 			await actions.getCategoriasApoyos()
+
 			await actions.getCondiciones(state.identification.data.id)
+
 			!state.selects[catalogsEnumObj.OTRASCONDICIONES.name][0] &&
 				(await actions.getCatalogs(catalogsEnumObj.OTRASCONDICIONES.id))
+
 			!state.selects[catalogsEnumObj.DISCAPACIDADES.name][0] &&
 				(await actions.getCatalogs(catalogsEnumObj.DISCAPACIDADES.id))
+
 			await actions.getDiscapacidades(state.identification.data.id)
+
 			setLoading(false)
 		}
 		loadData()
