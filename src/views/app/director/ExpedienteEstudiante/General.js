@@ -286,7 +286,6 @@ const General = props => {
 				`${envVariables.BACKEND_URL}/api/TSEIdentidad/GetOneByCedula/${identidadData.identificacion}`
 			)
 			.then(r => {
-				console.log('LORE', r)
 				setProgenitor(r.data)
 			})
 	}, [identidadData.identificacion])

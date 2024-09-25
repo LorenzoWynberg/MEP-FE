@@ -28,7 +28,6 @@ function FormProgenitor({ cedula, nombre, title }) {
 				const response = await axios.get(
 					`${envVariables.BACKEND_URL}/api/TSEIdentidad/GetOneByCedula/${cedula}`
 				)
-				console.log('LORE', response)
 				setProgenitor(response.data)
 				setEsFallecido(response.data?.esFallecido ? 'Sí' : 'No')
 			} catch (error) {
