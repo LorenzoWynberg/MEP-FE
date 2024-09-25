@@ -11,6 +11,7 @@ import OtraCondicion from './OtraCondicion'
 import axios from 'axios'
 import { ApoyosCurriculares } from './ApoyosCurriculares'
 import { ApoyosPersonales } from './ApoyosPersonales'
+import { AltoPotencial } from './AltoPotencial'
 import { ApoyosOrganizativos } from './ApoyosOrganizativos'
 import OptionModal from '../../../../../../components/Modal/OptionModal'
 import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
@@ -156,11 +157,12 @@ const ApoyoEducativo = props => {
 	}
 
 	const optionsTab = [
-		{ title: 'Condición de discapacidad' },
-		{ title: 'Otras condiciones' },
 		{ title: 'Apoyos curriculares' },
 		{ title: 'Apoyos personales' },
-		{ title: 'Apoyos organizativos' }
+		{ title: 'Apoyos organizativos' },
+		{ title: 'Alto Potencial' },
+		{ title: 'Condición de discapacidad' },
+		{ title: 'Otras condiciones' },
 	]
 	const deleteCondicion = id => {
 		axios
@@ -172,15 +174,12 @@ const ApoyoEducativo = props => {
 				getCondiciones(id)
 			})
 	}
-	const deleteDiscapacidad = id => {
-		axios
-			.delete(
-				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/${id}`
-			)
-			.then(() => {
-				getDiscapacidades(id)
-				getHistoricosDiscapacidades()
-			})
+	const deleteDiscapacidad = (id) => {
+		axios.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/${id}`).then(() => {
+		
+			getDiscapacidades(id)
+			getHistoricosDiscapacidades()
+		})
 	}
 	return (
 		<>
@@ -192,33 +191,26 @@ const ApoyoEducativo = props => {
 					setActiveTab={setActiveTab}
 				/>
 				<ContentTab activeTab={activeTab} numberId={activeTab}>
-					{activeTab === 0 && (
-						<CondicionDiscapacidad
-							discapacidadesHistorico={discapacidadesHistorico}
-							delete={deleteDiscapacidad}
-							handleOpenOptions={handleOpenOptions}
-							discapacidades={props.discapacidades}
-							validations={props.validations}
-						/>
+					{activeTab === 0 && (<ApoyosCurriculares  validations={props.validations} />
+
 					)}
-					{activeTab === 1 && (
-						<OtraCondicion
-							condicionesHistorico={condicionesHistorico}
-							handleOpenOptions={handleOpenOptions}
-							delete={deleteCondicion}
-							condiciones={props.condiciones}
-							validations={props.validations}
-						/>
+					{activeTab === 1 && (<ApoyosPersonales  validations={props.validations} />
+
 					)}
-					{activeTab === 2 && (
-						<ApoyosCurriculares validations={props.validations} />
-					)}
-					{activeTab === 3 && (
-						<ApoyosPersonales validations={props.validations} />
-					)}
-					{activeTab === 4 && (
-						<ApoyosOrganizativos validations={props.validations} />
-					)}
+					{activeTab === 2 && <ApoyosOrganizativos  validations={props.validations} />}
+					{activeTab === 3 && <AltoPotencial  validations={props.validations} />}
+					{activeTab === 4 && <CondicionDiscapacidad validations={props.validations} 
+						discapacidadesHistorico={discapacidadesHistorico}
+						delete={deleteDiscapacidad}
+						handleOpenOptions={handleOpenOptions}
+						discapacidades={props.discapacidades}
+					/>}
+					{activeTab === 5 && <OtraCondicion validations={props.validations} 
+						condicionesHistorico={condicionesHistorico}
+						handleOpenOptions={handleOpenOptions}
+						delete={deleteCondicion}
+						condiciones={props.condiciones}
+					/>}
 				</ContentTab>
 			</Row>
 			<OptionModal

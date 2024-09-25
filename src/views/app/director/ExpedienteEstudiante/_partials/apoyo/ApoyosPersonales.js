@@ -621,7 +621,7 @@ export const ApoyosPersonales = props => {
 							value={radioValue}
 						>
 							{tiposApoyoFilter.map((item, i) => (
-								<Row key={i}>
+								<Row key={i} style={{ marginTop: '10px' }}>
 									<Col
 										style={{
 											display: 'flex',
