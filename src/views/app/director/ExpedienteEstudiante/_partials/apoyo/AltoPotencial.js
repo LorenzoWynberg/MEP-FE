@@ -49,6 +49,7 @@ import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import moment from 'moment'
 import colors from 'assets/js/colors'
+import { set } from 'lodash'
 
 const categoria = {
 	id: 5,
@@ -56,7 +57,7 @@ const categoria = {
 	addDispatchName: 'condiciónaltopotencial5'
 }
 
-const tituloModal = 'Registro de apoyo alto potencial'
+const tituloModal = 'Registros de alto potencial'
 
 const condicionSeRecibeNombre = 'Se recibe'
 
@@ -69,18 +70,14 @@ export const AltoPotencial = () => {
 	const [showModalTalento, setShowModalTalento] = useState(false)
 	const [data, setData] = useState([])
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
-	const [enriquecimiento, setEnriquecimiento] = useState(false)
-	const [trabajo, setTrabajo] = useState(false)
-	const [agrupamiento, setAgrupamiento] = useState(false)
-	const [actividades, setActividades] = useState(false)
 	const [tiposApoyo, setTiposApoyo] = useState([])
 	const [tiposApoyoFilter, setTiposApoyoFilter] = useState([])
 	const [talentos, setTalentos] = useState([])
 	const [estrategias, setEstrategias] = useState([])
 	const [sortedYearList, setSortedYearList] = useState(null)
-	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
 	const [editable, setEditable] = useState(false)
-	const [radioValue, setRadioValue] = useState(0)
+	const [radioValueTalento, setRadioValueTalento] = useState(0)
+	const [radioValueApoyo, setRadioValueApoyo] = useState(0)
 	const [snackbar, handleClick] = useNotification()
 	const [snackbarContent, setSnackbarContent] = useState({
 		msg: '',
@@ -90,12 +87,10 @@ export const AltoPotencial = () => {
 	const [formData, setFormData] = useState({
 		id: 0,
 		tipoDeApoyo: 0,
-		condicionApoyo: '',
 		talentoId: '',
 		nombreTalento: '',
 		anioAprobacion: 0,
 		estrategias: [],
-		detalleApoyo: '',
 		nombreApoyo: '',
 		fechaDeAprobacion: ''
 	})
@@ -107,25 +102,16 @@ export const AltoPotencial = () => {
 			talentoId: '',
 			nombreTalento: '',
 			anioAprobacion: 0,
-			condicionApoyo: '',
 			estrategias: [],
-			detalleApoyo: '',
 			nombreApoyo: '',
 			fechaDeAprobacion: ''
 		}
 		setFormData(data)
-		setRadioValue(0)
-		setShowFechaAprobacion(false)
+		setRadioValueTalento(0)
+		setRadioValueApoyo(0)
 	}
 
 	const primary = colors.primary
-
-	const handleFormDataChange = event => {
-		setFormData({
-			...formData,
-			[event.target.name]: event.target.value
-		})
-	}
 
 	const handleFechaAprobacionOnChange = event => {
 		const anio = Number(event.target.value)
@@ -173,7 +159,6 @@ export const AltoPotencial = () => {
 					)
 					.then(response => {
 						const data = response.data
-						console.log('data JP', data)
 						setTalentos(data)
 					})
 					.catch(error => {
@@ -196,7 +181,6 @@ export const AltoPotencial = () => {
 					)
 					.then(response => {
 						const data = response.data
-						console.log('data JP', data)
 						setEstrategias(data)
 					})
 					.catch(error => {
@@ -231,7 +215,6 @@ export const AltoPotencial = () => {
 					tipo => tipo.categoriaApoyoId === categoria.id
 				)
 
-				console.log('Tipos de apoyo alto potencial JP', tiposDeApoyo)
 				setTiposApoyo(tiposDeApoyo)
 
 				/* !state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
@@ -272,6 +255,28 @@ export const AltoPotencial = () => {
 
 		filterTiposDeApoyo(tiposApoyo, parseInt(state.activeYear.nombre))
 	}, [data])
+
+	const handleClickEstrategias = item => {
+		let estrategias = formData.estrategias
+
+		const filteredEstrategias = estrategias.filter(
+			estrategia => estrategia === item.id
+		)
+
+		if (filteredEstrategias.length > 0) {
+			estrategias = estrategias.filter(estrategia => estrategia !== item.id)
+			setFormData({
+				...formData,
+				estrategias: estrategias
+			})
+		} else {
+			estrategias.push(item.id)
+			setFormData({
+				...formData,
+				estrategias: estrategias
+			})
+		}
+	}
 
 	const deleteApoyoById = apoyoId => {
 		setLoading(true)
@@ -322,20 +327,22 @@ export const AltoPotencial = () => {
 		setEditable(true)
 		setShowNuevoApoyoModal(true)
 
-		if (
-			!isNull(row.fechaInicio) &&
-			!isUndefined(row.fechaInicio) &&
-			!isEmpty(row.fechaInicio)
-		) {
-			setShowFechaAprobacion(true)
+		setRadioValueApoyo(row.sb_TiposDeApoyoId)
+		setRadioValueTalento(row.sB_TalentoId)
+
+		let anioAprobacion = null
+		if (row.fechaInicio) {
+			anioAprobacion = new Date(row.fechaInicio).getFullYear()
 		}
 
 		setFormData({
 			id: row.id,
 			tipoDeApoyo: row.sb_TiposDeApoyoId,
-			condicionApoyo: row.condicionApoyoId,
-			detalleApoyo: row.detalle,
 			nombreApoyo: row.sb_TiposDeApoyo,
+			talentoId: row.sB_TalentoId,
+			nombreTalento: row.sB_TalentoDesc,
+			estrategias: row.estrategias,
+			anioAprobacion: anioAprobacion,
 			fechaDeAprobacion: row.fechaInicio
 		})
 	}
@@ -344,32 +351,32 @@ export const AltoPotencial = () => {
 		return [
 			{
 				Header: 'Condicion',
-				column: 'condicion',
-				accessor: 'condicion',
+				column: 'sb_TiposDeApoyo',
+				accessor: 'sb_TiposDeApoyo',
 				label: ''
 			},
 			{
 				Header: 'Talento',
-				column: 'talento',
-				accessor: 'talento',
+				column: 'sB_TalentoDesc',
+				accessor: 'sB_TalentoDesc',
 				label: ''
 			},
 			{
 				Header: 'Estrategias de flexibilizacion',
-				column: 'estrategias',
-				accessor: 'estrategias',
+				column: 'estrategiasDesc',
+				accessor: 'estrategiasDesc',
 				label: ''
 			},
 			{
 				Header: 'Registrado por (Usuario)',
-				column: 'registradoPor',
-				accessor: 'registradoPor',
+				column: 'usuarioRegistro',
+				accessor: 'usuarioRegistro',
 				label: ''
 			},
 			{
 				Header: 'Fecha y hora del registro',
-				column: 'fechaRegistro',
-				accessor: 'fechaRegistro',
+				column: 'fechaInsercion',
+				accessor: 'fechaInsercion',
 				label: ''
 			},
 			{
@@ -459,27 +466,19 @@ export const AltoPotencial = () => {
 			hayError = true
 		}
 
-		if (formData.condicionApoyo === '' || isNaN(formData.condicionApoyo)) {
-			validationMessage += '\nLa condición de apoyo es requerida'
+		if (formData.talentoId === '' || isNaN(formData.talentoId)) {
+			validationMessage += '\nEl talento es requerido'
 			hayError = true
 		}
 
-		if (formData.detalleApoyo === '') {
-			validationMessage += '\nEl detalle es requerido'
+		if (formData.anioAprobacion === 0) {
+			validationMessage += '\nEl año de aprobación es requerido'
 			hayError = true
 		}
 
-		const condicionesApoyo = state.selects.tipoCondicionApoyo
-
-		const condicionSeRecibe = condicionesApoyo.find(
-			o => o.nombre === condicionSeRecibeNombre
-		)
-
-		if (
-			formData.fechaDeAprobacion === '' &&
-			formData.condicionApoyo === condicionSeRecibe.id
-		) {
-			validationMessage += '\nLa fecha de aprobación es requerida'
+		if (formData.estrategias.length === 0) {
+			validationMessage +=
+				'\nDebe seleccionar al menos una estrategia de flexibilización'
 			hayError = true
 		}
 
@@ -502,18 +501,16 @@ export const AltoPotencial = () => {
 		}
 
 		let _data = {
-			//
-			detalle: formData.detalleApoyo,
 			fechaInicio: formData.fechaDeAprobacion
 				? formData.fechaDeAprobacion
 				: null,
-			fechaFin: null,
+			//fechaFin: null,
 			dependenciasApoyosId: null,
 			sb_TiposDeApoyoId: parseInt(formData.tipoDeApoyo),
-			condicionApoyoId: parseInt(formData.condicionApoyo),
+			//condicionApoyoId: parseInt(formData.condicionApoyo),
 			identidadesId: state.identification.data.id,
-			sb_TalentoId: null,
-			estrategias: null
+			sb_TalentoId: parseInt(formData.talentoId),
+			estrategias: formData.estrategias
 		}
 
 		let create = true
@@ -658,7 +655,7 @@ export const AltoPotencial = () => {
 	}
 
 	const handleChangeItem = item => {
-		setRadioValue(item.id)
+		setRadioValueApoyo(item.id)
 		setFormData({
 			...formData,
 			tipoDeApoyo: item.id,
@@ -667,7 +664,7 @@ export const AltoPotencial = () => {
 	}
 
 	const handleChangeTalento = item => {
-		setRadioValue(item.id)
+		setRadioValueTalento(item.id)
 		setFormData({
 			...formData,
 			talentoId: item.id,
@@ -699,7 +696,7 @@ export const AltoPotencial = () => {
 						<RadioGroup
 							aria-labelledby="demo-radio-buttons-group-label"
 							name="radio-buttons-group"
-							value={radioValue}
+							value={radioValueApoyo}
 						>
 							{tiposApoyoFilter.map((item, i) => (
 								<Row key={i} style={{ marginTop: '10px' }}>
@@ -718,7 +715,7 @@ export const AltoPotencial = () => {
 												e.persist()
 												handleChangeItem(item)
 											}}
-											checked={radioValue == item.id}
+											checked={radioValueApoyo == item.id}
 											control={<Radio style={{ color: primary }} />}
 											label={item.nombre}
 										/>
@@ -742,7 +739,7 @@ export const AltoPotencial = () => {
 						<RadioGroup
 							aria-labelledby="demo-radio-buttons-group-label"
 							name="radio-buttons-group"
-							value={radioValue}
+							value={radioValueTalento}
 						>
 							{talentos.map((item, i) => (
 								<Row key={i} style={{ marginTop: '10px' }}>
@@ -761,7 +758,7 @@ export const AltoPotencial = () => {
 												e.persist()
 												handleChangeTalento(item)
 											}}
-											checked={radioValue == item.id}
+											checked={radioValueTalento == item.id}
 											control={<Radio style={{ color: primary }} />}
 											label={item.nombre}
 										/>
@@ -783,7 +780,9 @@ export const AltoPotencial = () => {
 				<Form onSubmit={onConfirmSaveApoyo}>
 					<Row>
 						<Col md={4}>
-							<Label for="tipoDeApoyo">Condición de alto potencial</Label>
+							<Label for="tipoDeApoyo">
+								Condición de alto potencial <RequiredSpan />
+							</Label>
 							<StyledInput
 								id="tipoDeApoyo"
 								name="tipoDeApoyo"
@@ -796,7 +795,9 @@ export const AltoPotencial = () => {
 							></StyledInput>
 						</Col>
 						<Col md={4}>
-							<Label for="talentoId">Talentos</Label>
+							<Label for="talentoId">
+								Talentos <RequiredSpan />
+							</Label>
 							<StyledInput
 								id="talentoId"
 								name="talentoId"
@@ -811,7 +812,7 @@ export const AltoPotencial = () => {
 
 						<Col md={4}>
 							<Label for="anioIdentificacion">
-								Año de identificación de la condición
+								Año de identificación de la condición <RequiredSpan />
 							</Label>
 							<StyledInput
 								id="anioIdentificacion"
@@ -832,83 +833,35 @@ export const AltoPotencial = () => {
 					</Row>
 
 					<Row className="mt-4">
-						{/*
-						<Col md={3}>
-							<FormGroup>
-								<FormControlLabel
-									control={
-										<Checkbox
-											id="enriquecimiento"
-											color="primary"
-											checked={enriquecimiento}
-											onClick={() => setEnriquecimiento(!enriquecimiento)}
-										/>
-									}
-									label={
-										<Typography variant="body2">
-											Enriquecimiento cultural
-										</Typography>
-									}
-								/>
-							</FormGroup>
+						<Col md={12}>
+							<span>
+								Estrategias de flexibilización curricular <RequiredSpan />
+							</span>
 						</Col>
-						<Col md={3}>
-							<FormGroup>
-								<FormControlLabel
-									control={
-										<Checkbox
-											id="trabajo"
-											color="primary"
-											checked={trabajo}
-											onClick={() => setTrabajo(!trabajo)}
-										/>
-									}
-									label={
-										<Typography variant="body2">
-											Trabajo Colaborativo
-										</Typography>
-									}
-								/>
-							</FormGroup>
-						</Col>
-						<Col md={3}>
-							<FormGroup>
-								<FormControlLabel
-									control={
-										<Checkbox
-											id="agrupamiento"
-											color="primary"
-											checked={agrupamiento}
-											onClick={() => setAgrupamiento(!agrupamiento)}
-										/>
-									}
-									label={
-										<Typography variant="body2">
-											Agrupamiento por Capacidad
-										</Typography>
-									}
-								/>
-							</FormGroup>
-						</Col>
-						<Col md={3}>
-							<FormGroup>
-								<FormControlLabel
-									control={
-										<Checkbox
-											id="actividades"
-											color="primary"
-											checked={actividades}
-											onClick={() => setActividades(!actividades)}
-										/>
-									}
-									label={
-										<Typography variant="body2">
-											Actividades Curriculares
-										</Typography>
-									}
-								/>
-							</FormGroup>
-						</Col> */}
+					</Row>
+
+					<Row className="mt-3">
+						{estrategias.map((item, i) => (
+							<Col md={3}>
+								<FormGroup>
+									<FormControlLabel
+										control={
+											<Checkbox
+												id={i}
+												color="primary"
+												checked={formData.estrategias.some(
+													obj => obj === item.id
+												)}
+												onClick={() => handleClickEstrategias(item)}
+											/>
+										}
+										label={
+											<Typography variant="body2">{item.nombre}</Typography>
+										}
+									/>
+								</FormGroup>
+							</Col>
+						))}
 					</Row>
 				</Form>
 			</OptionModal>
