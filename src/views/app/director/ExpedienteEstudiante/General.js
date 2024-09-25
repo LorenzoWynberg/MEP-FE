@@ -23,7 +23,7 @@ import { useForm } from 'react-hook-form'
 import withAuthorization from 'Hoc/withAuthorization'
 import { getYearsOld } from 'Utils/years'
 import { useTranslation } from 'react-i18next'
-import FormProgenitor from './_partials/apoyo/FormProgenitor'
+import FormProgenitor from './_partials/general/FormProgenitor'
 import axios from 'axios'
 import { envVariables } from '../../../../constants/enviroment'
 
@@ -33,7 +33,7 @@ const listSexo = [
 ]
 const optionsTab = [
 	{ title: 'Información personal' },
-	{ title: 'Datos registrales' },
+	{ title: 'Datos registrales' }
 ]
 
 const General = props => {
@@ -246,6 +246,7 @@ const General = props => {
 			nacionalidadId: identidadData.nacionalidad.value,
 			tipoIdentificacionId: identidadData.idType.value
 		}
+
 		setPrevIdentidadData(_data)
 		setIdentidadData(_data)
 		let response = await actions.updateIdentity(_data)
@@ -278,12 +279,18 @@ const General = props => {
 			return
 		}
 	}
+
 	useEffect(() => {
-		axios.get(`${envVariables.BACKEND_URL}/api/TSEIdentidad/GetOneByCedula/${identidadData.identificacion}`).then(r => {
-			setProgenitor(r.data)
-		}
-		)
+		axios
+			.get(
+				`${envVariables.BACKEND_URL}/api/TSEIdentidad/GetOneByCedula/${identidadData.identificacion}`
+			)
+			.then(r => {
+				console.log('LORE', r)
+				setProgenitor(r.data)
+			})
 	}, [identidadData.identificacion])
+
 	const handleChange = (e, select = '') => {
 		let _data = {}
 		if (e.target && e.target.name === 'id') {
@@ -310,98 +317,115 @@ const General = props => {
 		setIdentidadData(_data)
 	}
 
-	return <div>
-		<br />
+	return (
+		<div>
+			<br />
 
-		<h4>
-			{t(
-				'estudiantes>expediente>info_gen>info_gen>titulo',
-				'Información general'
-			)}
-		</h4>
+			<h4>
+				{t(
+					'estudiantes>expediente>info_gen>info_gen>titulo',
+					'Información general'
+				)}
+			</h4>
 
-		{loading ? (
-			<Loader />
-		) : (
-			<>
-				<br />
-				{snackBar(snackbarContent.variant, snackbarContent.msg)}
-				<HeaderTab
-					options={optionsTab}
-					activeTab={activeTab}
-					setActiveTab={setActiveTab}
-				/>
-				<ContentTab activeTab={activeTab} numberId={activeTab}>
-					{activeTab === 0 && (
-						<Form className="mb-3" onSubmit={handleSubmit(submitData)}>
-							<Row>
-								<Colxx lg="6">
-									<PersonalDataForm
-										personalData={identidadData}
-										disabled={
-											(state.identification.loaded &&
-												identidadData.idType &&
-												identidadData.idType.codigo === '01') ||
-											!editable
-										}
-										identification={state.identification}
-										handleChange={handleChange}
-										listSexo={listSexo}
-										selects={props.selects}
-										label
-									/>
-								</Colxx>
+			{loading ? (
+				<Loader />
+			) : (
+				<>
+					<br />
+					{snackBar(snackbarContent.variant, snackbarContent.msg)}
+					<HeaderTab
+						options={optionsTab}
+						activeTab={activeTab}
+						setActiveTab={setActiveTab}
+						marginTop="5"
+					/>
+					<ContentTab activeTab={activeTab} numberId={activeTab}>
+						{activeTab === 0 && (
+							<Form className="mb-3" onSubmit={handleSubmit(submitData)}>
+								<Row>
+									<Colxx lg="6">
+										<PersonalDataForm
+											personalData={identidadData}
+											disabled={
+												(state.identification.loaded &&
+													identidadData.idType &&
+													identidadData.idType.codigo === '01') ||
+												!editable
+											}
+											identification={state.identification}
+											handleChange={handleChange}
+											listSexo={listSexo}
+											selects={props.selects}
+											label
+										/>
+									</Colxx>
 
-								<Colxx lg="6">
-									<DataForm
-										selects={props.selects}
-										identification={state.identification}
-										personalData={identidadData}
-										handleChange={handleChange}
-										disabled={
-											(state.identification.loaded &&
-												identidadData.idType &&
-												identidadData.idType.codigo === '01') ||
-											!editable
-										}
+									<Colxx lg="6">
+										<DataForm
+											selects={props.selects}
+											identification={state.identification}
+											personalData={identidadData}
+											handleChange={handleChange}
+											disabled={
+												(state.identification.loaded &&
+													identidadData.idType &&
+													identidadData.idType.codigo === '01') ||
+												!editable
+											}
+											editable={editable}
+											disableMigrationStatus={disableMigrationStatus}
+										/>
+									</Colxx>
+								</Row>
+								<div
+									className="container-center mt-3"
+									style={props.validations.modificar ? {} : { display: 'none' }}
+								>
+									<EditButton
+										loading={state.identification.loading}
 										editable={editable}
-										disableMigrationStatus={disableMigrationStatus}
+										setEditable={value => {
+											authHandler(
+												'modificar',
+												() => handleCancelEdit(value),
+												toggleSnackbar
+											)
+										}}
+										sendData={sendData}
 									/>
-								</Colxx>
+								</div>
+							</Form>
+						)}
+						{activeTab === 1 && (
+							<Row className="mb-5">
+								<Col xs={12} sm={6}>
+									<FormProgenitor
+										nombre={progenitor.nombreMadrePadreRegistral1}
+										cedula={progenitor.idMadrePadreRegistral1}
+										title={t(
+											'estudiantes>expediente>info_gen>info_gen>datos_padre>titulo',
+											'Datos del padre'
+										)}
+									/>
+								</Col>
+								<Col xs={12} sm={6}>
+									<FormProgenitor
+										nombre={progenitor.nombreMadrePadreRegistral2}
+										cedula={progenitor.idMadrePadreRegistral2}
+										title={t(
+											'estudiantes>expediente>info_gen>info_gen>datos_madre>titulo',
+											'Datos de la madre'
+										)}
+									/>
+								</Col>
 							</Row>
-							<div
-								className="container-center mt-3"
-								style={props.validations.modificar ? {} : { display: 'none' }}
-							>
-								<EditButton
-									loading={state.identification.loading}
-									editable={editable}
-									setEditable={value => {
-										authHandler(
-											'modificar',
-											() => handleCancelEdit(value),
-											toggleSnackbar
-										)
-									}}
-									sendData={sendData}
-								/>
-							</div>
-						</Form>)}
-					{activeTab === 1 && (
-						<Row>
-							<Col xs={12} sm={6}>
-								<FormProgenitor cedula={progenitor.idMadrePadreRegistral1} />
-							</Col>
-							<Col xs={12} sm={6}>
-								<FormProgenitor cedula={progenitor.idMadrePadreRegistral2} />
-							</Col>
-						</Row>
-					)}
-				</ContentTab>
-			</>
-		)}
-	</div >
-
+						)}
+					</ContentTab>
+				</>
+			)}
+		</div>
+	)
 }
 export default withAuthorization({
 	id: 1,
