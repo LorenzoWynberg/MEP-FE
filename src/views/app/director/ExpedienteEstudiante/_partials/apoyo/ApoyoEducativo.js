@@ -118,10 +118,11 @@ const ApoyoEducativo = props => {
 			modalOptions.forEach(el => {
 				if (el.newChecked) options.push(el)
 			})
-			const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${openOptions.type === 'discapacidades'
-				? 'DiscapacidadesPorUsuario'
-				: 'CondicionesPorUsuario'
-				}/AddMultiple/${props.identidadId}`
+			const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${
+				openOptions.type === 'discapacidades'
+					? 'DiscapacidadesPorUsuario'
+					: 'CondicionesPorUsuario'
+			}/AddMultiple/${props.identidadId}`
 			const optionsMap = options.map(d => {
 				return {
 					id: 0,
@@ -162,7 +163,7 @@ const ApoyoEducativo = props => {
 		{ title: 'Apoyos organizativos' },
 		{ title: 'Alto Potencial' },
 		{ title: 'Condición de discapacidad' },
-		{ title: 'Otras condiciones' },
+		{ title: 'Otras condiciones' }
 	]
 	const deleteCondicion = id => {
 		axios
@@ -174,12 +175,15 @@ const ApoyoEducativo = props => {
 				getCondiciones(id)
 			})
 	}
-	const deleteDiscapacidad = (id) => {
-		axios.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/${id}`).then(() => {
-		
-			getDiscapacidades(id)
-			getHistoricosDiscapacidades()
-		})
+	const deleteDiscapacidad = id => {
+		axios
+			.delete(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/${id}`
+			)
+			.then(() => {
+				getDiscapacidades(id)
+				getHistoricosDiscapacidades()
+			})
 	}
 	return (
 		<>
@@ -191,26 +195,34 @@ const ApoyoEducativo = props => {
 					setActiveTab={setActiveTab}
 				/>
 				<ContentTab activeTab={activeTab} numberId={activeTab}>
-					{activeTab === 0 && (<ApoyosCurriculares  validations={props.validations} />
-
+					{activeTab === 0 && (
+						<ApoyosCurriculares validations={props.validations} />
 					)}
-					{activeTab === 1 && (<ApoyosPersonales  validations={props.validations} />
-
+					{activeTab === 1 && (
+						<ApoyosPersonales validations={props.validations} />
 					)}
-					{activeTab === 2 && <ApoyosOrganizativos  validations={props.validations} />}
-					{activeTab === 3 && <AltoPotencial  validations={props.validations} />}
-					{activeTab === 4 && <CondicionDiscapacidad validations={props.validations} 
-						discapacidadesHistorico={discapacidadesHistorico}
-						delete={deleteDiscapacidad}
-						handleOpenOptions={handleOpenOptions}
-						discapacidades={props.discapacidades}
-					/>}
-					{activeTab === 5 && <OtraCondicion validations={props.validations} 
-						condicionesHistorico={condicionesHistorico}
-						handleOpenOptions={handleOpenOptions}
-						delete={deleteCondicion}
-						condiciones={props.condiciones}
-					/>}
+					{activeTab === 2 && (
+						<ApoyosOrganizativos validations={props.validations} />
+					)}
+					{activeTab === 3 && <AltoPotencial validations={props.validations} />}
+					{activeTab === 4 && (
+						<CondicionDiscapacidad
+							validations={props.validations}
+							discapacidadesHistorico={discapacidadesHistorico}
+							delete={deleteDiscapacidad}
+							handleOpenOptions={handleOpenOptions}
+							discapacidades={props.discapacidades}
+						/>
+					)}
+					{activeTab === 5 && (
+						<OtraCondicion
+							validations={props.validations}
+							condicionesHistorico={condicionesHistorico}
+							handleOpenOptions={handleOpenOptions}
+							delete={deleteCondicion}
+							condiciones={props.condiciones}
+						/>
+					)}
 				</ContentTab>
 			</Row>
 			<OptionModal
@@ -218,13 +230,13 @@ const ApoyoEducativo = props => {
 				titleHeader={
 					openOptions.type === 'discapacidades'
 						? t(
-							'estudiantes>expediente>apoyos_edu>modal>tipos',
-							'Tipos de discapacidades'
-						)
+								'estudiantes>expediente>apoyos_edu>modal>tipos',
+								'Tipos de discapacidades'
+						  )
 						: t(
-							'estudiantes>expediente>apoyos_edu>modal>otro',
-							'Otros tipos de condiciones'
-						)
+								'estudiantes>expediente>apoyos_edu>modal>otro',
+								'Otros tipos de condiciones'
+						  )
 				}
 				onConfirm={() => toggleModal(true)}
 				onCancel={() => toggleModal(false)}
@@ -234,32 +246,35 @@ const ApoyoEducativo = props => {
 						openOptions.type === 'discapacidades'
 							? !discapacidadesHistorico?.some(di => di.id == d.id)
 							: !condicionesHistorico?.some(di => di.id == d.id)
-					).filter(d=>!d.checked )
+					)
+					.filter(d => !d.checked)
 					.map((item, i) => {
-						return (<Row key={i}>
-							<Col xs={3} className="modal-detalle-subsidio-col">
-								<div>
-									<CustomInput
-										type="checkbox"
-										label={item.nombre}
-										inline
-										onClick={() => handleChangeItem(item)}
-										checked={item.newChecked}
-									/>
-								</div>
-							</Col>
-							<Col xs={9} className="modal-detalle-subsidio-col">
-								<div>
-									<p>
-										{item.descripcion
-											? item.descripcion
-											: item.detalle
+						return (
+							<Row key={i}>
+								<Col xs={3} className="modal-detalle-subsidio-col">
+									<div>
+										<CustomInput
+											type="checkbox"
+											label={item.nombre}
+											inline
+											onClick={() => handleChangeItem(item)}
+											checked={item.newChecked}
+										/>
+									</div>
+								</Col>
+								<Col xs={9} className="modal-detalle-subsidio-col">
+									<div>
+										<p>
+											{item.descripcion
+												? item.descripcion
+												: item.detalle
 												? item.detalle
 												: 'Elemento sin detalle actualmente'}
-									</p>
-								</div>
-							</Col>
-						</Row>)
+										</p>
+									</div>
+								</Col>
+							</Row>
+						)
 					})}
 			</OptionModal>
 		</>

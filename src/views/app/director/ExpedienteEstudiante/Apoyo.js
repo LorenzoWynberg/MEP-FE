@@ -37,11 +37,11 @@ const Apoyo = props => {
 	const { t } = useTranslation()
 	const [loading, setLoading] = useState(true)
 	const [snackBar, handleClick] = useNotification()
+	const { handleSubmit } = useForm()
 	const [snackBarContent, setSnackbarContent] = useState({
 		varian: 'error',
 		msg: ''
 	})
-	const { handleSubmit } = useForm()
 	const state = useSelector(store => {
 		return {
 			apoyos: store.apoyos,
