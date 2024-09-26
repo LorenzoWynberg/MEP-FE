@@ -164,7 +164,7 @@ const ApoyosCurriculares = props => {
 					return item.nombre === 'Condiciones de Apoyo'
 				})
 
-				!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
+				!state.selects[condicionApoyo.id][0] &&
 					(await actions.getCatalogs(condicionApoyo.id))
 			} finally {
 				setLoading(false)
