@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Row, Col } from 'reactstrap'
 import moment from 'moment'
 import HTMLTable from 'Components/HTMLTable'
+import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import {
 	getBitacorasIdentidad,
 	getIdentificacionPersona,
@@ -11,18 +12,17 @@ import {
 import { useSelector } from 'react-redux'
 import { useActions } from 'Hooks/useActions'
 import useNotification from 'Hooks/useNotification'
-import DatePicker, { registerLocale } from 'react-datepicker'
-
+import { registerLocale } from 'react-datepicker'
+import BarLoader from 'Components/barLoader/barLoader'
 import 'react-datepicker/dist/react-datepicker.css'
 import es from 'date-fns/locale/es'
-
 import PreviewChange from '../../../../../app/configuracion/Identidad/PreviewUserBitacora'
 import swal from 'sweetalert'
 import { useTranslation } from 'react-i18next'
 
 registerLocale('es', es)
 
-type IProps = {}
+type IProps = { identificacion: any }
 
 type IState = {
 	identidad: any
@@ -35,13 +35,12 @@ type SnackbarConfig = {
 
 const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 	const [t] = useTranslation()
-
 	const [data, setData] = React.useState<any[]>([])
 	const [identidad, setIdentidad] = React.useState<any>(null)
 	const [previewUser, setPreviewUser] = React.useState<any>(null)
-	const [filter, setFilter] = React.useState<string>('')
 	const [random, setRandom] = React.useState<number>(-1)
 	const [snackbar, handleClick] = useNotification()
+	const [loading, setLoading] = React.useState(true)
 	const [snackBarContent, setSnackbarContent] = React.useState<SnackbarConfig>({
 		variant: '',
 		msg: ''
@@ -68,14 +67,13 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 
 	const [paginationData, setPaginationData] = React.useState({
 		pagina: 1,
-		cantidad: 6
+		cantidad: 10
 	})
 
 	const state = useSelector((store: IState) => {
 		return {
 			bitacoras: store.identidad.bitacoras,
-			user: store.identidad.data,
-			identification: store.identification
+			user: store.identidad.data
 		}
 	})
 
@@ -111,10 +109,10 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 	}
 
 	const handleInputSearch = async () => {
+		setLoading(true)
 		const { data } = await actions.getIdentificacionPersona(
-			state.identification.data.identificacion
+			props.identificacion
 		)
-
 		setIdentidad(data)
 		if (Object.keys(data).length === 0) {
 			swal({
@@ -154,17 +152,7 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 				)
 			}
 		}
-	}
-
-	const handleSearch = (date: string) => {
-		const parseDate = moment(date).format('DD/MM/YYYY')
-		setFilter(date)
-		actions.getBitacorasFilter({
-			pagina: 1,
-			cantidad: 10,
-			filter: parseDate,
-			identidadId: identidad.id
-		})
+		setLoading(false)
 	}
 
 	const handleDetail = (item: any) => {
@@ -182,6 +170,9 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 			})
 		)
 	}
+
+	if (state.bitacoras.loading || state.user.loading || loading)
+		return <BarLoader />
 
 	return (
 		<Wrapper>
@@ -210,20 +201,6 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 									)}
 								</p>
 							)}
-							<ContentPicker>
-								<DatePicker
-									dateFormat="dd/MM/yyyy"
-									peekNextMonth
-									showMonthDropdown
-									showYearDropdown
-									dropdownMode="select"
-									placeholderText={t('general>buscar', 'Buscar')}
-									locale={t('general>locale', 'es')}
-									onChange={(date: string) => handleSearch(date)}
-									// onBlur={onBlur}
-									selected={filter}
-								/>
-							</ContentPicker>
 							<HTMLTable
 								columns={columns}
 								selectDisplayMode="datalist"
@@ -231,29 +208,25 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 								data={data}
 								isBreadcrumb={false}
 								showHeadersCenter={false}
-								match={props.match}
 								tableName="label.users"
-								/* toggleEditModal={(item: object) => null} */
 								toggleModal={() => null}
 								modalOpen={false}
-								pageSize={6}
+								pageSize={paginationData.cantidad}
 								totalRegistro={state.bitacoras.totalCount}
 								handlePagination={(
 									pageNumber: number,
 									selectedPageSize: number
 								) => {
+									setPaginationData({
+										pagina: pageNumber,
+										cantidad: selectedPageSize
+									})
 									actions.getBitacorasIdentidad({
 										pagina: pageNumber,
 										cantidad: selectedPageSize,
 										identidadId: identidad.id
 									})
 								}}
-								handleSearch={(
-									searchValue: string,
-									selectedColumn: string,
-									selectedPageSize: number,
-									page: number
-								) => {}}
 								toggleEditModal={e => {
 									handleDetail(e)
 									setSelectedRow(e)
@@ -301,12 +274,6 @@ const Title = styled.h4`
 	color: #000;
 `
 
-const ContentPicker = styled.div`
-	& .react-datepicker__input-container input {
-		border-radius: 5px !important;
-	}
-`
-
 const Card = styled.div`
 	background: #fff;
 	margin-top: 30px;
@@ -317,4 +284,9 @@ const CardTitle = styled.h5`
 	margin-bottom: 10px;
 `
 
-export default HistoricoCambiosIdentidadEstudiante
+export default withAuthorization({
+	id: 102,
+	Modulo: 'Expediente Estudiantil',
+	Apartado: 'Bitácora expediente',
+	Seccion: 'Histórico cambios de identidad'
+})(HistoricoCambiosIdentidadEstudiante)
