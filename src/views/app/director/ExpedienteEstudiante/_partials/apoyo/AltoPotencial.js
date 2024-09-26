@@ -354,7 +354,7 @@ const AltoPotencial = props => {
 	const columns = useMemo(() => {
 		return [
 			{
-				Header: 'Condicion',
+				Header: 'Condición',
 				column: 'sb_TiposDeApoyo',
 				accessor: 'sb_TiposDeApoyo',
 				label: ''
@@ -366,7 +366,7 @@ const AltoPotencial = props => {
 				label: ''
 			},
 			{
-				Header: 'Estrategias de flexibilizacion',
+				Header: 'Estrategias de flexibilización',
 				column: 'estrategiasDesc',
 				accessor: 'estrategiasDesc',
 				label: ''
