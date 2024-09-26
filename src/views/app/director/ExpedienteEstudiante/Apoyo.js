@@ -108,7 +108,6 @@ const Apoyo = props => {
 			<h4>
 				{t('estudiantes>expediente>apoyos_edu>titulo', 'Apoyos educativos')}
 			</h4>
-			``
 			<br />
 			<ApoyoEducativoOpciones
 				showsnackBar={showsnackBar}
