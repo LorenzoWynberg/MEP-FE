@@ -635,6 +635,7 @@ const ApoyosCurriculares = props => {
 				titleHeader={tituloModal}
 				onConfirm={onConfirmSaveApoyo}
 				onCancel={() => closeAgregarModal()}
+				textConfirm="Guardar"
 			>
 				<Form onSubmit={onConfirmSaveApoyo}>
 					<Row>

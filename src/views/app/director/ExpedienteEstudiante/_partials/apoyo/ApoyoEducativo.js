@@ -259,6 +259,7 @@ const ApoyoEducativo = props => {
 				}
 				onConfirm={() => toggleModal(true)}
 				onCancel={() => toggleModal(false)}
+				textConfirm="Guardar"
 			>
 				{modalOptions
 					.filter(d =>
