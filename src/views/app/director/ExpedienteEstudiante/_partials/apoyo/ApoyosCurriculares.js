@@ -26,7 +26,6 @@ import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
 import { getCatalogs } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
-import { catalogsEnumObj } from 'Utils/catalogsEnum'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
 import { IoMdTrash } from 'react-icons/io'
@@ -182,7 +181,7 @@ const ApoyosCurriculares = props => {
 			return item.nombre === 'Condiciones de Apoyo'
 		})
 
-		!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
+		!state.selects[condicionApoyo.id][0] &&
 			(await actions.getCatalogs(condicionApoyo.id))
 	}
 
