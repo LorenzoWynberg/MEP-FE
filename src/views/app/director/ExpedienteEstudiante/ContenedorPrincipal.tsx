@@ -7,7 +7,7 @@ import {
 	getStudentDataFilter,
 	loadStudent
 } from 'Redux/expedienteEstudiantil/actions'
-import { getDiscapacidades } from 'Redux/apoyos/actions'
+import { getDiscapacidades, getCondiciones } from 'Redux/apoyos/actions'
 import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
 import EstudianteInformationCard from './_partials/EstudianteInformationCard'
@@ -60,6 +60,7 @@ const ContenedorPrincipal = props => {
 		getStudentDataFilter,
 		loadStudent,
 		getDiscapacidades,
+		getCondiciones,
 		getCatalogs,
 		getCatalogsSet
 	})
@@ -161,12 +162,23 @@ const ContenedorPrincipal = props => {
 			const discapacidades = await actions.getDiscapacidades(
 				state.expedienteEstudiantil.currentStudent.idEstudiante
 			)
-			const tieneDiscapacidades = !isEmpty(discapacidades) ? 'SI' : 'NO'
+			const tieneDiscapacidades = !isEmpty(discapacidades) ? true : false
+
+			const condiciones = await actions.getCondiciones(
+				state.expedienteEstudiantil.currentStudent.idEstudiante
+			)
+
+			const tieneCondiciones = !isEmpty(condiciones) ? true : false
+
+			let infoCondiciones = 'NO'
+			if (tieneDiscapacidades || tieneCondiciones) {
+				infoCondiciones = 'SI'
+			}
 
 			setInfoCard(prevState => {
 				return {
 					...prevState,
-					tieneDiscapacidades: tieneDiscapacidades
+					tieneDiscapacidades: infoCondiciones
 				}
 			})
 			setLoading(false)
