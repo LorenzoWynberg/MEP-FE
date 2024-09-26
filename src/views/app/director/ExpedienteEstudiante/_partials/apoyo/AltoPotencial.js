@@ -61,10 +61,7 @@ const tituloModal = 'Registros de alto potencial'
 
 const condicionSeRecibeNombre = 'Se recibe'
 
-const IdTalentoCatalog = 81
-const IdEstrategiaCatalog = 82
-
-export const AltoPotencial = () => {
+export const AltoPotencial = props => {
 	const [loading, setLoading] = useState(true)
 	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
 	const [showModalTalento, setShowModalTalento] = useState(false)
@@ -153,9 +150,13 @@ export const AltoPotencial = () => {
 	useEffect(() => {
 		const loadTalentos = async () => {
 			try {
+				const catalogoTalentos = props.catalogos.find(item => {
+					return item.nombre === 'Talentos'
+				})
+
 				axios
 					.get(
-						`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyCodeType/${IdTalentoCatalog}`
+						`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyCodeType/${catalogoTalentos.id}`
 					)
 					.then(response => {
 						const data = response.data
@@ -175,9 +176,13 @@ export const AltoPotencial = () => {
 	useEffect(() => {
 		const loadEstrategias = async () => {
 			try {
+				const catalogoEstategias = props.catalogos.find(item => {
+					return item.nombre === 'Estrategias de flexibilización curricular'
+				})
+
 				axios
 					.get(
-						`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyCodeType/${IdEstrategiaCatalog}`
+						`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyCodeType/${catalogoEstategias.id}`
 					)
 					.then(response => {
 						const data = response.data
@@ -209,16 +214,17 @@ export const AltoPotencial = () => {
 	useEffect(() => {
 		const loadData = async () => {
 			try {
+				debugger
 				setLoading(true)
-				await actions.getTiposApoyos()
-				const tiposDeApoyo = state.apoyos.tipos.filter(tipo => {
-					tipo.categoriaApoyoId === categoria.id
-				})
+				const response = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/TipoApoyo`
+				)
+
+				const tiposDeApoyo = response.data.filter(
+					tipo => Number(tipo.categoriaApoyoId) === categoria.id
+				)
 
 				setTiposApoyo(tiposDeApoyo)
-
-				/* !state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
-					(await actions.getCatalogs(catalogsEnumObj.TIPOCONDICIONAPOYO.id)) */
 			} finally {
 				setLoading(false)
 			}
@@ -244,16 +250,14 @@ export const AltoPotencial = () => {
 	}, [])
 
 	useEffect(() => {
-		if (isNull(sortedYearList)) {
-			const yearList = state.activeYears.map(year => {
-				return { id: year.id, name: year.nombre }
-			})
+		const yearList = state.activeYears.map(year => {
+			return { id: year.id, name: year.nombre }
+		})
 
-			const sortedYears = yearList.sort((a, b) => b.name.localeCompare(a.name))
-			setSortedYearList(sortedYears)
-		}
+		const sortedYears = yearList.sort((a, b) => b.name.localeCompare(a.name))
+		setSortedYearList(sortedYears)
 
-		filterTiposDeApoyo(tiposApoyo, parseInt(sortedYearList[0]?.nombre))
+		filterTiposDeApoyo(tiposApoyo, parseInt(sortedYears[0]?.name))
 	}, [data])
 
 	const handleClickEstrategias = item => {
@@ -707,7 +711,7 @@ export const AltoPotencial = () => {
 											justifyContent: 'left',
 											alignItems: 'left'
 										}}
-										sm={7}
+										sm={4}
 									>
 										<FormControlLabel
 											value={formData.tipoDeApoyo}
@@ -720,7 +724,7 @@ export const AltoPotencial = () => {
 											label={item.nombre}
 										/>
 									</Col>
-									<Col sm={5}>{item.detalle}</Col>
+									<Col sm={8}>{item.detalle}</Col>
 								</Row>
 							))}
 						</RadioGroup>
@@ -750,7 +754,7 @@ export const AltoPotencial = () => {
 											justifyContent: 'left',
 											alignItems: 'left'
 										}}
-										sm={7}
+										sm={4}
 									>
 										<FormControlLabel
 											value={formData.talentoId}
@@ -763,7 +767,7 @@ export const AltoPotencial = () => {
 											label={item.nombre}
 										/>
 									</Col>
-									<Col sm={5}>{item.descripcion}</Col>
+									<Col sm={8}>{item.descripcion}</Col>
 								</Row>
 							))}
 						</RadioGroup>

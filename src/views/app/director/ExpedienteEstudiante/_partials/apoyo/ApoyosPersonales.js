@@ -38,6 +38,7 @@ import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import moment from 'moment'
 import colors from 'assets/js/colors'
+import { getElementosFilterText } from 'Redux/elementos/actions'
 
 const categoria = {
 	id: 1,
@@ -58,6 +59,7 @@ export const ApoyosPersonales = props => {
 	const [tiposApoyoFilter, setTiposApoyoFilter] = useState([])
 	const [sortedYearList, setSortedYearList] = useState(null)
 	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
+	const [catalogos, setCatalogos] = useState([])
 	const [editable, setEditable] = useState(false)
 	const [radioValue, setRadioValue] = useState(0)
 	const [snackbar, handleClick] = useNotification()
@@ -127,7 +129,8 @@ export const ApoyosPersonales = props => {
 		addApoyo,
 		deleteApoyo,
 		editApoyo,
-		getCatalogs
+		getCatalogs,
+		getElementosFilterText
 	})
 
 	const state = useSelector(store => {
@@ -144,16 +147,23 @@ export const ApoyosPersonales = props => {
 	const loadData = async () => {
 		try {
 			setLoading(true)
-			await actions.getTiposApoyos()
 
-			const tiposDeApoyo = state.apoyos.tipos.filter(
+			const response = await axios.get(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/TipoApoyo`
+			)
+
+			const tiposDeApoyo = response.data.filter(
 				tipo => tipo.categoriaApoyoId === categoria.id
 			)
 
 			setTiposApoyo(tiposDeApoyo)
 
+			const condicionApoyo = props.catalogos.find(item => {
+				return item.nombre === 'Condiciones de Apoyo'
+			})
+
 			!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
-				(await actions.getCatalogs(catalogsEnumObj.TIPOCONDICIONAPOYO.id))
+				(await actions.getCatalogs(condicionApoyo.id))
 		} finally {
 			setLoading(false)
 		}
@@ -181,16 +191,7 @@ export const ApoyosPersonales = props => {
 	}, [])
 
 	useEffect(() => {
-		if (isNull(sortedYearList)) {
-			const yearList = state.activeYears.map(year => {
-				return { id: year.id, name: year.nombre }
-			})
-
-			const sortedYears = yearList.sort((a, b) => b.name.localeCompare(a.name))
-			setSortedYearList(sortedYears)
-		}
-
-		filterTiposDeApoyo(tiposApoyo, parseInt(state.activeYear.nombre))
+		filterTiposDeApoyo(tiposApoyo)
 	}, [data])
 
 	const deleteApoyoById = apoyoId => {
@@ -567,21 +568,24 @@ export const ApoyosPersonales = props => {
 		setShowNuevoApoyoModal(false)
 	}
 
-	const filterTiposDeApoyo = (tipos, currentYear) => {
+	const filterTiposDeApoyo = tipos => {
 		let filtro = tiposApoyo
-
-		if (tipos.length > 0) {
-			filtro = tipos.filter(
-				tipoApoyo =>
-					!data.some(
-						apoyoEstudiante =>
-							apoyoEstudiante.sb_TiposDeApoyoId === tipoApoyo.id &&
-							new Date(apoyoEstudiante.fechaInsercion).getFullYear() ===
-								parseInt(currentYear)
-					)
-			)
+		if (tipos && tipos.length > 0) {
+			const currentYear = moment().year()
+			filtro = tipos.filter(tipoApoyo => {
+				const hasApoyoThisYear = data.some(apoyoEstudiante => {
+					const insertionYear = moment(
+						apoyoEstudiante.fechaInsercion,
+						'DD/MM/YYYY'
+					).year()
+					const isSameTipoApoyo =
+						apoyoEstudiante.sb_TiposDeApoyoId === tipoApoyo.id
+					const isCurrentYear = insertionYear === currentYear
+					return isSameTipoApoyo && isCurrentYear
+				})
+				return !hasApoyoThisYear
+			})
 		}
-
 		setTiposApoyoFilter(filtro)
 	}
 

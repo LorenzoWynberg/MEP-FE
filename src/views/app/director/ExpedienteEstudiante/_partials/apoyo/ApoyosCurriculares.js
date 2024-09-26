@@ -143,22 +143,47 @@ export const ApoyosCurriculares = props => {
 		const loadData = async () => {
 			try {
 				setLoading(true)
-				await actions.getTiposApoyos()
+				const response = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/TipoApoyo`
+				)
 
-				const tiposDeApoyo = state.apoyos.tipos.filter(
+				const tiposDeApoyo = response.data.filter(
 					tipo => tipo.categoriaApoyoId === categoria.id
 				)
 
 				setTiposApoyo(tiposDeApoyo)
 
+				//TODO quitar esto cuando se solucione la carga de catalogos para esta pantalla, primera que se carga
+				if (props.catalogos.length === 0) {
+					await loadCatalogosTipoCondicionApoyo()
+					return
+				}
+
+				const condicionApoyo = props.catalogos.find(item => {
+					return item.nombre === 'Condiciones de Apoyo'
+				})
+
 				!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
-					(await actions.getCatalogs(catalogsEnumObj.TIPOCONDICIONAPOYO.id))
+					(await actions.getCatalogs(condicionApoyo.id))
 			} finally {
 				setLoading(false)
 			}
 		}
 		loadData()
 	}, [])
+
+	const loadCatalogosTipoCondicionApoyo = async () => {
+		const catalogos = await axios.get(
+			`${envVariables.BACKEND_URL}/api/Areas/GestorCatalogos/TipoCatalogo`
+		)
+
+		const condicionApoyo = catalogos.data.find(item => {
+			return item.nombre === 'Condiciones de Apoyo'
+		})
+
+		!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
+			(await actions.getCatalogs(condicionApoyo.id))
+	}
 
 	useEffect(() => {
 		setLoading(true)
@@ -537,10 +562,14 @@ export const ApoyosCurriculares = props => {
 		})
 	}
 
+	if (loading) {
+		return <Loader />
+	}
+
 	return (
 		<>
 			{/*loading && <BarLoader />*/}
-			{loading && <Loader />}
+
 			{snackbar(snackbarContent.type, snackbarContent.msg)}
 			<TableReactImplementationApoyo
 				placeholderText="Buscar por nombre"
