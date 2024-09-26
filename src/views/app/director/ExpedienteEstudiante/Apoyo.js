@@ -22,15 +22,7 @@ import Loader from '../../../../components/Loader'
 import { catalogsEnumObj } from '../../../../utils/catalogsEnum'
 import useNotification from '../../../../hooks/useNotification'
 import { useForm } from 'react-hook-form'
-import withAuthorization from '../../../../Hoc/withAuthorization'
 import { useTranslation } from 'react-i18next'
-
-const ApoyoEducativoOpciones = withAuthorization({
-	id: 9,
-	Modulo: 'Expediente Estudiantil',
-	Apartado: 'Apoyos Educativos',
-	Seccion: 'Apoyos Educativos'
-})(ApoyoEducativo)
 
 //TODO JPBR: Limpiar los llamados innesarios de esta pagina al BE
 const Apoyo = props => {
@@ -109,7 +101,7 @@ const Apoyo = props => {
 				{t('estudiantes>expediente>apoyos_edu>titulo', 'Apoyos educativos')}
 			</h4>
 			<br />
-			<ApoyoEducativoOpciones
+			<ApoyoEducativo
 				showsnackBar={showsnackBar}
 				discapacidades={state.selects[catalogsEnumObj.DISCAPACIDADES.name]}
 				condiciones={state.selects[catalogsEnumObj.OTRASCONDICIONES.name]}
@@ -126,9 +118,4 @@ const Apoyo = props => {
 	)
 }
 
-export default withAuthorization({
-	id: 9,
-	Modulo: 'Expediente Estudiantil',
-	Apartado: 'Apoyos Educativos',
-	Seccion: 'Apoyos Educativos'
-})(Apoyo)
+export default Apoyo

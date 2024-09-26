@@ -12,6 +12,7 @@ import {
 } from 'reactstrap'
 import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
 import useNotification from 'Hooks/useNotification'
+import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import styled from 'styled-components'
 import {
 	getTiposApoyos,
@@ -58,10 +59,9 @@ const categoria = {
 }
 
 const tituloModal = 'Registros de alto potencial'
-
 const condicionSeRecibeNombre = 'Se recibe'
 
-export const AltoPotencial = props => {
+const AltoPotencial = props => {
 	const [loading, setLoading] = useState(true)
 	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
 	const [showModalTalento, setShowModalTalento] = useState(false)
@@ -401,12 +401,16 @@ export const AltoPotencial = props => {
 							}}
 						>
 							<button
-								style={{
-									border: 'none',
-									background: 'transparent',
-									cursor: 'pointer',
-									color: 'grey'
-								}}
+								style={
+									!props.validations.modificar
+										? { display: 'none' }
+										: {
+												border: 'none',
+												background: 'transparent',
+												cursor: 'pointer',
+												color: 'grey'
+										  }
+								}
 								onClick={() => {
 									onEditarEvent(row.original)
 								}}
@@ -418,12 +422,16 @@ export const AltoPotencial = props => {
 								</Tooltip>
 							</button>
 							<button
-								style={{
-									border: 'none',
-									background: 'transparent',
-									cursor: 'pointer',
-									color: 'grey'
-								}}
+								style={
+									!props.validations.eliminar
+										? { display: 'none' }
+										: {
+												border: 'none',
+												background: 'transparent',
+												cursor: 'pointer',
+												color: 'grey'
+										  }
+								}
 								onClick={() => {
 									swal({
 										title: 'Eliminar Apoyo',
@@ -683,7 +691,7 @@ export const AltoPotencial = props => {
 			{snackbar(snackbarContent.type, snackbarContent.msg)}
 			<TableReactImplementationApoyo
 				placeholderText="Buscar por nombre"
-				showAddButton
+				showAddButton={props.validations.agregar}
 				msjButton="Agregar"
 				onSubmitAddButton={() => onAgregarEvent()}
 				data={data || []}
@@ -876,3 +884,10 @@ export const AltoPotencial = props => {
 const StyledInput = styled(Input)`
 	width: 100% !important;
 `
+
+export default withAuthorization({
+	id: 9,
+	Modulo: 'Expediente Estudiantil',
+	Apartado: 'Apoyos Educativos',
+	Seccion: 'Apoyos Educativos'
+})(AltoPotencial)

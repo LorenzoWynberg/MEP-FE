@@ -9,10 +9,10 @@ import Loader from 'Components/LoaderContainer'
 import CondicionDiscapacidad from './CondicionDiscapacidad'
 import OtraCondicion from './OtraCondicion'
 import axios from 'axios'
-import { ApoyosCurriculares } from './ApoyosCurriculares'
-import { ApoyosPersonales } from './ApoyosPersonales'
-import { AltoPotencial } from './AltoPotencial'
-import { ApoyosOrganizativos } from './ApoyosOrganizativos'
+import ApoyosCurriculares from './ApoyosCurriculares'
+import ApoyosPersonales from './ApoyosPersonales'
+import AltoPotencial from './AltoPotencial'
+import ApoyosOrganizativos from './ApoyosOrganizativos'
 import OptionModal from '../../../../../../components/Modal/OptionModal'
 import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
 import { isEmpty } from 'lodash'
@@ -222,33 +222,12 @@ const ApoyoEducativo = props => {
 				setActiveTab={setActiveTab}
 			/>
 			<ContentTab activeTab={activeTab} numberId={activeTab}>
-				{activeTab === 0 && (
-					<ApoyosCurriculares
-						validations={props.validations}
-						catalogos={catalogos}
-					/>
-				)}
-				{activeTab === 1 && (
-					<ApoyosPersonales
-						validations={props.validations}
-						catalogos={catalogos}
-					/>
-				)}
-				{activeTab === 2 && (
-					<ApoyosOrganizativos
-						validations={props.validations}
-						catalogos={catalogos}
-					/>
-				)}
-				{activeTab === 3 && (
-					<AltoPotencial
-						validations={props.validations}
-						catalogos={catalogos}
-					/>
-				)}
+				{activeTab === 0 && <ApoyosCurriculares catalogos={catalogos} />}
+				{activeTab === 1 && <ApoyosPersonales catalogos={catalogos} />}
+				{activeTab === 2 && <ApoyosOrganizativos catalogos={catalogos} />}
+				{activeTab === 3 && <AltoPotencial catalogos={catalogos} />}
 				{activeTab === 4 && (
 					<CondicionDiscapacidad
-						validations={props.validations}
 						discapacidadesHistorico={discapacidadesHistorico}
 						delete={deleteDiscapacidad}
 						handleOpenOptions={handleOpenOptions}
@@ -257,7 +236,6 @@ const ApoyoEducativo = props => {
 				)}
 				{activeTab === 5 && (
 					<OtraCondicion
-						validations={props.validations}
 						condicionesHistorico={condicionesHistorico}
 						handleOpenOptions={handleOpenOptions}
 						delete={deleteCondicion}

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap'
 import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
 import useNotification from 'Hooks/useNotification'
+import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import styled from 'styled-components'
 import {
 	getTiposApoyos,
@@ -46,10 +47,9 @@ const categoria = {
 }
 
 const tituloModal = 'Registro de apoyos organizativos'
-
 const condicionSeRecibeNombre = 'Se recibe'
 
-export const ApoyosOrganizativos = props => {
+const ApoyosOrganizativos = props => {
 	const [loading, setLoading] = useState(true)
 	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
 	const [data, setData] = useState([])
@@ -314,12 +314,16 @@ export const ApoyosOrganizativos = props => {
 							}}
 						>
 							<button
-								style={{
-									border: 'none',
-									background: 'transparent',
-									cursor: 'pointer',
-									color: 'grey'
-								}}
+								style={
+									!props.validations.modificar
+										? { display: 'none' }
+										: {
+												border: 'none',
+												background: 'transparent',
+												cursor: 'pointer',
+												color: 'grey'
+										  }
+								}
 								onClick={() => {
 									onEditarEvent(row.original)
 								}}
@@ -331,12 +335,16 @@ export const ApoyosOrganizativos = props => {
 								</Tooltip>
 							</button>
 							<button
-								style={{
-									border: 'none',
-									background: 'transparent',
-									cursor: 'pointer',
-									color: 'grey'
-								}}
+								style={
+									!props.validations.eliminar
+										? { display: 'none' }
+										: {
+												border: 'none',
+												background: 'transparent',
+												cursor: 'pointer',
+												color: 'grey'
+										  }
+								}
 								onClick={() => {
 									swal({
 										title: 'Eliminar Apoyo',
@@ -587,7 +595,7 @@ export const ApoyosOrganizativos = props => {
 			{snackbar(snackbarContent.type, snackbarContent.msg)}
 			<TableReactImplementationApoyo
 				placeholderText="Buscar por nombre"
-				showAddButton
+				showAddButton={props.validations.agregar}
 				msjButton="Agregar"
 				onSubmitAddButton={() => onAgregarEvent()}
 				data={data || []}
@@ -728,3 +736,9 @@ export const ApoyosOrganizativos = props => {
 const StyledInput = styled(Input)`
 	width: 100% !important;
 `
+export default withAuthorization({
+	id: 9,
+	Modulo: 'Expediente Estudiantil',
+	Apartado: 'Apoyos Educativos',
+	Seccion: 'Apoyos Educativos'
+})(ApoyosOrganizativos)
