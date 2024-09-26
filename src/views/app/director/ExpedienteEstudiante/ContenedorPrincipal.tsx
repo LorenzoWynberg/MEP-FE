@@ -47,6 +47,8 @@ const ContenedorPrincipal = props => {
 	const [loading, setLoading] = React.useState(true)
 	const [aplicaSCE, setAplicaSCE] = React.useState(false)
 	const [breadcrumbs, setBreadcrumbs] = React.useState([])
+	const [conditionsHaveChanged, setConditionsHaveChanged] =
+		React.useState(false)
 	const idInstitucion = localStorage.getItem('idInstitucion')
 	const [infoCard, setInfoCard] = React.useState({})
 
@@ -178,15 +180,18 @@ const ContenedorPrincipal = props => {
 			setInfoCard(prevState => {
 				return {
 					...prevState,
+					discapacidades: tieneDiscapacidades,
+					condiciones: tieneCondiciones,
 					tieneDiscapacidades: infoCondiciones
 				}
 			})
+			setConditionsHaveChanged(false)
 			setLoading(false)
 		}
 		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
 			loadData()
 		}
-	}, [state.expedienteEstudiantil.currentStudent])
+	}, [state.expedienteEstudiantil.currentStudent, conditionsHaveChanged])
 
 	useEffect(() => {
 		setLoading(true)
@@ -302,7 +307,10 @@ const ContenedorPrincipal = props => {
 												blockeo()
 											),
 											6: estudianteEnContexto() ? (
-												<Apoyo {...props} />
+												<Apoyo
+													{...props}
+													setConditionsHaveChanged={setConditionsHaveChanged}
+												/>
 											) : (
 												blockeo()
 											),
