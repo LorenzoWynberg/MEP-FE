@@ -15,10 +15,13 @@ import { AltoPotencial } from './AltoPotencial'
 import { ApoyosOrganizativos } from './ApoyosOrganizativos'
 import OptionModal from '../../../../../../components/Modal/OptionModal'
 import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
+import { isEmpty } from 'lodash'
+
 import {
 	getCondiciones,
 	getDiscapacidades
 } from '../../../../../../redux/apoyos/actions'
+import { set } from 'lodash'
 
 const ApoyoEducativo = props => {
 	const { t } = useTranslation()
@@ -29,6 +32,7 @@ const ApoyoEducativo = props => {
 	const [condiciones, setCondiciones] = useState([])
 	const [openOptions, setOpenOptions] = useState({ open: false, type: null })
 	const [modalOptions, setModalOptions] = useState([])
+	const [catalogos, setCatalogos] = useState([])
 	const [activeTab, setActiveTab] = useState(0)
 
 	useEffect(() => {
@@ -75,6 +79,25 @@ const ApoyoEducativo = props => {
 				setLoading(false)
 			}, [])
 	}
+
+	useEffect(() => {
+		setLoading(true)
+		const loadCatalogos = async () => {
+			axios
+				.get(
+					`${envVariables.BACKEND_URL}/api/Areas/GestorCatalogos/TipoCatalogo`
+				)
+				.then(r => {
+					setCatalogos(r.data)
+					setLoading(false)
+				})
+				.catch(e => {
+					console.log(e)
+					setLoading(false)
+				})
+		}
+		loadCatalogos()
+	}, [])
 
 	useEffect(() => {
 		setLoading(true)
@@ -185,9 +208,13 @@ const ApoyoEducativo = props => {
 				getHistoricosDiscapacidades()
 			})
 	}
+
+	if (loading) {
+		return <Loader />
+	}
+
 	return (
 		<>
-			{loading && <Loader />}
 			<Row>
 				<HeaderTab
 					options={optionsTab}
@@ -196,15 +223,29 @@ const ApoyoEducativo = props => {
 				/>
 				<ContentTab activeTab={activeTab} numberId={activeTab}>
 					{activeTab === 0 && (
-						<ApoyosCurriculares validations={props.validations} />
+						<ApoyosCurriculares
+							validations={props.validations}
+							catalogos={catalogos}
+						/>
 					)}
 					{activeTab === 1 && (
-						<ApoyosPersonales validations={props.validations} />
+						<ApoyosPersonales
+							validations={props.validations}
+							catalogos={catalogos}
+						/>
 					)}
 					{activeTab === 2 && (
-						<ApoyosOrganizativos validations={props.validations} />
+						<ApoyosOrganizativos
+							validations={props.validations}
+							catalogos={catalogos}
+						/>
 					)}
-					{activeTab === 3 && <AltoPotencial validations={props.validations} />}
+					{activeTab === 3 && (
+						<AltoPotencial
+							validations={props.validations}
+							catalogos={catalogos}
+						/>
+					)}
 					{activeTab === 4 && (
 						<CondicionDiscapacidad
 							validations={props.validations}

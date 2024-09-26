@@ -65,6 +65,7 @@ export const getElementosByTipoCatalogoId =
 export const getElementosFilterText =
 	(name, pageNum, pageSize) => async dispatch => {
 		try {
+			debugger
 			const response = await axios.get(
 				`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyName/${name}/${pageNum}/${pageSize}`
 			)
