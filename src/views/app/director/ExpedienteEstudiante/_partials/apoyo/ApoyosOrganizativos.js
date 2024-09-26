@@ -156,9 +156,9 @@ const ApoyosOrganizativos = props => {
 			const condicionApoyo = props.catalogos.find(item => {
 				return item.nombre === 'Condiciones de Apoyo'
 			})
-
-			!state.selects[condicionApoyo.id][0] &&
-				(await actions.getCatalogs(condicionApoyo.id))
+			if (!state.selects.tipoCondicionApoyo[0]) {
+				await actions.getCatalogs(condicionApoyo.id)
+			}
 		} finally {
 			setLoading(false)
 		}

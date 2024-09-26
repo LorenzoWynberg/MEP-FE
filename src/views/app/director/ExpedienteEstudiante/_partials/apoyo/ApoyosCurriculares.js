@@ -153,37 +153,19 @@ const ApoyosCurriculares = props => {
 
 				setTiposApoyo(tiposDeApoyo)
 
-				//TODO quitar esto cuando se solucione la carga de catalogos para esta pantalla, primera que se carga
-				if (props.catalogos.length === 0) {
-					await loadCatalogosTipoCondicionApoyo()
-					return
-				}
-
 				const condicionApoyo = props.catalogos.find(item => {
 					return item.nombre === 'Condiciones de Apoyo'
 				})
 
-				!state.selects[condicionApoyo.id][0] &&
-					(await actions.getCatalogs(condicionApoyo.id))
+				if (!state.selects.tipoCondicionApoyo[0]) {
+					await actions.getCatalogs(condicionApoyo.id)
+				}
 			} finally {
 				setLoading(false)
 			}
 		}
 		loadData()
 	}, [])
-
-	const loadCatalogosTipoCondicionApoyo = async () => {
-		const catalogos = await axios.get(
-			`${envVariables.BACKEND_URL}/api/Areas/GestorCatalogos/TipoCatalogo`
-		)
-
-		const condicionApoyo = catalogos.data.find(item => {
-			return item.nombre === 'Condiciones de Apoyo'
-		})
-
-		!state.selects[condicionApoyo.id][0] &&
-			(await actions.getCatalogs(condicionApoyo.id))
-	}
 
 	useEffect(() => {
 		setLoading(true)
