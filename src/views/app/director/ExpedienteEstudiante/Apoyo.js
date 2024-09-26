@@ -108,6 +108,7 @@ const Apoyo = props => {
 			<h4>
 				{t('estudiantes>expediente>apoyos_edu>titulo', 'Apoyos educativos')}
 			</h4>
+			``
 			<br />
 			<ApoyoEducativoOpciones
 				showsnackBar={showsnackBar}
@@ -120,6 +121,7 @@ const Apoyo = props => {
 				saveDiscapacidades={actions.saveDiscapacidades}
 				apoyos={state.apoyos}
 				handleSubmit={handleSubmit}
+				setConditionsHaveChanged={props.setConditionsHaveChanged}
 			/>
 		</>
 	)
