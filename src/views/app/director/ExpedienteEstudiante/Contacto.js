@@ -31,6 +31,13 @@ const InformacionResidenciaFija = withAuthorization({
 	Seccion: 'Informacion de Residencia'
 })(InformacionResidenciaSaber)
 
+const HistoricoResidenciaAuth = withAuthorization({
+	id: 104,
+	Modulo: 'Expediente Estudiantil',
+	Apartado: 'Informacion de Contacto',
+	Seccion: 'Historico de residencias'
+})(HistoricoResidencia)
+
 const Expediente = () => {
 	const [activeTab, setActiveTab] = useState(0)
 	const [tempAddress, setTempAddress] = useState(false)
@@ -101,7 +108,9 @@ const Expediente = () => {
 					/>
 				)}
 				{activeTab === 3 && (
-					<HistoricoResidencia identidadId={state.identification?.data?.id} />
+					<HistoricoResidenciaAuth
+						identidadId={state.identification?.data?.id}
+					/>
 				)}
 			</ContentTab>
 		</>
