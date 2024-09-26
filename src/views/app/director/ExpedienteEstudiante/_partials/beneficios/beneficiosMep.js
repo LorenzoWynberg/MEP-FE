@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
+import { Grid, Collapse } from '@mui/material'
 import Subsidio from '../../_modals/beneficio'
 import Tabla from './TablaMep'
 import PropTypes from 'prop-types'
@@ -61,6 +61,7 @@ const BeneficiosMEP = props => {
 	})
 	const [disabledRadio, setDisabledRadio] = useState(false)
 	const [currentBeneficio, setCurrentBeneficio] = useState({})
+	const [hideFechaFinal, setHideFechaFinal] = useState(false)
 	const [visualizing, setVisualizing] = useState(false)
 	const [showButtons, setShowButtons] = useState(true)
 	const [snackbar, handleClick] = useNotification()
@@ -216,6 +217,10 @@ const BeneficiosMEP = props => {
 			fechaFinal: moment(formData.dateTo).toDate()
 		}
 
+		if (hideFechaFinal) {
+			_data.fechaFinal = _data.fechaInicio
+		}
+
 		if (dataTable.id) {
 			_data.id = dataTable.id
 			response = await actions.editSubsidioBody(_data)
@@ -358,6 +363,10 @@ const BeneficiosMEP = props => {
 											item => item.dependeciasSubsidioId === data.value
 										)
 									)
+									setHideFechaFinal(
+										data.nombre ==
+											'Departamento de apoyos educativos para el estudiantado con discapacidad, Dirección de Desarrollo Curricular (DDC)'
+									)
 									setPrevSubsidio({})
 									setFormData({
 										...formData,
@@ -429,19 +438,16 @@ const BeneficiosMEP = props => {
 						</FormGroup>
 					</Grid>
 					<Grid container>
-						<Grid item xs={12} className={classes.periodo}>
-							<Label>Periodo activo</Label>
-						</Grid>
-						<Grid item xs={5} className={classes.control}>
+						<Grid item xs={6} className={classes.control}>
 							<FormGroup>
 								<Label for="dateFrom">
-									Fecha inicio <RequiredSpan />
+									Fecha inicio / Entrega <RequiredSpan />
 								</Label>
 								<Input
 									type="date"
 									min={moment()
 										.subtract(1, 'year')
-										.month(5)
+										.month(7)
 										.date(1)
 										.format('YYYY-MM-DD')}
 									max={moment().format('YYYY-MM-DD')}
@@ -456,46 +462,37 @@ const BeneficiosMEP = props => {
 								/>
 							</FormGroup>
 						</Grid>
-						<Grid
-							item
-							xs={2}
-							style={{
-								textAlign: 'center',
-								paddingTop: 40
-							}}
-							className={classes.control}
-						>
-							<FormGroup>
-								<Label> al </Label>
-							</FormGroup>
-						</Grid>
-						<Grid item xs={5} className={classes.control}>
-							<FormGroup>
-								<Label for="dateTo">Fecha final</Label>
-								<Input
-									min={moment().startOf('year').format('YYYY-MM-DD')}
-									max={moment()
-										.add(1, 'year')
-										.month(6)
-										.date(1)
-										.format('YYYY-MM-DD')}
-									type="date"
-									name="dateTo"
-									style={{
-										paddingRight: '12%'
-									}}
-									invalid={toDateInvalid || state.beneficios.fields.fechaFinal}
-									disabled={!editable}
-									value={formData.dateTo}
-									onChange={handleFormDataChange}
-								/>
-								<FormFeedback>
-									{toDateInvalid &&
-										'la fecha de inicio debe ser antes de la fecha de final'}
-									{state.beneficios.fields.fechaFinal &&
-										state.beneficios.errors.fechaFinal}
-								</FormFeedback>
-							</FormGroup>
+						<Grid item xs={6} className={classes.control}>
+							<Collapse in={!hideFechaFinal} timeout={750} easing="easeInOut">
+								<FormGroup>
+									<Label for="dateTo">Fecha final ( Opcional )</Label>
+									<Input
+										min={moment().startOf('year').format('YYYY-MM-DD')}
+										max={moment()
+											.add(1, 'year')
+											.month(5)
+											.date(30)
+											.format('YYYY-MM-DD')}
+										type="date"
+										name="dateTo"
+										style={{
+											paddingRight: '12%'
+										}}
+										invalid={
+											toDateInvalid || state.beneficios.fields.fechaFinal
+										}
+										disabled={!editable}
+										value={formData.dateTo}
+										onChange={handleFormDataChange}
+									/>
+									<FormFeedback>
+										{toDateInvalid &&
+											'la fecha de inicio debe ser antes de la fecha de final'}
+										{state.beneficios.fields.fechaFinal &&
+											state.beneficios.errors.fechaFinal}
+									</FormFeedback>
+								</FormGroup>
+							</Collapse>
 						</Grid>
 					</Grid>
 				</Grid>
