@@ -68,47 +68,61 @@ const cleadDiscapacidades = () => ({
 	type: CLEAR_CURRENT_DISCAPACIDADES
 })
 
-export const addApoyo = (data, category, categoryKeyName, pageNumber) => async dispatch => {
-	loadingApoyos(categoryKeyName)
-	try {
-		const response = await axios.post(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo`, data)
-		dispatch(getApoyosByType(data.identidadesId, pageNumber, 5, category))
-		return { error: false }
-	} catch (e) {
-		return { error: e.message }
+export const addApoyo =
+	(data, category, categoryKeyName, pageNumber) => async dispatch => {
+		loadingApoyos(categoryKeyName)
+		try {
+			const response = await axios.post(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo`,
+				data
+			)
+			dispatch(getApoyosByType(data.identidadesId, pageNumber, 5, category))
+			return { error: false }
+		} catch (e) {
+			return { error: e.message }
+		}
 	}
-}
 
-export const editApoyo = (data, category, categoryKeyName, pageNumber) => async dispatch => {
-	loadingApoyos(categoryKeyName)
-	try {
-		const response = await axios.put(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo`, data)
-		dispatch(getApoyosByType(data.identidadesId, pageNumber, 5, category))
-		return { error: false }
-	} catch (e) {
-		return { error: e.message }
+export const editApoyo =
+	(data, category, categoryKeyName, pageNumber) => async dispatch => {
+		loadingApoyos(categoryKeyName)
+		try {
+			const response = await axios.put(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo`,
+				data
+			)
+			dispatch(getApoyosByType(data.identidadesId, pageNumber, 5, category))
+			return { error: false }
+		} catch (e) {
+			return { error: e.message }
+		}
 	}
-}
 
 export const clearCurrentDiscapacidades = () => dispatch => {
 	dispatch(cleadDiscapacidades())
 }
 
-export const deleteApoyo = (id, categoryKeyName, identidadesId, pageNumber, category) => async dispatch => {
-	loadingApoyos(categoryKeyName)
-	try {
-		const response = await axios.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${id}`)
-		dispatch(getApoyosByType(identidadesId, pageNumber, 5, category))
-		return { error: false }
-	} catch (e) {
-		return { error: e.message }
+export const deleteApoyo =
+	(id, categoryKeyName, identidadesId, pageNumber, category) =>
+	async dispatch => {
+		loadingApoyos(categoryKeyName)
+		try {
+			const response = await axios.delete(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${id}`
+			)
+			dispatch(getApoyosByType(identidadesId, pageNumber, 5, category))
+			return { error: false }
+		} catch (e) {
+			return { error: e.message }
+		}
 	}
-}
 
 export const getTiposApoyos = () => async dispatch => {
 	dispatch(loading(true))
 	try {
-		const response = await axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/TipoApoyo`)
+		const response = await axios.get(
+			`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/TipoApoyo`
+		)
 		dispatch(loadTypes(response.data))
 	} catch (e) {
 		return { error: true, message: e.message }
@@ -118,7 +132,9 @@ export const getTiposApoyos = () => async dispatch => {
 export const getDependenciasApoyos = () => async dispatch => {
 	dispatch(loading(true))
 	try {
-		const response = await axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DependenciaApoyo`)
+		const response = await axios.get(
+			`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DependenciaApoyo`
+		)
 		dispatch(loadDependencias(response.data))
 	} catch (e) {
 		return { error: true, message: e.message }
@@ -128,32 +144,37 @@ export const getDependenciasApoyos = () => async dispatch => {
 export const getCategoriasApoyos = () => async dispatch => {
 	dispatch(loading(true))
 	try {
-		const response = await axios.get(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CategoriaApoyo`)
+		const response = await axios.get(
+			`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CategoriaApoyo`
+		)
 		dispatch(loadCategories(response.data))
 	} catch (e) {
 		return { error: true, message: e.message }
 	}
 }
 
-export const getApoyosByType = (identidad, page, quantity, type) => async dispatch => {
-	dispatch(loading(true))
-	dispatch(loadingApoyos(type.nombre.replace(/\s/g, '') + `${type.id}`))
-	try {
-		const response = await axios.get(
-			`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${type.id}/${page}/${quantity}?identidadId=${identidad}`
-		)
-		const responseData = {
-			...response.data,
-			errors: [],
-			fields: [],
-			currentApoyoId: null,
-			loading: false
+export const getApoyosByType =
+	(identidad, page, quantity, type) => async dispatch => {
+		dispatch(loading(true))
+		dispatch(loadingApoyos(type.nombre.replace(/\s/g, '') + `${type.id}`))
+		try {
+			const response = await axios.get(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${type.id}/${page}/${quantity}?identidadId=${identidad}`
+			)
+			const responseData = {
+				...response.data,
+				errors: [],
+				fields: [],
+				currentApoyoId: null,
+				loading: false
+			}
+			dispatch(
+				loadApoyos(responseData, type.nombre.replace(/\s/g, '') + `${type.id}`)
+			)
+		} catch (e) {
+			return { error: true, message: e.message }
 		}
-		dispatch(loadApoyos(responseData, type.nombre.replace(/\s/g, '') + `${type.id}`))
-	} catch (e) {
-		return { error: true, message: e.message }
 	}
-}
 
 export const getDiscapacidades = identidad => async dispatch => {
 	try {
@@ -173,6 +194,7 @@ export const getCondiciones = identidad => async dispatch => {
 			`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/GetByIdentidad/${identidad}`
 		)
 		dispatch(loadCondiciones(response.data))
+		return response.data
 	} catch (e) {
 		return { error: true, message: e.message }
 	}
@@ -183,7 +205,10 @@ export const getResources = (type, identidadId) => async dispatch => {
 		type === 'discapacidades'
 			? `${envVariables.BACKEND_URL}/api/RecursosDiscapacidad/GetByIdentidad/${identidadId}`
 			: `${envVariables.BACKEND_URL}/api/RecursosCondicion/GetRecursosByCondicion/${identidadId}`
-	const name = type === 'discapacidades' ? 'recursosDiscapacidadesIdentidad' : 'recursosCondicionesIdentidad'
+	const name =
+		type === 'discapacidades'
+			? 'recursosDiscapacidadesIdentidad'
+			: 'recursosCondicionesIdentidad'
 	try {
 		const response = await axios.get(url)
 		dispatch(loadResources(response.data || [], name))
@@ -265,7 +290,9 @@ const createResource = async (file, identidadId, type) => {
 		data.append('file', file)
 		data.append('identidadId', identidadId)
 		const response = await axios.post(
-			`${envVariables.BACKEND_URL}/api/${type === 'discapacidad' ? 'RecursosDiscapacidad' : 'RecursosCondicion'}`,
+			`${envVariables.BACKEND_URL}/api/${
+				type === 'discapacidad' ? 'RecursosDiscapacidad' : 'RecursosCondicion'
+			}`,
 			data
 		)
 		return { data: response.data, error: false }
