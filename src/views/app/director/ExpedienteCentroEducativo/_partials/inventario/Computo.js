@@ -39,7 +39,7 @@ const Computo = props => {
 			setLoading(false)
 		}
 		loadData()
-	}, [state.currentInstitution.id])
+	}, [state.currentInstitution?.id])
 
 	const [pagination, setPagination] = useState({
 		page: 1,
