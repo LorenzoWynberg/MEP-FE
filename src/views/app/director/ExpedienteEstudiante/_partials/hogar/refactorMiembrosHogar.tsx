@@ -207,16 +207,18 @@ const RefactorMiembrosHogar = props => {
 								style={
 									props.validations.modificar
 										? {
-											border: 'none',
-											background: 'transparent',
-											cursor: 'pointer',
-											color: 'grey'
-										}
+												border: 'none',
+												background: 'transparent',
+												cursor: 'pointer',
+												color: 'grey'
+										  }
 										: { display: 'none' }
 								}
 								onClick={async () => {
 									setLoading(true)
-									await events.onEditarClick(fullRow.id, () => { setLoading(false) })
+									await events.onEditarClick(fullRow.id, () => {
+										setLoading(false)
+									})
 
 									// props.authHandler('modificar', () => {
 									//   setMemberDetailOpen(true)
@@ -233,11 +235,11 @@ const RefactorMiembrosHogar = props => {
 								style={
 									props.validations.eliminar
 										? {
-											border: 'none',
-											background: 'transparent',
-											cursor: 'pointer',
-											color: 'grey'
-										}
+												border: 'none',
+												background: 'transparent',
+												cursor: 'pointer',
+												color: 'grey'
+										  }
 										: { display: 'none' }
 								}
 								onClick={() => {
@@ -258,10 +260,10 @@ const RefactorMiembrosHogar = props => {
 										if (result) {
 											const age = identification.data?.fechaNacimiento
 												? moment().diff(
-													identification.data?.fechaNacimiento,
-													'years',
-													false
-												)
+														identification.data?.fechaNacimiento,
+														'years',
+														false
+												  )
 												: 0
 											debugger
 											if (
@@ -289,7 +291,9 @@ const RefactorMiembrosHogar = props => {
 											} else {
 												// toggle(!modal.show, fullRow.id)
 												setLoading(true)
-												await events.onDeleteClick(fullRow.id, () => setLoading(false))
+												await events.onDeleteClick(fullRow.id, () =>
+													setLoading(false)
+												)
 												await loadFamilyMembers()
 											}
 										}
@@ -378,7 +382,10 @@ const RefactorMiembrosHogar = props => {
 											className="content-avatar-expediente mb-3"
 											id="image_form"
 										>
-											<Avatar value={formData.imagen} disabled={true} />
+											<Avatar
+												value={formData.imagen?.src ?? ''}
+												disabled={true}
+											/>
 										</div>
 									</div>
 								</Col>
@@ -400,7 +407,9 @@ const RefactorMiembrosHogar = props => {
 											onChange={events.onIdentificacionChange}
 											style={{
 												border:
-													checkedValid && !formData.identificacion ? '1px solid red' : ''
+													checkedValid && !formData.identificacion
+														? '1px solid red'
+														: ''
 											}}
 										/>
 									</InputContainer>
@@ -678,7 +687,9 @@ const RefactorMiembrosHogar = props => {
 												onChange={events.onTelefonoPrincipalChange}
 												style={{
 													border:
-														checkedValid && !formData.telefonoPrincipal ? '1px solid red' : ''
+														checkedValid && !formData.telefonoPrincipal
+															? '1px solid red'
+															: ''
 												}}
 											>
 												{inputProps => (
@@ -757,15 +768,17 @@ const RefactorMiembrosHogar = props => {
 													control: (baseStyles, state) => ({
 														...baseStyles,
 														borderColor:
-															checkedValid && !formData.relacionConEstudiante?.id ? 'red' : 'hsl(0, 0%, 80%)',
-													}),
+															checkedValid &&
+															!formData.relacionConEstudiante?.id
+																? 'red'
+																: 'hsl(0, 0%, 80%)'
+													})
 												}}
 												isDisabled={!formData.editable}
 												placeholder={t('general>seleccionar', 'Seleccionar')}
 												value={formData.relacionConEstudiante}
 												onChange={events.onRelacionConEstudianteChange}
 												options={catalogs.relacionConEstudianteCatalog}
-
 											/>
 											<span style={{ color: 'red' }}>
 												{/* {props.fields["ParentescoId"] && props.errors["ParentescoId"]} */}
@@ -930,9 +943,11 @@ const RefactorMiembrosHogar = props => {
 										onClick={async () => {
 											setLoading(true)
 											setCheckedValid(true)
-											await events.onGuardarClick(() => onRegresarEvent(), () => setLoading(false))
+											await events.onGuardarClick(
+												() => onRegresarEvent(),
+												() => setLoading(false)
+											)
 										}}
-
 									>
 										Guardar
 									</Button>
@@ -941,8 +956,7 @@ const RefactorMiembrosHogar = props => {
 						</div>
 					</Row>
 				</>
-			)
-			}
+			)}
 			<SimpleModal
 				openDialog={formData.showModalBusqueda}
 				onClose={closeModalNoEncontrado}
@@ -1026,8 +1040,8 @@ const RefactorMiembrosHogar = props => {
 												{item.descripcion
 													? item.descripcion
 													: item.detalle
-														? item.detalle
-														: 'Elemento sin detalle actualmente'}
+													? item.detalle
+													: 'Elemento sin detalle actualmente'}
 											</OnlyVert>
 										</Col>
 									</Row>
@@ -1058,7 +1072,7 @@ const RefactorMiembrosHogar = props => {
 					</Row>
 				</Container>
 			</SimpleModal>
-		</div >
+		</div>
 	)
 }
 
