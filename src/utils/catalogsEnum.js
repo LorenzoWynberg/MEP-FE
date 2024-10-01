@@ -75,7 +75,23 @@ export const catalogsEnum = [
 ]
 
 export const catalogsEnumByName = [
-	{ id: 'Condiciones de Apoyo', name: 'tipoCondicionApoyo' }
+	{ id: 'Condiciones de Apoyo', name: 'tipoCondicionApoyo' },
+	{
+		id: 'Tipo activo inventario tecnológico',
+		name: 'tipoActivoInventarioTecnologico'
+	},
+	{
+		id: 'Estado inventario tecnológico',
+		name: 'estadoInventarioTecnologico'
+	},
+	{
+		id: 'Ubicación inventario tecnológico',
+		name: 'ubicacionInventarioTecnologico'
+	},
+	{
+		id: 'Fuente inventario tecnológico',
+		name: 'fuenteInventarioTecnologico'
+	}
 ]
 
 export const catalogsEnumObj = {
