@@ -272,11 +272,15 @@ const BeneficiosMEP = props => {
 	}
 
 	const handleDeleteSubsidio = async ids => {
-		const response = await actions.deleteSubsidio(
-			ids,
-			state.identification.data.id
-		)
-		return response
+		try {
+			const response = await actions.deleteSubsidio(
+				ids,
+				state.identification.data.id
+			)
+			toggleSnackbar('success', 'El subsidio se ha eliminado correctamente.')
+		} catch (e) {
+			toggleSnackbar('error', 'Error eliminando el subsidio.')
+		}
 	}
 
 	const handleViewSubsidio = (e, show) => {
