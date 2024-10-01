@@ -164,7 +164,7 @@ const InformacionResidenciaSaber = props => {
 				})
 			}
 			setEditDirection(item)
-			setDirection(item.direccionExacta)
+			  setDirection(item.direccionExacta)
 			setLocation({
 				latitude: item.latitud,
 				longitude: item.longitud
@@ -314,7 +314,7 @@ const InformacionResidenciaSaber = props => {
 		setDirection(e.target.value)
 	}
 
-	const handleSearchBySelects = (data, name) => {
+	const handleSearchBySelects = useCallback(()=>(data, name) => {
 		if (search) {
 			search.clear()
 		}
@@ -337,16 +337,17 @@ const InformacionResidenciaSaber = props => {
 				break
 			case 'poblado':
 				_newDirection = `${currentProvince.label}, ${currentCanton.label}, ${currentDistrito.label}`
+				setDirection('') 
 				setCurrentPoblado(data)
 				break
 			default:
 				return null
 		}
 		search.searchTerm = _newDirection
-		setDirection('')
+		//
 		search.search(`${_newDirection}, CRI`)
-		search.suggest()
-	}
+		// search.suggest()
+	},[])
 
 	const handleChange = e => {
 		setRazon(e.target.value)
