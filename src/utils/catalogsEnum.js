@@ -58,7 +58,7 @@ export const catalogsEnum = [
 	{ id: 50, name: 'estructurasTechosMaterialPrincipal' },
 	{ id: 51, name: 'techoMaterialPrincipal' },
 	{ id: 52, name: 'canoasBajantesMaterialPrincipal' },
-	{ id: 66, name: 'puertasVentanasMaterialPrincipal' },
+	{ id: 53, name: 'puertasVentanasMaterialPrincipal' },
 	{ id: 54, name: 'estadosElementosMaterialPrincipal' },
 	{ id: 55, name: 'cerramientoPerimetral' },
 	{ id: 56, name: 'estadoCerramientoPerimetral' },
@@ -71,8 +71,11 @@ export const catalogsEnum = [
 	{ id: 63, name: 'estadoSistemaCamaraCircuito' },
 	{ id: 64, name: 'proveedordelServicio' },
 	{ id: 65, name: 'responsabledePago' },
-	//TODO Estos no corresponden, tipoCondicionApoyo
-	{ id: 53, name: 'tipoCondicionApoyo' }
+	{ id: 66, name: 'tipoCondicionApoyo' }
+]
+
+export const catalogsEnumByName = [
+	{ id: 'Condiciones de Apoyo', name: 'tipoCondicionApoyo' }
 ]
 
 export const catalogsEnumObj = {
@@ -167,6 +170,5 @@ export const catalogsEnumObj = {
 	TIPOYISRO: { id: 41, name: 'tipoYisro' },
 	ESTADOASISTENCIA: { id: 42, name: 'estadoAsistencia' },
 	TIPOSAPOYOS: { id: 47, name: 'tiposApoyos' },
-	//TODO agregar este catalogo, y modificar el Id
 	TIPOCONDICIONAPOYO: { id: 66, name: 'tipoCondicionApoyo' }
 }
