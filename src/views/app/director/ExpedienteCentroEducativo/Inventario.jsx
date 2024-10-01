@@ -1,36 +1,25 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { useState } from 'react'
+import { Helmet } from 'react-helmet'
 import HeaderTab from 'Components/Tab/Header'
+import { useTranslation } from 'react-i18next'
 import ContentTab from 'Components/Tab/Content'
 import Computo from './_partials/inventario/Computo'
-import { Helmet } from 'react-helmet'
 import Notification from '../../../../Hoc/Notificaction'
-import { useTranslation } from 'react-i18next'
 
 const Inventario = props => {
 	const { t } = useTranslation()
 	const [activeTab, setActiveTab] = useState(0)
-	const optionsTab = [
-		t('expediente_ce>informacion_general>nav>perfilaa', 'Cómputo')
-	]
+	const optionsTab = [t('inventario>computo>titulo', 'Cómputo')]
 	return (
 		<Notification>
 			{showSnackbar => {
 				return (
 					<>
 						<Helmet>
-							<title>
-								{t(
-									'expediente_ce>informacion_general>titulo',
-									'Información general'
-								)}
-							</title>
+							<title>{t('inventario>titulo', 'Inventario')}</title>
 						</Helmet>
-						<h4>
-							{t(
-								'expediente_ce>informacion_general>titulo',
-								'Información general'
-							)}
-						</h4>
+						<h4>{t('inventario>titulo', 'Inventario')}</h4>
 						<br />
 						<HeaderTab
 							options={optionsTab}
