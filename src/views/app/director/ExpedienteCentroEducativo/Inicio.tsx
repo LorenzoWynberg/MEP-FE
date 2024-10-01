@@ -17,6 +17,7 @@ import HouseIcon from '@material-ui/icons/House'
 import GroupWorkIcon from '@material-ui/icons/GroupWork'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { envVariables } from 'Constants/enviroment'
 
 const Inicio = props => {
 	const { t } = useTranslation()
@@ -31,12 +32,14 @@ const Inicio = props => {
 		}
 	})
 
-	const tienePermisoSCE = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
+	const tienePermisoSCE = state.permisos.find(
+		permiso => permiso.codigoSeccion == 'registrosSCE'
+	)
 
 	const validarInstitucionSCE = async () => {
 		try {
 			const response = await axios.post(
-				`https://mep-saber.azurewebsites.net/api/ServicioComunal/VerificarInstitucionAplicaSCE?idInstitucion=${idInstitucion}`
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/VerificarInstitucionAplicaSCE?idInstitucion=${idInstitucion}`
 			)
 			setAplicaSCE(response.data)
 		} catch (error) {
@@ -84,14 +87,18 @@ const Inicio = props => {
 				{loading ? (
 					<Loader />
 				) : (
-					<Colxx xxs='12' className='px-5'>
+					<Colxx xxs="12" className="px-5">
 						<Row>
 							{centroBreadcrumb.map((r, i) => {
 								if (r.active) return
-								if (i == 10 && (!aplicaSCE || !tienePermisoSCE || tienePermisoSCE.leer == 0)) return
+								if (
+									i == 10 &&
+									(!aplicaSCE || !tienePermisoSCE || tienePermisoSCE.leer == 0)
+								)
+									return
 								return (
 									<NavigationCard
-										icon=''
+										icon=""
 										title={t(r.label, `${r.label} not found`)}
 										href={r.to}
 										key={i}

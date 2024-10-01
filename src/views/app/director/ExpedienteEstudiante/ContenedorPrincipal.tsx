@@ -3,7 +3,10 @@ import axios from 'axios'
 import studentBreadcrumb from 'Constants/studentBreadcrumb'
 import { useSelector } from 'react-redux'
 import { getIdentification } from 'Redux/identificacion/actions'
-import { getStudentDataFilter, loadStudent } from 'Redux/expedienteEstudiantil/actions'
+import {
+	getStudentDataFilter,
+	loadStudent
+} from 'Redux/expedienteEstudiantil/actions'
 import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
 import InformationCard from './_partials/InformationCard'
@@ -14,6 +17,7 @@ import directorItems from 'Constants/directorMenu'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
+import { envVariables } from 'Constants/enviroment'
 
 const Navegacion = React.lazy(() => import('./Navegacion'))
 const Contacto = React.lazy(() => import('./Contacto'))
@@ -28,7 +32,9 @@ const Buscador = React.lazy(() => import('./Buscador'))
 const Sinirube = React.lazy(() => import('./Sinirube'))
 const CuentaCorreo = React.lazy(() => import('./CuentaCorreo'))
 const CuentaUsuarios = React.lazy(() => import('./CuentaUsuario'))
-const ServicioComunalEstudiantil = React.lazy(() => import('./ServicioComunalEstudiantil'))
+const ServicioComunalEstudiantil = React.lazy(
+	() => import('./ServicioComunalEstudiantil')
+)
 
 const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
@@ -63,7 +69,9 @@ const ContenedorPrincipal = props => {
 	}
 
 	const blockeo = () => {
-		return <h3>Debe seleccionar un estudiante en el buscador de estudiantes.</h3>
+		return (
+			<h3>Debe seleccionar un estudiante en el buscador de estudiantes.</h3>
+		)
 	}
 
 	useEffect(() => {
@@ -101,7 +109,7 @@ const ContenedorPrincipal = props => {
 	const validarEstudianteSCE = async () => {
 		try {
 			const response = await axios.post(
-				`https://mep-saber.azurewebsites.net/api/ServicioComunal/VerificarEstudianteAplicaSCE?idInstitucion=${idInstitucion}&idEstudiante=${state.expedienteEstudiantil.currentStudent.idEstudiante}`
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/VerificarEstudianteAplicaSCE?idInstitucion=${idInstitucion}&idEstudiante=${state.expedienteEstudiantil.currentStudent.idEstudiante}`
 			)
 			setAplicaSCE(response.data)
 		} catch (error) {
@@ -133,16 +141,21 @@ const ContenedorPrincipal = props => {
 
 	return (
 		<AppLayout items={directorItems}>
-			<div className='dashboard-wrapper'>
+			<div className="dashboard-wrapper">
 				<Container>
 					{active !== 0 && estudianteEnContexto() && (
-						<InformationCard data={state.expedienteEstudiantil.currentStudent} />
+						<InformationCard
+							data={state.expedienteEstudiantil.currentStudent}
+						/>
 					)}
 					<Row>
 						{active !== 0 && estudianteEnContexto() && (
 							<Col xs={12}>
 								<Breadcrumb
-									header={t('expediente_estudiantil>titulo', 'Expediente Estudiantil')}
+									header={t(
+										'expediente_estudiantil>titulo',
+										'Expediente Estudiantil'
+									)}
 									data={breadcrumbs}
 								/>
 								<br />
@@ -161,15 +174,46 @@ const ContenedorPrincipal = props => {
 											) : (
 												blockeo()
 											),
-											2: estudianteEnContexto() ? <General {...props} /> : blockeo(),
-											3: estudianteEnContexto() ? <Contacto {...props} /> : blockeo(),
-											4: estudianteEnContexto() ? <Hogar {...props} /> : blockeo(),
-											5: estudianteEnContexto() ? <Beneficios {...props} /> : blockeo(),
-											6: estudianteEnContexto() ? <Apoyo {...props} /> : blockeo(),
-											7: estudianteEnContexto() ? <AreaCurricular {...props} /> : blockeo(),
-											8: estudianteEnContexto() ? <Salud {...props} /> : blockeo(),
+											2: estudianteEnContexto() ? (
+												<General {...props} />
+											) : (
+												blockeo()
+											),
+											3: estudianteEnContexto() ? (
+												<Contacto {...props} />
+											) : (
+												blockeo()
+											),
+											4: estudianteEnContexto() ? (
+												<Hogar {...props} />
+											) : (
+												blockeo()
+											),
+											5: estudianteEnContexto() ? (
+												<Beneficios {...props} />
+											) : (
+												blockeo()
+											),
+											6: estudianteEnContexto() ? (
+												<Apoyo {...props} />
+											) : (
+												blockeo()
+											),
+											7: estudianteEnContexto() ? (
+												<AreaCurricular {...props} />
+											) : (
+												blockeo()
+											),
+											8: estudianteEnContexto() ? (
+												<Salud {...props} />
+											) : (
+												blockeo()
+											),
 											9: estudianteEnContexto() ? (
-												<Oferta {...props} historialMatricula={state.historialMatricula} />
+												<Oferta
+													{...props}
+													historialMatricula={state.historialMatricula}
+												/>
 											) : (
 												blockeo()
 											),
