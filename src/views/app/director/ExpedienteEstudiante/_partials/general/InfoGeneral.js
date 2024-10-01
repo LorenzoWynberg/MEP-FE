@@ -224,7 +224,7 @@ const InfoGeneral = props => {
 		setPrevIdentidadData(_data)
 		setIdentidadData(_data)
 		let response = await actions.updateIdentity(_data)
-
+		setEditable(false)
 		if (response.data.error) {
 			setSnackbarContent({
 				variant: 'error',
@@ -238,7 +238,7 @@ const InfoGeneral = props => {
 				msg: '¡Los datos se han actualizado con éxito!'
 			})
 			handleClick()
-			setEditable(false)
+
 			setPrevIdentidadData(null)
 		}
 	}
