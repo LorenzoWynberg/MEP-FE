@@ -26,10 +26,6 @@ const Computo = props => {
 		getDatosDirector
 	})
 
-	const loadDatosDirector = async () => {
-		return await actions.getDatosDirector(store.authUser.currentInstitution)
-	}
-
 	const state = useSelector(store => {
 		return {
 			selectedYear: store.authUser.selectedActiveYear,
@@ -38,10 +34,6 @@ const Computo = props => {
 	})
 
 	useEffect(() => {}, [])
-
-	useEffect(() => {
-		console.log('LOREDIRECTOR', loadDatosDirector())
-	}, [state.currentInstitution?.id])
 
 	useEffect(() => {
 		console.log('LOREPROPS', props)
@@ -60,7 +52,7 @@ const Computo = props => {
 
 	return (
 		<div>
-			{!loading ?? !selectsLoading ?? !historicoLoading ? (
+			{!loading && !selectsLoading && !historicoLoading ? (
 				<>
 					{showModal && <Modal />}
 					<TableReactImplementation
@@ -78,6 +70,7 @@ const Computo = props => {
 								searchValue
 							})
 						}}
+						// paginationObject={pagination}
 						columns={columns}
 						orderOptions={[]}
 						pageSize={pagination.pageSize}
