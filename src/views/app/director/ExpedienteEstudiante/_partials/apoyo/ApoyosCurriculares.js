@@ -106,14 +106,18 @@ const ApoyosCurriculares = props => {
 			o => o.nombre === condicionSeRecibeNombre
 		)
 
+		let fechaAprobacion = formData.fechaDeAprobacion
+
 		if (value === condicionSeRecibe.id) {
 			setShowFechaAprobacion(true)
 		} else {
 			setShowFechaAprobacion(false)
+			fechaAprobacion = ''
 		}
 		setFormData({
 			...formData,
-			condicionApoyo: value
+			condicionApoyo: value,
+			fechaDeAprobacion: fechaAprobacion
 		})
 	}
 
@@ -241,13 +245,18 @@ const ApoyosCurriculares = props => {
 			setShowFechaAprobacion(true)
 		}
 
+		let fechaDeAprobacion = ''
+		if (!isNull(row.fechaInicio)) {
+			fechaDeAprobacion = moment(row.fechaInicio, 'DD-MM-YYYY')
+		}
+
 		setFormData({
 			id: row.id,
 			tipoDeApoyo: row.sb_TiposDeApoyoId,
 			condicionApoyo: row.condicionApoyoId,
 			detalleApoyo: row.detalle,
 			nombreApoyo: row.sb_TiposDeApoyo,
-			fechaDeAprobacion: row.fechaInicio
+			fechaDeAprobacion: fechaDeAprobacion
 		})
 	}
 

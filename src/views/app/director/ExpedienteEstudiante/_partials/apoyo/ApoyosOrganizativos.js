@@ -97,6 +97,7 @@ const ApoyosOrganizativos = props => {
 	}
 
 	const handleFechaAprobacionOnChange = event => {
+		debugger
 		const value = Number(event.target.value)
 
 		const condicionesApoyo = state.selects.tipoCondicionApoyo
@@ -105,14 +106,18 @@ const ApoyosOrganizativos = props => {
 			o => o.nombre === condicionSeRecibeNombre
 		)
 
+		let fechaAprobacion = formData.fechaDeAprobacion
+
 		if (value === condicionSeRecibe.id) {
 			setShowFechaAprobacion(true)
 		} else {
 			setShowFechaAprobacion(false)
+			fechaAprobacion = ''
 		}
 		setFormData({
 			...formData,
-			condicionApoyo: value
+			condicionApoyo: value,
+			fechaDeAprobacion: fechaAprobacion
 		})
 	}
 
@@ -238,6 +243,7 @@ const ApoyosOrganizativos = props => {
 	const onEditarEvent = row => {
 		setEditable(true)
 		setShowNuevoApoyoModal(true)
+		debugger
 
 		if (
 			!isNull(row.fechaInicio) &&
@@ -247,13 +253,18 @@ const ApoyosOrganizativos = props => {
 			setShowFechaAprobacion(true)
 		}
 
+		let fechaDeAprobacion = ''
+		if (!isNull(row.fechaInicio)) {
+			fechaDeAprobacion = moment(row.fechaInicio, 'DD-MM-YYYY')
+		}
+
 		setFormData({
 			id: row.id,
 			tipoDeApoyo: row.sb_TiposDeApoyoId,
 			condicionApoyo: row.condicionApoyoId,
 			detalleApoyo: row.detalle,
 			nombreApoyo: row.sb_TiposDeApoyo,
-			fechaDeAprobacion: row.fechaInicio
+			fechaDeAprobacion: fechaDeAprobacion
 		})
 	}
 

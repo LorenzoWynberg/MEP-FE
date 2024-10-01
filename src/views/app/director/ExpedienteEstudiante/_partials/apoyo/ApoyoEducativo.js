@@ -210,6 +210,9 @@ const ApoyoEducativo = props => {
 			})
 	}
 
+	//TODO JP props.apoyos.categorias y props.apoyos.tipos
+	console.log('JP apoyos', props.apoyos)
+
 	if (loading) {
 		return <Loader />
 	}
