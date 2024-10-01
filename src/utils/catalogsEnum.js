@@ -75,7 +75,12 @@ export const catalogsEnum = [
 ]
 
 export const catalogsEnumByName = [
-	{ id: 'Condiciones de Apoyo', name: 'tipoCondicionApoyo' }
+	{ id: 'Condiciones de Apoyo', name: 'tipoCondicionApoyo' },
+	{ id: 'Talentos', name: 'talentos' },
+	{
+		id: 'Estrategias de flexibilización curricular',
+		name: 'estrategiasFlexibilidadCurricular'
+	}
 ]
 
 export const catalogsEnumObj = {

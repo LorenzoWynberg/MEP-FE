@@ -34,6 +34,7 @@ import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import moment from 'moment'
 import colors from 'assets/js/colors'
+import { catalogsEnumByName } from '../../../../../../utils/catalogsEnum'
 
 const condicionSeRecibeNombre = 'Se recibe'
 
@@ -49,6 +50,7 @@ const ApoyosEstudiante = props => {
 	const [tiposApoyoFilter, setTiposApoyoFilter] = useState([])
 	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
 	const [radioValue, setRadioValue] = useState(0)
+	const [editable, setEditable] = useState(false)
 	const [snackbarContent, setSnackbarContent] = useState({
 		msg: '',
 		type: ''
@@ -61,11 +63,6 @@ const ApoyosEstudiante = props => {
 		nombreApoyo: '',
 		fechaDeAprobacion: ''
 	})
-
-	//TODO JP Borrar estas 3 lineas
-	const [editable, setEditable] = useState(false)
-	const [sortedYearList, setSortedYearList] = useState(null)
-	const [catalogos, setCatalogos] = useState([])
 
 	const primary = colors.primary
 
@@ -82,9 +79,6 @@ const ApoyosEstudiante = props => {
 			expedienteEstudiantil: store.expedienteEstudiantil,
 			identification: store.identification,
 			selects: store.selects
-			//TODO JP Borrar
-			//activeYear: store.authUser.selectedActiveYear,
-			//activeYears: store.authUser.activeYears
 		}
 	})
 
@@ -103,6 +97,7 @@ const ApoyosEstudiante = props => {
 				const condicionApoyo = props.catalogos.find(item => {
 					return item.nombre === 'Condiciones de Apoyo'
 				})
+
 				if (!state.selects.tipoCondicionApoyo[0]) {
 					await actions.getCatalogsByName(
 						condicionApoyo.id,
@@ -118,7 +113,6 @@ const ApoyosEstudiante = props => {
 		loadData()
 	}, [])
 
-	//TODO JP pasar la categoria como prop
 	useEffect(() => {
 		setLoading(true)
 
@@ -127,7 +121,6 @@ const ApoyosEstudiante = props => {
 				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
 			)
 			.then(response => {
-				debugger
 				setData(response.data.entityList)
 				setLoading(false)
 			})
@@ -233,6 +226,7 @@ const ApoyosEstudiante = props => {
 	}
 
 	const onEditarEvent = row => {
+		debugger
 		setEditable(true)
 		setShowNuevoApoyoModal(true)
 
