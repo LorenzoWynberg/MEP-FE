@@ -73,6 +73,7 @@ const Computo = props => {
 						// paginationObject={pagination}
 						columns={columns}
 						orderOptions={[]}
+						paginationObject={pagination}
 						pageSize={pagination.pageSize}
 						backendSearch
 					/>
