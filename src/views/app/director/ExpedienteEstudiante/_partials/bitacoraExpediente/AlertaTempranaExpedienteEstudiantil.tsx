@@ -145,7 +145,7 @@ const Title = styled.h4`
 `
 
 export default withAuthorization({
-	id: 99,
+	id: 101,
 	Modulo: 'Expediente Estudiantil',
 	Apartado: 'Bitácora expediente',
 	Seccion: 'Alerta temprana'
