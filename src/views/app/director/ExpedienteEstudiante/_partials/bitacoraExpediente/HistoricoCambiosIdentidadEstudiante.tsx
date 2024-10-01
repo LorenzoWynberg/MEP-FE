@@ -2,28 +2,27 @@ import React from 'react'
 import styled from 'styled-components'
 import { Row, Col } from 'reactstrap'
 import moment from 'moment'
-import colors from '../../../../../../assets/js/colors'
-import HTMLTable from '../../../../../../components/HTMLTable'
+import HTMLTable from 'Components/HTMLTable'
+import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import {
 	getBitacorasIdentidad,
 	getIdentificacionPersona,
 	getBitacorasFilter
-} from '../../../../../../redux/identidad/actions'
+} from 'Redux/identidad/actions'
 import { useSelector } from 'react-redux'
 import { useActions } from 'Hooks/useActions'
 import useNotification from 'Hooks/useNotification'
-import DatePicker, { registerLocale } from 'react-datepicker'
-
+import { registerLocale } from 'react-datepicker'
+import BarLoader from 'Components/barLoader/barLoader'
 import 'react-datepicker/dist/react-datepicker.css'
 import es from 'date-fns/locale/es'
-
 import PreviewChange from '../../../../../app/configuracion/Identidad/PreviewUserBitacora'
 import swal from 'sweetalert'
 import { useTranslation } from 'react-i18next'
 
 registerLocale('es', es)
 
-type IProps = {}
+type IProps = { identificacion: any }
 
 type IState = {
 	identidad: any
@@ -36,15 +35,12 @@ type SnackbarConfig = {
 
 const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 	const [t] = useTranslation()
-
 	const [data, setData] = React.useState<any[]>([])
-	const [modalVisible, setModalVisible] = React.useState<boolean>(false)
 	const [identidad, setIdentidad] = React.useState<any>(null)
 	const [previewUser, setPreviewUser] = React.useState<any>(null)
-	const [search, setSearch] = React.useState<string>('')
-	const [filter, setFilter] = React.useState<string>('')
 	const [random, setRandom] = React.useState<number>(-1)
 	const [snackbar, handleClick] = useNotification()
+	const [loading, setLoading] = React.useState(true)
 	const [snackBarContent, setSnackbarContent] = React.useState<SnackbarConfig>({
 		variant: '',
 		msg: ''
@@ -53,26 +49,31 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 	const columns = [
 		{
 			column: 'fechaActualizacion',
-			label: t('estudiantes>indentidad_per>historico_camb>fecha', 'Fecha del evento'),
+			label: t(
+				'estudiantes>indentidad_per>historico_camb>fecha',
+				'Fecha del evento'
+			),
 			width: 30
 		},
 		{
 			column: 'nombreCompleto',
-			label: t('estudiantes>indentidad_per>historico_camb>user', 'Usuario aplicó cambio'),
+			label: t(
+				'estudiantes>indentidad_per>historico_camb>user',
+				'Usuario aplicó cambio'
+			),
 			width: 70
 		}
 	]
 
 	const [paginationData, setPaginationData] = React.useState({
 		pagina: 1,
-		cantidad: 6
+		cantidad: 10
 	})
 
 	const state = useSelector((store: IState) => {
 		return {
 			bitacoras: store.identidad.bitacoras,
-			user: store.identidad.data,
-			identification: store.identification
+			user: store.identidad.data
 		}
 	})
 
@@ -81,7 +82,9 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 			state.bitacoras.entityList.map((item: any, index) => {
 				return {
 					...item,
-					fechaActualizacion: moment(item.fechaActualizacion).format('DD/MM/YY h:mm a'),
+					fechaActualizacion: moment(item.fechaActualizacion).format(
+						'DD/MM/YY h:mm a'
+					),
 					rowId: index,
 					itemSelected: false,
 					nombreCompleto: `${item.nombreCompleto}`
@@ -105,19 +108,19 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 		handleClick()
 	}
 
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setSearch(e.target.value)
-	}
-
-	//const handleInputSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
 	const handleInputSearch = async () => {
-		const { data } = await actions.getIdentificacionPersona(state.identification.data.identificacion)
-
+		setLoading(true)
+		const { data } = await actions.getIdentificacionPersona(
+			props.identificacion
+		)
 		setIdentidad(data)
 		if (Object.keys(data).length === 0) {
 			swal({
 				title: t('general>error>siento', '¡Lo siento!'),
-				text: t('general>error>no_register', 'Esta persona no se encuentra registrada'),
+				text: t(
+					'general>error>no_register',
+					'Esta persona no se encuentra registrada'
+				),
 				icon: 'warning',
 				buttons: {
 					ok: {
@@ -134,23 +137,22 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 			})
 			if (!res.error) {
 				if (res.data.totalCount === 0) {
-					showNotification('warning', 'No se han registrado cambios a esta identidad')
+					showNotification(
+						'warning',
+						'No se han registrado cambios a esta identidad'
+					)
 				}
 			} else {
-				showNotification('error', t('general>error', 'Oops. Algo ha salido mal. Por favor intentelo luego'))
+				showNotification(
+					'error',
+					t(
+						'general>error',
+						'Oops. Algo ha salido mal. Por favor intentelo luego'
+					)
+				)
 			}
 		}
-	}
-
-	const handleSearch = (date: string) => {
-		const parseDate = moment(date).format('DD/MM/YYYY')
-		setFilter(date)
-		actions.getBitacorasFilter({
-			pagina: 1,
-			cantidad: 10,
-			filter: parseDate,
-			identidadId: identidad.id
-		})
+		setLoading(false)
 	}
 
 	const handleDetail = (item: any) => {
@@ -169,18 +171,27 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 		)
 	}
 
+	if (state.bitacoras.loading || state.user.loading || loading)
+		return <BarLoader />
+
 	return (
 		<Wrapper>
 			{snackbar(snackBarContent.variant, snackBarContent.msg)}
 			<Title>
-				{t('estudiantes>indentidad_per>historico_camb>titulo', 'Histórico de cambios a la identidad')}
+				{t(
+					'estudiantes>indentidad_per>historico_camb>titulo',
+					'Histórico de cambios a la identidad'
+				)}
 			</Title>
 			{identidad ? (
 				<Row>
 					<Col md={6}>
-						<Card className='bg-white__radius'>
+						<Card className="bg-white__radius">
 							<CardTitle>
-								{t('estudiantes>indentidad_per>historico_camb>bitacora', 'Bitácora de cambios')}
+								{t(
+									'estudiantes>indentidad_per>historico_camb>bitacora',
+									'Bitácora de cambios'
+								)}
 							</CardTitle>
 							{data.length > 0 && (
 								<p style={{ marginTop: '5px' }}>
@@ -190,47 +201,32 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 									)}
 								</p>
 							)}
-							<ContentPicker>
-								<DatePicker
-									dateFormat='dd/MM/yyyy'
-									peekNextMonth
-									showMonthDropdown
-									showYearDropdown
-									dropdownMode='select'
-									placeholderText={t('general>buscar', 'Buscar')}
-									locale={t('general>locale', 'es')}
-									onChange={(date: string) => handleSearch(date)}
-									// onBlur={onBlur}
-									selected={filter}
-								/>
-							</ContentPicker>
 							<HTMLTable
 								columns={columns}
-								selectDisplayMode='datalist'
+								selectDisplayMode="datalist"
 								showHeaders
 								data={data}
 								isBreadcrumb={false}
 								showHeadersCenter={false}
-								match={props.match}
-								tableName='label.users'
-								/* toggleEditModal={(item: object) => null} */
+								tableName="label.users"
 								toggleModal={() => null}
 								modalOpen={false}
-								pageSize={6}
+								pageSize={paginationData.cantidad}
 								totalRegistro={state.bitacoras.totalCount}
-								handlePagination={(pageNumber: number, selectedPageSize: number) => {
+								handlePagination={(
+									pageNumber: number,
+									selectedPageSize: number
+								) => {
+									setPaginationData({
+										pagina: pageNumber,
+										cantidad: selectedPageSize
+									})
 									actions.getBitacorasIdentidad({
 										pagina: pageNumber,
 										cantidad: selectedPageSize,
 										identidadId: identidad.id
 									})
 								}}
-								handleSearch={(
-									searchValue: string,
-									selectedColumn: string,
-									selectedPageSize: number,
-									page: number
-								) => {}}
 								toggleEditModal={e => {
 									handleDetail(e)
 									setSelectedRow(e)
@@ -247,7 +243,7 @@ const HistoricoCambiosIdentidadEstudiante: React.FC<IProps> = props => {
 								hideMultipleOptions
 								readOnly
 								disableSearch
-								selectedBgColor='#14538850'
+								selectedBgColor="#14538850"
 							/>
 						</Card>
 					</Col>
@@ -278,57 +274,6 @@ const Title = styled.h4`
 	color: #000;
 `
 
-const Form = styled.form`
-	margin-top: 30px;
-	width: 40%;
-`
-
-const FormRow = styled.div`
-	display: grid;
-	grid-template-columns: 50% 30%;
-	align-items: flex-end;
-	grid-column-gap: 10px;
-	margin-bottom: 13px;
-`
-
-const FormInline = styled.div`
-	flex-direction: column;
-`
-
-const Label = styled.label`
-	color: #000;
-	display: block;
-`
-
-const Input = styled.input`
-	padding: 10px;
-	width: 100%;
-	border: 1px solid #d7d7d7;
-	background-color: #e9ecef;
-	outline: 0;
-	&:focus {
-		background: #fff;
-	}
-`
-
-const ContentPicker = styled.div`
-	& .react-datepicker__input-container input {
-		border-radius: 5px !important;
-	}
-`
-
-const Search = styled.div``
-
-const Button = styled.button`
-	background: ${colors.primary};
-	color: #fff;
-	border: 0;
-	min-height: 43px;
-	padding: 0 20px;
-	border-radius: 25px;
-	cursor: pointer;
-`
-
 const Card = styled.div`
 	background: #fff;
 	margin-top: 30px;
@@ -339,4 +284,9 @@ const CardTitle = styled.h5`
 	margin-bottom: 10px;
 `
 
-export default HistoricoCambiosIdentidadEstudiante
+export default withAuthorization({
+	id: 102,
+	Modulo: 'Expediente Estudiantil',
+	Apartado: 'Bitácora expediente',
+	Seccion: 'Histórico cambios de identidad'
+})(HistoricoCambiosIdentidadEstudiante)

@@ -17,6 +17,7 @@ import HouseIcon from '@material-ui/icons/House'
 import GroupWorkIcon from '@material-ui/icons/GroupWork'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
+import { envVariables } from 'Constants/enviroment'
 
 const Inicio = props => {
 	const { t } = useTranslation()
@@ -38,7 +39,7 @@ const Inicio = props => {
 	const validarInstitucionSCE = async () => {
 		try {
 			const response = await axios.post(
-				`https://mep-saber.azurewebsites.net/api/ServicioComunal/VerificarInstitucionAplicaSCE?idInstitucion=${idInstitucion}`
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/VerificarInstitucionAplicaSCE?idInstitucion=${idInstitucion}`
 			)
 			setAplicaSCE(response.data)
 		} catch (error) {

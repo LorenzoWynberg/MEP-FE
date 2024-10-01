@@ -27,7 +27,6 @@ const Subsidio = props => {
 													onClick={() => props.handleChangeSubsidio(item)}
 													checked={props.currentSubsidio.id === item.id}
 												/>
-
 												<p>{item.nombre}</p>
 											</Label>
 										</div>

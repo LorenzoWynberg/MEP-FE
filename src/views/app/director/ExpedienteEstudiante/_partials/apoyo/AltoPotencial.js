@@ -1,7 +1,15 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap'
+import {
+	Row,
+	Col,
+	Form,
+	FormGroup,
+	Label,
+	Input,
+	CustomInput
+} from 'reactstrap'
 import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
 import useNotification from 'Hooks/useNotification'
 import withAuthorization from '../../../../../../Hoc/withAuthorization'
@@ -16,15 +24,18 @@ import {
 	editApoyo
 } from 'Redux/apoyos/actions'
 import {
+	Checkbox,
 	FormControl,
 	FormControlLabel,
+	FormLabel,
 	Radio,
-	RadioGroup
+	RadioGroup,
+	Typography
 } from '@material-ui/core'
 import styles from './apoyos.css'
 import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
-import { getCatalogs } from 'Redux/selects/actions'
+import { getCatalogs, getCatalogsByCode } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
@@ -38,37 +49,44 @@ import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import moment from 'moment'
 import colors from 'assets/js/colors'
+import { set } from 'lodash'
 
 const categoria = {
-	id: 2,
-	nombre: 'Apoyos organizativos',
-	addDispatchName: 'apoyosorganizativos2'
+	id: 5,
+	nombre: 'Condición alto potencial',
+	addDispatchName: 'condiciónaltopotencial5'
 }
 
-const tituloModal = 'Registro de apoyos organizativos'
+const tituloModal = 'Registros de alto potencial'
 const condicionSeRecibeNombre = 'Se recibe'
 
-const ApoyosOrganizativos = props => {
+const AltoPotencial = props => {
 	const [loading, setLoading] = useState(true)
 	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
+	const [showModalTalento, setShowModalTalento] = useState(false)
 	const [data, setData] = useState([])
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
 	const [tiposApoyo, setTiposApoyo] = useState([])
 	const [tiposApoyoFilter, setTiposApoyoFilter] = useState([])
+	const [talentos, setTalentos] = useState([])
+	const [estrategias, setEstrategias] = useState([])
 	const [sortedYearList, setSortedYearList] = useState(null)
-	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
 	const [editable, setEditable] = useState(false)
-	const [radioValue, setRadioValue] = useState(0)
+	const [radioValueTalento, setRadioValueTalento] = useState(0)
+	const [radioValueApoyo, setRadioValueApoyo] = useState(0)
 	const [snackbar, handleClick] = useNotification()
 	const [snackbarContent, setSnackbarContent] = useState({
 		msg: '',
 		type: ''
 	})
+	const [aniosDeteccion, setAnionsDeteccion] = useState([])
 	const [formData, setFormData] = useState({
 		id: 0,
 		tipoDeApoyo: 0,
-		condicionApoyo: '',
-		detalleApoyo: '',
+		talentoId: '',
+		nombreTalento: '',
+		anioAprobacion: 0,
+		estrategias: [],
 		nombreApoyo: '',
 		fechaDeAprobacion: ''
 	})
@@ -77,47 +95,29 @@ const ApoyosOrganizativos = props => {
 		const data = {
 			id: 0,
 			tipoDeApoyo: 0,
-			condicionApoyo: '',
-			detalleApoyo: '',
+			talentoId: '',
+			nombreTalento: '',
+			anioAprobacion: 0,
+			estrategias: [],
 			nombreApoyo: '',
 			fechaDeAprobacion: ''
 		}
 		setFormData(data)
-		setRadioValue(0)
-		setShowFechaAprobacion(false)
+		setRadioValueTalento(0)
+		setRadioValueApoyo(0)
 	}
 
 	const primary = colors.primary
 
-	const handleFormDataChange = event => {
-		setFormData({
-			...formData,
-			[event.target.name]: event.target.value
-		})
-	}
-
 	const handleFechaAprobacionOnChange = event => {
-		debugger
-		const value = Number(event.target.value)
+		const anio = Number(event.target.value)
 
-		const condicionesApoyo = state.selects.tipoCondicionApoyo
+		const fechaInicio = '01/01/' + anio
 
-		const condicionSeRecibe = condicionesApoyo.find(
-			o => o.nombre === condicionSeRecibeNombre
-		)
-
-		let fechaAprobacion = formData.fechaDeAprobacion
-
-		if (value === condicionSeRecibe.id) {
-			setShowFechaAprobacion(true)
-		} else {
-			setShowFechaAprobacion(false)
-			fechaAprobacion = ''
-		}
 		setFormData({
 			...formData,
-			condicionApoyo: value,
-			fechaDeAprobacion: fechaAprobacion
+			fechaDeAprobacion: fechaInicio,
+			anioAprobacion: anio
 		})
 	}
 
@@ -131,7 +131,8 @@ const ApoyosOrganizativos = props => {
 		addApoyo,
 		deleteApoyo,
 		editApoyo,
-		getCatalogs
+		getCatalogs,
+		getCatalogsByCode
 	})
 
 	const state = useSelector(store => {
@@ -145,31 +146,88 @@ const ApoyosOrganizativos = props => {
 		}
 	})
 
-	const loadData = async () => {
-		try {
-			setLoading(true)
-			const response = await axios.get(
-				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/TipoApoyo`
-			)
+	useEffect(() => {
+		const loadTalentos = async () => {
+			try {
+				const catalogoTalentos = props.catalogos.find(item => {
+					return item.nombre === 'Talentos'
+				})
 
-			const tiposDeApoyo = response.data.filter(
-				tipo => tipo.categoriaApoyoId === categoria.id
-			)
-
-			setTiposApoyo(tiposDeApoyo)
-
-			const condicionApoyo = props.catalogos.find(item => {
-				return item.nombre === 'Condiciones de Apoyo'
-			})
-			if (!state.selects.tipoCondicionApoyo[0]) {
-				await actions.getCatalogs(condicionApoyo.id)
+				axios
+					.get(
+						`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyCodeType/${catalogoTalentos.id}`
+					)
+					.then(response => {
+						const data = response.data
+						setTalentos(data)
+					})
+					.catch(error => {
+						console.log(error)
+					})
+			} finally {
+				setLoading(false)
 			}
-		} finally {
-			setLoading(false)
 		}
-	}
+
+		loadTalentos()
+	}, [])
 
 	useEffect(() => {
+		const loadEstrategias = async () => {
+			try {
+				const catalogoEstategias = props.catalogos.find(item => {
+					return item.nombre === 'Estrategias de flexibilización curricular'
+				})
+
+				axios
+					.get(
+						`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyCodeType/${catalogoEstategias.id}`
+					)
+					.then(response => {
+						const data = response.data
+						setEstrategias(data)
+					})
+					.catch(error => {
+						console.log(error)
+					})
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		loadEstrategias()
+	}, [])
+
+	useEffect(() => {
+		const currentYear = new Date().getFullYear()
+		let anios = []
+		for (let i = 2015; i <= currentYear; i++) {
+			anios.push({
+				id: i,
+				nombre: i
+			})
+		}
+		setAnionsDeteccion(anios)
+	}, [])
+
+	useEffect(() => {
+		const loadData = async () => {
+			try {
+				debugger
+				setLoading(true)
+				const response = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/TipoApoyo`
+				)
+
+				const tiposDeApoyo = props.apoyos.tipos.filter(
+					tipo => Number(tipo.categoriaApoyoId) === categoria.id
+				)
+
+				setTiposApoyo(tiposDeApoyo)
+			} finally {
+				setLoading(false)
+			}
+		}
 		loadData()
 	}, [])
 
@@ -191,8 +249,37 @@ const ApoyosOrganizativos = props => {
 	}, [])
 
 	useEffect(() => {
-		filterTiposDeApoyo(tiposApoyo)
+		const yearList = state.activeYears.map(year => {
+			return { id: year.id, name: year.nombre }
+		})
+
+		const sortedYears = yearList.sort((a, b) => b.name.localeCompare(a.name))
+		setSortedYearList(sortedYears)
+
+		filterTiposDeApoyo(tiposApoyo, parseInt(sortedYears[0]?.name))
 	}, [data])
+
+	const handleClickEstrategias = item => {
+		let estrategias = formData.estrategias
+
+		const filteredEstrategias = estrategias.filter(
+			estrategia => estrategia === item.id
+		)
+
+		if (filteredEstrategias.length > 0) {
+			estrategias = estrategias.filter(estrategia => estrategia !== item.id)
+			setFormData({
+				...formData,
+				estrategias: estrategias
+			})
+		} else {
+			estrategias.push(item.id)
+			setFormData({
+				...formData,
+				estrategias: estrategias
+			})
+		}
+	}
 
 	const deleteApoyoById = apoyoId => {
 		setLoading(true)
@@ -201,14 +288,13 @@ const ApoyosOrganizativos = props => {
 				.delete(
 					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`
 				)
-				.then(() => {
-					loadData()
+				.then(response => {
 					axios
 						.get(
 							`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
 						)
-						.then(res => {
-							setData(res.data.entityList)
+						.then(response => {
+							setData(response.data.entityList)
 							setLoading(false)
 							setSnackbarContent({
 								msg: 'Se ha eliminado el registro',
@@ -243,59 +329,49 @@ const ApoyosOrganizativos = props => {
 	const onEditarEvent = row => {
 		setEditable(true)
 		setShowNuevoApoyoModal(true)
-		debugger
 
-		if (
-			!isNull(row.fechaInicio) &&
-			!isUndefined(row.fechaInicio) &&
-			!isEmpty(row.fechaInicio)
-		) {
-			setShowFechaAprobacion(true)
-		}
+		setRadioValueApoyo(row.sb_TiposDeApoyoId)
+		setRadioValueTalento(row.sB_TalentoId)
 
-		let fechaDeAprobacion = ''
-		if (!isNull(row.fechaInicio)) {
-			fechaDeAprobacion = moment(row.fechaInicio, 'DD-MM-YYYY')
+		let anioAprobacion = null
+		if (row.fechaInicio) {
+			anioAprobacion = new Date(row.fechaInicio).getFullYear()
 		}
 
 		setFormData({
 			id: row.id,
 			tipoDeApoyo: row.sb_TiposDeApoyoId,
-			condicionApoyo: row.condicionApoyoId,
-			detalleApoyo: row.detalle,
 			nombreApoyo: row.sb_TiposDeApoyo,
-			fechaDeAprobacion: fechaDeAprobacion
+			talentoId: row.sB_TalentoId,
+			nombreTalento: row.sB_TalentoDesc,
+			estrategias: row.estrategias,
+			anioAprobacion: anioAprobacion,
+			fechaDeAprobacion: row.fechaInicio
 		})
 	}
 
 	const columns = useMemo(() => {
 		return [
 			{
-				Header: 'Tipo de apoyo',
+				Header: 'Condición',
 				column: 'sb_TiposDeApoyo',
 				accessor: 'sb_TiposDeApoyo',
 				label: ''
 			},
 			{
-				Header: 'Detalle del apoyo',
-				column: 'detalle',
-				accessor: 'detalle',
+				Header: 'Talento',
+				column: 'sB_TalentoDesc',
+				accessor: 'sB_TalentoDesc',
 				label: ''
 			},
 			{
-				Header: 'Condición del apoyo',
-				column: 'condicionApoyo',
-				accessor: 'condicionApoyo',
+				Header: 'Estrategias de flexibilización',
+				column: 'estrategiasDesc',
+				accessor: 'estrategiasDesc',
 				label: ''
 			},
 			{
-				Header: 'Fecha de aprobación',
-				column: 'fechaInicio',
-				accessor: 'fechaInicio',
-				label: ''
-			},
-			{
-				Header: 'Registrado por',
+				Header: 'Registrado por (Usuario)',
 				column: 'usuarioRegistro',
 				accessor: 'usuarioRegistro',
 				label: ''
@@ -396,18 +472,24 @@ const ApoyosOrganizativos = props => {
 		let validationMessage = ''
 		let hayError = false
 
-		if (formData.tipoDeApoyo === '' || isNaN(formData.tipoDeApoyo)) {
+		if (formData.tipoDeApoyo === 0 || isNaN(formData.tipoDeApoyo)) {
 			validationMessage = '\nEl tipo de apoyo es requerido'
 			hayError = true
 		}
 
-		if (formData.condicionApoyo === '' || isNaN(formData.condicionApoyo)) {
-			validationMessage += '\nLa condición de apoyo es requerida'
+		if (formData.talentoId === '' || isNaN(formData.talentoId)) {
+			validationMessage += '\nEl talento es requerido'
 			hayError = true
 		}
 
-		if (formData.detalleApoyo === '') {
-			validationMessage += '\nEl detalle es requerido'
+		if (formData.anioAprobacion === 0) {
+			validationMessage += '\nEl año de aprobación es requerido'
+			hayError = true
+		}
+
+		if (formData.estrategias.length === 0) {
+			validationMessage +=
+				'\nDebe seleccionar al menos una estrategia de flexibilización'
 			hayError = true
 		}
 
@@ -430,18 +512,16 @@ const ApoyosOrganizativos = props => {
 		}
 
 		let _data = {
-			//
-			detalle: formData.detalleApoyo,
 			fechaInicio: formData.fechaDeAprobacion
 				? formData.fechaDeAprobacion
 				: null,
-			fechaFin: null,
+			//fechaFin: null,
 			dependenciasApoyosId: null,
 			sb_TiposDeApoyoId: parseInt(formData.tipoDeApoyo),
-			condicionApoyoId: parseInt(formData.condicionApoyo),
+			//condicionApoyoId: parseInt(formData.condicionApoyo),
 			identidadesId: state.identification.data.id,
-			sb_TalentoId: null,
-			estrategias: null
+			sb_TalentoId: parseInt(formData.talentoId),
+			estrategias: formData.estrategias
 		}
 
 		let create = true
@@ -551,7 +631,6 @@ const ApoyosOrganizativos = props => {
 			.then(response => {
 				setLoading(false)
 				setData(response.data.entityList)
-				loadData()
 			})
 			.catch(error => {
 				setLoading(false)
@@ -568,33 +647,39 @@ const ApoyosOrganizativos = props => {
 		setShowNuevoApoyoModal(false)
 	}
 
-	const filterTiposDeApoyo = tipos => {
+	const filterTiposDeApoyo = (tipos, currentYear) => {
 		let filtro = tiposApoyo
-		if (tipos && tipos.length > 0) {
-			const currentYear = moment().year()
-			filtro = tipos.filter(tipoApoyo => {
-				const hasApoyoThisYear = data.some(apoyoEstudiante => {
-					const insertionYear = moment(
-						apoyoEstudiante.fechaInsercion,
-						'DD/MM/YYYY'
-					).year()
-					const isSameTipoApoyo =
-						apoyoEstudiante.sb_TiposDeApoyoId === tipoApoyo.id
-					const isCurrentYear = insertionYear === currentYear
-					return isSameTipoApoyo && isCurrentYear
-				})
-				return !hasApoyoThisYear
-			})
+
+		if (tipos.length > 0) {
+			filtro = tipos.filter(
+				tipoApoyo =>
+					!data.some(
+						apoyoEstudiante =>
+							apoyoEstudiante.sb_TiposDeApoyoId === tipoApoyo.id &&
+							new Date(apoyoEstudiante.fechaInsercion).getFullYear() ===
+								parseInt(currentYear)
+					)
+			)
 		}
+
 		setTiposApoyoFilter(filtro)
 	}
 
 	const handleChangeItem = item => {
-		setRadioValue(item.id)
+		setRadioValueApoyo(item.id)
 		setFormData({
 			...formData,
 			tipoDeApoyo: item.id,
 			nombreApoyo: item.nombre
+		})
+	}
+
+	const handleChangeTalento = item => {
+		setRadioValueTalento(item.id)
+		setFormData({
+			...formData,
+			talentoId: item.id,
+			nombreTalento: item.nombre
 		})
 	}
 
@@ -622,7 +707,7 @@ const ApoyosOrganizativos = props => {
 						<RadioGroup
 							aria-labelledby="demo-radio-buttons-group-label"
 							name="radio-buttons-group"
-							value={radioValue}
+							value={radioValueApoyo}
 						>
 							{tiposApoyoFilter.map((item, i) => (
 								<Row key={i} style={{ marginTop: '10px' }}>
@@ -633,7 +718,7 @@ const ApoyosOrganizativos = props => {
 											justifyContent: 'left',
 											alignItems: 'left'
 										}}
-										sm={12}
+										sm={4}
 									>
 										<FormControlLabel
 											value={formData.tipoDeApoyo}
@@ -641,17 +726,62 @@ const ApoyosOrganizativos = props => {
 												e.persist()
 												handleChangeItem(item)
 											}}
-											checked={radioValue == item.id}
+											checked={radioValueApoyo == item.id}
 											control={<Radio style={{ color: primary }} />}
 											label={item.nombre}
 										/>
 									</Col>
+									<Col sm={8}>{item.detalle}</Col>
 								</Row>
 							))}
 						</RadioGroup>
 					</FormControl>
 				</div>
 			</OptionModal>
+			{/* Talentos */}
+			<OptionModal
+				isOpen={showModalTalento}
+				titleHeader={'Talentos'}
+				onConfirm={() => setShowModalTalento(false)}
+				onCancel={() => setShowModalTalento(false)}
+			>
+				<div>
+					<FormControl>
+						<RadioGroup
+							aria-labelledby="demo-radio-buttons-group-label"
+							name="radio-buttons-group"
+							value={radioValueTalento}
+						>
+							{talentos.map((item, i) => (
+								<Row key={i} style={{ marginTop: '10px' }}>
+									<Col
+										style={{
+											display: 'flex',
+											textAlign: 'left',
+											justifyContent: 'left',
+											alignItems: 'left'
+										}}
+										sm={4}
+									>
+										<FormControlLabel
+											value={formData.talentoId}
+											onClick={(e, v) => {
+												e.persist()
+												handleChangeTalento(item)
+											}}
+											checked={radioValueTalento == item.id}
+											control={<Radio style={{ color: primary }} />}
+											label={item.nombre}
+										/>
+									</Col>
+									<Col sm={8}>{item.descripcion}</Col>
+								</Row>
+							))}
+						</RadioGroup>
+					</FormControl>
+				</div>
+			</OptionModal>
+
 			<OptionModal
 				isOpen={showNuevoApoyoModal && !showModalTiposApoyo}
 				titleHeader={tituloModal}
@@ -661,9 +791,9 @@ const ApoyosOrganizativos = props => {
 			>
 				<Form onSubmit={onConfirmSaveApoyo}>
 					<Row>
-						<Col md={6}>
+						<Col md={4}>
 							<Label for="tipoDeApoyo">
-								Tipo de apoyo <RequiredSpan />
+								Condición de alto potencial <RequiredSpan />
 							</Label>
 							<StyledInput
 								id="tipoDeApoyo"
@@ -676,67 +806,74 @@ const ApoyosOrganizativos = props => {
 								value={formData.nombreApoyo || 'Seleccionar'}
 							></StyledInput>
 						</Col>
-						<Col md={6}>
-							<FormGroup>
-								<Label for="condicionDeApoyo">
-									Condición del apoyo <RequiredSpan />
-								</Label>
-								<StyledInput
-									id="condicionApoyo"
-									name="condicionApoyo"
-									type="select"
-									onChange={handleFechaAprobacionOnChange}
-									placeholder="Seleccionar"
-									value={formData.condicionApoyo}
-								>
-									<option value={null}>
-										{t('general>seleccionar', 'Seleccionar')}
-									</option>
-									{state.selects.tipoCondicionApoyo.map(tipo => {
-										return <option value={tipo.id}>{tipo.nombre}</option>
-									})}
-								</StyledInput>
-							</FormGroup>
+						<Col md={4}>
+							<Label for="talentoId">
+								Talentos <RequiredSpan />
+							</Label>
+							<StyledInput
+								id="talentoId"
+								name="talentoId"
+								type="text"
+								placeholder="Seleccionar"
+								onClick={() => {
+									setShowModalTalento(true)
+								}}
+								value={formData.nombreTalento || 'Seleccionar'}
+							></StyledInput>
+						</Col>
+
+						<Col md={4}>
+							<Label for="anioIdentificacion">
+								Año de identificación de la condición <RequiredSpan />
+							</Label>
+							<StyledInput
+								id="anioIdentificacion"
+								name="anioIdentificacion"
+								type="select"
+								onChange={handleFechaAprobacionOnChange}
+								placeholder="Seleccionar"
+								value={formData.anioAprobacion}
+							>
+								<option value={null}>
+									{t('general>seleccionar', 'Seleccionar')}
+								</option>
+								{aniosDeteccion.map(tipo => {
+									return <option value={tipo.id}>{tipo.nombre}</option>
+								})}
+							</StyledInput>
 						</Col>
 					</Row>
-					{showFechaAprobacion && (
-						<Row>
-							<Col md={6}>
+
+					<Row className="mt-4">
+						<Col md={12}>
+							<span>
+								Estrategias de flexibilización curricular <RequiredSpan />
+							</span>
+						</Col>
+					</Row>
+
+					<Row className="mt-3">
+						{estrategias.map((item, i) => (
+							<Col md={3}>
 								<FormGroup>
-									<Label for="fechaDeAprobacion">
-										Fecha de aprobación <RequiredSpan />
-									</Label>
-									<Input
-										type="date"
-										min={moment().startOf('year').format('YYYY-MM-DD')}
-										max={moment().format('YYYY-MM-DD')}
-										name="fechaDeAprobacion"
-										style={{
-											paddingRight: '12%'
-										}}
-										value={formData.fechaDeAprobacion}
-										onChange={handleFormDataChange}
+									<FormControlLabel
+										control={
+											<Checkbox
+												id={i}
+												color="primary"
+												checked={formData.estrategias.some(
+													obj => obj === item.id
+												)}
+												onClick={() => handleClickEstrategias(item)}
+											/>
+										}
+										label={
+											<Typography variant="body2">{item.nombre}</Typography>
+										}
 									/>
 								</FormGroup>
 							</Col>
-						</Row>
-					)}
-					<Row>
-						<Col md={12}>
-							<FormGroup>
-								<Label for="detalleDelApoyo">
-									Detalle del apoyo <RequiredSpan />
-								</Label>
-								<Input
-									type="textarea"
-									id="detalleApoyo"
-									name="detalleApoyo"
-									rows="5"
-									onChange={handleFormDataChange}
-									value={formData.detalleApoyo}
-								/>
-							</FormGroup>
-						</Col>
+						))}
 					</Row>
 				</Form>
 			</OptionModal>
@@ -747,9 +884,10 @@ const ApoyosOrganizativos = props => {
 const StyledInput = styled(Input)`
 	width: 100% !important;
 `
+
 export default withAuthorization({
 	id: 9,
 	Modulo: 'Expediente Estudiantil',
 	Apartado: 'Apoyos Educativos',
 	Seccion: 'Apoyos Educativos'
-})(ApoyosOrganizativos)
+})(AltoPotencial)

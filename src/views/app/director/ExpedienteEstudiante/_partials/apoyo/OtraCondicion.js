@@ -5,6 +5,7 @@ import { IoMdTrash } from 'react-icons/io'
 import Tooltip from '@mui/material/Tooltip'
 import { IconButton } from '@material-ui/core'
 import swal from 'sweetalert'
+import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
 
@@ -51,12 +52,16 @@ function OtraCondicion(props) {
 							}}
 						>
 							<Button
-								style={{
-									border: 'none',
-									background: 'transparent',
-									cursor: 'pointer',
-									color: 'grey'
-								}}
+								style={
+									!props.validations.eliminar
+										? { display: 'none' }
+										: {
+												border: 'none',
+												background: 'transparent',
+												cursor: 'pointer',
+												color: 'grey'
+										  }
+								}
 								color="primary"
 								onClick={() => {
 									swal({
@@ -93,7 +98,7 @@ function OtraCondicion(props) {
 				<Col md="12">
 					<TableReactImplementation
 						data={props.condicionesHistorico || []}
-						showAddButton
+						showAddButton={props.validations.agregar}
 						placeholderText="Buscar por nombre"
 						key={props.condicionesHistorico}
 						// avoidSearch
@@ -110,4 +115,9 @@ function OtraCondicion(props) {
 	)
 }
 
-export default OtraCondicion
+export default withAuthorization({
+	id: 9,
+	Modulo: 'Expediente Estudiantil',
+	Apartado: 'Apoyos Educativos',
+	Seccion: 'Apoyos Educativos'
+})(OtraCondicion)

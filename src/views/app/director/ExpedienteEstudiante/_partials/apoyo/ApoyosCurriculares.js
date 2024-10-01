@@ -1,17 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import {
-	Row,
-	Col,
-	Form,
-	FormGroup,
-	Label,
-	Input,
-	CustomInput
-} from 'reactstrap'
+import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap'
 import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
 import useNotification from 'Hooks/useNotification'
+import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import styled from 'styled-components'
 import {
 	getTiposApoyos,
@@ -25,16 +18,14 @@ import {
 import {
 	FormControl,
 	FormControlLabel,
-	FormLabel,
 	Radio,
 	RadioGroup
 } from '@material-ui/core'
 import styles from './apoyos.css'
 import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
-import { getCatalogs } from 'Redux/selects/actions'
+import { getCatalogs, getCatalogsByName } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
-import { catalogsEnumObj } from 'Utils/catalogsEnum'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
 import { IoMdTrash } from 'react-icons/io'
@@ -42,7 +33,6 @@ import IconButton from '@mui/material/IconButton'
 import { HiPencil } from 'react-icons/hi'
 import swal from 'sweetalert'
 import { isNull, isUndefined, isEmpty } from 'lodash'
-import BarLoader from 'Components/barLoader/barLoader'
 import Loader from 'Components/LoaderContainer'
 import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
@@ -59,7 +49,7 @@ const tituloModal = 'Registro de apoyo curricular'
 
 const condicionSeRecibeNombre = 'Se recibe'
 
-export const ApoyosCurriculares = () => {
+const ApoyosCurriculares = props => {
 	const [loading, setLoading] = useState(true)
 	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
 	const [data, setData] = useState([])
@@ -116,14 +106,18 @@ export const ApoyosCurriculares = () => {
 			o => o.nombre === condicionSeRecibeNombre
 		)
 
+		let fechaAprobacion = formData.fechaDeAprobacion
+
 		if (value === condicionSeRecibe.id) {
 			setShowFechaAprobacion(true)
 		} else {
 			setShowFechaAprobacion(false)
+			fechaAprobacion = ''
 		}
 		setFormData({
 			...formData,
-			condicionApoyo: value
+			condicionApoyo: value,
+			fechaDeAprobacion: fechaAprobacion
 		})
 	}
 
@@ -137,7 +131,8 @@ export const ApoyosCurriculares = () => {
 		addApoyo,
 		deleteApoyo,
 		editApoyo,
-		getCatalogs
+		getCatalogs,
+		getCatalogsByName
 	})
 
 	const state = useSelector(store => {
@@ -145,9 +140,7 @@ export const ApoyosCurriculares = () => {
 			expedienteEstudiantil: store.expedienteEstudiantil,
 			identification: store.identification,
 			apoyos: store.apoyos,
-			selects: store.selects,
-			activeYear: store.authUser.selectedActiveYear,
-			activeYears: store.authUser.activeYears
+			selects: store.selects
 		}
 	})
 
@@ -155,16 +148,30 @@ export const ApoyosCurriculares = () => {
 		const loadData = async () => {
 			try {
 				setLoading(true)
-				await actions.getTiposApoyos()
+				const response = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/TipoApoyo`
+				)
 
-				const tiposDeApoyo = state.apoyos.tipos.filter(
+				const tiposDeApoyo = response.data.filter(
 					tipo => tipo.categoriaApoyoId === categoria.id
 				)
 
 				setTiposApoyo(tiposDeApoyo)
 
-				!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
-					(await actions.getCatalogs(catalogsEnumObj.TIPOCONDICIONAPOYO.id))
+				const condicionApoyo = props.catalogos.find(item => {
+					return item.nombre === 'Condiciones de Apoyo'
+				})
+
+				if (!state.selects.tipoCondicionApoyo[0]) {
+					await actions.getCatalogsByName(
+						condicionApoyo.id,
+						-1,
+						-1,
+						'Condiciones de Apoyo'
+					)
+				}
+
+				console.log('Condicion de APOYO', state.selects.tipoCondicionApoyo)
 			} finally {
 				setLoading(false)
 			}
@@ -196,13 +203,13 @@ export const ApoyosCurriculares = () => {
 				.delete(
 					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`
 				)
-				.then(response => {
+				.then(() => {
 					axios
 						.get(
 							`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
 						)
-						.then(response => {
-							setData(response.data.entityList)
+						.then(res => {
+							setData(res.data.entityList)
 							setLoading(false)
 							setSnackbarContent({
 								msg: 'Se ha eliminado el registro',
@@ -246,13 +253,18 @@ export const ApoyosCurriculares = () => {
 			setShowFechaAprobacion(true)
 		}
 
+		let fechaDeAprobacion = ''
+		if (!isNull(row.fechaInicio)) {
+			fechaDeAprobacion = moment(row.fechaInicio, 'DD-MM-YYYY')
+		}
+
 		setFormData({
 			id: row.id,
 			tipoDeApoyo: row.sb_TiposDeApoyoId,
 			condicionApoyo: row.condicionApoyoId,
 			detalleApoyo: row.detalle,
 			nombreApoyo: row.sb_TiposDeApoyo,
-			fechaDeAprobacion: row.fechaInicio
+			fechaDeAprobacion: fechaDeAprobacion
 		})
 	}
 
@@ -312,12 +324,16 @@ export const ApoyosCurriculares = () => {
 							}}
 						>
 							<button
-								style={{
-									border: 'none',
-									background: 'transparent',
-									cursor: 'pointer',
-									color: 'grey'
-								}}
+								style={
+									!props.validations.modificar
+										? { display: 'none' }
+										: {
+												border: 'none',
+												background: 'transparent',
+												cursor: 'pointer',
+												color: 'grey'
+										  }
+								}
 								onClick={() => {
 									onEditarEvent(row.original)
 								}}
@@ -329,12 +345,16 @@ export const ApoyosCurriculares = () => {
 								</Tooltip>
 							</button>
 							<button
-								style={{
-									border: 'none',
-									background: 'transparent',
-									cursor: 'pointer',
-									color: 'grey'
-								}}
+								style={
+									!props.validations.eliminar
+										? { display: 'none' }
+										: {
+												border: 'none',
+												background: 'transparent',
+												cursor: 'pointer',
+												color: 'grey'
+										  }
+								}
 								onClick={() => {
 									swal({
 										title: 'Eliminar Apoyo',
@@ -549,14 +569,18 @@ export const ApoyosCurriculares = () => {
 		})
 	}
 
+	if (loading) {
+		return <Loader />
+	}
+
 	return (
 		<>
 			{/*loading && <BarLoader />*/}
-			{loading && <Loader />}
+
 			{snackbar(snackbarContent.type, snackbarContent.msg)}
 			<TableReactImplementationApoyo
 				placeholderText="Buscar por nombre"
-				showAddButton
+				showAddButton={props.validations.agregar}
 				msjButton="Agregar"
 				onSubmitAddButton={() => onAgregarEvent()}
 				data={data || []}
@@ -609,12 +633,13 @@ export const ApoyosCurriculares = () => {
 				titleHeader={tituloModal}
 				onConfirm={onConfirmSaveApoyo}
 				onCancel={() => closeAgregarModal()}
+				textConfirm="Guardar"
 			>
 				<Form onSubmit={onConfirmSaveApoyo}>
 					<Row>
 						<Col md={6}>
 							<Label for="tipoDeApoyo">
-								Tipo de apoyo <RequiredSpan />{' '}
+								Tipo de apoyo <RequiredSpan />
 							</Label>
 							<StyledInput
 								id="tipoDeApoyo"
@@ -630,7 +655,7 @@ export const ApoyosCurriculares = () => {
 						<Col md={6}>
 							<FormGroup>
 								<Label for="condicionDeApoyo">
-									Condición del apoyo <RequiredSpan />{' '}
+									Condición del apoyo <RequiredSpan />
 								</Label>
 								<StyledInput
 									id="condicionApoyo"
@@ -655,7 +680,7 @@ export const ApoyosCurriculares = () => {
 							<Col md={6}>
 								<FormGroup>
 									<Label for="fechaDeAprobacion">
-										Fecha de aprobación <RequiredSpan />{' '}
+										Fecha de aprobación <RequiredSpan />
 									</Label>
 									<Input
 										type="date"
@@ -676,7 +701,7 @@ export const ApoyosCurriculares = () => {
 						<Col md={12}>
 							<FormGroup>
 								<Label for="detalleDelApoyo">
-									Detalle del apoyo (opcional)
+									Detalle del apoyo <RequiredSpan />
 								</Label>
 								<Input
 									type="textarea"
@@ -698,3 +723,10 @@ export const ApoyosCurriculares = () => {
 const StyledInput = styled(Input)`
 	width: 100% !important;
 `
+
+export default withAuthorization({
+	id: 9,
+	Modulo: 'Expediente Estudiantil',
+	Apartado: 'Apoyos Educativos',
+	Seccion: 'Apoyos Educativos'
+})(ApoyosCurriculares)

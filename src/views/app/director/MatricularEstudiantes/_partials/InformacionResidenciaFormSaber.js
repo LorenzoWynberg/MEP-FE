@@ -132,7 +132,7 @@ const InformacionResidenciaFormSaber = (props) => {
       if (item) {
         // [provincia, canton, distrito, poblado, ...]
         const _direccionArray = item.direccionExacta.split(',')
-        setDireccionArray([item.provinciasId,item.cantonesId,item.distritosId,item.pobladoId])
+        setDireccionArray([item.provinciasId, item.cantonesId, item.distritosId, item.pobladoId])
         setLoadLocation(true)
         const _province = props.provinces.provincias.find(
           (el) => el.id == item.provinciasId
@@ -142,7 +142,7 @@ const InformacionResidenciaFormSaber = (props) => {
             _province.id,
             props.temporal
           )
-  
+
           if (provinceResponse.error) {
             return handleError()
           }
@@ -298,7 +298,7 @@ const InformacionResidenciaFormSaber = (props) => {
         )
         if (props.temporal) {
           _poblado = props.poblados.pobladosTemporales.find(
-            
+
             (item) => {
               if (isNaN(direccionArray[3])) {
                 return item.nombre === direccionArray[3].trim()
@@ -419,7 +419,7 @@ const InformacionResidenciaFormSaber = (props) => {
     setDirection("")
     search.searchTerm = _newDirection
     search.search(`${_newDirection}, CRI`)
-    search.suggest()
+    // search.suggest()
   }
 
   const handleChange = (e) => {

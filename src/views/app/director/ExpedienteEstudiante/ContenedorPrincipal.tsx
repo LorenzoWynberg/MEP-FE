@@ -7,7 +7,7 @@ import {
 	getStudentDataFilter,
 	loadStudent
 } from 'Redux/expedienteEstudiantil/actions'
-import { getDiscapacidades } from 'Redux/apoyos/actions'
+import { getDiscapacidades, getCondiciones } from 'Redux/apoyos/actions'
 import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
 import EstudianteInformationCard from './_partials/EstudianteInformationCard'
@@ -47,6 +47,8 @@ const ContenedorPrincipal = props => {
 	const [loading, setLoading] = React.useState(true)
 	const [aplicaSCE, setAplicaSCE] = React.useState(false)
 	const [breadcrumbs, setBreadcrumbs] = React.useState([])
+	const [conditionsHaveChanged, setConditionsHaveChanged] =
+		React.useState(false)
 	const idInstitucion = localStorage.getItem('idInstitucion')
 	const [infoCard, setInfoCard] = React.useState({})
 
@@ -60,6 +62,7 @@ const ContenedorPrincipal = props => {
 		getStudentDataFilter,
 		loadStudent,
 		getDiscapacidades,
+		getCondiciones,
 		getCatalogs,
 		getCatalogsSet
 	})
@@ -161,20 +164,34 @@ const ContenedorPrincipal = props => {
 			const discapacidades = await actions.getDiscapacidades(
 				state.expedienteEstudiantil.currentStudent.idEstudiante
 			)
-			const tieneDiscapacidades = !isEmpty(discapacidades) ? 'SI' : 'NO'
+			const tieneDiscapacidades = !isEmpty(discapacidades) ? true : false
+
+			const condiciones = await actions.getCondiciones(
+				state.expedienteEstudiantil.currentStudent.idEstudiante
+			)
+
+			const tieneCondiciones = !isEmpty(condiciones) ? true : false
+
+			let infoCondiciones = 'NO'
+			if (tieneDiscapacidades || tieneCondiciones) {
+				infoCondiciones = 'SI'
+			}
 
 			setInfoCard(prevState => {
 				return {
 					...prevState,
-					tieneDiscapacidades: tieneDiscapacidades
+					discapacidades: tieneDiscapacidades,
+					condiciones: tieneCondiciones,
+					tieneDiscapacidades: infoCondiciones
 				}
 			})
+			setConditionsHaveChanged(false)
 			setLoading(false)
 		}
 		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
 			loadData()
 		}
-	}, [state.expedienteEstudiantil.currentStudent])
+	}, [state.expedienteEstudiantil.currentStudent, conditionsHaveChanged])
 
 	useEffect(() => {
 		setLoading(true)
@@ -204,7 +221,7 @@ const ContenedorPrincipal = props => {
 	const validarEstudianteSCE = async () => {
 		try {
 			const response = await axios.post(
-				`https://mep-saber.azurewebsites.net/api/ServicioComunal/VerificarEstudianteAplicaSCE?idInstitucion=${idInstitucion}&idEstudiante=${state.expedienteEstudiantil.currentStudent.idEstudiante}`
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/VerificarEstudianteAplicaSCE?idInstitucion=${idInstitucion}&idEstudiante=${state.expedienteEstudiantil.currentStudent.idEstudiante}`
 			)
 			setAplicaSCE(response.data)
 		} catch (error) {
@@ -290,7 +307,10 @@ const ContenedorPrincipal = props => {
 												blockeo()
 											),
 											6: estudianteEnContexto() ? (
-												<Apoyo {...props} />
+												<Apoyo
+													{...props}
+													setConditionsHaveChanged={setConditionsHaveChanged}
+												/>
 											) : (
 												blockeo()
 											),

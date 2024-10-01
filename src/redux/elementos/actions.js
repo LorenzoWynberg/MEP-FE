@@ -44,55 +44,68 @@ const changeStateElementos = payload => ({
 	payload
 })
 
-export const getElementosByTipoCatalogoId = tipoCatalogoId => async dispatch => {
-	try {
-		const response = await axios.get(
-			`${envVariables.BACKEND_URL}/api/Catalogo/GetElementosByTipo/${tipoCatalogoId}`
-		)
-		if (response.data.error) {
-			return { data: { message: response.data.message, error: true } }
-		} else {
-			dispatch(loadElementos(response.data))
-			return { error: false }
+export const getElementosByTipoCatalogoId =
+	tipoCatalogoId => async dispatch => {
+		try {
+			const response = await axios.get(
+				`${envVariables.BACKEND_URL}/api/Catalogo/GetElementosByTipo/${tipoCatalogoId}`
+			)
+			if (response.data.error) {
+				return { data: { message: response.data.message, error: true } }
+			} else {
+				dispatch(loadElementos(response.data))
+				return { error: false }
+			}
+		} catch (error) {
+			dispatch(elementosError(error.message))
+			return { data: { message: error.message, error: true } }
 		}
-	} catch (error) {
-		dispatch(elementosError(error.message))
-		return { data: { message: error.message, error: true } }
 	}
-}
 
-export const getElementosFilterText = (filterText, page, quantity) => async dispatch => {
-	try {
-		const response = await axios.get(
-			`${envVariables.BACKEND_URL}/api/Catalogo/PaginatedFilterText/${filterText}/${page}/${quantity}`
-		)
-	} catch (error) {}
-}
-
-export const getElementosEstructura = (page, quantity, id) => async dispatch => {
-	try {
-		const response = await axios.get(
-			`${envVariables.BACKEND_URL}/api/Catalogo/paginatedElement/${page}/${quantity}/${id}`
-		)
-
-		if (response.data.error) {
-			return { data: { message: response.data.message, error: true } }
-		} else {
-			response.data.entityList.forEach(element => {
-				if (element.estado === true) {
-					element.strEstado = 'ACTIVO'
-				} else {
-					element.strEstado = 'INACTIVO'
-				}
-			})
-			dispatch(loadElementosEstructura(response.data))
-			return { error: false }
+export const getElementosFilterText =
+	(name, pageNum, pageSize) => async dispatch => {
+		try {
+			debugger
+			const response = await axios.get(
+				`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyName/${name}/${pageNum}/${pageSize}`
+			)
+			if (response.data.error) {
+				return { data: { message: response.data.message, error: true } }
+			} else {
+				dispatch(loadElementos(response.data))
+				return { error: false }
+			}
+		} catch (error) {
+			dispatch(elementosError(error.message))
+			return { data: { message: error.message, error: true } }
 		}
-	} catch (error) {
-		dispatch(elementosError(error.message))
-		return { data: { message: error.message, error: true } }
 	}
-}
+
+export const getElementosEstructura =
+	(page, quantity, id) => async dispatch => {
+		try {
+			const response = await axios.get(
+				`${envVariables.BACKEND_URL}/api/Catalogo/paginatedElement/${page}/${quantity}/${id}`
+			)
+
+			if (response.data.error) {
+				return { data: { message: response.data.message, error: true } }
+			} else {
+				response.data.entityList.forEach(element => {
+					if (element.estado === true) {
+						element.strEstado = 'ACTIVO'
+					} else {
+						element.strEstado = 'INACTIVO'
+					}
+				})
+				dispatch(loadElementosEstructura(response.data))
+				return { error: false }
+			}
+		} catch (error) {
+			dispatch(elementosError(error.message))
+			return { data: { message: error.message, error: true } }
+		}
+	}
 
 export const getElementos = () => async dispatch => {
 	try {
@@ -111,7 +124,10 @@ export const getElementos = () => async dispatch => {
 
 export const saveElementos = data => async dispatch => {
 	try {
-		const response = await axios.post(`${envVariables.BACKEND_URL}/api/Catalogo`, data)
+		const response = await axios.post(
+			`${envVariables.BACKEND_URL}/api/Catalogo`,
+			data
+		)
 		if (response.data.error) {
 			dispatch(elementosError(response.data.message))
 			return { data: { message: response.data.message, error: true } }
@@ -127,7 +143,10 @@ export const saveElementos = data => async dispatch => {
 
 export const updateElementos = data => async dispatch => {
 	try {
-		const response = await axios.put(`${envVariables.BACKEND_URL}/api/Catalogo`, data)
+		const response = await axios.put(
+			`${envVariables.BACKEND_URL}/api/Catalogo`,
+			data
+		)
 		if (response.data.error) {
 			dispatch(elementosError(response.data.message))
 			return { data: { message: response.data.message, error: true } }
