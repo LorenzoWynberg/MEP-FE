@@ -11,7 +11,6 @@ import Horarios from './Horarios'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import Loader from 'Components/Loader'
-import { use } from 'i18next'
 
 const Inicio = React.lazy(() => import('./Inicio'))
 const General = React.lazy(() => import('./General'))
@@ -22,6 +21,7 @@ const Infraestructura = React.lazy(() => import('./Infraestructura'))
 const OrganizacionAuxiliar = React.lazy(() => import('./OrganizacionAuxiliar'))
 const InformationCard = React.lazy(() => import('./_partials/InformationCard'))
 const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
+const Inventario = React.lazy(() => import('./Inventario'))
 const ServicioComunalEstudiantil = React.lazy(
 	() => import('./ServicioComunalEstudiantil')
 )
@@ -136,7 +136,8 @@ const ContenedorPrincipal = props => {
 									7: <Estadistica {...props} />,
 									8: <Grupos {...props} />,
 									9: <NormativaInterna {...props} />,
-									10: <ServicioComunalEstudiantil {...props} />
+									10: <ServicioComunalEstudiantil {...props} />,
+									11: <Inventario {...props} />
 								}[props.active]
 							}
 						</Col>

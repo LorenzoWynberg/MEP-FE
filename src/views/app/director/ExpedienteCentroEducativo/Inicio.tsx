@@ -31,7 +31,9 @@ const Inicio = props => {
 		}
 	})
 
-	const tienePermisoSCE = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
+	const tienePermisoSCE = state.permisos.find(
+		permiso => permiso.codigoSeccion == 'registrosSCE'
+	)
 
 	const validarInstitucionSCE = async () => {
 		try {
@@ -75,6 +77,8 @@ const Inicio = props => {
 				return <Normativa />
 			case 10:
 				return <Solidarity style={{ fontSize: 50 }} />
+			case 11:
+				return <Solidarity style={{ fontSize: 50 }} />
 		}
 	}
 
@@ -84,14 +88,18 @@ const Inicio = props => {
 				{loading ? (
 					<Loader />
 				) : (
-					<Colxx xxs='12' className='px-5'>
+					<Colxx xxs="12" className="px-5">
 						<Row>
 							{centroBreadcrumb.map((r, i) => {
 								if (r.active) return
-								if (i == 10 && (!aplicaSCE || !tienePermisoSCE || tienePermisoSCE.leer == 0)) return
+								if (
+									i == 10 &&
+									(!aplicaSCE || !tienePermisoSCE || tienePermisoSCE.leer == 0)
+								)
+									return
 								return (
 									<NavigationCard
-										icon=''
+										icon=""
 										title={t(r.label, `${r.label} not found`)}
 										href={r.to}
 										key={i}

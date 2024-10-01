@@ -863,6 +863,18 @@ const routes: Route[] = [
 		}
 	},
 	{
+		component: ExpedienteCentro,
+		isAuthenticated: true,
+		route: '/director/expediente-centro/inventario/equipo-de-computo',
+		exact: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 11,
+			activeTab: 0
+		}
+	},
+
+	{
 		component: Admin,
 		exact: true,
 		route: '/admin/',

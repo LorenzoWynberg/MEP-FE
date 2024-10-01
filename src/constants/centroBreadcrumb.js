@@ -52,7 +52,12 @@ const data = [
 	{
 		label: 'expediente_ce>nav>servicio_comunal', // to use IntlMessages
 		to: '/director/expediente-centro/sce',
-		active: true
+		active: false
+	},
+	{
+		label: 'expediente_ce>nav>inventario_equipo_de_computo', // to use IntlMessages
+		to: '/director/expediente-centro/inventario/equipo-de-computo',
+		active: false
 	}
 ]
 
