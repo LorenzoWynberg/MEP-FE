@@ -20,6 +20,7 @@ import {
 	getCondiciones,
 	getDiscapacidades
 } from '../../../../../../redux/apoyos/actions'
+import ApoyosEstudiante from './ApoyosEstudiante'
 
 const ApoyoEducativo = props => {
 	const { t } = useTranslation()
@@ -81,11 +82,14 @@ const ApoyoEducativo = props => {
 	useEffect(() => {
 		setLoading(true)
 		const loadCatalogos = async () => {
+			debugger
 			axios
 				.get(
 					`${envVariables.BACKEND_URL}/api/Areas/GestorCatalogos/TipoCatalogo`
 				)
 				.then(r => {
+					debugger
+					console.log('Catalogos JP', r.data)
 					setCatalogos(r.data)
 					setLoading(false)
 				})
@@ -210,7 +214,10 @@ const ApoyoEducativo = props => {
 			})
 	}
 
-	if (loading) {
+	//TODO JP props.apoyos.categorias y props.apoyos.tipos
+	console.log('JP apoyos', props.apoyos)
+
+	if (loading || catalogos.length === 0) {
 		return <Loader />
 	}
 
@@ -222,10 +229,49 @@ const ApoyoEducativo = props => {
 				setActiveTab={setActiveTab}
 			/>
 			<ContentTab activeTab={activeTab} numberId={activeTab}>
-				{activeTab === 0 && <ApoyosCurriculares catalogos={catalogos} />}
-				{activeTab === 1 && <ApoyosPersonales catalogos={catalogos} />}
-				{activeTab === 2 && <ApoyosOrganizativos catalogos={catalogos} />}
-				{activeTab === 3 && <AltoPotencial catalogos={catalogos} />}
+				{/*{activeTab === 0 && <ApoyosCurriculares catalogos={catalogos} />}
+				{activeTab === 1 && <ApoyosPersonales catalogos={catalogos} />} 
+				{activeTab === 2 && <ApoyosOrganizativos catalogos={catalogos} />}*/}
+
+				{activeTab === 0 && (
+					<ApoyosEstudiante
+						catalogos={catalogos}
+						apoyos={props.apoyos}
+						categoria={{
+							id: 4,
+							nombre: 'Apoyos curriculares',
+							addDispatchName: 'apoyoscurriculares4',
+							tituloModal: 'Registro de apoyo curricular'
+						}}
+					/>
+				)}
+				{activeTab === 1 && (
+					<ApoyosEstudiante
+						catalogos={catalogos}
+						apoyos={props.apoyos}
+						categoria={{
+							id: 1,
+							nombre: 'Apoyos personales',
+							addDispatchName: 'apoyospersonales1',
+							tituloModal: 'Registro de apoyo personal'
+						}}
+					/>
+				)}
+				{activeTab === 2 && (
+					<ApoyosEstudiante
+						catalogos={catalogos}
+						apoyos={props.apoyos}
+						categoria={{
+							id: 2,
+							nombre: 'Apoyos organizativos',
+							addDispatchName: 'apoyosorganizativos2',
+							tituloModal: 'Registro de apoyos organizativos'
+						}}
+					/>
+				)}
+				{activeTab === 3 && (
+					<AltoPotencial catalogos={catalogos} apoyos={props.apoyos} />
+				)}
 				{activeTab === 4 && (
 					<CondicionDiscapacidad
 						discapacidadesHistorico={discapacidadesHistorico}

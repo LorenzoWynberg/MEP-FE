@@ -1,7 +1,7 @@
 import { SELECTS_LOAD_CATALOGS, SELECTS_LOAD_MULTICATALOGS } from './types'
 import axios from 'axios'
 import { envVariables } from 'Constants/enviroment'
-import { catalogsEnum } from '../../utils/catalogsEnum'
+import { catalogsEnum, catalogsEnumByName } from '../../utils/catalogsEnum'
 
 const loadCatalog = (data, name) => ({
 	type: SELECTS_LOAD_CATALOGS,
@@ -38,11 +38,32 @@ export const getCatalogs =
 		}
 	}
 
+export const getCatalogsByName =
+	(type, page = -1, size = -1, name) =>
+	async (dispatch, getState) => {
+		try {
+			const _type = catalogsEnumByName.find(item => item.id === name)
+			const response = await axios.get(
+				`${envVariables.BACKEND_URL}/api/Catalogo/GetAllByType/${type}/${page}/${size}`
+			)
+			if (response.data.error) {
+				return response
+			} else {
+				dispatch(loadCatalog(response.data, _type.name))
+				return response
+			}
+		} catch (error) {
+			return { data: { message: error.message, error: true } }
+		}
+	}
+
 export const getCatalogsByCode = type => async (dispatch, getState) => {
 	try {
 		const _type = catalogsEnum.find(item => item.id === type)
 
-		const response = await axios.get(`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyCodeType/${type}`)
+		const response = await axios.get(
+			`${envVariables.BACKEND_URL}/api/Catalogo/GetAllbyCodeType/${type}`
+		)
 		if (response.data.error) {
 			return response
 		} else {
@@ -72,7 +93,10 @@ export const getMultiCatalogs = ids => async (dispatch, getState) => {
 	try {
 		const _types = catalogsEnum.filter(item => ids.includes(item.id))
 
-		const response = await axios.post(`${envVariables.BACKEND_URL}/api/Catalogo/List`, ids)
+		const response = await axios.post(
+			`${envVariables.BACKEND_URL}/api/Catalogo/List`,
+			ids
+		)
 		if (response.data.error) {
 			return response
 		} else {

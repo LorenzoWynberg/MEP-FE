@@ -219,7 +219,7 @@ const AltoPotencial = props => {
 					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/TipoApoyo`
 				)
 
-				const tiposDeApoyo = response.data.filter(
+				const tiposDeApoyo = props.apoyos.tipos.filter(
 					tipo => Number(tipo.categoriaApoyoId) === categoria.id
 				)
 

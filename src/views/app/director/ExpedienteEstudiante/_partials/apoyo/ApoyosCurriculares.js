@@ -24,7 +24,7 @@ import {
 import styles from './apoyos.css'
 import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
-import { getCatalogs } from 'Redux/selects/actions'
+import { getCatalogs, getCatalogsByName } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
@@ -106,14 +106,18 @@ const ApoyosCurriculares = props => {
 			o => o.nombre === condicionSeRecibeNombre
 		)
 
+		let fechaAprobacion = formData.fechaDeAprobacion
+
 		if (value === condicionSeRecibe.id) {
 			setShowFechaAprobacion(true)
 		} else {
 			setShowFechaAprobacion(false)
+			fechaAprobacion = ''
 		}
 		setFormData({
 			...formData,
-			condicionApoyo: value
+			condicionApoyo: value,
+			fechaDeAprobacion: fechaAprobacion
 		})
 	}
 
@@ -127,7 +131,8 @@ const ApoyosCurriculares = props => {
 		addApoyo,
 		deleteApoyo,
 		editApoyo,
-		getCatalogs
+		getCatalogs,
+		getCatalogsByName
 	})
 
 	const state = useSelector(store => {
@@ -158,8 +163,15 @@ const ApoyosCurriculares = props => {
 				})
 
 				if (!state.selects.tipoCondicionApoyo[0]) {
-					await actions.getCatalogs(condicionApoyo.id)
+					await actions.getCatalogsByName(
+						condicionApoyo.id,
+						-1,
+						-1,
+						'Condiciones de Apoyo'
+					)
 				}
+
+				console.log('Condicion de APOYO', state.selects.tipoCondicionApoyo)
 			} finally {
 				setLoading(false)
 			}
@@ -241,13 +253,18 @@ const ApoyosCurriculares = props => {
 			setShowFechaAprobacion(true)
 		}
 
+		let fechaDeAprobacion = ''
+		if (!isNull(row.fechaInicio)) {
+			fechaDeAprobacion = moment(row.fechaInicio, 'DD-MM-YYYY')
+		}
+
 		setFormData({
 			id: row.id,
 			tipoDeApoyo: row.sb_TiposDeApoyoId,
 			condicionApoyo: row.condicionApoyoId,
 			detalleApoyo: row.detalle,
 			nombreApoyo: row.sb_TiposDeApoyo,
-			fechaDeAprobacion: row.fechaInicio
+			fechaDeAprobacion: fechaDeAprobacion
 		})
 	}
 

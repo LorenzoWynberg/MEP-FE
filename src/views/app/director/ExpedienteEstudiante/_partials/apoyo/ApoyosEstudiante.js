@@ -7,9 +7,6 @@ import useNotification from 'Hooks/useNotification'
 import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import styled from 'styled-components'
 import {
-	getTiposApoyos,
-	getDependenciasApoyos,
-	getCategoriasApoyos,
 	getApoyosByType,
 	addApoyo,
 	deleteApoyo,
@@ -21,10 +18,9 @@ import {
 	Radio,
 	RadioGroup
 } from '@material-ui/core'
-import styles from './apoyos.css'
 import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
-import { getCatalogs } from 'Redux/selects/actions'
+import { getCatalogsByName } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
@@ -39,27 +35,20 @@ import RequiredSpan from 'Components/Form/RequiredSpan'
 import moment from 'moment'
 import colors from 'assets/js/colors'
 
-const categoria = {
-	id: 2,
-	nombre: 'Apoyos organizativos',
-	addDispatchName: 'apoyosorganizativos2'
-}
-
-const tituloModal = 'Registro de apoyos organizativos'
 const condicionSeRecibeNombre = 'Se recibe'
 
-const ApoyosOrganizativos = props => {
+const ApoyosEstudiante = props => {
+	const categoria = props.categoria
+	const { t } = useTranslation()
+	const [snackbar, handleClick] = useNotification()
 	const [loading, setLoading] = useState(true)
 	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
 	const [data, setData] = useState([])
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
 	const [tiposApoyo, setTiposApoyo] = useState([])
 	const [tiposApoyoFilter, setTiposApoyoFilter] = useState([])
-	const [sortedYearList, setSortedYearList] = useState(null)
 	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
-	const [editable, setEditable] = useState(false)
 	const [radioValue, setRadioValue] = useState(0)
-	const [snackbar, handleClick] = useNotification()
 	const [snackbarContent, setSnackbarContent] = useState({
 		msg: '',
 		type: ''
@@ -72,6 +61,86 @@ const ApoyosOrganizativos = props => {
 		nombreApoyo: '',
 		fechaDeAprobacion: ''
 	})
+
+	//TODO JP Borrar estas 3 lineas
+	const [editable, setEditable] = useState(false)
+	const [sortedYearList, setSortedYearList] = useState(null)
+	const [catalogos, setCatalogos] = useState([])
+
+	const primary = colors.primary
+
+	const actions = useActions({
+		getApoyosByType,
+		addApoyo,
+		deleteApoyo,
+		editApoyo,
+		getCatalogsByName
+	})
+
+	const state = useSelector(store => {
+		return {
+			expedienteEstudiantil: store.expedienteEstudiantil,
+			identification: store.identification,
+			selects: store.selects
+			//TODO JP Borrar
+			//activeYear: store.authUser.selectedActiveYear,
+			//activeYears: store.authUser.activeYears
+		}
+	})
+
+	useEffect(() => {
+		//TODO esto esta en ApoyoEducativo (PADRE)
+		const loadData = async () => {
+			try {
+				setLoading(true)
+
+				const tiposDeApoyo = props.apoyos.tipos.filter(
+					tipo => tipo.categoriaApoyoId === categoria.id
+				)
+
+				setTiposApoyo(tiposDeApoyo)
+
+				const condicionApoyo = props.catalogos.find(item => {
+					return item.nombre === 'Condiciones de Apoyo'
+				})
+				if (!state.selects.tipoCondicionApoyo[0]) {
+					await actions.getCatalogsByName(
+						condicionApoyo.id,
+						-1,
+						-1,
+						condicionApoyo.nombre
+					)
+				}
+			} finally {
+				setLoading(false)
+			}
+		}
+		loadData()
+	}, [])
+
+	//TODO JP pasar la categoria como prop
+	useEffect(() => {
+		setLoading(true)
+
+		axios
+			.get(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
+			)
+			.then(response => {
+				debugger
+				setData(response.data.entityList)
+				setLoading(false)
+			})
+			.catch(error => {
+				console.log(error)
+				setLoading(false)
+			})
+	}, [])
+
+	//TODO JP tipos de apoyo quitar el useState esto, esto viene en los props y no hacerlo para los apoyos curriculares
+	useEffect(() => {
+		filterTiposDeApoyo(tiposApoyo)
+	}, [data])
 
 	const cleanFormData = () => {
 		const data = {
@@ -87,8 +156,6 @@ const ApoyosOrganizativos = props => {
 		setShowFechaAprobacion(false)
 	}
 
-	const primary = colors.primary
-
 	const handleFormDataChange = event => {
 		setFormData({
 			...formData,
@@ -97,7 +164,6 @@ const ApoyosOrganizativos = props => {
 	}
 
 	const handleFechaAprobacionOnChange = event => {
-		debugger
 		const value = Number(event.target.value)
 
 		const condicionesApoyo = state.selects.tipoCondicionApoyo
@@ -121,79 +187,6 @@ const ApoyosOrganizativos = props => {
 		})
 	}
 
-	const { t } = useTranslation()
-
-	const actions = useActions({
-		getTiposApoyos,
-		getDependenciasApoyos,
-		getCategoriasApoyos,
-		getApoyosByType,
-		addApoyo,
-		deleteApoyo,
-		editApoyo,
-		getCatalogs
-	})
-
-	const state = useSelector(store => {
-		return {
-			expedienteEstudiantil: store.expedienteEstudiantil,
-			identification: store.identification,
-			apoyos: store.apoyos,
-			selects: store.selects,
-			activeYear: store.authUser.selectedActiveYear,
-			activeYears: store.authUser.activeYears
-		}
-	})
-
-	const loadData = async () => {
-		try {
-			setLoading(true)
-			const response = await axios.get(
-				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/TipoApoyo`
-			)
-
-			const tiposDeApoyo = response.data.filter(
-				tipo => tipo.categoriaApoyoId === categoria.id
-			)
-
-			setTiposApoyo(tiposDeApoyo)
-
-			const condicionApoyo = props.catalogos.find(item => {
-				return item.nombre === 'Condiciones de Apoyo'
-			})
-			if (!state.selects.tipoCondicionApoyo[0]) {
-				await actions.getCatalogs(condicionApoyo.id)
-			}
-		} finally {
-			setLoading(false)
-		}
-	}
-
-	useEffect(() => {
-		loadData()
-	}, [])
-
-	useEffect(() => {
-		setLoading(true)
-
-		axios
-			.get(
-				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
-			)
-			.then(response => {
-				setData(response.data.entityList)
-				setLoading(false)
-			})
-			.catch(error => {
-				console.log(error)
-				setLoading(false)
-			})
-	}, [])
-
-	useEffect(() => {
-		filterTiposDeApoyo(tiposApoyo)
-	}, [data])
-
 	const deleteApoyoById = apoyoId => {
 		setLoading(true)
 		try {
@@ -202,7 +195,6 @@ const ApoyosOrganizativos = props => {
 					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`
 				)
 				.then(() => {
-					loadData()
 					axios
 						.get(
 							`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
@@ -243,7 +235,6 @@ const ApoyosOrganizativos = props => {
 	const onEditarEvent = row => {
 		setEditable(true)
 		setShowNuevoApoyoModal(true)
-		debugger
 
 		if (
 			!isNull(row.fechaInicio) &&
@@ -396,7 +387,7 @@ const ApoyosOrganizativos = props => {
 		let validationMessage = ''
 		let hayError = false
 
-		if (formData.tipoDeApoyo === '' || isNaN(formData.tipoDeApoyo)) {
+		if (formData.tipoDeApoyo === 0 || isNaN(formData.tipoDeApoyo)) {
 			validationMessage = '\nEl tipo de apoyo es requerido'
 			hayError = true
 		}
@@ -408,6 +399,20 @@ const ApoyosOrganizativos = props => {
 
 		if (formData.detalleApoyo === '') {
 			validationMessage += '\nEl detalle es requerido'
+			hayError = true
+		}
+
+		const condicionesApoyo = state.selects.tipoCondicionApoyo
+
+		const condicionSeRecibe = condicionesApoyo.find(
+			o => o.nombre === condicionSeRecibeNombre
+		)
+
+		if (
+			formData.fechaDeAprobacion === '' &&
+			formData.condicionApoyo === condicionSeRecibe.id
+		) {
+			validationMessage += '\nLa fecha de aprobación es requerida'
 			hayError = true
 		}
 
@@ -447,7 +452,8 @@ const ApoyosOrganizativos = props => {
 		let create = true
 		//create
 		if (formData.id === 0) {
-			const existeApoyo = data.find(item => {
+			//TODO JP revisar que esto no se ocupe, en teoria ya esta filtrado
+			/*  const existeApoyo = data.find(item => {
 				if (item.sb_TiposDeApoyoId === _data.tipoDeApoyoId) {
 					const date = new Date(item.fechaInicio)
 					const anioApoyoExistente = date.getFullYear()
@@ -484,7 +490,7 @@ const ApoyosOrganizativos = props => {
 				})
 				setLoading(false)
 				return
-			}
+			} */
 
 			_data = {
 				..._data,
@@ -570,6 +576,12 @@ const ApoyosOrganizativos = props => {
 
 	const filterTiposDeApoyo = tipos => {
 		let filtro = tiposApoyo
+
+		if (categoria.nombre === 'Apoyos curriculares') {
+			setTiposApoyoFilter(filtro)
+			return
+		}
+
 		if (tipos && tipos.length > 0) {
 			const currentYear = moment().year()
 			filtro = tipos.filter(tipoApoyo => {
@@ -633,7 +645,7 @@ const ApoyosOrganizativos = props => {
 											justifyContent: 'left',
 											alignItems: 'left'
 										}}
-										sm={12}
+										sm={7}
 									>
 										<FormControlLabel
 											value={formData.tipoDeApoyo}
@@ -646,6 +658,7 @@ const ApoyosOrganizativos = props => {
 											label={item.nombre}
 										/>
 									</Col>
+									<Col sm={5}>{item.detalle}</Col>
 								</Row>
 							))}
 						</RadioGroup>
@@ -654,7 +667,7 @@ const ApoyosOrganizativos = props => {
 			</OptionModal>
 			<OptionModal
 				isOpen={showNuevoApoyoModal && !showModalTiposApoyo}
-				titleHeader={tituloModal}
+				titleHeader={categoria.tituloModal}
 				onConfirm={onConfirmSaveApoyo}
 				onCancel={() => closeAgregarModal()}
 				textConfirm="Guardar"
@@ -752,4 +765,4 @@ export default withAuthorization({
 	Modulo: 'Expediente Estudiantil',
 	Apartado: 'Apoyos Educativos',
 	Seccion: 'Apoyos Educativos'
-})(ApoyosOrganizativos)
+})(ApoyosEstudiante)

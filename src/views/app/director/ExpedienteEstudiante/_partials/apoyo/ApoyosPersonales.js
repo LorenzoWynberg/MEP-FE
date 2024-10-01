@@ -21,7 +21,6 @@ import {
 	Radio,
 	RadioGroup
 } from '@material-ui/core'
-import styles from './apoyos.css'
 import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
 import { getCatalogs } from 'Redux/selects/actions'
@@ -108,14 +107,18 @@ const ApoyosPersonales = props => {
 			o => o.nombre === condicionSeRecibeNombre
 		)
 
+		let fechaAprobacion = formData.fechaDeAprobacion
+
 		if (value === condicionSeRecibe.id) {
 			setShowFechaAprobacion(true)
 		} else {
 			setShowFechaAprobacion(false)
+			fechaAprobacion = ''
 		}
 		setFormData({
 			...formData,
-			condicionApoyo: value
+			condicionApoyo: value,
+			fechaDeAprobacion: fechaAprobacion
 		})
 	}
 
@@ -144,6 +147,7 @@ const ApoyosPersonales = props => {
 		}
 	})
 
+	//TODO esto esta en ApoyoEducativo (PADRE)
 	const loadData = async () => {
 		try {
 			setLoading(true)
@@ -173,6 +177,7 @@ const ApoyosPersonales = props => {
 		loadData()
 	}, [])
 
+	//TODO JP pasar la categoria como prop
 	useEffect(() => {
 		setLoading(true)
 
@@ -190,6 +195,7 @@ const ApoyosPersonales = props => {
 			})
 	}, [])
 
+	//TODO JP tipos de apoyo quitar el useState esto, esto viene en los props
 	useEffect(() => {
 		filterTiposDeApoyo(tiposApoyo)
 	}, [data])
@@ -252,13 +258,18 @@ const ApoyosPersonales = props => {
 			setShowFechaAprobacion(true)
 		}
 
+		let fechaDeAprobacion = ''
+		if (!isNull(row.fechaInicio)) {
+			fechaDeAprobacion = moment(row.fechaInicio, 'DD-MM-YYYY')
+		}
+
 		setFormData({
 			id: row.id,
 			tipoDeApoyo: row.sb_TiposDeApoyoId,
 			condicionApoyo: row.condicionApoyoId,
 			detalleApoyo: row.detalle,
 			nombreApoyo: row.sb_TiposDeApoyo,
-			fechaDeAprobacion: row.fechaInicio
+			fechaDeAprobacion: fechaDeAprobacion
 		})
 	}
 
