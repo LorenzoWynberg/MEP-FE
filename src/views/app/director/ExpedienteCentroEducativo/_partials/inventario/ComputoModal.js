@@ -211,7 +211,6 @@ const ComputoModal = ({
 					utilizada: formState.utilizada === true ? 1 : 0,
 					paraDonar: formState.paraDonar === true ? 1 : 0
 				}
-				console.log('LORES', submissionData)
 				// Determinar endpoint y método
 				const endpoint =
 					mode === 'edit'
@@ -224,7 +223,6 @@ const ComputoModal = ({
 					url: endpoint,
 					data: submissionData
 				})
-				console.log('LORER', response)
 				setLoading(false)
 				handleClose()
 				refetch()

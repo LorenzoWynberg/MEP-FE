@@ -85,8 +85,6 @@ const Computo = props => {
 		orientation: ''
 	})
 
-	// console.log('LORE', data)
-
 	return (
 		<div>
 			{!loading && !selectsLoading && !historicoLoading ? (
