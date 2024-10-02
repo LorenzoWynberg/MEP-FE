@@ -81,7 +81,7 @@ const ComputoModal = ({
 	// Condiciones para donar
 	const canSetParaDonar =
 		['Bueno', 'Excelente'].includes(formState.condicionNombre) &&
-		!formState.utilizada
+		formState.utilizada === false
 
 	// Settea el valor de paraDonar a false si no se cumplen las condiciones
 	useEffect(() => {
@@ -504,7 +504,7 @@ const ComputoModal = ({
 									style={{
 										borderColor: errors.utilizada ? 'red' : ''
 									}}
-									disabled={isViewMode} // Desahabilitar campo en modo vista
+									disabled={isViewMode} // Desabilitar campo en modo vista
 								>
 									<option value="">
 										{t('general>seleccionar', 'Seleccionar')}
