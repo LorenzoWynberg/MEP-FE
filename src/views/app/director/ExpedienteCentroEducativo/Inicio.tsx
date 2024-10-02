@@ -12,6 +12,7 @@ import TwoPeople from 'Assets/icons/TwoPeople'
 import Loader from 'Components/Loader'
 import Horarios from 'Assets/icons/Horarios'
 import Solidarity from 'Assets/icons/Solidarity'
+import Computador from 'Assets/icons/Computador'
 import Normativa from 'Assets/icons/Normativa'
 import HouseIcon from '@material-ui/icons/House'
 import GroupWorkIcon from '@material-ui/icons/GroupWork'
@@ -79,7 +80,7 @@ const Inicio = props => {
 			case 10:
 				return <Solidarity style={{ fontSize: 50 }} />
 			case 11:
-				return <Solidarity style={{ fontSize: 50 }} />
+				return <Computador style={{ fontSize: 50 }} />
 		}
 	}
 
