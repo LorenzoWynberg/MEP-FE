@@ -26,17 +26,31 @@ const Computo = props => {
 		refetch
 	} = useLoadComputoHistorico(filterText)
 
-	const { columns } = useLoadComputoColumns({
-		setModalMode, // Callback para settear el modo ('add', 'edit', or 'view')
-		setInitialData, // Callback para settear initial data
-		setOpenComputoModal // Callback para abrir modal
-	})
-
 	const state = useSelector(store => {
 		return {
 			selectedYear: store.authUser.selectedActiveYear,
 			currentInstitution: store.authUser.currentInstitution
 		}
+	})
+
+	const handleDelete = async id => {
+		setLoading(true)
+		try {
+			await axios.delete(`${envVariables.BACKEND_URL}/api/Inventario/${id}`)
+			refetch() // Refetch despues de borrar
+		} catch (error) {
+			console.error('Error deleting record:', error)
+			alert('Failed to delete the record. Please try again.')
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	const { columns } = useLoadComputoColumns({
+		setModalMode, // Callback para settear el modo ('add', 'edit', or 'view')
+		setInitialData, // Callback para settear initial data
+		setOpenComputoModal, // Callback para abrir modal
+		handleDelete // Callback para borrar un registro
 	})
 
 	useEffect(() => {

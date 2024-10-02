@@ -9,7 +9,8 @@ import { RemoveRedEyeRounded, Edit } from '@material-ui/icons'
 const useLoadComputoColumns = ({
 	setModalMode,
 	setInitialData,
-	setOpenComputoModal
+	setOpenComputoModal,
+	handleDelete
 }) => {
 	const { t } = useTranslation()
 	const state = useSelector(store => {
@@ -142,7 +143,24 @@ const useLoadComputoColumns = ({
 								>
 									<Delete
 										onClick={() => {
-											// Logic for deleting the record (if required)
+											swal({
+												title: 'Eliminar registro de equipo de cómputo',
+												text: '¿Esta seguro de que desea realizar esta acción?',
+												icon: 'warning',
+												className: 'text-alert-modal',
+												buttons: {
+													cancel: 'Cancelar',
+													ok: {
+														text: 'Eliminar',
+														value: true,
+														className: 'btn-alert-color'
+													}
+												}
+											}).then(async result => {
+												if (result) {
+													handleDelete(fullRow.id)
+												}
+											})
 										}}
 										style={{
 											fontSize: 25,
