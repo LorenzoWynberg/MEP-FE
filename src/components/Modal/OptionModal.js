@@ -1,11 +1,19 @@
-import { Button, Col, Container, Modal, ModalBody, ModalHeader, Row } from 'reactstrap'
+import {
+	Button,
+	Col,
+	Container,
+	Modal,
+	ModalBody,
+	ModalHeader,
+	Row
+} from 'reactstrap'
 import styles from './OptionModal.css'
 
 function OptionModal({
 	isOpen,
 	titleHeader,
 	onConfirm,
-	onCancel = () => { },
+	onCancel = () => {},
 	hideCancel = false,
 	textCancel = 'Cancelar',
 	textConfirm = 'Confirmar',
@@ -20,13 +28,25 @@ function OptionModal({
 					<Row>
 						<Col xs={12}>{children}</Col>
 					</Row>
-					<Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',paddingTop:16 }}>
+					<Row
+						style={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							paddingTop: 16
+						}}
+					>
 						{!hideCancel && (
-							<Button onClick={onCancel} color='primary' outline style={{ marginRight: 10 }}>
+							<Button
+								onClick={onCancel}
+								color="primary"
+								outline
+								style={{ marginRight: 10 }}
+							>
 								{textCancel}
 							</Button>
 						)}
-						<Button color='primary' onClick={onConfirm}>
+						<Button color="primary" onClick={onConfirm}>
 							{textConfirm}
 						</Button>
 					</Row>

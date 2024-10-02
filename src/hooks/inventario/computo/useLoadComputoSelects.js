@@ -5,7 +5,7 @@ import { useActions } from 'Hooks/useActions'
 import { getCatalogsByName } from 'Redux/selects/actions'
 import { envVariables } from 'Constants/enviroment'
 
-const useLoadSelects = () => {
+const useLoadComputoSelects = () => {
 	const [loading, setLoading] = useState(true)
 	const [selects, setSelects] = useState([])
 	const [catalogos, setCatalogos] = useState([])
@@ -107,4 +107,4 @@ const useLoadSelects = () => {
 	return { selects, loading }
 }
 
-export default useLoadSelects
+export default useLoadComputoSelects

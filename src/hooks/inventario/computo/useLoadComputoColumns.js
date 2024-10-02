@@ -6,7 +6,7 @@ import Tooltip from '@mui/material/Tooltip'
 import { useTranslation } from 'react-i18next'
 import { RemoveRedEyeRounded, Edit } from '@material-ui/icons'
 
-const useLoadColumns = () => {
+const useLoadComputoColumns = () => {
 	const { t } = useTranslation()
 	const state = useSelector(store => {
 		return {
@@ -148,4 +148,4 @@ const useLoadColumns = () => {
 	return { columns }
 }
 
-export default useLoadColumns
+export default useLoadComputoColumns

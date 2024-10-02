@@ -3,15 +3,11 @@ import { useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { useActions } from 'Hooks/useActions'
 import { useTranslation } from 'react-i18next'
-import useLoadColumns from 'Hooks/inventario/useLoadColumns'
-import useLoadSelects from 'Hooks/inventario/useLoadSelects'
-import useLoadHistorico from 'Hooks/inventario/useLoadHistorico'
+import useLoadColumns from 'Hooks/inventario/computo/useLoadComputoColumns'
+import useLoadSelects from 'Hooks/inventario/computo/useLoadComputoSelects'
+import useLoadHistorico from 'Hooks/inventario/computo/useLoadComputoHistorico'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import { getDatosDirector, clearDatosDirector } from 'Redux/institucion/actions'
-
-const Modal = props => {
-	return <div>Modal</div>
-}
 
 const Computo = props => {
 	const { data, loading: historicoLoading } = useLoadHistorico()

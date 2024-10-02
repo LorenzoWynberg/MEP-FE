@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { envVariables } from 'Constants/enviroment'
 
-const useLoadHistorico = () => {
+const useLoadComputoHistorico = () => {
 	const [loading, setLoading] = useState(true)
 	const [data, setData] = useState([])
 
@@ -36,4 +36,4 @@ const useLoadHistorico = () => {
 	return { data, loading }
 }
 
-export default useLoadHistorico
+export default useLoadComputoHistorico
