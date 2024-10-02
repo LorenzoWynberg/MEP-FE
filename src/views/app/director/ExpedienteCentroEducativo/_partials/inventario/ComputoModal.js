@@ -268,16 +268,16 @@ const ComputoModal = ({
 							value={formState.sb_condicionId || ''}
 						>
 							{selects.estadoInventarioTecnologico.map((item, i) => (
-								<Row key={i}>
-									<Col
-										style={{
-											display: 'flex',
-											textAlign: 'left',
-											justifyContent: 'left',
-											alignItems: 'left'
-										}}
-										sm={5}
-									>
+								<Row
+									className="py-2"
+									style={{
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center',
+										borderBottom: '1px solid #d7d7d7'
+									}}
+								>
+									<Col sm={4}>
 										<FormControlLabel
 											value={item.id}
 											control={
@@ -291,7 +291,7 @@ const ComputoModal = ({
 											label={item.nombre}
 										/>
 									</Col>
-									<Col sm={7}>{item.descripcion}</Col>
+									<Col sm={8}>{item.descripcion}</Col>
 								</Row>
 							))}
 						</RadioGroup>
