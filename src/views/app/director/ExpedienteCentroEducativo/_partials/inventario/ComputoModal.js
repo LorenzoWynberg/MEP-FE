@@ -99,7 +99,7 @@ const ComputoModal = ({
 	}, [canSetParaDonar, formState.paraDonar])
 
 	/* 
-      Settiar el nombre de la condición para mostrar en el
+      Settear el nombre de la condición para mostrar en el
       formulario despues de haber seleccionado del modal de radios
     */
 	useEffect(() => {
@@ -154,7 +154,7 @@ const ComputoModal = ({
 		}))
 	}
 
-	// Settiar nombre del director
+	// Settear nombre del director
 	useEffect(() => {
 		if (mode === 'add') {
 			setFormState(prev => ({
