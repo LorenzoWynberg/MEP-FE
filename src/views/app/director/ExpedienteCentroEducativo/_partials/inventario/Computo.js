@@ -5,6 +5,7 @@ import ComputoModal from './ComputoModal'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { envVariables } from 'Constants/enviroment'
+import useNotification from 'Hooks/useNotification'
 import useLoadComputoColumns from 'Hooks/inventario/computo/useLoadComputoColumns'
 import useLoadComputoSelects from 'Hooks/inventario/computo/useLoadComputoSelects'
 import useLoadComputoHistorico from 'Hooks/inventario/computo/useLoadComputoHistorico'
@@ -16,9 +17,15 @@ const Computo = props => {
 	const [nombreDirector, setNombreDirector] = useState('')
 	const [initialData, setInitialData] = useState(null)
 	const [modalMode, setModalMode] = useState('add')
+	const [snackbar, handleClick] = useNotification()
 	const [filterText, setFilterText] = useState('')
 	const [loading, setLoading] = useState(true)
 	const { t } = useTranslation()
+
+	const [snackbarContent, setSnackbarContent] = useState({
+		msg: '',
+		type: ''
+	})
 
 	const {
 		data,
@@ -37,10 +44,18 @@ const Computo = props => {
 		setLoading(true)
 		try {
 			await axios.delete(`${envVariables.BACKEND_URL}/api/Inventario/${id}`)
+			setSnackbarContent({
+				msg: 'Se ha eliminado el registro',
+				type: 'warning'
+			})
+			handleClick()
 			refetch() // Refetch despues de borrar
 		} catch (error) {
-			console.error('Error deleting record:', error)
-			alert('Failed to delete the record. Please try again.')
+			setSnackbarContent({
+				msg: 'Error eliminando el registro',
+				type: 'error'
+			})
+			handleClick()
 		} finally {
 			setLoading(false)
 		}
@@ -89,7 +104,10 @@ const Computo = props => {
 		<div>
 			{!loading && !selectsLoading && !historicoLoading ? (
 				<>
+					{snackbar(snackbarContent.type, snackbarContent.msg)}
 					<ComputoModal
+						setSnackbarContent={setSnackbarContent}
+						handleClick={handleClick}
 						nombreDirector={nombreDirector || ''}
 						selects={selects}
 						open={openComputoModal}

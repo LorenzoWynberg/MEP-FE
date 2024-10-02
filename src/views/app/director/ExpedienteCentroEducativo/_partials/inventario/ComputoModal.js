@@ -22,14 +22,15 @@ const ComputoModal = ({
 	selects,
 	nombreDirector,
 	idInstitucion,
-	refetch
+	refetch,
+	handleClick,
+	setSnackbarContent
 }) => {
 	const [showModalEstado, setShowModalEstado] = useState(false)
-	const primary = colors.primary
-	const { t } = useTranslation()
 	const [loading, setLoading] = useState(false)
-	const [submitError, setSubmitError] = useState(null)
 	const [errors, setErrors] = useState({})
+	const { t } = useTranslation()
+	const primary = colors.primary
 
 	// Definir estado inicial
 	const getInitialFormState = () => {
@@ -74,7 +75,6 @@ const ComputoModal = ({
 		if (open) {
 			setFormState(getInitialFormState())
 			setErrors({})
-			setSubmitError(null)
 		}
 	}, [open, mode, initialData])
 
@@ -202,7 +202,6 @@ const ComputoModal = ({
 	const handleSubmit = async () => {
 		if (validateFields()) {
 			setLoading(true)
-			setSubmitError(null)
 			try {
 				const submissionData = {
 					...formState,
@@ -225,12 +224,21 @@ const ComputoModal = ({
 				})
 				setLoading(false)
 				handleClose()
+				setSnackbarContent({
+					msg: edit
+						? 'Se ha modificado el registro'
+						: 'Se ha guardado el registro',
+					type: 'success'
+				})
+				handleClick()
 				refetch()
 			} catch (error) {
 				setLoading(false)
-				setSubmitError(
-					error.response?.data?.message || 'Error al guardar el registro.'
-				)
+				setSnackbarContent({
+					msg: `Error al ${edit ? 'modificar' : 'guardar'} el registro`,
+					type: 'error'
+				})
+				handleClick()
 				console.error('Error saving data:', error)
 			}
 		} else {
@@ -305,7 +313,6 @@ const ComputoModal = ({
 					handleClose()
 					setFormState(getInitialFormState()) // Settea el estado basado en el modo
 					setErrors({})
-					setSubmitError(null)
 				}}
 				textConfirm={
 					loading ? 'Guardando...' : isViewMode ? 'Cerrar' : 'Guardar'
@@ -560,14 +567,6 @@ const ComputoModal = ({
 							</FormGroup>
 						</Col>
 					</Row>
-					{submitError && (
-						<div
-							className="error-message"
-							style={{ color: 'red', marginTop: '10px' }}
-						>
-							{submitError}
-						</div>
-					)}
 				</Form>
 			</OptionModal>
 		</>
