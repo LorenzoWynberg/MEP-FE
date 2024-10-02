@@ -7,14 +7,17 @@ const useLoadComputoHistorico = () => {
 	const [loading, setLoading] = useState(true)
 	const [data, setData] = useState([])
 
-	const currentInstitution = useSelector(
-		store => store.authUser.currentInstitution
-	)
+	const state = useSelector(store => {
+		return {
+			selectedYear: store.authUser.selectedActiveYear,
+			currentInstitution: store.authUser.currentInstitution
+		}
+	})
 
 	const loadHistorico = async () => {
 		try {
 			const response = await axios.get(
-				`${envVariables.BACKEND_URL}/api/Inventario/ListarInventarioByInstitucionId/${currentInstitution.id}`
+				`${envVariables.BACKEND_URL}/api/Inventario/ListarInventarioByInstitucionId/${state.currentInstitution.id}/${state.selectedYear.nombre}`
 			)
 			if (response.data.length) {
 				setData(response.data)
@@ -27,11 +30,11 @@ const useLoadComputoHistorico = () => {
 	}
 
 	useEffect(() => {
-		if (currentInstitution?.id) {
+		if (state.currentInstitution?.id && state.selectedYear?.nombre) {
 			setLoading(true)
 			loadHistorico()
 		}
-	}, [currentInstitution?.id])
+	}, [state.currentInstitution?.id, state.selectedYear?.nombre])
 
 	return { data, loading }
 }
