@@ -19,10 +19,6 @@ const Computo = props => {
 	const { columns } = useLoadColumns()
 	const { t } = useTranslation()
 
-	const save = async () => {
-		setOpenComputoModal(false)
-	}
-
 	const state = useSelector(store => {
 		return {
 			selectedYear: store.authUser.selectedActiveYear,
