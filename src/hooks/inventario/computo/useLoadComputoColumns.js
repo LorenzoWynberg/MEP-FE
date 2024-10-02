@@ -73,7 +73,7 @@ const useLoadComputoColumns = () => {
 				label: '',
 				Cell: ({ _, row, data }) => {
 					const fullRow = data[row.index]
-					const val = fullRow.utilizada ? 'Si' : 'No'
+					const val = fullRow.paraDonar ? 'Si' : 'No'
 					return val
 				}
 			},
@@ -112,7 +112,9 @@ const useLoadComputoColumns = () => {
 									)}
 								>
 									<Edit
-										onClick={() => {}}
+										onClick={() => {
+											console.log('LORE', fullRow)
+										}}
 										style={{
 											fontSize: 25,
 											color: colors.darkGray,
