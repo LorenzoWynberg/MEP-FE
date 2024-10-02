@@ -45,7 +45,7 @@ const ComputoModal = ({
 				sb_fuenteId: '',
 				sb_condicionId: '',
 				sb_ubicacionId: '',
-				nombreDirector: '',
+				nombreDirector: nombreDirector,
 				puestoRealizaInventario: ''
 			}
 		} else if (mode === 'edit' || mode === 'view') {
@@ -55,8 +55,8 @@ const ComputoModal = ({
 			return {
 				...initialData,
 				id: initialData?.id || null,
-				condicionNombre: selectedCondicion?.nombre || '', // Use selected condition name
-				sb_condicionId: initialData?.sb_condicionId || '', // Ensure ID is set
+				condicionNombre: selectedCondicion?.nombre || '', // Settear el nombre de la condición
+				sb_condicionId: initialData?.sb_condicionId || '', // Settear el id de la condición
 				utilizada:
 					initialData?.utilizada !== undefined ? initialData.utilizada : '',
 				paraDonar:
