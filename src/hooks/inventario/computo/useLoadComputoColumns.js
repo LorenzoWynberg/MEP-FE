@@ -6,7 +6,11 @@ import Tooltip from '@mui/material/Tooltip'
 import { useTranslation } from 'react-i18next'
 import { RemoveRedEyeRounded, Edit } from '@material-ui/icons'
 
-const useLoadComputoColumns = () => {
+const useLoadComputoColumns = ({
+	setModalMode,
+	setInitialData,
+	setOpenComputoModal
+}) => {
 	const { t } = useTranslation()
 	const state = useSelector(store => {
 		return {
@@ -96,7 +100,11 @@ const useLoadComputoColumns = () => {
 								title={t('inventario>columna_acciones>ver', 'Ver registro')}
 							>
 								<RemoveRedEyeRounded
-									onClick={() => {}}
+									onClick={() => {
+										setModalMode('view') // Set mode to 'view'
+										setInitialData(fullRow) // Set the row data for viewing
+										setOpenComputoModal(true) // Open the modal
+									}}
 									style={{
 										fontSize: 25,
 										color: colors.darkGray,
@@ -113,7 +121,9 @@ const useLoadComputoColumns = () => {
 								>
 									<Edit
 										onClick={() => {
-											console.log('LORE', fullRow)
+											setModalMode('edit') // Set mode to 'edit'
+											setInitialData(fullRow) // Set the row data for editing
+											setOpenComputoModal(true) // Open the modal
 										}}
 										style={{
 											fontSize: 25,
@@ -131,7 +141,9 @@ const useLoadComputoColumns = () => {
 									)}
 								>
 									<Delete
-										onClick={() => {}}
+										onClick={() => {
+											// Logic for deleting the record (if required)
+										}}
 										style={{
 											fontSize: 25,
 											color: colors.darkGray,
@@ -145,7 +157,7 @@ const useLoadComputoColumns = () => {
 				}
 			}
 		]
-	}, [t])
+	}, [t, setModalMode, setInitialData, setOpenComputoModal])
 
 	return { columns }
 }

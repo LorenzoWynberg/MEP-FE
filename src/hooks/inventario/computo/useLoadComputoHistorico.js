@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSelector } from 'react-redux'
 import { envVariables } from 'Constants/enviroment'
 
@@ -7,34 +7,40 @@ const useLoadComputoHistorico = () => {
 	const [loading, setLoading] = useState(true)
 	const [data, setData] = useState([])
 
-	const state = useSelector(store => {
-		return {
-			selectedYear: store.authUser.selectedActiveYear,
-			currentInstitution: store.authUser.currentInstitution
-		}
-	})
+	const { selectedYear, currentInstitution } = useSelector(store => ({
+		selectedYear: store.authUser.selectedActiveYear,
+		currentInstitution: store.authUser.currentInstitution
+	}))
 
-	const loadHistorico = async () => {
+	const loadHistorico = useCallback(async () => {
+		if (!currentInstitution?.id || !selectedYear?.nombre) {
+			setData([])
+			setLoading(false)
+			return
+		}
+
 		try {
+			setLoading(true)
 			const response = await axios.get(
-				`${envVariables.BACKEND_URL}/api/Inventario/ListarInventarioByInstitucionId/${state.currentInstitution.id}/${state.selectedYear.nombre}`
+				`${envVariables.BACKEND_URL}/api/Inventario/ListarInventarioByInstitucionId/${currentInstitution.id}/${selectedYear.nombre}`
 			)
 			if (response.data.length) {
+				console.log('LORE', response.data)
 				setData(response.data)
+			} else {
+				setData([])
 			}
 		} catch (error) {
 			console.error('Error loading historical data:', error)
+			setData([])
 		} finally {
 			setLoading(false)
 		}
-	}
+	}, [currentInstitution?.id, selectedYear?.nombre])
 
 	useEffect(() => {
-		if (state.currentInstitution?.id && state.selectedYear?.nombre) {
-			setLoading(true)
-			loadHistorico()
-		}
-	}, [state.currentInstitution?.id, state.selectedYear?.nombre])
+		loadHistorico()
+	}, [loadHistorico])
 
 	return { data, loading, refetch: loadHistorico }
 }

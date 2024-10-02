@@ -18,6 +18,7 @@ function OptionModal({
 	textCancel = 'Cancelar',
 	textConfirm = 'Confirmar',
 	size = 'lg',
+	hideSubmit = false,
 	children
 }) {
 	return (
@@ -46,9 +47,11 @@ function OptionModal({
 								{textCancel}
 							</Button>
 						)}
-						<Button color="primary" onClick={onConfirm}>
-							{textConfirm}
-						</Button>
+						{!hideSubmit && (
+							<Button color="primary" onClick={onConfirm}>
+								{textConfirm}
+							</Button>
+						)}
 					</Row>
 				</Container>
 			</ModalBody>

@@ -29,19 +29,79 @@ const ComputoModal = ({
 	const { t } = useTranslation()
 	const [loading, setLoading] = useState(false)
 	const [submitError, setSubmitError] = useState(null)
-
-	const [formState, setFormState] = useState({
-		...initialData,
-		id: initialData?.id || null,
-		condicionNombre: '',
-		utilizada:
-			initialData?.utilizada !== undefined ? initialData.utilizada : '',
-		paraDonar: initialData?.paraDonar !== undefined ? initialData.paraDonar : ''
-	})
-
-	// State to track errors for each field
 	const [errors, setErrors] = useState({})
 
+	// Definir estado inicial
+	const getInitialFormState = () => {
+		if (mode === 'add') {
+			return {
+				id: null,
+				condicionNombre: '',
+				utilizada: '',
+				paraDonar: '',
+				sb_tipoActivoId: '',
+				serie: '',
+				placa: '',
+				sb_fuenteId: '',
+				sb_condicionId: '',
+				sb_ubicacionId: '',
+				nombreDirector: '',
+				puestoRealizaInventario: ''
+			}
+		} else if (mode === 'edit' || mode === 'view') {
+			const selectedCondicion = selects.estadoInventarioTecnologico.find(
+				condicion => condicion.id === initialData?.sb_condicionId
+			)
+			return {
+				...initialData,
+				id: initialData?.id || null,
+				condicionNombre: selectedCondicion?.nombre || '', // Use selected condition name
+				sb_condicionId: initialData?.sb_condicionId || '', // Ensure ID is set
+				utilizada:
+					initialData?.utilizada !== undefined ? initialData.utilizada : '',
+				paraDonar:
+					initialData?.paraDonar !== undefined ? initialData.paraDonar : ''
+			}
+		}
+		return {}
+	}
+
+	// Inicializar el estado del formulario
+	const [formState, setFormState] = useState(getInitialFormState())
+
+	// Resetear el estado del formulario cuando se abre el modal
+	useEffect(() => {
+		if (open) {
+			setFormState(getInitialFormState())
+			setErrors({})
+			setSubmitError(null)
+		}
+	}, [open, mode, initialData])
+
+	// Condiciones para donar
+	const canSetParaDonar =
+		['Bueno', 'Excelente'].includes(formState.condicionNombre) &&
+		!formState.utilizada
+
+	// Settea el valor de paraDonar a false si no se cumplen las condiciones
+	useEffect(() => {
+		if (!canSetParaDonar && formState.paraDonar !== false) {
+			setFormState(prev => ({
+				...prev,
+				paraDonar: false
+			}))
+
+			setErrors(prev => ({
+				...prev,
+				paraDonar: false
+			}))
+		}
+	}, [canSetParaDonar, formState.paraDonar])
+
+	/* 
+      Settiar el nombre de la condición para mostrar en el
+      formulario despues de haber seleccionado del modal de radios
+    */
 	useEffect(() => {
 		if (
 			formState.sb_condicionId &&
@@ -59,10 +119,11 @@ const ComputoModal = ({
 		}
 	}, [formState.sb_condicionId, selects.estadoInventarioTecnologico])
 
+	//Manejar cambios de condición
 	const handleCondicionChange = e => {
-		const selectedId = e.target.value
+		const selectedId = parseInt(e.target.value, 10)
 		const selectedCondicion = selects.estadoInventarioTecnologico.find(
-			condicion => condicion.id === parseInt(selectedId)
+			condicion => condicion.id === selectedId
 		)
 
 		setFormState(prev => ({
@@ -72,6 +133,7 @@ const ComputoModal = ({
 		}))
 	}
 
+	// Manejar cambios de datos de el formulario
 	const handleInputChange = e => {
 		const { name, value } = e.target
 		let processedValue = value
@@ -92,13 +154,17 @@ const ComputoModal = ({
 		}))
 	}
 
+	// Settiar nombre del director
 	useEffect(() => {
-		setFormState(prev => ({
-			...prev,
-			nombreDirector: nombreDirector
-		}))
-	}, [nombreDirector])
+		if (mode === 'add') {
+			setFormState(prev => ({
+				...prev,
+				nombreDirector: nombreDirector
+			}))
+		}
+	}, [nombreDirector, mode])
 
+	// Validaciones
 	const validateFields = () => {
 		const newErrors = {}
 		if (!formState.sb_tipoActivoId || formState.sb_tipoActivoId === '')
@@ -117,10 +183,22 @@ const ComputoModal = ({
 		if (formState.utilizada === '') newErrors.utilizada = true
 		if (formState.paraDonar === '') newErrors.paraDonar = true
 
+		if (formState.paraDonar) {
+			if (
+				!(
+					['Bueno', 'Excelente'].includes(formState.condicionNombre) &&
+					!formState.utilizada
+				)
+			) {
+				newErrors.paraDonar = true
+			}
+		}
+
 		setErrors(newErrors)
 		return Object.keys(newErrors).length === 0
 	}
 
+	// Enviar datos al backend
 	const handleSubmit = async () => {
 		if (validateFields()) {
 			setLoading(true)
@@ -133,18 +211,23 @@ const ComputoModal = ({
 					utilizada: formState.utilizada === true ? 1 : 0,
 					paraDonar: formState.paraDonar === true ? 1 : 0
 				}
+				console.log('LORES', submissionData)
+				// Determinar endpoint y método
+				const endpoint =
+					mode === 'edit'
+						? `${envVariables.BACKEND_URL}/api/Inventario`
+						: `${envVariables.BACKEND_URL}/api/Inventario/CrearRegistroInventario`
+				const method = mode === 'edit' ? 'put' : 'post'
 
-				const response = await axios.post(
-					`${envVariables.BACKEND_URL}/api/Inventario/CrearRegistroInventario`,
-					submissionData
-				)
-
+				const response = await axios({
+					method: method,
+					url: endpoint,
+					data: submissionData
+				})
+				console.log('LORER', response)
 				setLoading(false)
 				handleClose()
 				refetch()
-				if (onConfirm) {
-					onConfirm(response.data)
-				}
 			} catch (error) {
 				setLoading(false)
 				setSubmitError(
@@ -157,8 +240,12 @@ const ComputoModal = ({
 		}
 	}
 
+	// Modo de vista
+	const isViewMode = mode === 'view'
+
 	return (
 		<>
+			{/* Modal Estado del activo */}
 			<OptionModal
 				isOpen={showModalEstado}
 				titleHeader={'Estado del activo'}
@@ -188,8 +275,9 @@ const ComputoModal = ({
 											control={
 												<Radio
 													onClick={handleCondicionChange}
-													checked={formState.sb_condicionId == item.id}
+													checked={formState.sb_condicionId === item.id}
 													style={{ color: primary }}
+													disabled={isViewMode} // Disable in 'view' mode
 												/>
 											}
 											label={item.nombre}
@@ -203,16 +291,27 @@ const ComputoModal = ({
 				</div>
 			</OptionModal>
 
+			{/* Modal Agregar/Edit/View */}
 			<OptionModal
 				isOpen={open}
-				titleHeader={mode === 'add' ? 'Agregar registro' : 'Editar registro'}
-				onConfirm={handleSubmit}
+				titleHeader={
+					mode === 'add'
+						? 'Agregar registro'
+						: mode === 'edit'
+						? 'Editar registro'
+						: 'Ver registro'
+				}
+				hideSubmit={isViewMode}
+				onConfirm={isViewMode ? handleClose : handleSubmit} // En modo vista cerrar modal en el onConfirm
 				onCancel={() => {
 					handleClose()
+					setFormState(getInitialFormState()) // Settea el estado basado en el modo
 					setErrors({})
 					setSubmitError(null)
 				}}
-				textConfirm={loading ? 'Guardando...' : 'Guardar'}
+				textConfirm={
+					loading ? 'Guardando...' : isViewMode ? 'Cerrar' : 'Guardar'
+				}
 				disableConfirm={loading}
 			>
 				<Form>
@@ -231,6 +330,7 @@ const ComputoModal = ({
 									style={{
 										borderColor: errors.sb_tipoActivoId ? 'red' : ''
 									}}
+									disabled={isViewMode} // Desabilitar campo en modo vista
 								>
 									<option value="">
 										{t('general>seleccionar', 'Seleccionar')}
@@ -257,6 +357,7 @@ const ComputoModal = ({
 								style={{
 									borderColor: errors.serie ? 'red' : ''
 								}}
+								disabled={isViewMode} // Desahabilitar campo en modo vista
 							/>
 						</Col>
 						<Col className={'mb-3'} md={6}>
@@ -273,6 +374,7 @@ const ComputoModal = ({
 								style={{
 									borderColor: errors.placa ? 'red' : ''
 								}}
+								disabled={isViewMode} // Desahabilitar campo en modo vista
 							/>
 						</Col>
 						<Col className={'mb-3'} md={6}>
@@ -289,6 +391,7 @@ const ComputoModal = ({
 									style={{
 										borderColor: errors.sb_fuenteId ? 'red' : ''
 									}}
+									disabled={isViewMode} // Desahabilitar campo en modo vista
 								>
 									<option value="">
 										{t('general>seleccionar', 'Seleccionar')}
@@ -310,11 +413,14 @@ const ComputoModal = ({
 								name="sb_condicionId"
 								type="text"
 								placeholder="Seleccionar"
-								onClick={() => setShowModalEstado(true)}
-								value={formState.condicionNombre || 'Seleccionar'}
+								onClick={() => {
+									if (!isViewMode) setShowModalEstado(true) // Prevenir abrir modal en modo vista
+								}}
+								value={formState.condicionNombre || 'Seleccionar'} // Mostrar el nombre de la condición
 								style={{
 									borderColor: errors.sb_condicionId ? 'red' : ''
 								}}
+								disabled={isViewMode} // Desahabilitar campo en modo vista
 							/>
 						</Col>
 						<Col className={'mb-3'} md={6}>
@@ -331,6 +437,7 @@ const ComputoModal = ({
 									style={{
 										borderColor: errors.sb_ubicacionId ? 'red' : ''
 									}}
+									disabled={isViewMode} // Desahabilitar campo en modo vista
 								>
 									<option value="">
 										{t('general>seleccionar', 'Seleccionar')}
@@ -357,6 +464,7 @@ const ComputoModal = ({
 								style={{
 									borderColor: errors.nombreDirector ? 'red' : ''
 								}}
+								disabled={isViewMode || mode == 'edit'} // Desahabilitar campo en modo vista
 							/>
 						</Col>
 						<Col className={'mb-3'} md={6}>
@@ -373,6 +481,7 @@ const ComputoModal = ({
 								style={{
 									borderColor: errors.puestoRealizaInventario ? 'red' : ''
 								}}
+								disabled={isViewMode || mode == 'edit'} // Desahabilitar campo en modo vista
 							/>
 						</Col>
 						<Col className={'mb-3'} md={6}>
@@ -395,6 +504,7 @@ const ComputoModal = ({
 									style={{
 										borderColor: errors.utilizada ? 'red' : ''
 									}}
+									disabled={isViewMode} // Desahabilitar campo en modo vista
 								>
 									<option value="">
 										{t('general>seleccionar', 'Seleccionar')}
@@ -425,13 +535,30 @@ const ComputoModal = ({
 									style={{
 										borderColor: errors.paraDonar ? 'red' : ''
 									}}
+									disabled={isViewMode || !canSetParaDonar} // Desabilitar campo en modo vista o si no se cumplen las condiciones
 								>
 									<option value="">
 										{t('general>seleccionar', 'Seleccionar')}
 									</option>
-									<option value="1">{t('general>si', 'Si')}</option>
+									<option
+										value="1"
+										disabled={!canSetParaDonar} // Desabilitar opción si no se cumplen las condiciones
+										title={
+											!canSetParaDonar
+												? 'Para donar, la condición debe ser Bueno o Excelente y utilizada debe ser No.'
+												: ''
+										}
+									>
+										{t('general>si', 'Si')}
+									</option>
 									<option value="0">{t('general>no', 'No')}</option>
 								</StyledInput>
+								{!isViewMode && (
+									<small style={{ color: 'gray' }}>
+										Para donar, la condición debe ser Bueno o Excelente y
+										utilizada debe ser No.
+									</small>
+								)}
 							</FormGroup>
 						</Col>
 					</Row>

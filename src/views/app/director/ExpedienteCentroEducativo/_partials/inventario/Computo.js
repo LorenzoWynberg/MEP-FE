@@ -5,19 +5,26 @@ import ComputoModal from './ComputoModal'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { envVariables } from 'Constants/enviroment'
-import useLoadColumns from 'Hooks/inventario/computo/useLoadComputoColumns'
-import useLoadSelects from 'Hooks/inventario/computo/useLoadComputoSelects'
-import useLoadHistorico from 'Hooks/inventario/computo/useLoadComputoHistorico'
+import useLoadComputoColumns from 'Hooks/inventario/computo/useLoadComputoColumns'
+import useLoadComputoSelects from 'Hooks/inventario/computo/useLoadComputoSelects'
+import useLoadComputoHistorico from 'Hooks/inventario/computo/useLoadComputoHistorico'
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 
 const Computo = props => {
+	const { data, loading: historicoLoading, refetch } = useLoadComputoHistorico()
 	const [openComputoModal, setOpenComputoModal] = useState(false)
-	const { data, loading: historicoLoading, refetch } = useLoadHistorico()
-	const { selects, loading: selectsLoading } = useLoadSelects()
+	const { selects, loading: selectsLoading } = useLoadComputoSelects()
 	const [nombreDirector, setNombreDirector] = useState('')
+	const [initialData, setInitialData] = useState(null)
+	const [modalMode, setModalMode] = useState('add')
 	const [loading, setLoading] = useState(true)
-	const { columns } = useLoadColumns()
 	const { t } = useTranslation()
+
+	const { columns } = useLoadComputoColumns({
+		setModalMode, // Callback para settear el modo ('add', 'edit', or 'view')
+		setInitialData, // Callback para settear initial data
+		setOpenComputoModal // Callback para abrir modal
+	})
 
 	const state = useSelector(store => {
 		return {
@@ -58,6 +65,8 @@ const Computo = props => {
 		orientation: ''
 	})
 
+	// console.log('LORE', data)
+
 	return (
 		<div>
 			{!loading && !selectsLoading && !historicoLoading ? (
@@ -66,8 +75,9 @@ const Computo = props => {
 						nombreDirector={nombreDirector || ''}
 						selects={selects}
 						open={openComputoModal}
+						initialData={initialData}
 						idInstitucion={state.currentInstitution.id || ''}
-						mode="add"
+						mode={modalMode}
 						handleClose={() => {
 							setOpenComputoModal(false)
 						}}
@@ -77,6 +87,8 @@ const Computo = props => {
 						data={data}
 						showAddButton={state.selectedYear.esActivo}
 						onSubmitAddButton={() => {
+							setModalMode('add') // Set mode to "add"
+							setInitialData(null) // No initial data for adding
 							setOpenComputoModal(true)
 						}}
 						handleGetData={async (searchValue, _, pageSize, page, column) => {
