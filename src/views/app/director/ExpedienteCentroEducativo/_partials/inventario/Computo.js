@@ -11,14 +11,20 @@ import useLoadComputoHistorico from 'Hooks/inventario/computo/useLoadComputoHist
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 
 const Computo = props => {
-	const { data, loading: historicoLoading, refetch } = useLoadComputoHistorico()
-	const [openComputoModal, setOpenComputoModal] = useState(false)
 	const { selects, loading: selectsLoading } = useLoadComputoSelects()
+	const [openComputoModal, setOpenComputoModal] = useState(false)
 	const [nombreDirector, setNombreDirector] = useState('')
 	const [initialData, setInitialData] = useState(null)
 	const [modalMode, setModalMode] = useState('add')
+	const [filterText, setFilterText] = useState('')
 	const [loading, setLoading] = useState(true)
 	const { t } = useTranslation()
+
+	const {
+		data,
+		loading: historicoLoading,
+		refetch
+	} = useLoadComputoHistorico(filterText)
 
 	const { columns } = useLoadComputoColumns({
 		setModalMode, // Callback para settear el modo ('add', 'edit', or 'view')
@@ -99,13 +105,12 @@ const Computo = props => {
 								column,
 								searchValue
 							})
+							setFilterText(searchValue ? searchValue : null)
 						}}
-						// paginationObject={pagination}
 						columns={columns}
 						orderOptions={[]}
 						paginationObject={pagination}
 						pageSize={pagination.pageSize}
-						backendSearch
 					/>
 				</>
 			) : (
