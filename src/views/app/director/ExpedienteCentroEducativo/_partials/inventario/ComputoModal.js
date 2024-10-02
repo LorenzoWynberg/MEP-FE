@@ -274,7 +274,7 @@ const ComputoModal = ({
 										display: 'flex',
 										justifyContent: 'center',
 										alignItems: 'center',
-										borderBottom: '1px solid #d7d7d7'
+										borderBottom: `1px solid ${colors.opaqueGray}`
 									}}
 								>
 									<Col sm={4}>
