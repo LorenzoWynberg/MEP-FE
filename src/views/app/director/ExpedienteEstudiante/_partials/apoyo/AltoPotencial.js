@@ -50,6 +50,7 @@ const tituloModal = 'Registros de alto potencial'
 
 const AltoPotencial = props => {
 	const [loading, setLoading] = useState(true)
+	const [loadingData, setLoadingData] = useState(true)
 	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
 	const [showModalTalento, setShowModalTalento] = useState(false)
 	const [data, setData] = useState([])
@@ -185,7 +186,7 @@ const AltoPotencial = props => {
 	}, [])
 
 	useEffect(() => {
-		setLoading(true)
+		setLoadingData(true)
 
 		axios
 			.get(
@@ -193,11 +194,11 @@ const AltoPotencial = props => {
 			)
 			.then(response => {
 				setData(response.data.entityList)
-				setLoading(false)
+				setLoadingData(false)
 			})
 			.catch(error => {
 				console.log(error)
-				setLoading(false)
+				setLoadingData(false)
 			})
 	}, [])
 
@@ -569,7 +570,6 @@ const AltoPotencial = props => {
 			})
 
 		cleanFormData()
-		setLoading(false)
 		closeAgregarModal()
 	}
 
@@ -597,8 +597,9 @@ const AltoPotencial = props => {
 	}
 
 	if (
-		loading &&
-		state.selects.talentos.length === 0 &&
+		loading ||
+		loadingData ||
+		state.selects.talentos.length === 0 ||
 		state.selects.estrategiasFlexibilidadCurricular.length === 0
 	) {
 		return <Loader />

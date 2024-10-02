@@ -9,10 +9,7 @@ import Loader from 'Components/LoaderContainer'
 import CondicionDiscapacidad from './CondicionDiscapacidad'
 import OtraCondicion from './OtraCondicion'
 import axios from 'axios'
-import ApoyosCurriculares from './ApoyosCurriculares'
-import ApoyosPersonales from './ApoyosPersonales'
 import AltoPotencial from './AltoPotencial'
-import ApoyosOrganizativos from './ApoyosOrganizativos'
 import OptionModal from '../../../../../../components/Modal/OptionModal'
 import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
 import { isEmpty } from 'lodash'
@@ -223,10 +220,6 @@ const ApoyoEducativo = props => {
 				setActiveTab={setActiveTab}
 			/>
 			<ContentTab activeTab={activeTab} numberId={activeTab}>
-				{/*{activeTab === 0 && <ApoyosCurriculares catalogos={catalogos} />}
-				{activeTab === 1 && <ApoyosPersonales catalogos={catalogos} />} 
-				{activeTab === 2 && <ApoyosOrganizativos catalogos={catalogos} />}*/}
-
 				{activeTab === 0 && (
 					<ApoyosEstudiante
 						catalogos={catalogos}
