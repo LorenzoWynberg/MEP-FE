@@ -225,9 +225,9 @@ const ComputoModal = ({
 				setLoading(false)
 				handleClose()
 				setSnackbarContent({
-					msg: edit
-						? 'Se ha modificado el registro'
-						: 'Se ha guardado el registro',
+					msg: `Se ha ${
+						mode === 'edit' ? 'modificado' : 'guardado'
+					} el registro`,
 					type: 'success'
 				})
 				handleClick()
@@ -235,7 +235,9 @@ const ComputoModal = ({
 			} catch (error) {
 				setLoading(false)
 				setSnackbarContent({
-					msg: `Error al ${edit ? 'modificar' : 'guardar'} el registro`,
+					msg: `Error al ${
+						mode === 'edit' ? 'modificar' : 'guardar'
+					} el registro`,
 					type: 'error'
 				})
 				handleClick()
