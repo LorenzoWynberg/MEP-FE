@@ -36,7 +36,7 @@ const useLoadComputoHistorico = () => {
 		}
 	}, [state.currentInstitution?.id, state.selectedYear?.nombre])
 
-	return { data, loading }
+	return { data, loading, refetch: loadHistorico }
 }
 
 export default useLoadComputoHistorico
