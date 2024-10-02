@@ -24,16 +24,21 @@ const useLoadComputoSelects = () => {
 			setCatalogos(response.data)
 		} catch (error) {
 			console.error('Error loading catalogos:', error)
-			setLoading(false) // If error, stop loading
+			setLoading(false)
 		}
 	}
 
 	const loadSelects = async () => {
 		if (!catalogos.length) return
 
-		let data = []
+		let data = {
+			tipoActivoInventarioTecnologico: [],
+			estadoInventarioTecnologico: [],
+			ubicacionInventarioTecnologico: [],
+			fuenteInventarioTecnologico: []
+		}
 
-		//Tipo activo inventario tecnológico
+		// Tipo activo inventario tecnológico
 		const tipoActivo = catalogos.find(
 			item => item.nombre === 'Tipo activo inventario tecnológico'
 		)
@@ -44,10 +49,10 @@ const useLoadComputoSelects = () => {
 				-1,
 				tipoActivo.nombre
 			)
-			data.push(res1.data)
+			data.tipoActivoInventarioTecnologico = res1.data
 		}
 
-		//Estado inventario tecnológico
+		// Estado inventario tecnológico
 		const estadoInventario = catalogos.find(
 			item => item.nombre === 'Estado inventario tecnológico'
 		)
@@ -58,10 +63,10 @@ const useLoadComputoSelects = () => {
 				-1,
 				estadoInventario.nombre
 			)
-			data.push(res2.data)
+			data.estadoInventarioTecnologico = res2.data
 		}
 
-		//Ubicación inventario tecnológico
+		// Ubicación inventario tecnológico
 		const ubicacionInventario = catalogos.find(
 			item => item.nombre === 'Ubicación inventario tecnológico'
 		)
@@ -72,10 +77,10 @@ const useLoadComputoSelects = () => {
 				-1,
 				ubicacionInventario.nombre
 			)
-			data.push(res3.data)
+			data.ubicacionInventarioTecnologico = res3.data
 		}
 
-		//Fuente inventario tecnológico
+		// Fuente inventario tecnológico
 		const fuenteInventario = catalogos.find(
 			item => item.nombre === 'Fuente inventario tecnológico'
 		)
@@ -86,7 +91,7 @@ const useLoadComputoSelects = () => {
 				-1,
 				fuenteInventario.nombre
 			)
-			data.push(res4.data)
+			data.fuenteInventarioTecnologico = res4.data
 		}
 
 		setSelects(data)
