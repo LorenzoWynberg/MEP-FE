@@ -65,8 +65,7 @@ const General = (props) => {
 						toggleSnackbar={toggleSnackbar}
 						handleClick={handleClick}
 					/>
-				)}
-				{console.log('state.expedienteEstudiantil.currentStudent', state)}
+				)} 
 				{activeTab === 1 && state.expedienteEstudiantil.currentStudent.tipoIdentificacion != "CÉDULA" && < DatosRegistrales />}
 			</ContentTab>
 		</div>

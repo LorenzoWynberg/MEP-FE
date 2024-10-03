@@ -314,17 +314,13 @@ const ContenedorPrincipal = props => {
 											) : (
 												blockeo()
 											),
+										
 											7: estudianteEnContexto() ? (
-												<AreaCurricular {...props} />
-											) : (
-												blockeo()
-											),
-											8: estudianteEnContexto() ? (
 												<Salud {...props} />
 											) : (
 												blockeo()
 											),
-											9: estudianteEnContexto() ? (
+											8: estudianteEnContexto() ? (
 												<Oferta
 													{...props}
 													historialMatricula={state.historialMatricula}
@@ -334,7 +330,7 @@ const ContenedorPrincipal = props => {
 											),
 											// 	10: <Sinirube {...props} />,
 											//10: <CuentaCorreo {...props} />,
-											10: estudianteEnContexto() ? (
+											9: estudianteEnContexto() ? (
 												<CuentaUsuarios
 													{...props}
 													expedienteEstudiantil={state.expedienteEstudiantil}
@@ -342,16 +338,21 @@ const ContenedorPrincipal = props => {
 											) : (
 												blockeo()
 											),
-											11: estudianteEnContexto() ? (
+											10: estudianteEnContexto() ? (
 												<ServicioComunalEstudiantil {...props} />
 											) : (
 												blockeo()
 											),
-											12: estudianteEnContexto() ? (
+											11: estudianteEnContexto() ? (
 												<BitacoraExpediente {...props} />
 											) : (
 												blockeo()
 											)
+												// 7: estudianteEnContexto() ? (
+											// 	<AreaCurricular {...props} />
+											// ) : (
+											// 	blockeo()
+											// ),
 										}[active]
 									}
 								</>

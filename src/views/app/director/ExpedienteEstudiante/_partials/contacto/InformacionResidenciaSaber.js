@@ -782,6 +782,7 @@ const InformacionResidenciaSaber = props => {
 									color="primary"
 									onClick={() => {
 										setInitiaState()
+										setDirection('')
 									}}
 								>
 									Limpiar campos
