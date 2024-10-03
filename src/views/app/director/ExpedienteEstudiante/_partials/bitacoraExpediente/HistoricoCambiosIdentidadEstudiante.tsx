@@ -285,7 +285,7 @@ const CardTitle = styled.h5`
 `
 
 export default withAuthorization({
-	id: 100,
+	id: 102,
 	Modulo: 'Expediente Estudiantil',
 	Apartado: 'Bitácora expediente',
 	Seccion: 'Histórico cambios de identidad'

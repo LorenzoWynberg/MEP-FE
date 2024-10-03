@@ -221,7 +221,7 @@ const ContenedorPrincipal = props => {
 	const validarEstudianteSCE = async () => {
 		try {
 			const response = await axios.post(
-				`https://mep-saber.azurewebsites.net/api/ServicioComunal/VerificarEstudianteAplicaSCE?idInstitucion=${idInstitucion}&idEstudiante=${state.expedienteEstudiantil.currentStudent.idEstudiante}`
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/VerificarEstudianteAplicaSCE?idInstitucion=${idInstitucion}&idEstudiante=${state.expedienteEstudiantil.currentStudent.idEstudiante}`
 			)
 			setAplicaSCE(response.data)
 		} catch (error) {

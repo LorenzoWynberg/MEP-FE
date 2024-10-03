@@ -65,11 +65,10 @@ const InfoGeneral = props => {
 			const response = await actions.getCatalogsSet(catalogsArray)
 
 			if (response.error) {
-				setSnackbarContent({
-					variant: 'error',
-					msg: 'Hubo un error al tratar de conseguir los datos del servidor'
-				})
-				handleClick()
+				toggleSnackbar(
+					'error',
+					'Hubo un error al tratar de conseguir los datos del servidor'
+				)
 			}
 		}
 		loadData()
@@ -224,21 +223,14 @@ const InfoGeneral = props => {
 		setPrevIdentidadData(_data)
 		setIdentidadData(_data)
 		let response = await actions.updateIdentity(_data)
-
+		setEditable(false)
 		if (response.data.error) {
-			setSnackbarContent({
-				variant: 'error',
-				msg: response.data.message
-			})
-			handleClick()
+			toggleSnackbar('error', response.data.message)
 			handleCancelEdit(true)
 		} else {
-			setSnackbarContent({
-				variant: 'success',
-				msg: '¡Los datos se han actualizado con éxito!'
-			})
+			toggleSnackbar('success', '¡Los datos se han actualizado con éxito!')
 			handleClick()
-			setEditable(false)
+
 			setPrevIdentidadData(null)
 		}
 	}

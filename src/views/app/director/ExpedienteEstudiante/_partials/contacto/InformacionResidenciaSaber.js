@@ -164,7 +164,7 @@ const InformacionResidenciaSaber = props => {
 				})
 			}
 			setEditDirection(item)
-			setDirection(item.direccionExacta)
+			  setDirection(item.direccionExacta)
 			setLocation({
 				latitude: item.latitud,
 				longitude: item.longitud
@@ -314,7 +314,7 @@ const InformacionResidenciaSaber = props => {
 		setDirection(e.target.value)
 	}
 
-	const handleSearchBySelects = (data, name) => {
+	const handleSearchBySelects = useCallback(()=>(data, name) => {
 		if (search) {
 			search.clear()
 		}
@@ -337,16 +337,17 @@ const InformacionResidenciaSaber = props => {
 				break
 			case 'poblado':
 				_newDirection = `${currentProvince.label}, ${currentCanton.label}, ${currentDistrito.label}`
+				setDirection('') 
 				setCurrentPoblado(data)
 				break
 			default:
 				return null
 		}
 		search.searchTerm = _newDirection
-		setDirection('')
+		//
 		search.search(`${_newDirection}, CRI`)
-		search.suggest()
-	}
+		// search.suggest()
+	},[])
 
 	const handleChange = e => {
 		setRazon(e.target.value)
@@ -373,10 +374,10 @@ const InformacionResidenciaSaber = props => {
 		let error = _errors['poblado']
 			? true
 			: _errors['razon']
-			? true
-			: _errors['direccionExacta']
-			? true
-			: false
+				? true
+				: _errors['direccionExacta']
+					? true
+					: false
 		setErrors(_errors)
 
 		if (error) {
@@ -393,8 +394,8 @@ const InformacionResidenciaSaber = props => {
 				...editDirection,
 				temporal: props.temporal,
 				razon,
-				latitud: location.latitude,
-				longitud: location.longitude,
+				latitud: location.latitude == '' ? null : location.latitude,
+				longitud: location.longitude == '' ? null : location.longitude,
 				pobladoId: currentPoblado.value,
 				pobladosId: currentPoblado.value,
 				cantonesId: currentCanton.value,
@@ -406,6 +407,7 @@ const InformacionResidenciaSaber = props => {
 				estado: true
 			}
 			if (!validateData(_data).error) {
+				console.log('_data', _data)
 				response = await props.updateDirection(_data, {
 					identidadId: props?.identification.data?.id,
 					tipo: props.temporal ? 1 : 0,
@@ -414,8 +416,8 @@ const InformacionResidenciaSaber = props => {
 						canton: currentCanton,
 						distrito: currentDistrito,
 						poblado: currentPoblado,
-						latitude: location.latitude,
-						longitude: location.longitude,
+						latitud: location.latitude == '' ? null : location.latitude,
+						longitud: location.longitude == '' ? null : location.longitude,
 						razon,
 						territorio: currentTerritory,
 						identidadId: props?.identification.data?.id,
@@ -435,8 +437,8 @@ const InformacionResidenciaSaber = props => {
 			_data = {
 				temporal: props.temporal,
 				razon,
-				latitud: location.latitude,
-				longitud: location.longitude,
+				latitud: location.latitude == '' ? null : location.latitude,
+				longitud: location.longitude == '' ? null : location.longitude,
 				pobladoId: currentPoblado.value,
 				pobladosId: currentPoblado.value,
 				cantonesId: currentCanton.value,
@@ -448,6 +450,8 @@ const InformacionResidenciaSaber = props => {
 				estado: true
 			}
 			if (!validateData(_data).error) {
+
+				console.log('_data', _data)
 				response = await props.createDirection(_data, {
 					identidadId: props?.identification.data?.id,
 					tipo: props.temporal ? 1 : 0,
@@ -456,8 +460,8 @@ const InformacionResidenciaSaber = props => {
 						canton: currentCanton,
 						distrito: currentDistrito,
 						poblado: currentPoblado,
-						latitude: location.latitude,
-						longitude: location.longitude,
+						latitud: location.latitude == '' ? null : location.latitude,
+						longitud: location.longitude == '' ? null : location.longitude,
 						razon,
 						identidadId: props?.identification.data?.id,
 						temporal: props.temporal,

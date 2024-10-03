@@ -32,7 +32,7 @@ const InformacionResidenciaFija = withAuthorization({
 })(InformacionResidenciaSaber)
 
 const HistoricoResidenciaAuth = withAuthorization({
-	id: 102,
+	id: 104,
 	Modulo: 'Expediente Estudiantil',
 	Apartado: 'Informacion de Contacto',
 	Seccion: 'Historico de residencias'
