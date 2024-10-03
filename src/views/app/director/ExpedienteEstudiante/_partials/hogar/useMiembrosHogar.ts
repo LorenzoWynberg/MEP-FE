@@ -757,8 +757,20 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		formBody.append('tipoIdentificacionId', state.tipoIdentificacion?.id)
 		formBody.append('nacionalidadId', state.nacionalidad?.id)
 		formBody.append('sexoId', state.sexo?.id)
-		formBody.append('condicionLaboralId', state.condicionLaboral?.id)
-		formBody.append('escolaridadId', state.escolaridad?.id)
+
+		if (
+			state.condicionLaboral?.id !== null &&
+			state.condicionLaboral?.id !== undefined
+		) {
+			formBody.append('condicionLaboralId', state.condicionLaboral?.id)
+		}
+
+		if (state.escolaridad?.id !== null && state.escolaridad?.id !== undefined) {
+			formBody.append('escolaridadId', state.escolaridad?.id)
+		}
+		//formBody.append('condicionLaboralId', state.condicionLaboral?.id)
+		//formBody.append('escolaridadId', state.escolaridad?.id || null)
+
 		formBody.append('parentescoId', state.relacionConEstudiante?.id)
 		state.condicionDiscapacidad.forEach(i => {
 			formBody.append('discapacidadesId', i.id)
@@ -806,7 +818,7 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			return null
 		}
 	}
-	const onGuardarClick = async (regresar,callback) => {
+	const onGuardarClick = async (regresar, callback) => {
 		if (
 			// !state.condicionLaboral?.id ||
 			// !state.escolaridad?.id ||
@@ -815,9 +827,9 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			// !state.correo ||
 			!state.identificacion
 		) {
-			console.log('state',state)
-			errorToast('Faltan rellenar campos obligatorios') 
-			callback();
+			console.log('state', state)
+			errorToast('Faltan rellenar campos obligatorios')
+			callback()
 			return
 		}
 		if (state.isNew) {
@@ -828,20 +840,22 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 					regresar()
 					callback()
 					toggleEditable(false)
-					infoToast('Guardado correctamente') 
+					infoToast('Guardado correctamente')
 				})
 				.catch(e => {
 					regresar()
 					callback()
-					
+
 					console.error(e)
 					errorToast('Se ha producido un error')
 				})
 		} else {
-			onUpdateClick(() => { callback() })
+			onUpdateClick(() => {
+				regresar()
+			})
 		}
 	}
-	const onUpdateClick = (callback) => {
+	const onUpdateClick = callback => {
 		const request = getRequest('update')
 		api
 			.editMiembroHogarRequest(request)
