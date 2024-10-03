@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
 import { Col, Row } from 'reactstrap'
-import AppLayout from 'Layout/AppLayout'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { useActions } from '../../../../hooks/useActions'
@@ -18,35 +17,31 @@ const ServicioComunalEstudiantil = props => {
 
 	const state = useSelector(store => {
 		return {
-			expedienteEstudiantil: store.expedienteEstudiantil,
 			identification: store.identification,
-			historialMatricula: store.identification.matriculaHistory,
-			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
 			permisos: store.authUser.rolPermisos
 		}
 	})
 
-	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'expedienteEstudianteSCE')
+	const tienePermiso = state.permisos.find(
+		permiso => permiso.codigoSeccion == 'expedienteEstudianteSCE'
+	)
 
 	useEffect(() => {
-		let id = state.expedienteEstudiantil?.currentStudent?.idEstudiante
-			? state.expedienteEstudiantil?.currentStudent?.idEstudiante
-			: localStorage.getItem('state.expedienteEstudiantil.currentStudent.idEstudiante')
 		actions
-			.GetServicioComunalInfoByStudentId(id)
+			.GetServicioComunalInfoByStudentId(state.identification)
 			.then(res => {
 				setServicioData(res)
 			})
 			.finally(() => setLoading(false))
-	}, [state.expedienteEstudiantil.currentStudent.idEstudiante])
+	}, [state.identification])
 
-	useEffect(() => {
-		state.expedienteEstudiantil?.currentStudent?.idEstudiante &&
-			localStorage.setItem(
-				'state.expedienteEstudiantil.currentStudent.idEstudiante',
-				state.expedienteEstudiantil.currentStudent.idEstudiante
-			)
-	}, [state.expedienteEstudiantil.currentStudent.idEstudiante])
+	if (!servicioData?.length) {
+		return (
+			<h4>
+				{t('No cuenta con registro de servicio comunal estudiantil asociado')}
+			</h4>
+		)
+	}
 
 	if (!tienePermiso || tienePermiso?.leer == 0) {
 		return <h4>{t('No tienes permisos para acceder a esta sección')}</h4>
@@ -55,7 +50,7 @@ const ServicioComunalEstudiantil = props => {
 	return (
 		<div>
 			{loading && <BarLoader />}
-			<Paper className='p-5 mb-5'>
+			<Paper className="p-5 mb-5">
 				<Row>
 					<Col style={{ marginBottom: 16 }} sm={12}>
 						<strong>
@@ -63,56 +58,84 @@ const ServicioComunalEstudiantil = props => {
 						</strong>
 						<hr />
 					</Col>
-					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>areaProyecto', 'Área de proyecto')}:</strong>
+					<Col sm={4} className="mb-3">
+						<strong>
+							{t('informationcarddetalle>areaProyecto', 'Área de proyecto')}:
+						</strong>
 						<br />
 						<span>{servicioData?.areaProyecto}</span>
 					</Col>
-					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>nombreProyecto', 'Nombre del proyecto')}: </strong>
+					<Col sm={4} className="mb-3">
+						<strong>
+							{t(
+								'informationcarddetalle>nombreProyecto',
+								'Nombre del proyecto'
+							)}
+							:{' '}
+						</strong>
 						<br />
 						<span>{servicioData?.nombreProyecto}</span>
 					</Col>
-					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>modalidad', 'Tipo de proyecto')}:</strong>
+					<Col sm={4} className="mb-3">
+						<strong>
+							{t('informationcarddetalle>modalidad', 'Tipo de proyecto')}:
+						</strong>
 						<br />
 						<span>{servicioData?.modalidadProyecto}</span>
 					</Col>
-					<Col sm={4} className='mb-3'>
+					<Col sm={4} className="mb-3">
 						<strong>
-							{t('informationcarddetalle>organizaciónContraParte', 'Tipo de organización contraparte')}:
+							{t(
+								'informationcarddetalle>organizaciónContraParte',
+								'Tipo de organización contraparte'
+							)}
+							:
 						</strong>
 						<br />
 						<span>{servicioData?.organizacionContraparte}</span>
 					</Col>
-					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>docenteAcompan', 'Persona tutor/a')}:</strong>
+					<Col sm={4} className="mb-3">
+						<strong>
+							{t('informationcarddetalle>docenteAcompan', 'Persona tutor/a')}:
+						</strong>
 						<br />
 						<span>{servicioData?.docenteAcompanante}</span>
 					</Col>
-					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>institucion', 'Institución')}: </strong>
+					<Col sm={4} className="mb-3">
+						<strong>
+							{t('informationcarddetalle>institucion', 'Institución')}:{' '}
+						</strong>
 						<br />
 						<span>{servicioData?.nombreInstitucion}</span>
 					</Col>
-					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>instituci', 'Quién registra')}: </strong>
+					<Col sm={4} className="mb-3">
+						<strong>
+							{t('informationcarddetalle>instituci', 'Quién registra')}:{' '}
+						</strong>
 						<br />
 						<span>{servicioData?.insertadoPor}</span>
 					</Col>
-					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>instituci', 'Fecha de registro')}: </strong>
+					<Col sm={4} className="mb-3">
+						<strong>
+							{t('informationcarddetalle>instituci', 'Fecha de registro')}:{' '}
+						</strong>
 						<br />
 						<span>{servicioData?.fechaInsercion}</span>
 					</Col>
-					<Col sm={4} className='mb-3'>
-						<strong>{t('informationcarddetalle>fechaConclusion', 'Fecha de conclusión')}:</strong>
+					<Col sm={4} className="mb-3">
+						<strong>
+							{t(
+								'informationcarddetalle>fechaConclusion',
+								'Fecha de conclusión'
+							)}
+							:
+						</strong>
 						<br />
 						<span>{servicioData?.fechaConclusionSCE}</span>
 					</Col>
 				</Row>
 				<Row>
-					<Col className='mb-3'>
+					<Col className="mb-3">
 						<strong>
 							{/* TODO: i18 */}
 							{/* {t(
