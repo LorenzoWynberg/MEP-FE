@@ -55,7 +55,7 @@ const DatosRegistrales = props => {
 }
 
 export default withAuthorization({
-	id: 103,
+	id: 101,
 	Modulo: 'Expediente Estudiantil',
 	Apartado: 'Informacion General',
 	Seccion: 'Datos registrales'

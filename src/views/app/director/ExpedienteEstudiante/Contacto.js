@@ -4,11 +4,11 @@ import ContentTab from 'Components/Tab/Content'
 import InformacionContacto from './_partials/contacto/InformacionContacto'
 import InformacionResidenciaSaber from './_partials/contacto/InformacionResidenciaSaber'
 import HistoricoResidencia from './_partials/contacto/HistoricoResidencia.tsx'
-import './style.scss'
 import { withRouter } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import withAuthorization from '../../../../Hoc/withAuthorization'
 import { useTranslation } from 'react-i18next'
+import './style.scss'
 
 const InformacionContactoAuth = withAuthorization({
 	id: 2,
@@ -32,7 +32,7 @@ const InformacionResidenciaFija = withAuthorization({
 })(InformacionResidenciaSaber)
 
 const HistoricoResidenciaAuth = withAuthorization({
-	id: 104,
+	id: 102,
 	Modulo: 'Expediente Estudiantil',
 	Apartado: 'Informacion de Contacto',
 	Seccion: 'Historico de residencias'
