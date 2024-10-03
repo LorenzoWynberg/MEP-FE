@@ -89,7 +89,7 @@ const InformacionResidenciaSaber = props => {
 		setCurrentDistrito(initialSelectOption)
 		setCurrentPoblado(initialSelectOption)
 		setCurrentTerritory(initialSelectOption)
-		setDirection('')
+		// setDirection('')
 		setLocation({ latitude: null, longitude: null })
 	}
 
@@ -97,6 +97,7 @@ const InformacionResidenciaSaber = props => {
 		props.getProvincias()
 		props.getCatalogs(catalogsEnumObj.TERRITORIOINDIGENA?.id)
 	}, [])
+
 	useEffect(() => {
 		if (currentPoblado?.label && search?.searchTerm && !location?.latitude) {
 			handleSearchBySelects(currentPoblado, 'poblado')
@@ -164,7 +165,7 @@ const InformacionResidenciaSaber = props => {
 				})
 			}
 			setEditDirection(item)
-			  setDirection(item.direccionExacta)
+			setDirection(item.direccionExacta)
 			setLocation({
 				latitude: item.latitud,
 				longitude: item.longitud
@@ -314,7 +315,8 @@ const InformacionResidenciaSaber = props => {
 		setDirection(e.target.value)
 	}
 
-	const handleSearchBySelects = useCallback(()=>(data, name) => {
+	const handleSearchBySelects = (data, name) => {
+		console.log('data', data)
 		if (search) {
 			search.clear()
 		}
@@ -337,7 +339,7 @@ const InformacionResidenciaSaber = props => {
 				break
 			case 'poblado':
 				_newDirection = `${currentProvince.label}, ${currentCanton.label}, ${currentDistrito.label}`
-				setDirection('') 
+				currentPoblado.value != null && currentPoblado.value != data.value && setDirection('')
 				setCurrentPoblado(data)
 				break
 			default:
@@ -347,7 +349,7 @@ const InformacionResidenciaSaber = props => {
 		//
 		search.search(`${_newDirection}, CRI`)
 		// search.suggest()
-	},[])
+	}
 
 	const handleChange = e => {
 		setRazon(e.target.value)
