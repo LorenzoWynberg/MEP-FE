@@ -340,6 +340,7 @@ const BeneficiosMEP = props => {
 				hideCancel={visualizing}
 				onConfirm={() => (!visualizing ? sendData(dataTable) : setView(false))}
 				onCancel={() => setView(false)}
+				textConfirm={'Guardar'}
 			>
 				<Grid container>
 					<Grid item xs={12} className={classes.control}>

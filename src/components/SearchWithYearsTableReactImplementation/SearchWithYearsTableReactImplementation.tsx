@@ -8,7 +8,6 @@ interface paginatedTableObject {
 }
 
 interface IProps {
-	placeholderText?: string
 	columns: column[]
 	data: any[]
 	handleGetData?: (
@@ -45,8 +44,8 @@ interface IProps {
 
 type orderType = 'ASC' | 'DESC'
 
-export const TableReactImplementationApoyo: React.FC<IProps> = React.memo(
-	props => {
+export const SearchWithYearsTableReactImplementation: React.FC<IProps> =
+	React.memo(props => {
 		const [cols, setCols] = useState<column[]>(props.columns || [])
 		const [currentPage, setCurrentPage] = useState<number>(1)
 		const [pageSize, setPageSize] = useState<number>(props.pageSize || 6)
@@ -234,7 +233,6 @@ export const TableReactImplementationApoyo: React.FC<IProps> = React.memo(
 			<>
 				{!props?.backendPaginated ? (
 					<TableDataFrontPaginated
-						placeholderText={props.placeholderText}
 						handleGetData={props.handleGetData}
 						pageSize={props.pageSize}
 						selectedColumn={selectedColumn}
@@ -260,7 +258,6 @@ export const TableReactImplementationApoyo: React.FC<IProps> = React.memo(
 					/>
 				) : (
 					<TableDataBackendPaginated
-						placeholderText={props.placeholderText}
 						autoResetPage={props.autoResetPage}
 						columns={cols}
 						items={items}
@@ -302,9 +299,8 @@ export const TableReactImplementationApoyo: React.FC<IProps> = React.memo(
 				)}
 			</>
 		)
-	}
-)
+	})
 
-TableReactImplementationApoyo.defaultProps = {
+SearchWithYearsTableReactImplementation.defaultProps = {
 	autoResetPage: true
 }
