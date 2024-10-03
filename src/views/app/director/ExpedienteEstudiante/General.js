@@ -6,16 +6,28 @@ import { withRouter } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import InfoGeneral from './_partials/general/InfoGeneral'
 import DatosRegistrales from './_partials/general/DatosRegistrales'
+import { useSelector } from 'react-redux'
 
 const optionsTab = [
 	{ title: 'Información personal' },
 	{ title: 'Datos registrales' }
 ]
 
-const General = () => {
+const General = (props) => {
 	const { t } = useTranslation()
 	const [activeTab, setActiveTab] = useState(0)
 	const [snackBar, handleClick] = useNotification()
+
+
+	const state = useSelector(store => {
+		return {
+			expedienteEstudiantil: store.expedienteEstudiantil,
+			identification: store.identification,
+			historialMatricula: store.identification.matriculaHistory,
+			apoyos: store.apoyos,
+			selects: store.selects
+		}
+	})
 
 	const [snackbarContent, setSnackbarContent] = useState({
 		msg: 'welcome',
@@ -54,7 +66,8 @@ const General = () => {
 						handleClick={handleClick}
 					/>
 				)}
-				{activeTab === 1 && <DatosRegistrales />}
+				{console.log('state.expedienteEstudiantil.currentStudent', state)}
+				{activeTab === 1 && state.expedienteEstudiantil.currentStudent.tipoIdentificacion != "CÉDULA" && < DatosRegistrales />}
 			</ContentTab>
 		</div>
 	)

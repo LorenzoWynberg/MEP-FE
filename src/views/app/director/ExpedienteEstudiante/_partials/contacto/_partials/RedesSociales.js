@@ -8,7 +8,7 @@ import Fab from '@material-ui/core/Fab'
 import FacebookIcon from '@material-ui/icons/Facebook'
 import InstagramIcon from '@material-ui/icons/Instagram'
 import WhatsAppIcon from '@material-ui/icons/WhatsApp'
-import { Input } from 'reactstrap'
+import { Input  } from 'reactstrap'
 import colors from '../../../../../../../assets/js/colors'
 import { useTranslation } from 'react-i18next'
 
@@ -50,8 +50,8 @@ const Redes = props => {
 	const classes = useStyles()
 	const { hasEditable, handleInputChange, formState } = props
 
-	return (
-		<List className={classes.root}>
+	return (<> 
+		<List className={classes.root} >
 			<ListItem>
 				<ListItemIcon>
 					<Fab disabled aria-label="like" className={classes.social}>
@@ -137,7 +137,7 @@ const Redes = props => {
 					/>
 				)}
 			</ListItem>
-		</List>
+		</List></>
 	)
 }
 
