@@ -38,11 +38,11 @@ const data = [
 		to: '/director/expediente-estudiante/apoyos-educativos',
 		active: false
 	},
-	{
-		label: 'estudiantes>expediente>nav>area_curric',
-		to: '/director/expediente-estudiante/area-curricular',
-		active: false
-	},
+	// {
+	// 	label: 'estudiantes>expediente>nav>area_curric',
+	// 	to: '/director/expediente-estudiante/area-curricular',
+	// 	active: false
+	// },
 	{
 		label: 'estudiantes>expediente>nav>salud',
 		to: '/director/expediente-estudiante/salud',

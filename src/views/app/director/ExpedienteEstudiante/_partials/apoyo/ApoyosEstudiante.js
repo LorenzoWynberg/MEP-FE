@@ -30,6 +30,7 @@ import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import moment from 'moment'
 import colors from 'assets/js/colors'
+import { catalogsEnumByName } from '../../../../../../utils/catalogsEnum'
 
 const condicionSeRecibeNombre = 'Se recibe'
 
@@ -45,6 +46,7 @@ const ApoyosEstudiante = props => {
 	const [tiposApoyoFilter, setTiposApoyoFilter] = useState([])
 	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
 	const [radioValue, setRadioValue] = useState(0)
+	const [editable, setEditable] = useState(false)
 	const [snackbarContent, setSnackbarContent] = useState({
 		msg: '',
 		type: ''

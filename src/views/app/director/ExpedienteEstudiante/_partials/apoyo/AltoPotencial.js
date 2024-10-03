@@ -24,6 +24,7 @@ import {
 	RadioGroup,
 	Typography
 } from '@material-ui/core'
+import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
 import { getCatalogs, getCatalogsByName } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
@@ -35,6 +36,7 @@ import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import colors from 'assets/js/colors'
 import moment from 'moment'
+import { Rtt } from '@mui/icons-material'
 
 const categoria = {
 	id: 5,
@@ -126,6 +128,7 @@ const AltoPotencial = props => {
 					catalogoEstategias.nombre
 				)
 			}
+			//setEstrategias(state.selects.estrategiasFlexibilidadCurricular)
 		} finally {
 			setLoading(false)
 		}
@@ -203,7 +206,7 @@ const AltoPotencial = props => {
 		const anio = Number(event.target.value)
 
 		const fechaInicio = '01/01/' + anio
-
+    
 		setFormData({
 			...formData,
 			fechaDeAprobacion: fechaInicio,
