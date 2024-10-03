@@ -10,7 +10,7 @@ import {
 	Input,
 	CustomInput
 } from 'reactstrap'
-import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
+import { SearchWithYearsTableReactImplementation } from 'Components/SearchWithYearsTableReactImplementation'
 import useNotification from 'Hooks/useNotification'
 import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import styled from 'styled-components'
@@ -24,21 +24,17 @@ import {
 	RadioGroup,
 	Typography
 } from '@material-ui/core'
-import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
 import { getCatalogs, getCatalogsByName } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
-import { IoMdTrash } from 'react-icons/io'
-import IconButton from '@mui/material/IconButton'
-import { HiPencil } from 'react-icons/hi'
 import swal from 'sweetalert'
 import Loader from 'Components/LoaderContainer'
 import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import colors from 'assets/js/colors'
-import { Rtt } from '@mui/icons-material'
+import moment from 'moment'
 
 const categoria = {
 	id: 5,
@@ -56,9 +52,6 @@ const AltoPotencial = props => {
 	const [data, setData] = useState([])
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
 	const [tiposApoyo, setTiposApoyo] = useState([])
-	const [talentos, setTalentos] = useState([])
-	const [estrategias, setEstrategias] = useState([])
-	const [editable, setEditable] = useState(false)
 	const [radioValueTalento, setRadioValueTalento] = useState(0)
 	const [radioValueApoyo, setRadioValueApoyo] = useState(0)
 	const [snackbar, handleClick] = useNotification()
@@ -113,9 +106,6 @@ const AltoPotencial = props => {
 					catalogoTalentos.nombre
 				)
 			}
-			console.log('Talentos JP', state.selects.talentos)
-
-			setTalentos(state.selects.talentos)
 		} finally {
 			setLoading(false)
 		}
@@ -136,15 +126,6 @@ const AltoPotencial = props => {
 					catalogoEstategias.nombre
 				)
 			}
-
-			console.log(
-				'Estrategias JP',
-				state.selects.estrategiasFlexibilidadCurricular
-			)
-
-			console.log('Selects JP', state.selects)
-
-			setEstrategias(state.selects.estrategiasFlexibilidadCurricular)
 		} finally {
 			setLoading(false)
 		}
@@ -252,73 +233,8 @@ const AltoPotencial = props => {
 		}
 	}
 
-	const deleteApoyoById = apoyoId => {
-		setLoading(true)
-		try {
-			axios
-				.delete(
-					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`
-				)
-				.then(response => {
-					axios
-						.get(
-							`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
-						)
-						.then(response => {
-							setData(response.data.entityList)
-							setLoading(false)
-							setSnackbarContent({
-								msg: 'Se ha eliminado el registro',
-								type: 'success'
-							})
-							handleClick()
-						})
-						.catch(error => {
-							setLoading(false)
-							setSnackbarContent({
-								msg: 'Hubo un error al eliminar el registro',
-								type: 'error'
-							})
-							handleClick()
-							console.log(error)
-						})
-				})
-				.catch(error => {
-					setLoading(false)
-					console.log('Error', error)
-				})
-		} catch (e) {
-			setLoading(false)
-		}
-	}
-
 	const onAgregarEvent = () => {
-		setEditable(false)
 		setShowNuevoApoyoModal(true)
-	}
-
-	const onEditarEvent = row => {
-		setEditable(true)
-		setShowNuevoApoyoModal(true)
-
-		setRadioValueApoyo(row.sb_TiposDeApoyoId)
-		setRadioValueTalento(row.sB_TalentoId)
-
-		let anioAprobacion = null
-		if (row.fechaInicio) {
-			anioAprobacion = new Date(row.fechaInicio).getFullYear()
-		}
-
-		setFormData({
-			id: row.id,
-			tipoDeApoyo: row.sb_TiposDeApoyoId,
-			nombreApoyo: row.sb_TiposDeApoyo,
-			talentoId: row.sB_TalentoId,
-			nombreTalento: row.sB_TalentoDesc,
-			estrategias: row.estrategias,
-			anioAprobacion: anioAprobacion,
-			fechaDeAprobacion: row.fechaInicio
-		})
 	}
 
 	const columns = useMemo(() => {
@@ -342,6 +258,15 @@ const AltoPotencial = props => {
 				label: ''
 			},
 			{
+				Header: 'Año de identificación',
+				column: 'fechaInicio',
+				accessor: 'fechaInicio',
+				label: '',
+				Cell: row => {
+					return moment(row.value, 'DD-MM-YYYY').format('YYYY')
+				}
+			},
+			{
 				Header: 'Registrado por (Usuario)',
 				column: 'usuarioRegistro',
 				accessor: 'usuarioRegistro',
@@ -352,86 +277,6 @@ const AltoPotencial = props => {
 				column: 'fechaInsercion',
 				accessor: 'fechaInsercion',
 				label: ''
-			},
-			{
-				Header: t('general>acciones', 'Acciones'),
-				column: '',
-				accessor: '',
-				label: '',
-				Cell: ({ _, row, data }) => {
-					const fullRow = data[row.index]
-
-					return (
-						<div
-							style={{
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center',
-								alignContent: 'center'
-							}}
-						>
-							<button
-								style={
-									!props.validations.modificar
-										? { display: 'none' }
-										: {
-												border: 'none',
-												background: 'transparent',
-												cursor: 'pointer',
-												color: 'grey'
-										  }
-								}
-								onClick={() => {
-									onEditarEvent(row.original)
-								}}
-							>
-								<Tooltip title="Actualizar">
-									<IconButton>
-										<HiPencil style={{ fontSize: 30 }} />
-									</IconButton>
-								</Tooltip>
-							</button>
-							<button
-								style={
-									!props.validations.eliminar
-										? { display: 'none' }
-										: {
-												border: 'none',
-												background: 'transparent',
-												cursor: 'pointer',
-												color: 'grey'
-										  }
-								}
-								onClick={() => {
-									swal({
-										title: 'Eliminar Apoyo',
-										text: '¿Esta seguro de que desea eliminar el apoyo?',
-										icon: 'warning',
-										className: 'text-alert-modal',
-										buttons: {
-											cancel: 'Cancelar',
-											ok: {
-												text: 'Eliminar',
-												value: true,
-												className: 'btn-alert-color'
-											}
-										}
-									}).then(async result => {
-										if (result) {
-											deleteApoyoById(row.original.id)
-										}
-									})
-								}}
-							>
-								<Tooltip title="Eliminar">
-									<IconButton>
-										<IoMdTrash style={{ fontSize: 30 }} />
-									</IconButton>
-								</Tooltip>
-							</button>
-						</div>
-					)
-				}
 			}
 		]
 	}, [state.expedienteEstudiantil.currentStudent])
@@ -454,7 +299,7 @@ const AltoPotencial = props => {
 		}
 
 		if (formData.anioAprobacion === 0) {
-			validationMessage += '\nEl año de aprobación es requerido'
+			validationMessage += '\nEl año de identificación es requerido'
 			hayError = true
 		}
 
@@ -483,6 +328,7 @@ const AltoPotencial = props => {
 		}
 
 		let _data = {
+			id: state.expedienteEstudiantil.currentStudent.idMatricula,
 			fechaInicio: formData.fechaDeAprobacion
 				? formData.fechaDeAprobacion
 				: null,
@@ -495,65 +341,24 @@ const AltoPotencial = props => {
 			estrategias: formData.estrategias
 		}
 
-		let create = true
-		//create
-		if (formData.id === 0) {
-			_data = {
-				..._data,
-
-				id: state.expedienteEstudiantil.currentStudent.idMatricula
-			}
+		const response = await actions.addApoyo(
+			_data,
+			categoria,
+			categoria.addDispatchName,
+			1
+		)
+		if (response.error) {
+			setSnackbarContent({
+				msg: 'Hubo un error al crear el registro',
+				type: 'error'
+			})
+			handleClick()
 		} else {
-			//update
-			create = false
-
-			_data = {
-				..._data,
-				tipoDeApoyoId: parseInt(formData.tipoDeApoyo),
-				id: formData.id
-			}
-		}
-
-		if (create) {
-			const response = await actions.addApoyo(
-				_data,
-				categoria,
-				categoria.addDispatchName,
-				1
-			)
-			if (response.error) {
-				setSnackbarContent({
-					msg: 'Hubo un error al crear el registro',
-					type: 'error'
-				})
-				handleClick()
-			} else {
-				setSnackbarContent({
-					msg: 'Se ha creado el registro',
-					type: 'success'
-				})
-				handleClick()
-			}
-		} else {
-			const response = await actions.editApoyo(
-				_data,
-				categoria,
-				categoria.addDispatchName,
-				1
-			)
-			if (response.error) {
-				setSnackbarContent({
-					msg: 'Hubo un error al editar',
-					type: 'error'
-				})
-				handleClick()
-			} else {
-				setSnackbarContent({
-					msg: 'Se ha editado el registro',
-					type: 'success'
-				})
-				handleClick()
-			}
+			setSnackbarContent({
+				msg: 'Se ha creado el registro',
+				type: 'success'
+			})
+			handleClick()
 		}
 
 		axios
@@ -608,7 +413,7 @@ const AltoPotencial = props => {
 	return (
 		<>
 			{snackbar(snackbarContent.type, snackbarContent.msg)}
-			<TableReactImplementationApoyo
+			<SearchWithYearsTableReactImplementation
 				placeholderText="Buscar por nombre"
 				showAddButton={props.validations.agregar}
 				msjButton="Agregar"

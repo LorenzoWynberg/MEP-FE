@@ -181,7 +181,7 @@ const ApoyoEducativo = props => {
 		{ title: 'Apoyos curriculares' },
 		{ title: 'Apoyos personales' },
 		{ title: 'Apoyos organizativos' },
-		{ title: 'Alto Potencial' },
+		{ title: 'Alto potencial' },
 		{ title: 'Condición de discapacidad' },
 		{ title: 'Otras condiciones' }
 	]
