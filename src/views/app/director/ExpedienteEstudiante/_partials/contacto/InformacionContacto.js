@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
 import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
+import moment from 'moment'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -241,13 +242,20 @@ const InformacionContacto = props => {
 										)}
 									</h4>
 								</Grid>
-								<Grid item xs={12} className={classes.control}>
-									<Redes
-										hasEditable={editable}
-										handleInputChange={handleInputChange}
-										formState={formState}
-									/>
-								</Grid>
+								{moment().diff(props.expedienteEstudiantil.currentStudent.fechaNacimiento, 'years') > 12 ? <>
+									<Grid item xs={12} className={classes.control}>
+										<span>Esta información solamente debe completarse en caso necesario y no es un requisito indispensable.</span>
+									</Grid>
+									<Grid item xs={12} className={classes.control}>
+										<Redes
+											hasEditable={editable}
+											handleInputChange={handleInputChange}
+											formState={formState}
+										/>
+									</Grid>
+								</> : <Grid item xs={12} className={classes.control}>
+									<span>Estos campos solo se pueden llenar en mayores de 12 años.</span>
+								</Grid>}
 							</Grid>
 						</Paper>
 					</Grid>

@@ -74,7 +74,7 @@ const Navegacion = props => {
 						>
 							<SquareFoot style={{ fontSize: 50 }} />
 						</NavigationCard>
-						<NavigationCard
+						{/* <NavigationCard
 							icon=""
 							title={t(
 								'estudiantes>expediente>nav>area_curric',
@@ -83,7 +83,7 @@ const Navegacion = props => {
 							href="/director/expediente-estudiante/area-curricular"
 						>
 							<Bookmark style={{ fontSize: 50 }} />
-						</NavigationCard>
+						</NavigationCard> */}
 						<NavigationCard
 							icon=""
 							title={t('estudiantes>expediente>nav>salud', 'Salud')}
@@ -130,9 +130,12 @@ const Navegacion = props => {
 							</NavigationCard>
 						}
 						<NavigationCard
-							icon=''
-							title={t('estudiantes>expediente>nav>bitacora_expediente', 'Bitácoras')}
-							href='/director/expediente-estudiante/BitacoraExpediente'
+							icon=""
+							title={t(
+								'estudiantes>expediente>nav>bitacora_expediente',
+								'Bitácoras'
+							)}
+							href="/director/expediente-estudiante/BitacoraExpediente"
 						>
 							<BookIcon style={{ fontSize: 50 }} />
 						</NavigationCard>
