@@ -10,7 +10,8 @@ const useLoadComputoColumns = ({
 	setModalMode,
 	setInitialData,
 	setOpenComputoModal,
-	handleDelete
+	handleDelete,
+	tienePermiso
 }) => {
 	const { t } = useTranslation()
 	const state = useSelector(store => {
@@ -113,63 +114,69 @@ const useLoadComputoColumns = ({
 									}}
 								/>
 							</Tooltip>
-							{fullRow.id && state.selectedYear.esActivo && (
-								<Tooltip
-									title={t(
-										'inventario>columna_acciones>editar',
-										'Editar Registro'
-									)}
-								>
-									<Edit
-										onClick={() => {
-											setModalMode('edit') // Set mode to 'edit'
-											setInitialData(fullRow) // Set the row data for editing
-											setOpenComputoModal(true) // Open the modal
-										}}
-										style={{
-											fontSize: 25,
-											color: colors.darkGray,
-											cursor: 'pointer'
-										}}
-									/>
-								</Tooltip>
-							)}
-							{fullRow.id && (
-								<Tooltip
-									title={t(
-										'inventario>columna_acciones>eliminar',
-										'Eliminar Registro'
-									)}
-								>
-									<Delete
-										onClick={() => {
-											swal({
-												title: 'Eliminar registro de equipo de cómputo',
-												text: '¿Esta seguro de que desea realizar esta acción?',
-												icon: 'warning',
-												className: 'text-alert-modal',
-												buttons: {
-													cancel: 'Cancelar',
-													ok: {
-														text: 'Eliminar',
-														value: true,
-														className: 'btn-alert-color'
+							{!!fullRow.id &&
+								!!tienePermiso &&
+								!!tienePermiso.modificar &&
+								state.selectedYear.esActivo && (
+									<Tooltip
+										title={t(
+											'inventario>columna_acciones>editar',
+											'Editar Registro'
+										)}
+									>
+										<Edit
+											onClick={() => {
+												setModalMode('edit') // Set mode to 'edit'
+												setInitialData(fullRow) // Set the row data for editing
+												setOpenComputoModal(true) // Open the modal
+											}}
+											style={{
+												fontSize: 25,
+												color: colors.darkGray,
+												cursor: 'pointer'
+											}}
+										/>
+									</Tooltip>
+								)}
+							{!!fullRow.id &&
+								!!tienePermiso &&
+								!!tienePermiso.eliminar &&
+								state.selectedYear.esActivo && (
+									<Tooltip
+										title={t(
+											'inventario>columna_acciones>eliminar',
+											'Eliminar Registro'
+										)}
+									>
+										<Delete
+											onClick={() => {
+												swal({
+													title: 'Eliminar registro de equipo de cómputo',
+													text: '¿Esta seguro de que desea realizar esta acción?',
+													icon: 'warning',
+													className: 'text-alert-modal',
+													buttons: {
+														cancel: 'Cancelar',
+														ok: {
+															text: 'Eliminar',
+															value: true,
+															className: 'btn-alert-color'
+														}
 													}
-												}
-											}).then(async result => {
-												if (result) {
-													handleDelete(fullRow.id)
-												}
-											})
-										}}
-										style={{
-											fontSize: 25,
-											color: colors.darkGray,
-											cursor: 'pointer'
-										}}
-									/>
-								</Tooltip>
-							)}
+												}).then(async result => {
+													if (result) {
+														handleDelete(fullRow.id)
+													}
+												})
+											}}
+											style={{
+												fontSize: 25,
+												color: colors.darkGray,
+												cursor: 'pointer'
+											}}
+										/>
+									</Tooltip>
+								)}
 						</div>
 					)
 				}

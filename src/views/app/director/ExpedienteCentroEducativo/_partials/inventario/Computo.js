@@ -35,10 +35,15 @@ const Computo = props => {
 
 	const state = useSelector(store => {
 		return {
+			permisos: store.authUser.rolPermisos,
 			selectedYear: store.authUser.selectedActiveYear,
 			currentInstitution: store.authUser.currentInstitution
 		}
 	})
+
+	const tienePermiso = state.permisos.find(
+		permiso => permiso.codigoSeccion == 'equipoComputo'
+	)
 
 	const handleDelete = async id => {
 		setLoading(true)
@@ -65,7 +70,8 @@ const Computo = props => {
 		setModalMode, // Callback para settear el modo ('add', 'edit', or 'view')
 		setInitialData, // Callback para settear initial data
 		setOpenComputoModal, // Callback para abrir modal
-		handleDelete // Callback para borrar un registro
+		handleDelete, // Callback para borrar un registro
+		tienePermiso // Permisos del usuario
 	})
 
 	useEffect(() => {
@@ -100,6 +106,10 @@ const Computo = props => {
 		orientation: ''
 	})
 
+	if (!tienePermiso || !tienePermiso.leer) {
+		return <h1>No tiene acceso a este sitio</h1>
+	}
+
 	return (
 		<div>
 			{!loading && !selectsLoading && !historicoLoading ? (
@@ -121,7 +131,11 @@ const Computo = props => {
 					/>
 					<TableReactImplementation
 						data={data}
-						showAddButton={state.selectedYear.esActivo}
+						showAddButton={
+							!!tienePermiso &&
+							!!tienePermiso.agregar &&
+							state.selectedYear.esActivo
+						}
 						onSubmitAddButton={() => {
 							setModalMode('add') // Set mode to "add"
 							setInitialData(null) // No initial data for adding
