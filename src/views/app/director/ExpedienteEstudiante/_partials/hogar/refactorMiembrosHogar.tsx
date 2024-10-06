@@ -939,7 +939,6 @@ const RefactorMiembrosHogar = props => {
 									onClick={async () => {
 										setLoading(true)
 										setCheckedValid(true)
-										debugger
 										await events.onGuardarClick(
 											() => onRegresarEvent(),
 											() => setLoading(false)

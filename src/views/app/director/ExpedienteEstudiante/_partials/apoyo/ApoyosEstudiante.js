@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react'
+
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap'
@@ -31,6 +32,7 @@ import RequiredSpan from 'Components/Form/RequiredSpan'
 import moment from 'moment'
 import colors from 'assets/js/colors'
 import { catalogsEnumByName } from '../../../../../../utils/catalogsEnum'
+import { set } from 'lodash'
 
 const condicionSeRecibeNombre = 'Se recibe'
 
@@ -49,8 +51,9 @@ const ApoyosEstudiante = props => {
 	const [editable, setEditable] = useState(false)
 	const [snackbarContent, setSnackbarContent] = useState({
 		msg: '',
-		type: ''
+		variant: ''
 	})
+	const [checkedValid, setCheckedValid] = useState(false)
 	const [formData, setFormData] = useState({
 		id: 0,
 		tipoDeApoyo: 0,
@@ -142,6 +145,7 @@ const ApoyosEstudiante = props => {
 		setFormData(data)
 		setRadioValue(0)
 		setShowFechaAprobacion(false)
+		setCheckedValid(false)
 	}
 
 	const handleFormDataChange = event => {
@@ -173,6 +177,14 @@ const ApoyosEstudiante = props => {
 			condicionApoyo: value,
 			fechaDeAprobacion: fechaAprobacion
 		})
+	}
+
+	/*
+		JP
+	*/
+	const errorToast = msg => {
+		setSnackbarContent({ msg, variant: 'error' })
+		handleClick()
 	}
 
 	const onAgregarEvent = () => {
@@ -221,6 +233,7 @@ const ApoyosEstudiante = props => {
 	}, [state.expedienteEstudiantil.currentStudent])
 
 	const onConfirmSaveApoyo = async event => {
+		setCheckedValid(true)
 		event.preventDefault()
 		setLoading(true)
 
@@ -228,17 +241,14 @@ const ApoyosEstudiante = props => {
 		let hayError = false
 
 		if (formData.tipoDeApoyo === 0 || isNaN(formData.tipoDeApoyo)) {
-			validationMessage = '\nEl tipo de apoyo es requerido'
 			hayError = true
 		}
 
 		if (formData.condicionApoyo === '' || isNaN(formData.condicionApoyo)) {
-			validationMessage += '\nLa condición de apoyo es requerida'
 			hayError = true
 		}
 
 		if (formData.detalleApoyo === '') {
-			validationMessage += '\nEl detalle es requerido'
 			hayError = true
 		}
 
@@ -252,24 +262,11 @@ const ApoyosEstudiante = props => {
 			formData.fechaDeAprobacion === '' &&
 			formData.condicionApoyo === condicionSeRecibe.id
 		) {
-			validationMessage += '\nLa fecha de aprobación es requerida'
 			hayError = true
 		}
 
 		if (hayError) {
-			swal({
-				title: 'Error al registrar el apoyo',
-				text: validationMessage,
-				icon: 'error',
-				className: 'text-alert-modal',
-				buttons: {
-					ok: {
-						text: 'Ok',
-						value: true,
-						className: 'btn-alert-color'
-					}
-				}
-			})
+			errorToast('Faltan rellenar campos obligatorios')
 			setLoading(false)
 			return
 		}
@@ -298,13 +295,13 @@ const ApoyosEstudiante = props => {
 		if (response.error) {
 			setSnackbarContent({
 				msg: 'Hubo un error al crear el registro',
-				type: 'error'
+				variant: 'error'
 			})
 			handleClick()
 		} else {
 			setSnackbarContent({
 				msg: 'Se ha creado el registro',
-				type: 'success'
+				variant: 'success'
 			})
 			handleClick()
 		}
@@ -329,6 +326,7 @@ const ApoyosEstudiante = props => {
 
 	const closeAgregarModal = () => {
 		cleanFormData()
+		setCheckedValid(false)
 		setShowNuevoApoyoModal(false)
 	}
 
@@ -374,7 +372,7 @@ const ApoyosEstudiante = props => {
 
 	return (
 		<>
-			{snackbar(snackbarContent.type, snackbarContent.msg)}
+			{snackbar(snackbarContent.variant, snackbarContent.msg)}
 			<SearchWithYearsTableReactImplementation
 				placeholderText="Buscar por nombre"
 				showAddButton={props.validations.agregar}
@@ -438,7 +436,13 @@ const ApoyosEstudiante = props => {
 							<Label for="tipoDeApoyo">
 								Tipo de apoyo <RequiredSpan />
 							</Label>
-							<StyledInput
+							<Input
+								style={{
+									border:
+										checkedValid && formData.tipoDeApoyo === 0
+											? '1px solid red'
+											: ''
+								}}
 								id="tipoDeApoyo"
 								name="tipoDeApoyo"
 								type="text"
@@ -447,7 +451,7 @@ const ApoyosEstudiante = props => {
 									setShowModalTiposApoyo(true)
 								}}
 								value={formData.nombreApoyo || 'Seleccionar'}
-							></StyledInput>
+							></Input>
 						</Col>
 						<Col md={6}>
 							<FormGroup>
@@ -458,6 +462,14 @@ const ApoyosEstudiante = props => {
 									id="condicionApoyo"
 									name="condicionApoyo"
 									type="select"
+									style={{
+										border:
+											checkedValid &&
+											(formData.condicionApoyo === '' ||
+												isNaN(formData.condicionApoyo))
+												? '1px solid red'
+												: ''
+									}}
 									onChange={handleFechaAprobacionOnChange}
 									placeholder="Seleccionar"
 									value={formData.condicionApoyo}
@@ -485,7 +497,11 @@ const ApoyosEstudiante = props => {
 										max={moment().format('YYYY-MM-DD')}
 										name="fechaDeAprobacion"
 										style={{
-											paddingRight: '12%'
+											paddingRight: '12%',
+											border:
+												checkedValid && formData.fechaDeAprobacion === ''
+													? '1px solid red'
+													: ''
 										}}
 										value={moment(formData.fechaDeAprobacion).format(
 											'YYYY-MM-DD'
@@ -506,6 +522,12 @@ const ApoyosEstudiante = props => {
 									type="textarea"
 									id="detalleApoyo"
 									name="detalleApoyo"
+									style={{
+										border:
+											checkedValid && formData.detalleApoyo === ''
+												? '1px solid red'
+												: ''
+									}}
 									rows="5"
 									onChange={handleFormDataChange}
 									value={formData.detalleApoyo}
