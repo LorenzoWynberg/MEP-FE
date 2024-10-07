@@ -22,6 +22,7 @@ import OptionModal from 'Components/Modal/OptionModal'
 import { isNaN, isEmpty } from 'lodash'
 import swal from 'sweetalert'
 import RequiredSpan from 'Components/Form/RequiredSpan'
+import { set } from 'lodash'
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -68,6 +69,7 @@ const BeneficiosMEP = props => {
 	const { reset, watch } = useForm()
 	const [loading, setLoading] = useState(false)
 	const [dataTable, setDataTable] = useState({})
+	const [checkedValid, setCheckedValid] = useState(false)
 	const [formData, setFormData] = useState({
 		dateFrom: '',
 		dateTo: '',
@@ -81,6 +83,8 @@ const BeneficiosMEP = props => {
 			detSubsidio: ''
 		}
 		setFormData(data)
+		setCheckedValid(false)
+		setDependencia({})
 	}
 
 	const handleFormDataChange = event => {
@@ -151,7 +155,9 @@ const BeneficiosMEP = props => {
 	}
 
 	const sendData = async () => {
+		console.log('Dependencia JP', dependencia)
 		setLoading(true)
+		setCheckedValid(true)
 		if (moment(formData.dateTo, 'YYYY-MM-DD').isBefore(formData.dateFrom)) {
 			swal({
 				title: 'Error',
@@ -171,37 +177,21 @@ const BeneficiosMEP = props => {
 		}
 
 		let isInvalid = false
-		let validationMessage = ''
 
 		if (isEmpty(dependencia)) {
-			validationMessage = '\nLa dependencia es requerida'
 			isInvalid = true
 		}
 
 		if (!prevSubsidio?.id || isNaN(prevSubsidio?.id)) {
-			validationMessage += '\nEl tipo de subsidio es requerido'
 			isInvalid = true
 		}
 
 		if (formData.dateFrom === '') {
-			validationMessage += '\nLa fecha de aprobación es requerida'
 			isInvalid = true
 		}
 
 		if (isInvalid) {
-			swal({
-				title: 'Error al registrar el apoyo',
-				text: validationMessage,
-				icon: 'error',
-				className: 'text-alert-modal',
-				buttons: {
-					ok: {
-						text: 'Ok',
-						value: true,
-						className: 'btn-alert-color'
-					}
-				}
-			})
+			toggleSnackbar('error', 'Faltan rellenar campos requeridos.')
 			setLoading(false)
 			return
 		}
@@ -269,6 +259,7 @@ const BeneficiosMEP = props => {
 		setDependencia({})
 		setVerificated(false)
 		cleanDataForm()
+		setView(false)
 	}
 
 	const handleDeleteSubsidio = async ids => {
@@ -339,8 +330,8 @@ const BeneficiosMEP = props => {
 				titleHeader={'Por parte del MEP'}
 				hideCancel={visualizing}
 				onConfirm={() => (!visualizing ? sendData(dataTable) : setView(false))}
-				onCancel={() => setView(false)}
-				textConfirm={'Guardar'}
+				onCancel={() => clearData()}
+				textConfirm={`${visualizing ? 'Cerrar' : 'Guardar'}`}
 			>
 				<Grid container>
 					<Grid item xs={12} className={classes.control}>
@@ -350,8 +341,15 @@ const BeneficiosMEP = props => {
 							</Label>
 							<Select
 								name="dependencia"
-								className="react-select"
-								classNamePrefix="react-select"
+								styles={{
+									control: (baseStyles, state) => ({
+										...baseStyles,
+										borderColor:
+											checkedValid && isEmpty(dependencia)
+												? 'red'
+												: 'hsl(0, 0%, 80%)'
+									})
+								}}
 								placeholder="Seleccione una dependencia"
 								value={isEmpty(dependencia) ? '' : dependencia}
 								options={dependencias.map(item => ({
@@ -386,6 +384,13 @@ const BeneficiosMEP = props => {
 							</Label>
 							<Input
 								name="tiposubsidio"
+								style={{
+									border:
+										checkedValid &&
+										(!prevSubsidio?.id || isNaN(prevSubsidio?.id))
+											? '1px solid red'
+											: ''
+								}}
 								onClick={() => {
 									handleSubsidio()
 								}}
@@ -458,7 +463,11 @@ const BeneficiosMEP = props => {
 									max={moment().format('YYYY-MM-DD')}
 									name="dateFrom"
 									style={{
-										paddingRight: '12%'
+										paddingRight: '12%',
+										border:
+											checkedValid && formData.dateFrom === ''
+												? '1px solid red'
+												: ''
 									}}
 									invalid={toDateInvalid || state.beneficios.fields.fechaInicio}
 									disabled={!editable}

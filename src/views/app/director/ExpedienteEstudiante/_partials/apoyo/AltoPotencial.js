@@ -24,7 +24,6 @@ import {
 	RadioGroup,
 	Typography
 } from '@material-ui/core'
-import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
 import { getCatalogs, getCatalogsByName } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
@@ -36,7 +35,6 @@ import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import colors from 'assets/js/colors'
 import moment from 'moment'
-import { Rtt } from '@mui/icons-material'
 
 const categoria = {
 	id: 5,
@@ -59,13 +57,14 @@ const AltoPotencial = props => {
 	const [snackbar, handleClick] = useNotification()
 	const [snackbarContent, setSnackbarContent] = useState({
 		msg: '',
-		type: ''
+		variant: ''
 	})
 	const [aniosDeteccion, setAnionsDeteccion] = useState([])
+	const [checkedValid, setCheckedValid] = useState(false)
 	const [formData, setFormData] = useState({
 		id: 0,
 		tipoDeApoyo: 0,
-		talentoId: '',
+		talentoId: 0,
 		nombreTalento: '',
 		anioAprobacion: 0,
 		estrategias: [],
@@ -190,7 +189,7 @@ const AltoPotencial = props => {
 		const data = {
 			id: 0,
 			tipoDeApoyo: 0,
-			talentoId: '',
+			talentoId: 0,
 			nombreTalento: '',
 			anioAprobacion: 0,
 			estrategias: [],
@@ -198,6 +197,7 @@ const AltoPotencial = props => {
 			fechaDeAprobacion: ''
 		}
 		setFormData(data)
+		setCheckedValid(false)
 		setRadioValueTalento(0)
 		setRadioValueApoyo(0)
 	}
@@ -206,7 +206,7 @@ const AltoPotencial = props => {
 		const anio = Number(event.target.value)
 
 		const fechaInicio = '01/01/' + anio
-    
+
 		setFormData({
 			...formData,
 			fechaDeAprobacion: fechaInicio,
@@ -285,6 +285,7 @@ const AltoPotencial = props => {
 	}, [state.expedienteEstudiantil.currentStudent])
 
 	const onConfirmSaveApoyo = async event => {
+		setCheckedValid(true)
 		event.preventDefault()
 		setLoading(true)
 
@@ -292,40 +293,27 @@ const AltoPotencial = props => {
 		let hayError = false
 
 		if (formData.tipoDeApoyo === 0 || isNaN(formData.tipoDeApoyo)) {
-			validationMessage = '\nEl tipo de apoyo es requerido'
 			hayError = true
 		}
 
 		if (formData.talentoId === '' || isNaN(formData.talentoId)) {
-			validationMessage += '\nEl talento es requerido'
 			hayError = true
 		}
 
 		if (formData.anioAprobacion === 0) {
-			validationMessage += '\nEl año de identificación es requerido'
 			hayError = true
 		}
 
 		if (formData.estrategias.length === 0) {
-			validationMessage +=
-				'\nDebe seleccionar al menos una estrategia de flexibilización'
 			hayError = true
 		}
 
 		if (hayError) {
-			swal({
-				title: 'Error al registrar el apoyo',
-				text: validationMessage,
-				icon: 'error',
-				className: 'text-alert-modal',
-				buttons: {
-					ok: {
-						text: 'Ok',
-						value: true,
-						className: 'btn-alert-color'
-					}
-				}
+			setSnackbarContent({
+				msg: 'Faltan rellenar campos requeridos.',
+				variant: 'error'
 			})
+			handleClick()
 			setLoading(false)
 			return
 		}
@@ -353,13 +341,13 @@ const AltoPotencial = props => {
 		if (response.error) {
 			setSnackbarContent({
 				msg: 'Hubo un error al crear el registro',
-				type: 'error'
+				variant: 'error'
 			})
 			handleClick()
 		} else {
 			setSnackbarContent({
 				msg: 'Se ha creado el registro',
-				type: 'success'
+				variant: 'success'
 			})
 			handleClick()
 		}
@@ -415,7 +403,7 @@ const AltoPotencial = props => {
 
 	return (
 		<>
-			{snackbar(snackbarContent.type, snackbarContent.msg)}
+			{snackbar(snackbarContent.variant, snackbarContent.msg)}
 			<SearchWithYearsTableReactImplementation
 				placeholderText="Buscar por nombre"
 				showAddButton={props.validations.agregar}
@@ -526,6 +514,12 @@ const AltoPotencial = props => {
 							<StyledInput
 								id="tipoDeApoyo"
 								name="tipoDeApoyo"
+								style={{
+									border:
+										checkedValid && formData.tipoDeApoyo === 0
+											? '1px solid red'
+											: ''
+								}}
 								type="text"
 								placeholder="Seleccionar"
 								onClick={() => {
@@ -542,6 +536,12 @@ const AltoPotencial = props => {
 								id="talentoId"
 								name="talentoId"
 								type="text"
+								style={{
+									border:
+										checkedValid && formData.talentoId === 0
+											? '1px solid red'
+											: ''
+								}}
 								placeholder="Seleccionar"
 								onClick={() => {
 									setShowModalTalento(true)
@@ -558,6 +558,12 @@ const AltoPotencial = props => {
 								id="anioIdentificacion"
 								name="anioIdentificacion"
 								type="select"
+								style={{
+									border:
+										checkedValid && formData.anioAprobacion === 0
+											? '1px solid red'
+											: ''
+								}}
 								onChange={handleFechaAprobacionOnChange}
 								placeholder="Seleccionar"
 								value={formData.anioAprobacion}
@@ -580,7 +586,15 @@ const AltoPotencial = props => {
 						</Col>
 					</Row>
 
-					<Row className="mt-3">
+					<Row
+						className="mt-3"
+						style={{
+							border:
+								checkedValid && formData.estrategias.length === 0
+									? '1px solid red'
+									: ''
+						}}
+					>
 						{state.selects.estrategiasFlexibilidadCurricular.map((item, i) => (
 							<Col md={3}>
 								<FormGroup>
