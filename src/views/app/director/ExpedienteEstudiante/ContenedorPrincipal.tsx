@@ -52,8 +52,7 @@ const ContenedorPrincipal = props => {
 	studentBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
 		return item
-	})
-
+	})	
 	const actions = useActions({
 		getIdentification,
 		getStudentDataFilter,

@@ -532,6 +532,92 @@ const routes: Route[] = [
 		isAuthenticated: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
+			active: 6,
+			activeTab: 1
+		}
+	},
+
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route: '/director/expediente-estudiante/apoyos-educativos/curriculares',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 6,
+			activeTab: 0
+		}
+	},
+
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route: '/director/expediente-estudiante/apoyos-educativos/personales',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 6,
+			activeTab: 1
+		}
+	},
+
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route: '/director/expediente-estudiante/apoyos-educativos/organizativos',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 6,
+			activeTab: 2
+		}
+	},
+
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route: '/director/expediente-estudiante/apoyos-educativos/alto-potencial',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 6,
+			activeTab: 3
+		}
+	},
+
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route:
+			'/director/expediente-estudiante/apoyos-educativos/condicion-discapacidad',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 6,
+			activeTab: 4
+		}
+	},
+
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route:
+			'/director/expediente-estudiante/apoyos-educativos/otras-condiciones',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 6,
+			activeTab: 5
+		}
+	},
+
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route: '/director/expediente-estudiante/apoyos-educativos',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
 			active: 6
 		}
 	},

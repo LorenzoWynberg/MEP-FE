@@ -102,6 +102,7 @@ const Apoyo = props => {
 			</h4>
 			<br />
 			<ApoyoEducativo
+				{...props}
 				showsnackBar={showsnackBar}
 				discapacidades={state.selects[catalogsEnumObj.DISCAPACIDADES.name]}
 				condiciones={state.selects[catalogsEnumObj.OTRASCONDICIONES.name]}
