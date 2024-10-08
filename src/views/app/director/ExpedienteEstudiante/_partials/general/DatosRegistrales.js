@@ -46,7 +46,7 @@ const DatosRegistrales = props => {
 		return (
 			<>
 				<h1 style={{ color: colors.error }}>
-					<i class="fas fa-exclamation-triangle"></i>
+					<i className="fas fa-exclamation-triangle"></i>
 					{' Problema de conexión con el TSE'}
 				</h1>
 			</>
@@ -57,7 +57,7 @@ const DatosRegistrales = props => {
 		<Row className="mb-3">
 			<Col xs={12}>
 				<p className="mb-3">
-					<i class="fas fa-info-circle"></i> En esta pantalla muestra la
+					<i className="fas fa-info-circle"></i> En esta pantalla muestra la
 					información de los progenitores de la persona estudiante, suministrada
 					por el Tribunal Supremo de Elecciones (T.S.E):
 				</p>

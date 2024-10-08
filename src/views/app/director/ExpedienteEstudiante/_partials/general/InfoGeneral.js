@@ -279,8 +279,8 @@ const InfoGeneral = props => {
 	return (
 		<>
 			<p className="mb-3">
-				<i class="fas fa-info-circle"></i> En esta pantalla podrá encontrar la
-				información personal de la persona estudiante:
+				<i className="fas fa-info-circle"></i> En esta pantalla podrá encontrar
+				la información personal de la persona estudiante:
 			</p>
 			<Form onSubmit={handleSubmit(submitData)}>
 				<Row>

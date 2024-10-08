@@ -127,7 +127,7 @@ const InformacionContacto = props => {
 	return (
 		<>
 			<p className="mb-3">
-				<i class="fas fa-info-circle"></i> En esta pantalla encontrará la
+				<i className="fas fa-info-circle"></i> En esta pantalla encontrará la
 				información de contacto de la persona estudiante:
 			</p>
 			{snakbar(snackbarVariant, snackbarMsg)}
@@ -256,9 +256,9 @@ const InformacionContacto = props => {
 							</Grid>
 							<Grid item xs={12} className={classes.control}>
 								<span>
-									<i class="fas fa-info-circle"></i> Los datos de redes sociales
-									no son obligatorios y se recomienda su registro solamente para
-									personas estudiantes mayores de 12 años.
+									<i className="fas fa-info-circle"></i> Los datos de redes
+									sociales no son obligatorios y se recomienda su registro
+									solamente para personas estudiantes mayores de 12 años.
 								</span>
 							</Grid>
 						</Grid>

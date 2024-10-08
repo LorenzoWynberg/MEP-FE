@@ -371,7 +371,8 @@ const InformacionResidenciaSaber = props => {
 			_errors['direccionExacta'] = 'Debe tener una dirección'
 		}
 		if (props.temporal && !data.razon) {
-			_errors['razon'] = 'Debe tener una razón para su residencia temporal'
+			_errors['razon'] =
+				'Debe indicar el motivo para el registro de residencia temporal'
 		}
 
 		let error = _errors['poblado']
@@ -498,6 +499,14 @@ const InformacionResidenciaSaber = props => {
 
 	return (
 		<Grid container className={classes.root} spacing={2}>
+			<Grid item xs={12}>
+				<p className="mb-0">
+					<i className="fas fa-info-circle"></i>{' '}
+					{props.temporal
+						? 'La información de residencia temporal solamente se utiliza cuando la persona estudiante por situaciones educativas tiene un lugar de residencia temporal (diferente al lugar de domicilio).'
+						: 'En esta pantalla encontrara la información del domicilio o lugar de residencia de la persona estudiante:'}
+				</p>
+			</Grid>
 			{sanackBar(snackbarVariant, snackbarMsg)}
 			<Grid item xs={12}>
 				<Form onSubmit={handleSubmit(sendData)}>
@@ -517,7 +526,8 @@ const InformacionResidenciaSaber = props => {
 										{props.temporal && (
 											<FormGroup>
 												<Label for="razon">
-													Razón <RequiredSpan />
+													Motivo del la residencia temporal
+													<RequiredSpan />
 												</Label>
 												<Input
 													type="textarea"

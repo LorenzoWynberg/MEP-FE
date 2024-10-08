@@ -240,7 +240,7 @@ const PersonalDataForm = props => {
 						</Col>
 						<Col>
 							<p className="mb-3">
-								<i class="fas fa-info-circle"></i> Recuerde que los datos
+								<i className="fas fa-info-circle"></i> Recuerde que los datos
 								personales se actualizan desde el módulo de “Identidad de la
 								persona”
 							</p>
