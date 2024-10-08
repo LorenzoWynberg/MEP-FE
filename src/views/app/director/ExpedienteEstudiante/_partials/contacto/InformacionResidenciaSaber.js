@@ -61,7 +61,7 @@ const InformacionResidenciaSaber = props => {
 	const [razon, setRazon] = useState('')
 	const [snackbarMsg, setSnackbarMsg] = useState('')
 	const [snackbarVariant, setSnackbarVariant] = useState('')
-	const [location, setLocation] = useState({ latitude: 0, longitude: 0 })
+	const [location, setLocation] = useState({ latitude: null, longitude: null })
 	const [editDirection, setEditDirection] = useState({})
 	const [editable, setEditable] = useState(false)
 	const [loading, setLoading] = useState(true)
@@ -90,7 +90,7 @@ const InformacionResidenciaSaber = props => {
 		setCurrentPoblado(initialSelectOption)
 		setCurrentTerritory(initialSelectOption)
 		// setDirection('')
-		setLocation({ latitude: null, longitude: null })
+		setLocation({ latitude: '', longitude: '' })
 	}
 
 	useEffect(() => {
@@ -103,6 +103,7 @@ const InformacionResidenciaSaber = props => {
 			handleSearchBySelects(currentPoblado, 'poblado')
 		}
 	}, [currentPoblado, search, location])
+
 	const loadData = useCallback(async () => {
 		if (ubicacion.provincia) {
 			const _direccionArray = [
@@ -126,15 +127,13 @@ const InformacionResidenciaSaber = props => {
 				label: _province?.nombre,
 				value: _province?.id
 			})
-			setLocation({
-				latitude: location.latitude,
-				longitude: location.longitude
-			})
 		}
 	}, [ubicacion])
+
 	useEffect(() => {
 		loadData()
 	}, [ubicacion])
+
 	const loadDataBac = useCallback(async () => {
 		const item = props?.identification.data.direcciones.find(
 			item => item.temporal === props.temporal
@@ -175,7 +174,7 @@ const InformacionResidenciaSaber = props => {
 			setLoading(false)
 			setInitiaState()
 		}
-	}, [props?.identification.data, editable])
+	}, [props?.identification?.data?.direcciones, editable])
 	//this effects parse the data when comes from the backend
 	useEffect(() => {
 		if (
@@ -187,7 +186,7 @@ const InformacionResidenciaSaber = props => {
 			setLoading(false)
 			setInitiaState()
 		}
-	}, [props?.identification.data, editable])
+	}, [props?.identification?.data?.direcciones, editable])
 
 	useEffect(() => {
 		const loadDataC = async () => {
@@ -339,7 +338,9 @@ const InformacionResidenciaSaber = props => {
 				break
 			case 'poblado':
 				_newDirection = `${currentProvince.label}, ${currentCanton.label}, ${currentDistrito.label}`
-				currentPoblado.value != null && currentPoblado.value != data.value && setDirection('')
+				currentPoblado.value != null &&
+					currentPoblado.value != data.value &&
+					setDirection('')
 				setCurrentPoblado(data)
 				break
 			default:
@@ -376,10 +377,10 @@ const InformacionResidenciaSaber = props => {
 		let error = _errors['poblado']
 			? true
 			: _errors['razon']
-				? true
-				: _errors['direccionExacta']
-					? true
-					: false
+			? true
+			: _errors['direccionExacta']
+			? true
+			: false
 		setErrors(_errors)
 
 		if (error) {
@@ -452,7 +453,6 @@ const InformacionResidenciaSaber = props => {
 				estado: true
 			}
 			if (!validateData(_data).error) {
-
 				console.log('_data', _data)
 				response = await props.createDirection(_data, {
 					identidadId: props?.identification.data?.id,
@@ -783,6 +783,7 @@ const InformacionResidenciaSaber = props => {
 									onClick={() => {
 										setInitiaState()
 										setDirection('')
+										setLocation({ latitude: '', longitude: '' })
 									}}
 								>
 									Limpiar campos

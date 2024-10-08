@@ -86,7 +86,7 @@ const Expediente = () => {
 					'Información de contacto'
 				)}
 			</h4>
-			<br />
+
 			<HeaderTab
 				options={optionsTab}
 				activeTab={activeTab}
