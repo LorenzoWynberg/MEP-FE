@@ -53,14 +53,23 @@ const ServicioComunalEstudiantil = props => {
 	}, [])
 
 	const mantenimientoTab = !props.match.params.id
-		? { title: 'Mantenimiento', path: '/registro' }
-		: { title: 'Mantenimiento', path: `/editar/${props.match.params.id}` }
+		? {
+				title: 'Mantenimiento',
+				path: '/director/expediente-centro/sce/registro'
+		  }
+		: {
+				title: 'Mantenimiento',
+				path: `/director/expediente-centro/sce/editar/${props.match.params.id}`
+		  }
 
 	const optionsTab = [
-		{ title: 'Historico', path: '/' },
+		{ title: 'Historico', path: '/director/expediente-centro/sce' },
 		mantenimientoTab,
-		{ title: 'Actas', path: '/actas' },
-		{ title: 'Certificados', path: '/certificados' }
+		{ title: 'Actas', path: '/director/expediente-centro/sce/actas' },
+		{
+			title: 'Certificados',
+			path: '/director/expediente-centro/sce/certificados'
+		}
 	]
 
 	if (!tienePermiso || tienePermiso?.leer == 0) {

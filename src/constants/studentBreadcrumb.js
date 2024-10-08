@@ -35,7 +35,7 @@ const data = [
 	},
 	{
 		label: 'estudiantes>expediente>nav>apoyos_edu',
-		to: '/director/expediente-estudiante/apoyos-educativos',
+		to: '/director/expediente-estudiante/apoyos-educativos/curriculares',
 		active: false
 	},
 	// {

@@ -533,7 +533,7 @@ const routes: Route[] = [
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
 			active: 6,
-			apoyo:1
+			activeTab: 1
 		}
 	},
 
@@ -545,7 +545,7 @@ const routes: Route[] = [
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
 			active: 6,
-			apoyo:0
+			activeTab: 0
 		}
 	},
 
@@ -557,7 +557,7 @@ const routes: Route[] = [
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
 			active: 6,
-			apoyo:1
+			activeTab: 1
 		}
 	},
 
@@ -569,7 +569,7 @@ const routes: Route[] = [
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
 			active: 6,
-			apoyo:2
+			activeTab: 2
 		}
 	},
 
@@ -581,31 +581,33 @@ const routes: Route[] = [
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
 			active: 6,
-			apoyo:3
+			activeTab: 3
 		}
 	},
 
 	{
 		component: ExpedienteEstudiante,
 		exact: true,
-		route: '/director/expediente-estudiante/apoyos-educativos/condicion-discapacidad',
+		route:
+			'/director/expediente-estudiante/apoyos-educativos/condicion-discapacidad',
 		isAuthenticated: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
 			active: 6,
-			apoyo:4
+			activeTab: 4
 		}
 	},
 
 	{
 		component: ExpedienteEstudiante,
 		exact: true,
-		route: '/director/expediente-estudiante/apoyos-educativos/otras-condiciones',
+		route:
+			'/director/expediente-estudiante/apoyos-educativos/otras-condiciones',
 		isAuthenticated: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
 			active: 6,
-			apoyo:5
+			activeTab: 5
 		}
 	},
 
