@@ -2,6 +2,7 @@ import {
 	Radio,
 	RadioGroup,
 	FormControl,
+	FormHelperText,
 	FormControlLabel
 } from '@material-ui/core'
 import axios from 'axios'
@@ -28,9 +29,26 @@ const ComputoModal = ({
 }) => {
 	const [showModalEstado, setShowModalEstado] = useState(false)
 	const [loading, setLoading] = useState(false)
-	const [errors, setErrors] = useState({})
 	const { t } = useTranslation()
 	const primary = colors.primary
+
+	const [errors, setErrors] = useState({
+		sb_tipoActivoId: null,
+		serie: null,
+		placa: null,
+		sb_fuenteId: null,
+		sb_condicionId: null,
+		sb_ubicacionId: null,
+		nombreDirector: null,
+		puestoRealizaInventario: null,
+		utilizada: null,
+		paraDonar: null
+	})
+
+	const CustomFormHelperText = styled(FormHelperText)(({ theme }) => ({
+		color: colors.error + ' !important',
+		border: 'none !important'
+	}))
 
 	// Definir estado inicial
 	const getInitialFormState = () => {
@@ -167,30 +185,54 @@ const ComputoModal = ({
 	// Validaciones
 	const validateFields = () => {
 		const newErrors = {}
-		if (!formState.sb_tipoActivoId || formState.sb_tipoActivoId === '')
-			newErrors.sb_tipoActivoId = true
-		if (!formState.serie) newErrors.serie = true
-		if (!formState.placa) newErrors.placa = true
-		if (!formState.sb_fuenteId || formState.sb_fuenteId === '')
-			newErrors.sb_fuenteId = true
-		if (!formState.sb_condicionId || formState.sb_condicionId === '')
-			newErrors.sb_condicionId = true
-		if (!formState.sb_ubicacionId || formState.sb_ubicacionId === '')
-			newErrors.sb_ubicacionId = true
-		if (!formState.nombreDirector) newErrors.nombreDirector = true
-		if (!formState.puestoRealizaInventario)
-			newErrors.puestoRealizaInventario = true
-		if (formState.utilizada === '') newErrors.utilizada = true
-		if (formState.paraDonar === '') newErrors.paraDonar = true
+
+		if (!formState.sb_tipoActivoId || formState.sb_tipoActivoId === '') {
+			newErrors.sb_tipoActivoId = 'Tipo de activo es requerido'
+		}
+
+		if (!formState.serie) {
+			newErrors.serie = 'Número de serie es requerido'
+		}
+
+		if (!formState.placa) {
+			newErrors.placa = 'Número de placa es requerido'
+		}
+
+		if (!formState.sb_fuenteId || formState.sb_fuenteId === '') {
+			newErrors.sb_fuenteId = 'Fuente es requerida'
+		}
+
+		if (!formState.sb_condicionId || formState.sb_condicionId === '') {
+			newErrors.sb_condicionId = 'Estado es requerido'
+		}
+
+		if (!formState.sb_ubicacionId || formState.sb_ubicacionId === '') {
+			newErrors.sb_ubicacionId = 'Ubicación es requerida'
+		}
+
+		if (!formState.nombreDirector) {
+			newErrors.nombreDirector = 'Nombre del director es requerido'
+		}
+
+		if (!formState.puestoRealizaInventario) {
+			newErrors.puestoRealizaInventario = 'Puesto es requerido'
+		}
+
+		if (formState.utilizada === '') {
+			newErrors.utilizada = 'Especificar si está utilizada es requerido'
+		}
+
+		if (formState.paraDonar === '') {
+			newErrors.paraDonar = 'Especificar si puede ser donada es requerido'
+		}
 
 		if (formState.paraDonar) {
 			if (
-				!(
-					['Bueno', 'Excelente'].includes(formState.condicionNombre) &&
-					!formState.utilizada
-				)
+				!['Bueno', 'Excelente'].includes(formState.condicionNombre) ||
+				formState.utilizada
 			) {
-				newErrors.paraDonar = true
+				newErrors.paraDonar =
+					'Para donar, la condición debe ser Bueno o Excelente y no utilizada'
 			}
 		}
 
@@ -241,10 +283,20 @@ const ComputoModal = ({
 					type: 'error'
 				})
 				handleClick()
-				console.error('Error saving data:', error)
+				if (error?.response?.data?.errors) {
+					setErrors(prevErrors => ({
+						...prevErrors,
+						serie: error.response.data.errors.serie || null,
+						placa: error.response.data.errors.placa || null
+					}))
+				}
 			}
 		} else {
-			console.log('Validation failed:', errors)
+			setSnackbarContent({
+				msg: `Error de validacion`,
+				type: 'error'
+			})
+			handleClick()
 		}
 	}
 
@@ -335,7 +387,7 @@ const ComputoModal = ({
 									onChange={handleInputChange}
 									value={formState.sb_tipoActivoId || ''}
 									style={{
-										borderColor: errors.sb_tipoActivoId ? 'red' : ''
+										borderColor: errors.sb_tipoActivoId ? colors.error : ''
 									}}
 									disabled={isViewMode} // Desabilitar campo en modo vista
 								>
@@ -362,10 +414,15 @@ const ComputoModal = ({
 								onChange={handleInputChange}
 								value={formState.serie || ''}
 								style={{
-									borderColor: errors.serie ? 'red' : ''
+									borderColor: errors.serie ? colors.error : ''
 								}}
 								disabled={isViewMode} // Desahabilitar campo en modo vista
 							/>
+							{errors.serie && (
+								<CustomFormHelperText error>
+									{errors.serie}
+								</CustomFormHelperText>
+							)}
 						</Col>
 						<Col className={'mb-3'} md={6}>
 							<Label for="placa">
@@ -379,10 +436,15 @@ const ComputoModal = ({
 								onChange={handleInputChange}
 								value={formState.placa || ''}
 								style={{
-									borderColor: errors.placa ? 'red' : ''
+									borderColor: errors.placa ? colors.error : ''
 								}}
 								disabled={isViewMode} // Desahabilitar campo en modo vista
 							/>
+							{errors.placa && (
+								<CustomFormHelperText error>
+									{errors.placa}
+								</CustomFormHelperText>
+							)}
 						</Col>
 						<Col className={'mb-3'} md={6}>
 							<FormGroup className={'mb-0'}>
@@ -396,7 +458,7 @@ const ComputoModal = ({
 									onChange={handleInputChange}
 									value={formState.sb_fuenteId || ''}
 									style={{
-										borderColor: errors.sb_fuenteId ? 'red' : ''
+										borderColor: errors.sb_fuenteId ? colors.error : ''
 									}}
 									disabled={isViewMode} // Desahabilitar campo en modo vista
 								>
@@ -425,7 +487,7 @@ const ComputoModal = ({
 								}}
 								value={formState.condicionNombre || 'Seleccionar'} // Mostrar el nombre de la condición
 								style={{
-									borderColor: errors.sb_condicionId ? 'red' : ''
+									borderColor: errors.sb_condicionId ? colors.error : ''
 								}}
 								disabled={isViewMode} // Desahabilitar campo en modo vista
 							/>
@@ -442,7 +504,7 @@ const ComputoModal = ({
 									onChange={handleInputChange}
 									value={formState.sb_ubicacionId || ''}
 									style={{
-										borderColor: errors.sb_ubicacionId ? 'red' : ''
+										borderColor: errors.sb_ubicacionId ? colors.error : ''
 									}}
 									disabled={isViewMode} // Desahabilitar campo en modo vista
 								>
@@ -469,7 +531,7 @@ const ComputoModal = ({
 								onChange={handleInputChange}
 								value={formState.nombreDirector || ''}
 								style={{
-									borderColor: errors.nombreDirector ? 'red' : ''
+									borderColor: errors.nombreDirector ? colors.error : ''
 								}}
 								disabled={isViewMode || mode == 'edit'} // Desahabilitar campo en modo vista
 							/>
@@ -486,7 +548,9 @@ const ComputoModal = ({
 								onChange={handleInputChange}
 								value={formState.puestoRealizaInventario || ''}
 								style={{
-									borderColor: errors.puestoRealizaInventario ? 'red' : ''
+									borderColor: errors.puestoRealizaInventario
+										? colors.error
+										: ''
 								}}
 								disabled={isViewMode || mode == 'edit'} // Desahabilitar campo en modo vista
 							/>
@@ -509,7 +573,7 @@ const ComputoModal = ({
 											: ''
 									}
 									style={{
-										borderColor: errors.utilizada ? 'red' : ''
+										borderColor: errors.utilizada ? colors.error : ''
 									}}
 									disabled={isViewMode} // Desabilitar campo en modo vista
 								>
@@ -540,7 +604,7 @@ const ComputoModal = ({
 											: ''
 									}
 									style={{
-										borderColor: errors.paraDonar ? 'red' : ''
+										borderColor: errors.paraDonar ? colors.error : ''
 									}}
 									disabled={isViewMode || !canSetParaDonar} // Desabilitar campo en modo vista o si no se cumplen las condiciones
 								>
@@ -561,10 +625,10 @@ const ComputoModal = ({
 									<option value="0">{t('general>no', 'No')}</option>
 								</StyledInput>
 								{!isViewMode && (
-									<small style={{ color: 'gray' }}>
+									<FormHelperText disabled>
 										Para donar, la condición debe ser Bueno o Excelente y
 										utilizada debe ser No.
-									</small>
+									</FormHelperText>
 								)}
 							</FormGroup>
 						</Col>
