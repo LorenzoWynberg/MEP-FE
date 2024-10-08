@@ -22,7 +22,6 @@ import OptionModal from 'Components/Modal/OptionModal'
 import { isNaN, isEmpty } from 'lodash'
 import swal from 'sweetalert'
 import RequiredSpan from 'Components/Form/RequiredSpan'
-import { set } from 'lodash'
 
 const useStyles = makeStyles(theme => ({
 	root: {
