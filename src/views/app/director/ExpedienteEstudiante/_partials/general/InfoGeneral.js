@@ -277,61 +277,67 @@ const InfoGeneral = props => {
 	}
 
 	return (
-		<Form onSubmit={handleSubmit(submitData)}>
-			<Row>
-				<Colxx lg="6" className="mb-3">
-					<PersonalDataForm
-						personalData={identidadData}
-						disabled={
-							(state.identification.loaded &&
-								identidadData.idType &&
-								identidadData.idType.codigo === '01') ||
-							!editable
-						}
-						identification={state.identification}
-						handleChange={handleChange}
-						listSexo={listSexo}
-						selects={props.selects}
-						label
-					/>
-				</Colxx>
+		<>
+			<p className="mb-3">
+				<i class="fas fa-info-circle"></i> En esta pantalla podrá encontrar la
+				información personal de la persona estudiante:
+			</p>
+			<Form onSubmit={handleSubmit(submitData)}>
+				<Row>
+					<Colxx lg="6" className="mb-3">
+						<PersonalDataForm
+							personalData={identidadData}
+							disabled={
+								(state.identification.loaded &&
+									identidadData.idType &&
+									identidadData.idType.codigo === '01') ||
+								!editable
+							}
+							identification={state.identification}
+							handleChange={handleChange}
+							listSexo={listSexo}
+							selects={props.selects}
+							label
+						/>
+					</Colxx>
 
-				<Colxx lg="6" className="mb-3">
-					<DataForm
-						selects={props.selects}
-						identification={state.identification}
-						personalData={identidadData}
-						handleChange={handleChange}
-						disabled={
-							(state.identification.loaded &&
-								identidadData.idType &&
-								identidadData.idType.codigo === '01') ||
-							!editable
-						}
+					<Colxx lg="6" className="mb-3">
+						<DataForm
+							selects={props.selects}
+							identification={state.identification}
+							personalData={identidadData}
+							handleChange={handleChange}
+							disabled={
+								(state.identification.loaded &&
+									identidadData.idType &&
+									identidadData.idType.codigo === '01') ||
+								!editable
+							}
+							editable={editable}
+							disableMigrationStatus={disableMigrationStatus}
+						/>
+					</Colxx>
+				</Row>
+				<div
+					className="container-center"
+					style={props.validations.modificar ? {} : { display: 'none' }}
+				>
+					<EditButton
+						loading={state.identification.loading}
 						editable={editable}
-						disableMigrationStatus={disableMigrationStatus}
+						marginY="mb-3"
+						setEditable={value => {
+							authHandler(
+								'modificar',
+								() => handleCancelEdit(value),
+								toggleSnackbar
+							)
+						}}
+						sendData={sendData}
 					/>
-				</Colxx>
-			</Row>
-			<div
-				className="container-center"
-				style={props.validations.modificar ? {} : { display: 'none' }}
-			>
-				<EditButton
-					loading={state.identification.loading}
-					editable={editable}
-					marginY="mb-3"
-					setEditable={value => {
-						authHandler(
-							'modificar',
-							() => handleCancelEdit(value),
-							toggleSnackbar
-						)
-					}}
-					sendData={sendData}
-				/>
-			</div>
-		</Form>
+				</div>
+			</Form>
+		</>
 	)
 }
 export default withAuthorization({

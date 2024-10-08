@@ -3,7 +3,18 @@ import CustomSelectInput from 'Components/common/CustomSelectInput'
 import Select from 'react-select'
 import { isEmpty } from 'lodash'
 
-import { Input, Label, Form, Row, Col, FormGroup, Card, CardBody, CardTitle, FormFeedback } from 'reactstrap'
+import {
+	Input,
+	Label,
+	Form,
+	Row,
+	Col,
+	FormGroup,
+	Card,
+	CardBody,
+	CardTitle,
+	FormFeedback
+} from 'reactstrap'
 import styled from 'styled-components'
 import RequiredLabel from '../../../../../../components/common/RequeredLabel'
 import { useTranslation } from 'react-i18next'
@@ -20,8 +31,12 @@ const IdentificationTypeCode = {
 
 const PersonalDataForm = props => {
 	const { t } = useTranslation()
-	const [errorFields, setErrorFields] = useState(props.identification.errorFields)
-	const [errorMessages, setErrorMessages] = useState(props.identification.errorMessages)
+	const [errorFields, setErrorFields] = useState(
+		props.identification.errorFields
+	)
+	const [errorMessages, setErrorMessages] = useState(
+		props.identification.errorMessages
+	)
 	const [tipoIdentidadData, setTipoIdentidadData] = useState(null)
 
 	const actions = useActions({
@@ -33,7 +48,11 @@ const PersonalDataForm = props => {
 		setErrorMessages(props.identification.errorMessages)
 	}, [props.identification])
 
-	const getTipoIdentificacion = async (codigoDeCatalogo, idType, nombreCatalogo) => {
+	const getTipoIdentificacion = async (
+		codigoDeCatalogo,
+		idType,
+		nombreCatalogo
+	) => {
 		try {
 			let type = ''
 			if (idType == 'YISRO') {
@@ -53,7 +72,9 @@ const PersonalDataForm = props => {
 
 			if (codigoIdentificacion !== '') {
 				const tipos = response.data
-				const nombre = tipos.find(item => item.id === parseInt(codigoIdentificacion)).nombre
+				const nombre = tipos.find(
+					item => item.id === parseInt(codigoIdentificacion)
+				).nombre
 				nombre && setTipoIdentidadData({ label: titulo, value: nombre })
 			}
 		} catch (err) {
@@ -64,10 +85,18 @@ const PersonalDataForm = props => {
 	useEffect(() => {
 		const loadData = async () => {
 			if (props.personalData.idType.codigo === IdentificationTypeCode.DIMEX) {
-				getTipoIdentificacion(catalogsEnumObj.TIPODIMEX.id, 'DIMEX', 'Tipo Dimex')
+				getTipoIdentificacion(
+					catalogsEnumObj.TIPODIMEX.id,
+					'DIMEX',
+					'Tipo Dimex'
+				)
 			}
 			if (props.personalData.idType.codigo === IdentificationTypeCode.YISRO) {
-				getTipoIdentificacion(catalogsEnumObj.TIPOYISRO.id, 'YISRO', 'TIPO YÍS RÖ')
+				getTipoIdentificacion(
+					catalogsEnumObj.TIPOYISRO.id,
+					'YISRO',
+					'TIPO YÍS RÖ'
+				)
 			}
 		}
 		loadData()
@@ -77,34 +106,40 @@ const PersonalDataForm = props => {
 		<Card>
 			<CardBody>
 				<CardTitle>
-					{t('estudiantes>expediente>info_gen>info_gen>datos_personales>titulo', 'Datos personales')}
+					{t(
+						'estudiantes>expediente>info_gen>info_gen>datos_personales>titulo',
+						'Datos personales'
+					)}
 				</CardTitle>
 				<Form>
 					<Row>
 						{!isEmpty(tipoIdentidadData) && (
-							<Col sm='12'>
+							<Col sm="12">
 								<FormGroup>
 									<Label>{tipoIdentidadData.label}</Label>
-									<Input type='text' value={tipoIdentidadData.value} disabled />
+									<Input type="text" value={tipoIdentidadData.value} disabled />
 								</FormGroup>
 							</Col>
 						)}
 
-						<Col sm='12'>
+						<Col sm="12">
 							<FormGroup>
 								<Label>
-									{t('estudiantes>expediente>info_gen>datos_adicionales>conocido', 'Conocido como')}
+									{t(
+										'estudiantes>expediente>info_gen>datos_adicionales>conocido',
+										'Conocido como'
+									)}
 								</Label>
 								<Input
-									type='text'
-									name='conocidoComo'
+									type="text"
+									name="conocidoComo"
 									value={props.personalData.conocidoComo}
 									onChange={props.handleChange}
 									disabled
 								/>
 							</FormGroup>
 						</Col>
-						<Col sm='12'>
+						<Col sm="12">
 							<FormGroup>
 								<Label>
 									{t(
@@ -114,13 +149,13 @@ const PersonalDataForm = props => {
 								</Label>
 								<SelectCatalogo
 									components={{ Input: CustomSelectInput }}
-									className='react-select'
-									classNamePrefix='react-select'
+									className="react-select"
+									classNamePrefix="react-select"
 									/* options={props.selects.genderTypes.map((item) => {
                     return { ...item, label: item.nombre, value: item.id };
                   })} */
-									catalogo='genderTypes'
-									placeholder=''
+									catalogo="genderTypes"
+									placeholder=""
 									value={props.personalData.genero}
 									onChange={data => {
 										props.handleChange(data, 'genero')
@@ -129,21 +164,24 @@ const PersonalDataForm = props => {
 								/>
 							</FormGroup>
 						</Col>
-						<Col sm='12'>
+						<Col sm="12">
 							<FormGroup>
 								<Label>
-									{t('estudiantes>expediente>info_gen>info_gen>datos_personales>sexo', 'Sexo')}
+									{t(
+										'estudiantes>expediente>info_gen>info_gen>datos_personales>sexo',
+										'Sexo'
+									)}
 								</Label>
 								<Select
 									components={{ Input: CustomSelectInput }}
-									className='react-select'
-									classNamePrefix='react-select'
+									className="react-select"
+									classNamePrefix="react-select"
 									options={props.selects.sexoTypes.map(item => ({
 										...item,
 										label: item.nombre,
 										value: item.id
 									}))}
-									placeholder=''
+									placeholder=""
 									value={props.personalData.sexo}
 									onChange={data => {
 										props.handleChange(data, 'sexo')
@@ -153,7 +191,7 @@ const PersonalDataForm = props => {
 								<FormFeedbackSpan>{errorMessages.SexoId}</FormFeedbackSpan>
 							</FormGroup>
 						</Col>
-						<Col sm='12'>
+						<Col sm="12">
 							<FormGroup>
 								{props.label ? (
 									<Label>
@@ -171,8 +209,8 @@ const PersonalDataForm = props => {
 									</RequiredLabel>
 								)}
 								<Input
-									type='text'
-									name='fechaDeNacimiento'
+									type="text"
+									name="fechaDeNacimiento"
 									value={props.personalData.fechaDeNacimiento}
 									disabled
 									onChange={data => {
@@ -183,7 +221,7 @@ const PersonalDataForm = props => {
 								<FormFeedback>{errorMessages.FechaDeNacimiento}</FormFeedback>
 							</FormGroup>
 						</Col>
-						<Col sm='12'>
+						<Col sm="12">
 							<FormGroup>
 								<Label>
 									{t(
@@ -191,9 +229,21 @@ const PersonalDataForm = props => {
 										'Edad cumplida'
 									)}
 								</Label>
-								<Input name='id' value={props.personalData.edad} disabled invalid={errorFields.Edad} />
+								<Input
+									name="id"
+									value={props.personalData.edad}
+									disabled
+									invalid={errorFields.Edad}
+								/>
 								<FormFeedback>{errorMessages.Edad}</FormFeedback>
 							</FormGroup>
+						</Col>
+						<Col>
+							<p className="mb-3">
+								<i class="fas fa-info-circle"></i> Recuerde que los datos
+								personales se actualizan desde el módulo de “Identidad de la
+								persona”
+							</p>
 						</Col>
 					</Row>
 				</Form>
