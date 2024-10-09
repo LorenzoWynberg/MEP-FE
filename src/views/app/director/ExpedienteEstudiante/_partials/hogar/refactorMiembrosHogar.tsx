@@ -266,7 +266,7 @@ const RefactorMiembrosHogar = props => {
 														false
 												  )
 												: 0
-											debugger
+
 											if (
 												age < 18 &&
 												fullRow.encargado === 'Sí' &&
@@ -346,10 +346,6 @@ const RefactorMiembrosHogar = props => {
 				</div>
 			)}
 			{snackBar(snackbarContent.variant, snackbarContent.msg)}
-			<p className="mb-3">
-				<i className="fas fa-info-circle"></i> En esta pantalla se muestran los
-				registros de información de miembros del hogar de la persona estudiante:
-			</p>
 			{!formData.showForm && (
 				<>
 					<TableReactImplementation
@@ -1028,8 +1024,8 @@ const RefactorMiembrosHogar = props => {
 													onClick={_ =>
 														events.onDiscapacidadesSeleccionadasClick(item)
 													}
-													checked={formData.condicionDiscapacidadSeleccionadas.find(
-														i => i.id == item.id
+													checked={formData.condicionDiscapacidadSeleccionadas.some(
+														i => i.id === item.id
 													)}
 												/>
 											</OnlyVert>

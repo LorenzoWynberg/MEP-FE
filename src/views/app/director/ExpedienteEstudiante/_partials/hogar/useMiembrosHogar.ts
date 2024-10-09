@@ -576,7 +576,6 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 						return
 					}
 
-					console.log('Identificacion response', r)
 					setIdentidadFormValues(r)
 					toggleLoading(false)
 				})
@@ -772,9 +771,11 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		//formBody.append('escolaridadId', state.escolaridad?.id || null)
 
 		formBody.append('parentescoId', state.relacionConEstudiante?.id)
+
 		state.condicionDiscapacidad.forEach(i => {
 			formBody.append('discapacidadesId', i.id)
 		})
+
 		if (state.imagen) {
 			formBody.append('fotoPerfil', state.imagen.blob)
 		}
@@ -827,7 +828,6 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			// !state.correo ||
 			!state.identificacion
 		) {
-			console.log('state', state)
 			errorToast('Faltan rellenar campos obligatorios')
 			callback()
 			return
