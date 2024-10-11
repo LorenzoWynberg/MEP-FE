@@ -51,7 +51,7 @@ const InformacionResidenciaSaber = props => {
 	const [currentProvince, setCurrentProvince] = useState(initialSelectOption)
 	const [currentCanton, setCurrentCanton] = useState(initialSelectOption)
 	const [currentDistrito, setCurrentDistrito] = useState(initialSelectOption)
-	 
+
 	const [currentPoblado, setCurrentPoblado] = useState(initialSelectOption)
 	const [currentTerritory, setCurrentTerritory] = useState(initialSelectOption)
 	const [errors, setErrors] = useState(initialSelectOption)
@@ -140,12 +140,12 @@ const InformacionResidenciaSaber = props => {
 			item => item.temporal === props.temporal
 		)
 		if (item) {
-console.log('props?.identification?.data?.direcciones',item)
+			console.log('props?.identification?.data?.direcciones', item)
 			const _direccionArray = [
 				item.provinciasId,
 				item.cantonesId,
 				item.distritosId,
-				item.pobladosId,
+				item.pobladosId
 			]
 
 			setDireccionArray(_direccionArray)
@@ -172,7 +172,7 @@ console.log('props?.identification?.data?.direcciones',item)
 				longitude: item.longitud || null
 			})
 			setRazon(item.razon)
-		} else { 
+		} else {
 			setLoading(false)
 			setInitiaState()
 		}
@@ -181,10 +181,10 @@ console.log('props?.identification?.data?.direcciones',item)
 	useEffect(() => {
 		if (
 			props?.identification.data.direcciones &&
-			props?.identification.data.direcciones.length > 0  
+			props?.identification.data.direcciones.length > 0
 		) {
 			loadDataBac()
-		}  
+		}
 	}, [props?.identification?.data?.direcciones, editable])
 
 	useEffect(() => {
@@ -390,95 +390,70 @@ console.log('props?.identification?.data?.direcciones',item)
 	}
 
 	const sendData = async () => {
-		let _data = {}
-		let response
+		let _data = {
+			temporal: props.temporal,
+			razon,
+			latitud: location.latitude === '' ? null : location.latitude,
+			longitud: location.longitude === '' ? null : location.longitude,
+			pobladoId: currentPoblado.value,
+			pobladosId: currentPoblado.value,
+			cantonesId: currentCanton.value,
+			provinciasId: currentProvince.value,
+			distritosId: currentDistrito.value,
+			identidadId: props?.identification.data?.id,
+			direccionExacta: direction,
+			territorioId: currentTerritory.value ? currentTerritory.value : 0,
+			estado: true
+		}
+
 		if (editDirection?.id) {
 			_data = {
 				...editDirection,
-				temporal: props.temporal,
-				razon,
-				latitud: location.latitude == '' ? null : location.latitude,
-				longitud: location.longitude == '' ? null : location.longitude,
-				pobladoId: currentPoblado.value,
-				pobladosId: currentPoblado.value,
-				cantonesId: currentCanton.value,
-				provinciasId: currentProvince.value,
-				distritosId: currentDistrito.value,
+				..._data
+			}
+		}
+
+		const validation = validateData(_data)
+		if (validation.error) {
+			showSnackbar('error', 'Por favor, corrige los errores en el formulario.')
+			return
+		}
+
+		const jsonPayload = {
+			province: currentProvince,
+			canton: currentCanton,
+			distrito: currentDistrito,
+			poblado: currentPoblado,
+			latitude: location.latitude === '' ? null : location.latitude,
+			longitude: location.longitude === '' ? null : location.longitude,
+			razon,
+			territorio: currentTerritory,
+			identidadId: props?.identification.data?.id,
+			temporal: props.temporal,
+			direccionExacta: direction,
+			estado: true
+		}
+
+		try {
+			const apiCall = editDirection?.id
+				? props.updateDirection
+				: props.createDirection
+
+			const response = await apiCall(_data, {
 				identidadId: props?.identification.data?.id,
-				direccionExacta: direction,
-				territorioId: currentTerritory.value ? currentTerritory.value : 0,
-				estado: true
+				tipo: props.temporal ? 1 : 0,
+				json: jsonPayload
+			})
+
+			if (response.error) {
+				showSnackbar('error', 'Los datos no pudieron ser guardados')
+			} else {
+				showSnackbar('success', 'Datos guardados con éxito')
+				setEditable(false)
 			}
-			if (!validateData(_data).error) {
-				console.log('_data', _data)
-				response = await props.updateDirection(_data, {
-					identidadId: props?.identification.data?.id,
-					tipo: props.temporal ? 1 : 0,
-					json: {
-						province: currentProvince,
-						canton: currentCanton,
-						distrito: currentDistrito,
-						poblado: currentPoblado,
-						latitud: location.latitude == '' ? null : location.latitude,
-						longitud: location.longitude == '' ? null : location.longitude,
-						razon,
-						territorio: currentTerritory,
-						identidadId: props?.identification.data?.id,
-						temporal: props.temporal,
-						direccionExacta: direction,
-						estado: true
-					}
-				})
-				if (response.error) {
-					showSnackbar('error', 'Los datos no pudieron ser guardados')
-				} else {
-					showSnackbar('success', 'Datos guardados con éxito')
-					setEditable(false)
-				}
-			}
-		} else {
-			_data = {
-				temporal: props.temporal,
-				razon,
-				latitud: location.latitude == '' ? null : location.latitude,
-				longitud: location.longitude == '' ? null : location.longitude,
-				pobladoId: currentPoblado.value,
-				pobladosId: currentPoblado.value,
-				cantonesId: currentCanton.value,
-				provinciasId: currentProvince.value,
-				distritosId: currentDistrito.value,
-				identidadId: props?.identification.data?.id,
-				direccionExacta: direction,
-				territorioId: currentTerritory.value ? currentTerritory.value : 0,
-				estado: true
-			}
-			if (!validateData(_data).error) {
-				console.log('_data', _data)
-				response = await props.createDirection(_data, {
-					identidadId: props?.identification.data?.id,
-					tipo: props.temporal ? 1 : 0,
-					json: {
-						province: currentProvince,
-						canton: currentCanton,
-						distrito: currentDistrito,
-						poblado: currentPoblado,
-						latitud: location.latitude == '' ? null : location.latitude,
-						longitud: location.longitude == '' ? null : location.longitude,
-						razon,
-						identidadId: props?.identification.data?.id,
-						temporal: props.temporal,
-						territorio: currentTerritory,
-						direccionExacta: direction,
-						estado: true
-					}
-				})
-				if (response.error) {
-					showSnackbar('error', 'Los datos no pudieron ser guardados')
-				} else {
-					showSnackbar('success', 'Datos guardados con éxito')
-					setEditable(false)
-				}
-			}
+		} catch (error) {
+			console.error('Unexpected Error:', error)
+			showSnackbar('error', 'Ocurrió un error inesperado.')
 		}
 	}
 
@@ -766,7 +741,7 @@ console.log('props?.identification?.data?.direcciones',item)
 							)}
 
 							<MapContainer item md={6} xs={12} className={classes.control}>
-								<WebMapView 
+								<WebMapView
 									setSearch={setSearch}
 									setUbicacion={setUbicacion}
 									editable={editable}
