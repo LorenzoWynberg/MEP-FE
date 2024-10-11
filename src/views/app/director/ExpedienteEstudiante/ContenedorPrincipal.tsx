@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import axios from 'axios'
 import studentBreadcrumb from 'Constants/studentBreadcrumb'
 import { useSelector } from 'react-redux'
@@ -7,7 +7,7 @@ import {
 	getStudentDataFilter,
 	loadStudent
 } from 'Redux/expedienteEstudiantil/actions'
-import { getDiscapacidades, getCondiciones } from 'Redux/apoyos/actions'
+import { getDiscapacidades } from 'Redux/apoyos/actions'
 import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
 import EstudianteInformationCard from './_partials/EstudianteInformationCard'
@@ -17,7 +17,7 @@ import AppLayout from 'Layout/AppLayout'
 import directorItems from 'Constants/directorMenu'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { isEmpty } from 'lodash'
+import { isEmpty, rest } from 'lodash'
 import { envVariables } from 'Constants/enviroment'
 import BitacoraExpediente from './BitacoraExpediente'
 import { catalogsEnumObj } from 'Utils/catalogsEnum'
@@ -29,6 +29,7 @@ const Navegacion = React.lazy(() => import('./Navegacion'))
 const Contacto = React.lazy(() => import('./Contacto'))
 const General = React.lazy(() => import('./General'))
 const Oferta = React.lazy(() => import('./Oferta'))
+// const AreaCurricular = React.lazy(() => import('./AreaCurricular'))
 const Hogar = React.lazy(() => import('./Hogar'))
 const Beneficios = React.lazy(() => import('./Beneficios'))
 const Apoyo = React.lazy(() => import('./Apoyo'))
@@ -42,10 +43,10 @@ const ServicioComunalEstudiantil = React.lazy(
 const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
 	const { idEstudiante } = useParams()
-	const [active, setActive] = useState(0)
-	const [loading, setLoading] = useState(true)
-	const [conditionsHaveChanged, setConditionsHaveChanged] = useState(false)
-	const [infoCard, setInfoCard] = useState({})
+	const [active, setActive] = React.useState(0)
+	const [loading, setLoading] = React.useState(true)
+	const idInstitucion = localStorage.getItem('idInstitucion')
+	const [infoCard, setInfoCard] = React.useState({})
 
 	studentBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
@@ -57,7 +58,6 @@ const ContenedorPrincipal = props => {
 		getStudentDataFilter,
 		loadStudent,
 		getDiscapacidades,
-		getCondiciones,
 		getCatalogs,
 		getCatalogsSet
 	})
@@ -159,34 +159,20 @@ const ContenedorPrincipal = props => {
 			const discapacidades = await actions.getDiscapacidades(
 				state.expedienteEstudiantil.currentStudent.idEstudiante
 			)
-			const tieneDiscapacidades = !isEmpty(discapacidades) ? true : false
-
-			const condiciones = await actions.getCondiciones(
-				state.expedienteEstudiantil.currentStudent.idEstudiante
-			)
-
-			const tieneCondiciones = !isEmpty(condiciones) ? true : false
-
-			let infoCondiciones = 'NO'
-			if (tieneDiscapacidades || tieneCondiciones) {
-				infoCondiciones = 'SI'
-			}
+			const tieneDiscapacidades = !isEmpty(discapacidades) ? 'SI' : 'NO'
 
 			setInfoCard(prevState => {
 				return {
 					...prevState,
-					discapacidades: tieneDiscapacidades,
-					condiciones: tieneCondiciones,
-					tieneDiscapacidades: infoCondiciones
+					tieneDiscapacidades: tieneDiscapacidades
 				}
 			})
-			setConditionsHaveChanged(false)
 			setLoading(false)
 		}
 		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
 			loadData()
 		}
-	}, [state.expedienteEstudiantil.currentStudent, conditionsHaveChanged])
+	}, [state.expedienteEstudiantil.currentStudent])
 
 	useEffect(() => {
 		setLoading(true)
@@ -220,6 +206,8 @@ const ContenedorPrincipal = props => {
 					{active !== 0 && estudianteEnContexto() && (
 						<EstudianteInformationCard fixed data={infoCard} />
 					)}
+
+					{/* <Row style={{ paddingTop: active !== 0 && estudianteEnContexto() ? 100 : 0 }}> */}
 					<Row>
 						{active !== 0 && estudianteEnContexto() && (
 							<Col xs={12}>
@@ -267,14 +255,15 @@ const ContenedorPrincipal = props => {
 												blockeo()
 											),
 											6: estudianteEnContexto() ? (
-												<Apoyo
-													{...props}
-													setConditionsHaveChanged={setConditionsHaveChanged}
-												/>
+												<Apoyo {...props} />
 											) : (
 												blockeo()
 											),
-
+											// 7: estudianteEnContexto() ? (
+											// 	<AreaCurricular {...props} />
+											// ) : (
+											// 	blockeo()
+											// ),
 											7: estudianteEnContexto() ? (
 												<Salud {...props} />
 											) : (
@@ -308,11 +297,6 @@ const ContenedorPrincipal = props => {
 											) : (
 												blockeo()
 											)
-											// 7: estudianteEnContexto() ? (
-											// 	<AreaCurricular {...props} />
-											// ) : (
-											// 	blockeo()
-											// ),
 										}[active]
 									}
 								</>

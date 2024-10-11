@@ -33,11 +33,12 @@ const ServicioComunalEstudiantil = props => {
 			.GetServicioComunalInfoByStudentId(state.identification?.data?.id)
 			.then(res => {
 				setServicioData(res)
+				console.log(res)
 			})
 			.finally(() => setLoading(false))
 	}, [state.identification])
 
-	if (isEmpty(servicioData) && !loading) {
+	if ((isEmpty(servicioData) || servicioData.error) && !loading) {
 		return (
 			<h4>
 				{t('No cuenta con registro de servicio comunal estudiantil asociado')}
