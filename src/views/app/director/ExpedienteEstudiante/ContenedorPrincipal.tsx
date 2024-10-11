@@ -17,7 +17,7 @@ import AppLayout from 'Layout/AppLayout'
 import directorItems from 'Constants/directorMenu'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { isEmpty, rest } from 'lodash'
+import { isEmpty } from 'lodash'
 import { envVariables } from 'Constants/enviroment'
 import BitacoraExpediente from './BitacoraExpediente'
 import { catalogsEnumObj } from 'Utils/catalogsEnum'
@@ -44,15 +44,14 @@ const ContenedorPrincipal = props => {
 	const { idEstudiante } = useParams()
 	const [active, setActive] = useState(0)
 	const [loading, setLoading] = useState(true)
-	const [aplicaSCE, setAplicaSCE] = useState(false)
 	const [conditionsHaveChanged, setConditionsHaveChanged] = useState(false)
-	const idInstitucion = localStorage.getItem('idInstitucion')
 	const [infoCard, setInfoCard] = useState({})
 
 	studentBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
 		return item
-	})	
+	})
+
 	const actions = useActions({
 		getIdentification,
 		getStudentDataFilter,
@@ -214,38 +213,13 @@ const ContenedorPrincipal = props => {
 		}
 	}, [state.expedienteEstudiantil.currentStudent])
 
-	const validarEstudianteSCE = async () => {
-		try {
-			const response = await axios.post(
-				`${envVariables.BACKEND_URL}/api/ServicioComunal/VerificarEstudianteAplicaSCE?idInstitucion=${idInstitucion}&idEstudiante=${state.expedienteEstudiantil.currentStudent.idEstudiante}`
-			)
-			setAplicaSCE(response.data)
-		} catch (error) {
-			console.error('API error:', error)
-		}
-	}
-
-	const validarAcceso = async () => {
-		setLoading(true)
-		await Promise.all([validarEstudianteSCE()])
-		setLoading(false)
-	}
-
-	useEffect(() => {
-		validarAcceso()
-	}, [])
-
 	return (
 		<AppLayout items={directorItems}>
 			<div className="dashboard-wrapper">
 				<Container>
 					{active !== 0 && estudianteEnContexto() && (
-						<InformationCard
-							data={state.expedienteEstudiantil.currentStudent}
-						/>
+						<EstudianteInformationCard fixed data={infoCard} />
 					)}
-
-					{/* <Row style={{ paddingTop: active !== 0 && estudianteEnContexto() ? 100 : 0 }}> */}
 					<Row>
 						{active !== 0 && estudianteEnContexto() && (
 							<Col xs={12}>
@@ -268,7 +242,7 @@ const ContenedorPrincipal = props => {
 										{
 											0: <Buscador {...props} />,
 											1: estudianteEnContexto() ? (
-												<Navegacion {...props} aplicaSCE={aplicaSCE} />
+												<Navegacion {...props} />
 											) : (
 												blockeo()
 											),

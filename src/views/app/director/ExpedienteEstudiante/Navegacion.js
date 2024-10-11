@@ -8,26 +8,14 @@ import Star from '@material-ui/icons/Star'
 import Solidarity from '../../../../assets/icons/Solidarity'
 import SquareFoot from '@material-ui/icons/SquareFoot'
 import BookIcon from '@mui/icons-material/Book'
-import Bookmark from '@material-ui/icons/Bookmark'
 import LocalHospital from '@material-ui/icons/LocalHospital'
 import EmailIcon from '@mui/icons-material/Email'
 import { Row, Container } from 'reactstrap'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
 
-const Navegacion = props => {
+const Navegacion = () => {
 	const { t } = useTranslation()
-	const { aplicaSCE } = props
 
-	const state = useSelector(store => {
-		return {
-			accessRole: store.authUser.currentRoleOrganizacion.accessRole,
-			permisos: store.authUser.rolPermisos
-		}
-	})
-	const tienePermisoSCE = state.permisos.find(
-		permiso => permiso.codigoSeccion == 'expedienteEstudianteSCE'
-	)
 	return (
 		<Container>
 			<Row className="mb-5">
@@ -139,15 +127,13 @@ const Navegacion = props => {
 						>
 							<BookIcon style={{ fontSize: 50 }} />
 						</NavigationCard>
-						{aplicaSCE && tienePermisoSCE && tienePermisoSCE?.leer == 1 ? (
-							<NavigationCard
-								icon={''}
-								title={'Servicio comunal estudiantil'}
-								href={'/director/expediente-estudiante/sce'}
-							>
-								<Solidarity style={{ fontSize: 50, color: 'white' }} />
-							</NavigationCard>
-						) : null}
+						<NavigationCard
+							icon={''}
+							title={'Servicio comunal estudiantil'}
+							href={'/director/expediente-estudiante/sce'}
+						>
+							<Solidarity style={{ fontSize: 50, color: 'white' }} />
+						</NavigationCard>
 					</Row>
 				</Colxx>
 			</Row>
