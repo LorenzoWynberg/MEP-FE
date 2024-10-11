@@ -1,86 +1,40 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import centroBreadcrumb from 'Constants/centroBreadcrumb'
-import { Col, Row, Container } from 'reactstrap'
-import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
-import AppLayout from 'Layout/AppLayout'
-import { envVariables } from 'Constants/enviroment'
-import directorItems from 'Constants/directorMenu'
-import Grupos from './_partials/GruposProyeccion/Grupos'
-import { Helmet } from 'react-helmet'
+import React from 'react'
 import Horarios from './Horarios'
+import { Helmet } from 'react-helmet'
+import AppLayout from 'Layout/AppLayout'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
-import Loader from 'Components/Loader'
-import { envVariables } from 'Constants/enviroment'
-import { use } from 'i18next'
+import { Col, Row, Container } from 'reactstrap'
+import directorItems from 'Constants/directorMenu'
+import Grupos from './_partials/GruposProyeccion/Grupos'
+import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
+import centroBreadcrumb from 'Constants/centroBreadcrumb'
 
 const Inicio = React.lazy(() => import('./Inicio'))
 const General = React.lazy(() => import('./General'))
-const Estadistica = React.lazy(() => import('./Estadistica'))
 const Ofertas = React.lazy(() => import('./Ofertas'))
+const Inventario = React.lazy(() => import('./Inventario'))
+const Estadistica = React.lazy(() => import('./Estadistica'))
 const RecursoHumano = React.lazy(() => import('./RecursoHumano'))
 const Infraestructura = React.lazy(() => import('./Infraestructura'))
+const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
 const OrganizacionAuxiliar = React.lazy(() => import('./OrganizacionAuxiliar'))
 const InformationCard = React.lazy(() => import('./_partials/InformationCard'))
-const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
-const Inventario = React.lazy(() => import('./Inventario'))
 const ServicioComunalEstudiantil = React.lazy(
 	() => import('./ServicioComunalEstudiantil')
 )
 
 const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
-	const [aplicaSCE, setAplicaSCE] = useState(false)
-	const [loading, setLoading] = useState(true)
-	const [breadcrumbs, setBreadcrumbs] = useState([])
-	const idInstitucion = localStorage.getItem('idInstitucion')
 
 	centroBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
 		return item
 	})
 
-	const validarInstitucionSCE = async () => {
-		try {
-			const response = await axios.post(
-				`${envVariables.BACKEND_URL}/api/ServicioComunal/VerificarInstitucionAplicaSCE?idInstitucion=${idInstitucion}`
-			)
-			setAplicaSCE(response.data)
-		} catch (error) {
-			console.error('API error:', error)
-		}
-	}
-
-	const validarAcceso = async () => {
-		await Promise.all([validarInstitucionSCE()])
-		setLoading(false)
-	}
-
-	useEffect(() => {
-		const newBreadcrumbs = centroBreadcrumb.map((item, idx) => ({
-			...item
-		}))
-
-		if (!aplicaSCE) {
-			newBreadcrumbs.splice(10, 1)
-		}
-
-		setBreadcrumbs(newBreadcrumbs)
-	}, [aplicaSCE])
-
-	useEffect(() => {
-		setLoading(true)
-		validarAcceso()
-	}, [])
-
 	const currentInstitucion = useSelector(
 		store => store.authUser.currentInstitution
 	)
-
-	if (loading) {
-		return <Loader />
-	}
 
 	if (currentInstitucion?.id == -1) {
 		return (
@@ -121,7 +75,7 @@ const ContenedorPrincipal = props => {
 										'expediente_ce>titulo',
 										'Expediente Centro educativo'
 									)}
-									data={breadcrumbs}
+									data={centroBreadcrumb}
 								/>
 								<br />
 							</Col>

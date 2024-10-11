@@ -128,8 +128,8 @@ export const Editar: React.FC<IProps> = props => {
 	}
 
 	useEffect(() => {
-		ObtenerInfoCatalogos().then(respone => {
-			setCatalogos(respone)
+		ObtenerInfoCatalogos().then(r => {
+			setCatalogos(r)
 		})
 	}, [])
 
