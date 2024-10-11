@@ -61,7 +61,7 @@ const InformacionResidenciaSaber = props => {
 	const [razon, setRazon] = useState('')
 	const [snackbarMsg, setSnackbarMsg] = useState('')
 	const [snackbarVariant, setSnackbarVariant] = useState('')
-	const [location, setLocation] = useState({ latitude: 0, longitude: 0 })
+	const [location, setLocation] = useState({ latitude: null, longitude: null })
 	const [editDirection, setEditDirection] = useState({})
 	const [editable, setEditable] = useState(false)
 	const [loading, setLoading] = useState(true)
@@ -89,19 +89,21 @@ const InformacionResidenciaSaber = props => {
 		setCurrentDistrito(initialSelectOption)
 		setCurrentPoblado(initialSelectOption)
 		setCurrentTerritory(initialSelectOption)
-		setDirection('')
-		setLocation({ latitude: null, longitude: null })
+		// setDirection('')
+		setLocation({ latitude: '', longitude: '' })
 	}
 
 	useEffect(() => {
 		props.getProvincias()
 		props.getCatalogs(catalogsEnumObj.TERRITORIOINDIGENA?.id)
 	}, [])
+
 	useEffect(() => {
 		if (currentPoblado?.label && search?.searchTerm && !location?.latitude) {
 			handleSearchBySelects(currentPoblado, 'poblado')
 		}
 	}, [currentPoblado, search, location])
+
 	const loadData = useCallback(async () => {
 		if (ubicacion.provincia) {
 			const _direccionArray = [
@@ -125,15 +127,13 @@ const InformacionResidenciaSaber = props => {
 				label: _province?.nombre,
 				value: _province?.id
 			})
-			setLocation({
-				latitude: location.latitude,
-				longitude: location.longitude
-			})
 		}
 	}, [ubicacion])
+
 	useEffect(() => {
 		loadData()
 	}, [ubicacion])
+
 	const loadDataBac = useCallback(async () => {
 		const item = props?.identification.data.direcciones.find(
 			item => item.temporal === props.temporal
@@ -164,7 +164,7 @@ const InformacionResidenciaSaber = props => {
 				})
 			}
 			setEditDirection(item)
-			  setDirection(item.direccionExacta)
+			setDirection(item.direccionExacta)
 			setLocation({
 				latitude: item.latitud,
 				longitude: item.longitud
@@ -174,7 +174,7 @@ const InformacionResidenciaSaber = props => {
 			setLoading(false)
 			setInitiaState()
 		}
-	}, [props?.identification.data, editable])
+	}, [props?.identification?.data?.direcciones, editable])
 	//this effects parse the data when comes from the backend
 	useEffect(() => {
 		if (
@@ -186,7 +186,7 @@ const InformacionResidenciaSaber = props => {
 			setLoading(false)
 			setInitiaState()
 		}
-	}, [props?.identification.data, editable])
+	}, [props?.identification?.data?.direcciones, editable])
 
 	useEffect(() => {
 		const loadDataC = async () => {
@@ -314,7 +314,8 @@ const InformacionResidenciaSaber = props => {
 		setDirection(e.target.value)
 	}
 
-	const handleSearchBySelects = useCallback(()=>(data, name) => {
+	const handleSearchBySelects = (data, name) => {
+		console.log('data', data)
 		if (search) {
 			search.clear()
 		}
@@ -337,7 +338,9 @@ const InformacionResidenciaSaber = props => {
 				break
 			case 'poblado':
 				_newDirection = `${currentProvince.label}, ${currentCanton.label}, ${currentDistrito.label}`
-				setDirection('') 
+				currentPoblado.value != null &&
+					currentPoblado.value != data.value &&
+					setDirection('')
 				setCurrentPoblado(data)
 				break
 			default:
@@ -347,7 +350,7 @@ const InformacionResidenciaSaber = props => {
 		//
 		search.search(`${_newDirection}, CRI`)
 		// search.suggest()
-	},[])
+	}
 
 	const handleChange = e => {
 		setRazon(e.target.value)
@@ -368,16 +371,17 @@ const InformacionResidenciaSaber = props => {
 			_errors['direccionExacta'] = 'Debe tener una dirección'
 		}
 		if (props.temporal && !data.razon) {
-			_errors['razon'] = 'Debe tener una razón para su residencia temporal'
+			_errors['razon'] =
+				'Debe indicar el motivo para el registro de residencia temporal'
 		}
 
 		let error = _errors['poblado']
 			? true
 			: _errors['razon']
-				? true
-				: _errors['direccionExacta']
-					? true
-					: false
+			? true
+			: _errors['direccionExacta']
+			? true
+			: false
 		setErrors(_errors)
 
 		if (error) {
@@ -450,7 +454,6 @@ const InformacionResidenciaSaber = props => {
 				estado: true
 			}
 			if (!validateData(_data).error) {
-
 				console.log('_data', _data)
 				response = await props.createDirection(_data, {
 					identidadId: props?.identification.data?.id,
@@ -496,6 +499,14 @@ const InformacionResidenciaSaber = props => {
 
 	return (
 		<Grid container className={classes.root} spacing={2}>
+			<Grid item xs={12}>
+				<p className="mb-0">
+					<i className="fas fa-info-circle"></i>{' '}
+					{props.temporal
+						? 'La información de residencia temporal solamente se utiliza cuando la persona estudiante por situaciones educativas tiene un lugar de residencia temporal (diferente al lugar de domicilio).'
+						: 'En esta pantalla encontrara la información del domicilio o lugar de residencia de la persona estudiante:'}
+				</p>
+			</Grid>
 			{sanackBar(snackbarVariant, snackbarMsg)}
 			<Grid item xs={12}>
 				<Form onSubmit={handleSubmit(sendData)}>
@@ -515,7 +526,8 @@ const InformacionResidenciaSaber = props => {
 										{props.temporal && (
 											<FormGroup>
 												<Label for="razon">
-													Razón <RequiredSpan />
+													Motivo del la residencia temporal
+													<RequiredSpan />
 												</Label>
 												<Input
 													type="textarea"
@@ -780,6 +792,8 @@ const InformacionResidenciaSaber = props => {
 									color="primary"
 									onClick={() => {
 										setInitiaState()
+										setDirection('')
+										setLocation({ latitude: '', longitude: '' })
 									}}
 								>
 									Limpiar campos

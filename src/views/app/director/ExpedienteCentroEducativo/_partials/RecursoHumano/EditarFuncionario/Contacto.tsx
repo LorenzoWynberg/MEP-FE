@@ -372,6 +372,9 @@ const Contacto = (props) => {
                     <h4>{t('expediente_ce>informacion_general>informacion>redes', 'Redes sociales')}</h4>
                   </Grid>
                   <Grid item xs={12} className={classes.control}>
+                  <span>Esta información solamente debe completarse en caso necesario y no es un requisito indispensable.</span>
+                  </Grid>
+                  <Grid item xs={12} className={classes.control}>
                     <Redes
                       data={state.funcionariosById.identidadDatos}
                       hasEditable={editable}

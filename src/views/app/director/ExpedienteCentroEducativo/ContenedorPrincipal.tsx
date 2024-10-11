@@ -12,6 +12,8 @@ import Horarios from './Horarios'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import Loader from 'Components/Loader'
+import { envVariables } from 'Constants/enviroment'
+import { use } from 'i18next'
 
 const Inicio = React.lazy(() => import('./Inicio'))
 const General = React.lazy(() => import('./General'))

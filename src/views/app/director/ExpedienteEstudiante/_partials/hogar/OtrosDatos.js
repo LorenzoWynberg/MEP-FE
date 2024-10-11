@@ -190,6 +190,11 @@ const OtrosDatos = props => {
 
 	return (
 		<Col sm="12" md="8" className="m-0 p-0 mb-3">
+			<p className="mb-3">
+				<i className="fas fa-info-circle"></i> En esta pantalla se encontrará la
+				información de otros datos de la persona estudiante:
+			</p>
+
 			{snakbar(snackbarVariant, snackbarMsg)}
 			<Card>
 				<CardBody>

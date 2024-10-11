@@ -35,14 +35,14 @@ const data = [
 	},
 	{
 		label: 'estudiantes>expediente>nav>apoyos_edu',
-		to: '/director/expediente-estudiante/apoyos-educativos',
+		to: '/director/expediente-estudiante/apoyos-educativos/curriculares',
 		active: false
 	},
-	{
-		label: 'estudiantes>expediente>nav>area_curric',
-		to: '/director/expediente-estudiante/area-curricular',
-		active: false
-	},
+	// {
+	// 	label: 'estudiantes>expediente>nav>area_curric',
+	// 	to: '/director/expediente-estudiante/area-curricular',
+	// 	active: false
+	// },
 	{
 		label: 'estudiantes>expediente>nav>salud',
 		to: '/director/expediente-estudiante/salud',

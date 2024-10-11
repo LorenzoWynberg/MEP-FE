@@ -132,8 +132,14 @@ const HistoricoResidencia = ({ identidadId }) => {
 			setShowCoordinates(false)
 		}
 	}, [search, selectedRow])
+
 	return (
 		<>
+			<p className="mb-3">
+				<i className="fas fa-info-circle"></i> En esta pantalla se muestran los
+				registros de histórico de domicilio y residencia temporal de la persona
+				estudiante::
+			</p>
 			<Card>
 				<CardBody>
 					<OptionModal

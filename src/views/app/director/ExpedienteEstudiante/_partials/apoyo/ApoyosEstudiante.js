@@ -1,8 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react'
+
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap'
-import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
+import { SearchWithYearsTableReactImplementation } from 'Components/SearchWithYearsTableReactImplementation'
 import useNotification from 'Hooks/useNotification'
 import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import styled from 'styled-components'
@@ -18,15 +19,11 @@ import {
 	Radio,
 	RadioGroup
 } from '@material-ui/core'
-import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
 import { getCatalogsByName } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
-import { IoMdTrash } from 'react-icons/io'
-import IconButton from '@mui/material/IconButton'
-import { HiPencil } from 'react-icons/hi'
 import swal from 'sweetalert'
 import { isNull, isUndefined, isEmpty } from 'lodash'
 import Loader from 'Components/LoaderContainer'
@@ -34,6 +31,8 @@ import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import moment from 'moment'
 import colors from 'assets/js/colors'
+import { catalogsEnumByName } from '../../../../../../utils/catalogsEnum'
+import { set } from 'lodash'
 
 const condicionSeRecibeNombre = 'Se recibe'
 
@@ -49,10 +48,12 @@ const ApoyosEstudiante = props => {
 	const [tiposApoyoFilter, setTiposApoyoFilter] = useState([])
 	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
 	const [radioValue, setRadioValue] = useState(0)
+	const [editable, setEditable] = useState(false)
 	const [snackbarContent, setSnackbarContent] = useState({
 		msg: '',
-		type: ''
+		variant: ''
 	})
+	const [checkedValid, setCheckedValid] = useState(false)
 	const [formData, setFormData] = useState({
 		id: 0,
 		tipoDeApoyo: 0,
@@ -61,11 +62,7 @@ const ApoyosEstudiante = props => {
 		nombreApoyo: '',
 		fechaDeAprobacion: ''
 	})
-
-	//TODO JP Borrar estas 3 lineas
-	const [editable, setEditable] = useState(false)
-	const [sortedYearList, setSortedYearList] = useState(null)
-	const [catalogos, setCatalogos] = useState([])
+	const [loadingData, setLoadingData] = useState(true)
 
 	const primary = colors.primary
 
@@ -82,14 +79,10 @@ const ApoyosEstudiante = props => {
 			expedienteEstudiantil: store.expedienteEstudiantil,
 			identification: store.identification,
 			selects: store.selects
-			//TODO JP Borrar
-			//activeYear: store.authUser.selectedActiveYear,
-			//activeYears: store.authUser.activeYears
 		}
 	})
 
 	useEffect(() => {
-		//TODO esto esta en ApoyoEducativo (PADRE)
 		const loadData = async () => {
 			try {
 				setLoading(true)
@@ -103,6 +96,7 @@ const ApoyosEstudiante = props => {
 				const condicionApoyo = props.catalogos.find(item => {
 					return item.nombre === 'Condiciones de Apoyo'
 				})
+
 				if (!state.selects.tipoCondicionApoyo[0]) {
 					await actions.getCatalogsByName(
 						condicionApoyo.id,
@@ -118,26 +112,23 @@ const ApoyosEstudiante = props => {
 		loadData()
 	}, [])
 
-	//TODO JP pasar la categoria como prop
 	useEffect(() => {
-		setLoading(true)
+		setLoadingData(true)
 
 		axios
 			.get(
 				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
 			)
 			.then(response => {
-				debugger
 				setData(response.data.entityList)
-				setLoading(false)
+				setLoadingData(false)
 			})
 			.catch(error => {
 				console.log(error)
-				setLoading(false)
+				setLoadingData(false)
 			})
 	}, [])
 
-	//TODO JP tipos de apoyo quitar el useState esto, esto viene en los props y no hacerlo para los apoyos curriculares
 	useEffect(() => {
 		filterTiposDeApoyo(tiposApoyo)
 	}, [data])
@@ -154,6 +145,7 @@ const ApoyosEstudiante = props => {
 		setFormData(data)
 		setRadioValue(0)
 		setShowFechaAprobacion(false)
+		setCheckedValid(false)
 	}
 
 	const handleFormDataChange = event => {
@@ -187,76 +179,16 @@ const ApoyosEstudiante = props => {
 		})
 	}
 
-	const deleteApoyoById = apoyoId => {
-		setLoading(true)
-		try {
-			axios
-				.delete(
-					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`
-				)
-				.then(() => {
-					axios
-						.get(
-							`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
-						)
-						.then(res => {
-							setData(res.data.entityList)
-							setLoading(false)
-							setSnackbarContent({
-								msg: 'Se ha eliminado el registro',
-								type: 'success'
-							})
-							handleClick()
-						})
-						.catch(error => {
-							setLoading(false)
-							setSnackbarContent({
-								msg: 'Hubo un error al eliminar el registro',
-								type: 'error'
-							})
-							handleClick()
-							console.log(error)
-						})
-				})
-				.catch(error => {
-					setLoading(false)
-					console.log('Error', error)
-				})
-		} catch (e) {
-			setLoading(false)
-		}
+	/*
+		JP
+	*/
+	const errorToast = msg => {
+		setSnackbarContent({ msg, variant: 'error' })
+		handleClick()
 	}
 
 	const onAgregarEvent = () => {
-		setEditable(false)
 		setShowNuevoApoyoModal(true)
-	}
-
-	const onEditarEvent = row => {
-		setEditable(true)
-		setShowNuevoApoyoModal(true)
-
-		if (
-			!isNull(row.fechaInicio) &&
-			!isUndefined(row.fechaInicio) &&
-			!isEmpty(row.fechaInicio)
-		) {
-			setShowFechaAprobacion(true)
-		}
-
-		let fechaDeAprobacion = ''
-		if (!isNull(row.fechaInicio)) {
-			fechaDeAprobacion = moment(row.fechaInicio, 'DD-MM-YYYY')
-		}
-
-		setFormData({
-			id: row.id,
-			tipoDeApoyo: row.sb_TiposDeApoyoId,
-			condicionApoyo: row.condicionApoyoId,
-			detalleApoyo: row.detalle,
-			nombreApoyo: row.sb_TiposDeApoyo,
-			fechaDeAprobacion: fechaDeAprobacion
-		})
 	}
 
 	const columns = useMemo(() => {
@@ -296,91 +228,12 @@ const ApoyosEstudiante = props => {
 				column: 'fechaInsercion',
 				accessor: 'fechaInsercion',
 				label: ''
-			},
-			{
-				Header: t('general>acciones', 'Acciones'),
-				column: '',
-				accessor: '',
-				label: '',
-				Cell: ({ _, row, data }) => {
-					const fullRow = data[row.index]
-
-					return (
-						<div
-							style={{
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center',
-								alignContent: 'center'
-							}}
-						>
-							<button
-								style={
-									!props.validations.modificar
-										? { display: 'none' }
-										: {
-												border: 'none',
-												background: 'transparent',
-												cursor: 'pointer',
-												color: 'grey'
-										  }
-								}
-								onClick={() => {
-									onEditarEvent(row.original)
-								}}
-							>
-								<Tooltip title="Actualizar">
-									<IconButton>
-										<HiPencil style={{ fontSize: 30 }} />
-									</IconButton>
-								</Tooltip>
-							</button>
-							<button
-								style={
-									!props.validations.eliminar
-										? { display: 'none' }
-										: {
-												border: 'none',
-												background: 'transparent',
-												cursor: 'pointer',
-												color: 'grey'
-										  }
-								}
-								onClick={() => {
-									swal({
-										title: 'Eliminar Apoyo',
-										text: '¿Esta seguro de que desea eliminar el apoyo?',
-										icon: 'warning',
-										className: 'text-alert-modal',
-										buttons: {
-											cancel: 'Cancelar',
-											ok: {
-												text: 'Eliminar',
-												value: true,
-												className: 'btn-alert-color'
-											}
-										}
-									}).then(async result => {
-										if (result) {
-											deleteApoyoById(row.original.id)
-										}
-									})
-								}}
-							>
-								<Tooltip title="Eliminar">
-									<IconButton>
-										<IoMdTrash style={{ fontSize: 30 }} />
-									</IconButton>
-								</Tooltip>
-							</button>
-						</div>
-					)
-				}
 			}
 		]
 	}, [state.expedienteEstudiantil.currentStudent])
 
 	const onConfirmSaveApoyo = async event => {
+		setCheckedValid(true)
 		event.preventDefault()
 		setLoading(true)
 
@@ -388,17 +241,14 @@ const ApoyosEstudiante = props => {
 		let hayError = false
 
 		if (formData.tipoDeApoyo === 0 || isNaN(formData.tipoDeApoyo)) {
-			validationMessage = '\nEl tipo de apoyo es requerido'
 			hayError = true
 		}
 
 		if (formData.condicionApoyo === '' || isNaN(formData.condicionApoyo)) {
-			validationMessage += '\nLa condición de apoyo es requerida'
 			hayError = true
 		}
 
 		if (formData.detalleApoyo === '') {
-			validationMessage += '\nEl detalle es requerido'
 			hayError = true
 		}
 
@@ -412,30 +262,17 @@ const ApoyosEstudiante = props => {
 			formData.fechaDeAprobacion === '' &&
 			formData.condicionApoyo === condicionSeRecibe.id
 		) {
-			validationMessage += '\nLa fecha de aprobación es requerida'
 			hayError = true
 		}
 
 		if (hayError) {
-			swal({
-				title: 'Error al registrar el apoyo',
-				text: validationMessage,
-				icon: 'error',
-				className: 'text-alert-modal',
-				buttons: {
-					ok: {
-						text: 'Ok',
-						value: true,
-						className: 'btn-alert-color'
-					}
-				}
-			})
+			errorToast('Faltan rellenar campos obligatorios')
 			setLoading(false)
 			return
 		}
 
 		let _data = {
-			//
+			id: state.expedienteEstudiantil.currentStudent.idMatricula,
 			detalle: formData.detalleApoyo,
 			fechaInicio: formData.fechaDeAprobacion
 				? formData.fechaDeAprobacion
@@ -449,105 +286,24 @@ const ApoyosEstudiante = props => {
 			estrategias: null
 		}
 
-		let create = true
-		//create
-		if (formData.id === 0) {
-			//TODO JP revisar que esto no se ocupe, en teoria ya esta filtrado
-			/*  const existeApoyo = data.find(item => {
-				if (item.sb_TiposDeApoyoId === _data.tipoDeApoyoId) {
-					const date = new Date(item.fechaInicio)
-					const anioApoyoExistente = date.getFullYear()
-
-					let anioAprobacion = null
-
-					if (isNull(_data.fechaInicio)) {
-						anioAprobacion = parseInt(state.activeYear.nombre)
-					} else {
-						anioAprobacion = new Date(_data.fechaInicio).getFullYear()
-					}
-
-					if (anioApoyoExistente === anioAprobacion) {
-						return item
-					} else {
-						return null
-					}
-				}
+		const response = await actions.addApoyo(
+			_data,
+			categoria,
+			categoria.addDispatchName,
+			1
+		)
+		if (response.error) {
+			setSnackbarContent({
+				msg: 'Hubo un error al crear el registro',
+				variant: 'error'
 			})
-
-			if (existeApoyo) {
-				swal({
-					title: 'Error al registrar el apoyo',
-					text: 'Ya existe un apoyo para el año ingresado.',
-					icon: 'error',
-					className: 'text-alert-modal',
-					buttons: {
-						ok: {
-							text: 'Ok',
-							value: true,
-							className: 'btn-alert-color'
-						}
-					}
-				})
-				setLoading(false)
-				return
-			} */
-
-			_data = {
-				..._data,
-
-				id: state.expedienteEstudiantil.currentStudent.idMatricula
-			}
+			handleClick()
 		} else {
-			//update
-			create = false
-
-			_data = {
-				..._data,
-				tipoDeApoyoId: parseInt(formData.tipoDeApoyo),
-				id: formData.id
-			}
-		}
-
-		if (create) {
-			const response = await actions.addApoyo(
-				_data,
-				categoria,
-				categoria.addDispatchName,
-				1
-			)
-			if (response.error) {
-				setSnackbarContent({
-					msg: 'Hubo un error al crear el registro',
-					type: 'error'
-				})
-				handleClick()
-			} else {
-				setSnackbarContent({
-					msg: 'Se ha creado el registro',
-					type: 'success'
-				})
-				handleClick()
-			}
-		} else {
-			const response = await actions.editApoyo(
-				_data,
-				categoria,
-				categoria.addDispatchName,
-				1
-			)
-			if (response.error) {
-				setSnackbarContent({
-					msg: 'Hubo un error al editar',
-					type: 'error'
-				})
-				handleClick()
-			} else {
-				setSnackbarContent({
-					msg: 'Se ha editado el registro',
-					type: 'success'
-				})
-				handleClick()
-			}
+			setSnackbarContent({
+				msg: 'Se ha creado el registro',
+				variant: 'success'
+			})
+			handleClick()
 		}
 
 		axios
@@ -565,12 +321,12 @@ const ApoyosEstudiante = props => {
 			})
 
 		cleanFormData()
-		setLoading(false)
 		closeAgregarModal()
 	}
 
 	const closeAgregarModal = () => {
 		cleanFormData()
+		setCheckedValid(false)
 		setShowNuevoApoyoModal(false)
 	}
 
@@ -610,12 +366,14 @@ const ApoyosEstudiante = props => {
 		})
 	}
 
+	if (loading || loadingData) {
+		return <Loader />
+	}
+
 	return (
 		<>
-			{/*loading && <BarLoader />*/}
-			{loading && <Loader />}
-			{snackbar(snackbarContent.type, snackbarContent.msg)}
-			<TableReactImplementationApoyo
+			{snackbar(snackbarContent.variant, snackbarContent.msg)}
+			<SearchWithYearsTableReactImplementation
 				placeholderText="Buscar por nombre"
 				showAddButton={props.validations.agregar}
 				msjButton="Agregar"
@@ -645,7 +403,7 @@ const ApoyosEstudiante = props => {
 											justifyContent: 'left',
 											alignItems: 'left'
 										}}
-										sm={7}
+										sm={item.detalle.length > 1 ? 5 : 12}
 									>
 										<FormControlLabel
 											value={formData.tipoDeApoyo}
@@ -658,7 +416,7 @@ const ApoyosEstudiante = props => {
 											label={item.nombre}
 										/>
 									</Col>
-									<Col sm={5}>{item.detalle}</Col>
+									{item.detalle.length > 1 && <Col sm={7}>{item.detalle}</Col>}
 								</Row>
 							))}
 						</RadioGroup>
@@ -678,7 +436,13 @@ const ApoyosEstudiante = props => {
 							<Label for="tipoDeApoyo">
 								Tipo de apoyo <RequiredSpan />
 							</Label>
-							<StyledInput
+							<Input
+								style={{
+									border:
+										checkedValid && formData.tipoDeApoyo === 0
+											? '1px solid red'
+											: ''
+								}}
 								id="tipoDeApoyo"
 								name="tipoDeApoyo"
 								type="text"
@@ -687,7 +451,7 @@ const ApoyosEstudiante = props => {
 									setShowModalTiposApoyo(true)
 								}}
 								value={formData.nombreApoyo || 'Seleccionar'}
-							></StyledInput>
+							></Input>
 						</Col>
 						<Col md={6}>
 							<FormGroup>
@@ -698,6 +462,14 @@ const ApoyosEstudiante = props => {
 									id="condicionApoyo"
 									name="condicionApoyo"
 									type="select"
+									style={{
+										border:
+											checkedValid &&
+											(formData.condicionApoyo === '' ||
+												isNaN(formData.condicionApoyo))
+												? '1px solid red'
+												: ''
+									}}
 									onChange={handleFechaAprobacionOnChange}
 									placeholder="Seleccionar"
 									value={formData.condicionApoyo}
@@ -725,9 +497,15 @@ const ApoyosEstudiante = props => {
 										max={moment().format('YYYY-MM-DD')}
 										name="fechaDeAprobacion"
 										style={{
-											paddingRight: '12%'
+											paddingRight: '12%',
+											border:
+												checkedValid && formData.fechaDeAprobacion === ''
+													? '1px solid red'
+													: ''
 										}}
-										value={formData.fechaDeAprobacion}
+										value={moment(formData.fechaDeAprobacion).format(
+											'YYYY-MM-DD'
+										)}
 										onChange={handleFormDataChange}
 									/>
 								</FormGroup>
@@ -744,6 +522,12 @@ const ApoyosEstudiante = props => {
 									type="textarea"
 									id="detalleApoyo"
 									name="detalleApoyo"
+									style={{
+										border:
+											checkedValid && formData.detalleApoyo === ''
+												? '1px solid red'
+												: ''
+									}}
 									rows="5"
 									onChange={handleFormDataChange}
 									value={formData.detalleApoyo}

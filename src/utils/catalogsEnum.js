@@ -91,6 +91,11 @@ export const catalogsEnumByName = [
 	{
 		id: 'Fuente inventario tecnológico',
 		name: 'fuenteInventarioTecnologico'
+  },
+	{ id: 'Talentos', name: 'talentos' },
+	{
+		id: 'Estrategias de flexibilización curricular',
+		name: 'estrategiasFlexibilidadCurricular'
 	}
 ]
 

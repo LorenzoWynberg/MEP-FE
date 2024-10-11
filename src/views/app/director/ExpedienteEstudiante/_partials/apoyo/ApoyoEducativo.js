@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import 'react-tagsinput/react-tagsinput.css'
-import HeaderTab from 'Components/Tab/Header'
+import HeaderTab from 'Components/Tab/LinkedHeader'
 import ContentTab from 'Components/Tab/Content'
 import { envVariables } from '../../../../../../constants/enviroment'
 import { Row, Col, CustomInput } from 'reactstrap'
@@ -9,13 +9,8 @@ import Loader from 'Components/LoaderContainer'
 import CondicionDiscapacidad from './CondicionDiscapacidad'
 import OtraCondicion from './OtraCondicion'
 import axios from 'axios'
-import ApoyosCurriculares from './ApoyosCurriculares'
-import ApoyosPersonales from './ApoyosPersonales'
 import AltoPotencial from './AltoPotencial'
-import ApoyosOrganizativos from './ApoyosOrganizativos'
 import OptionModal from '../../../../../../components/Modal/OptionModal'
-import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
-import { isEmpty } from 'lodash'
 import {
 	getCondiciones,
 	getDiscapacidades
@@ -32,7 +27,6 @@ const ApoyoEducativo = props => {
 	const [openOptions, setOpenOptions] = useState({ open: false, type: null })
 	const [modalOptions, setModalOptions] = useState([])
 	const [catalogos, setCatalogos] = useState([])
-	const [activeTab, setActiveTab] = useState(0)
 
 	useEffect(() => {
 		setLoading(true)
@@ -48,7 +42,6 @@ const ApoyoEducativo = props => {
 		setDiscapacidades(_discapacidades)
 		setLoading(false)
 	}, [props.discapacidadesIdentidad])
-
 	useEffect(() => {
 		getHistoricos()
 	}, [])
@@ -82,14 +75,11 @@ const ApoyoEducativo = props => {
 	useEffect(() => {
 		setLoading(true)
 		const loadCatalogos = async () => {
-			debugger
 			axios
 				.get(
 					`${envVariables.BACKEND_URL}/api/Areas/GestorCatalogos/TipoCatalogo`
 				)
 				.then(r => {
-					debugger
-					console.log('Catalogos JP', r.data)
 					setCatalogos(r.data)
 					setLoading(false)
 				})
@@ -184,13 +174,32 @@ const ApoyoEducativo = props => {
 	}
 
 	const optionsTab = [
-		{ title: 'Apoyos curriculares' },
-		{ title: 'Apoyos personales' },
-		{ title: 'Apoyos organizativos' },
-		{ title: 'Alto Potencial' },
-		{ title: 'Condición de discapacidad' },
-		{ title: 'Otras condiciones' }
+		{
+			title: 'Apoyos curriculares',
+			path: '/director/expediente-estudiante/apoyos-educativos/curriculares'
+		},
+		{
+			title: 'Apoyos personales',
+			path: '/director/expediente-estudiante/apoyos-educativos/personales'
+		},
+		{
+			title: 'Apoyos organizativos',
+			path: '/director/expediente-estudiante/apoyos-educativos/organizativos'
+		},
+		{
+			title: 'Alto potencial',
+			path: '/director/expediente-estudiante/apoyos-educativos/alto-potencial'
+		},
+		{
+			title: 'Condición de discapacidad',
+			path: '/director/expediente-estudiante/apoyos-educativos/condicion-discapacidad'
+		},
+		{
+			title: 'Otras condiciones',
+			path: '/director/expediente-estudiante/apoyos-educativos/otras-condiciones'
+		}
 	]
+
 	const deleteCondicion = id => {
 		axios
 			.delete(
@@ -214,26 +223,15 @@ const ApoyoEducativo = props => {
 			})
 	}
 
-	//TODO JP props.apoyos.categorias y props.apoyos.tipos
-	console.log('JP apoyos', props.apoyos)
-
 	if (loading || catalogos.length === 0) {
 		return <Loader />
 	}
 
 	return (
 		<>
-			<HeaderTab
-				options={optionsTab}
-				activeTab={activeTab}
-				setActiveTab={setActiveTab}
-			/>
-			<ContentTab activeTab={activeTab} numberId={activeTab}>
-				{/*{activeTab === 0 && <ApoyosCurriculares catalogos={catalogos} />}
-				{activeTab === 1 && <ApoyosPersonales catalogos={catalogos} />} 
-				{activeTab === 2 && <ApoyosOrganizativos catalogos={catalogos} />}*/}
-
-				{activeTab === 0 && (
+			<HeaderTab options={optionsTab} activeTab={props.activeTab} />
+			<ContentTab activeTab={props.activeTab} numberId={props.activeTab}>
+				{props.activeTab === 0 && (
 					<ApoyosEstudiante
 						catalogos={catalogos}
 						apoyos={props.apoyos}
@@ -245,7 +243,7 @@ const ApoyoEducativo = props => {
 						}}
 					/>
 				)}
-				{activeTab === 1 && (
+				{props.activeTab === 1 && (
 					<ApoyosEstudiante
 						catalogos={catalogos}
 						apoyos={props.apoyos}
@@ -257,7 +255,7 @@ const ApoyoEducativo = props => {
 						}}
 					/>
 				)}
-				{activeTab === 2 && (
+				{props.activeTab === 2 && (
 					<ApoyosEstudiante
 						catalogos={catalogos}
 						apoyos={props.apoyos}
@@ -269,10 +267,10 @@ const ApoyoEducativo = props => {
 						}}
 					/>
 				)}
-				{activeTab === 3 && (
+				{props.activeTab === 3 && (
 					<AltoPotencial catalogos={catalogos} apoyos={props.apoyos} />
 				)}
-				{activeTab === 4 && (
+				{props.activeTab === 4 && (
 					<CondicionDiscapacidad
 						discapacidadesHistorico={discapacidadesHistorico}
 						delete={deleteDiscapacidad}
@@ -280,7 +278,7 @@ const ApoyoEducativo = props => {
 						discapacidades={props.discapacidades}
 					/>
 				)}
-				{activeTab === 5 && (
+				{props.activeTab === 5 && (
 					<OtraCondicion
 						condicionesHistorico={condicionesHistorico}
 						handleOpenOptions={handleOpenOptions}

@@ -3,7 +3,8 @@ import PropTypes from 'prop-types'
 import { HiPencil } from 'react-icons/hi'
 import Tooltip from '@mui/material/Tooltip'
 import IconButton from '@mui/material/IconButton'
-import { TableReactImplementation } from 'Components/TableReactImplementation'
+//import { TableReactImplementation } from 'Components/TableReactImplementation'
+import { SearchWithYearsTableReactImplementation } from 'Components/SearchWithYearsTableReactImplementation'
 import { IoEyeSharp } from 'react-icons/io5'
 import { IoMdTrash } from 'react-icons/io'
 import { Button } from 'reactstrap'
@@ -98,8 +99,8 @@ const TablaMep = props => {
 			},
 			{
 				Header: 'Periodo activo (Inicio - Fin)',
-				column: 'periodo',
-				accessor: 'periodo',
+				column: 'periodoActivo',
+				accessor: 'periodoActivo',
 				label: '',
 				Cell: ({ _, row, data }) => {
 					const fullRow = data[row.index]
@@ -112,6 +113,13 @@ const TablaMep = props => {
 						</div>
 					)
 				}
+			},
+			{
+				Header: 'Fecha Inicio',
+				column: 'fechaInicio',
+				accessor: 'fechaInicio',
+				label: '',
+				show: false
 			},
 			{
 				Header: 'Acciones',
@@ -204,7 +212,7 @@ const TablaMep = props => {
 		<div>
 			{(loading || props.loading) && <BarLoader />}
 			<div>
-				<TableReactImplementation
+				<SearchWithYearsTableReactImplementation
 					showAddButton={props?.validations?.agregar}
 					onSubmitAddButton={() => props.handleCreateToggle()}
 					placeholderText={props.placeholderText}

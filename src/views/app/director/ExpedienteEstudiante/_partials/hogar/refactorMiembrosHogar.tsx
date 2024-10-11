@@ -46,6 +46,7 @@ import RequiredSpan from 'Components/Form/RequiredSpan'
 import styles from './Hogar.css'
 import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import { withRouter } from 'react-router-dom'
+import { debug } from 'util'
 
 const RefactorMiembrosHogar = props => {
 	const [loadingRegistrarModal, setLoadingRegistrarModal] = useState(false)
@@ -265,7 +266,7 @@ const RefactorMiembrosHogar = props => {
 														false
 												  )
 												: 0
-											debugger
+
 											if (
 												age < 18 &&
 												fullRow.encargado === 'Sí' &&
@@ -610,7 +611,7 @@ const RefactorMiembrosHogar = props => {
 												className="react-select"
 												classNamePrefix="react-select"
 												options={catalogs.escolaridadCatalog}
-												placeholder=""
+												placeholder={t('general>seleccionar', 'Seleccionar')}
 												value={formData.escolaridad}
 												onChange={events.onEscolaridadChange}
 												isDisabled={!formData.editable}
@@ -631,7 +632,7 @@ const RefactorMiembrosHogar = props => {
 												className="react-select"
 												classNamePrefix="react-select"
 												options={catalogs.condicionLaboralCatalog}
-												placeholder=""
+												placeholder={t('general>seleccionar', 'Seleccionar')}
 												value={formData.condicionLaboral}
 												isDisabled={!formData.editable}
 												onChange={events.onCondicionLaboralChange}
@@ -924,35 +925,29 @@ const RefactorMiembrosHogar = props => {
 							</Card>
 						</Colxx>
 						<div className="container-center my-5 mb-3">
-							{!formData.editable ? (
-								<Button color="primary" onClick={events.toggleEditable}>
-									Editar
+							<>
+								<Button
+									className="mr-2"
+									outline
+									color="primary"
+									onClick={onRegresarEvent}
+								>
+									Cancelar
 								</Button>
-							) : (
-								<>
-									<Button
-										className="mr-2"
-										outline
-										color="primary"
-										onClick={onRegresarEvent}
-									>
-										Cancelar
-									</Button>
-									<Button
-										color="primary"
-										onClick={async () => {
-											setLoading(true)
-											setCheckedValid(true)
-											await events.onGuardarClick(
-												() => onRegresarEvent(),
-												() => setLoading(false)
-											)
-										}}
-									>
-										Guardar
-									</Button>
-								</>
-							)}
+								<Button
+									color="primary"
+									onClick={async () => {
+										setLoading(true)
+										setCheckedValid(true)
+										await events.onGuardarClick(
+											() => onRegresarEvent(),
+											() => setLoading(false)
+										)
+									}}
+								>
+									Guardar
+								</Button>
+							</>
 						</div>
 					</Row>
 				</>
@@ -1029,8 +1024,8 @@ const RefactorMiembrosHogar = props => {
 													onClick={_ =>
 														events.onDiscapacidadesSeleccionadasClick(item)
 													}
-													checked={formData.condicionDiscapacidadSeleccionadas.find(
-														i => i.id == item.id
+													checked={formData.condicionDiscapacidadSeleccionadas.some(
+														i => i.id === item.id
 													)}
 												/>
 											</OnlyVert>
