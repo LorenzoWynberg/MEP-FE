@@ -15,7 +15,7 @@ const HeaderTab = props => {
 			setParentTab(index)
 		} else {
 			if (path) {
-				history.push(`/director/expediente-centro/sce${path}`)
+				history.push(`${path}`)
 			}
 		}
 	}

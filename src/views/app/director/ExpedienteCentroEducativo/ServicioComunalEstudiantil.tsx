@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux'
 import withRouter from 'react-router-dom/withRouter'
 import Notification from '../../../../Hoc/Notificaction'
 import { useTranslation } from 'react-i18next'
+import { envVariables } from 'Constants/enviroment'
 
 const ServicioComunalEstudiantil = props => {
 	const { t } = useTranslation()
@@ -26,12 +27,14 @@ const ServicioComunalEstudiantil = props => {
 		}
 	})
 
-	const tienePermiso = state.permisos.find(permiso => permiso.codigoSeccion == 'registrosSCE')
+	const tienePermiso = state.permisos.find(
+		permiso => permiso.codigoSeccion == 'registrosSCE'
+	)
 
 	const validarInstitucionSCE = async () => {
 		try {
 			const response = await axios.post(
-				`https://mep-saber.azurewebsites.net/api/ServicioComunal/VerificarInstitucionAplicaSCE?idInstitucion=${idInstitucion}`
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/VerificarInstitucionAplicaSCE?idInstitucion=${idInstitucion}`
 			)
 			setAplicaSCE(response.data)
 		} catch (error) {
@@ -50,14 +53,23 @@ const ServicioComunalEstudiantil = props => {
 	}, [])
 
 	const mantenimientoTab = !props.match.params.id
-		? { title: 'Mantenimiento', path: '/registro' }
-		: { title: 'Mantenimiento', path: `/editar/${props.match.params.id}` }
+		? {
+				title: 'Mantenimiento',
+				path: '/director/expediente-centro/sce/registro'
+		  }
+		: {
+				title: 'Mantenimiento',
+				path: `/director/expediente-centro/sce/editar/${props.match.params.id}`
+		  }
 
 	const optionsTab = [
-		{ title: 'Historico', path: '/' },
+		{ title: 'Historico', path: '/director/expediente-centro/sce' },
 		mantenimientoTab,
-		{ title: 'Actas', path: '/actas' },
-		{ title: 'Certificados', path: '/certificados' }
+		{ title: 'Actas', path: '/director/expediente-centro/sce/actas' },
+		{
+			title: 'Certificados',
+			path: '/director/expediente-centro/sce/certificados'
+		}
 	]
 
 	if (!tienePermiso || tienePermiso?.leer == 0) {
@@ -65,7 +77,11 @@ const ServicioComunalEstudiantil = props => {
 	}
 
 	if (!aplicaSCE) {
-		return <h4>{t('Esta institución no cuenta con servicio comunal estudiantil.')}</h4>
+		return (
+			<h4>
+				{t('Esta institución no cuenta con servicio comunal estudiantil.')}
+			</h4>
+		)
 	}
 
 	return (
@@ -82,10 +98,17 @@ const ServicioComunalEstudiantil = props => {
 							{!loading && aplicaSCE && (
 								<>
 									<HeaderTab options={optionsTab} activeTab={props.activeTab} />
-									<ContentTab activeTab={props.activeTab} numberId={props.activeTab}>
+									<ContentTab
+										activeTab={props.activeTab}
+										numberId={props.activeTab}
+									>
 										{props.activeTab === 0 && <Historico {...props} />}
-										{props.activeTab === 1 && props.match.params.id && <Editar {...props} />}
-										{props.activeTab === 1 && !props.match.params.id && <Agregar {...props} />}
+										{props.activeTab === 1 && props.match.params.id && (
+											<Editar {...props} />
+										)}
+										{props.activeTab === 1 && !props.match.params.id && (
+											<Agregar {...props} />
+										)}
 										{props.activeTab === 2 && <Actas {...props} />}
 										{props.activeTab === 3 && <Certificados {...props} />}
 									</ContentTab>

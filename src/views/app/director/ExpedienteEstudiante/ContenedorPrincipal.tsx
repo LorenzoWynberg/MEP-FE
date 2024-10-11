@@ -204,7 +204,7 @@ const ContenedorPrincipal = props => {
 	const validarEstudianteSCE = async () => {
 		try {
 			const response = await axios.post(
-				`https://mep-saber.azurewebsites.net/api/ServicioComunal/VerificarEstudianteAplicaSCE?idInstitucion=${idInstitucion}&idEstudiante=${state.expedienteEstudiantil.currentStudent.idEstudiante}`
+				`${envVariables.BACKEND_URL}/api/ServicioComunal/VerificarEstudianteAplicaSCE?idInstitucion=${idInstitucion}&idEstudiante=${state.expedienteEstudiantil.currentStudent.idEstudiante}`
 			)
 			setAplicaSCE(response.data)
 		} catch (error) {
@@ -239,7 +239,9 @@ const ContenedorPrincipal = props => {
 			<div className="dashboard-wrapper">
 				<Container>
 					{active !== 0 && estudianteEnContexto() && (
-						<EstudianteInformationCard fixed data={infoCard} />
+						<InformationCard
+							data={state.expedienteEstudiantil.currentStudent}
+						/>
 					)}
 
 					{/* <Row style={{ paddingTop: active !== 0 && estudianteEnContexto() ? 100 : 0 }}> */}
