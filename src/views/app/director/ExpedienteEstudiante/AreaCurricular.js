@@ -189,7 +189,7 @@ const AreaCurricular = props => {
 							</Grid>
 						</Grid>
 					</Paper>
-					<Row>
+					<Row style={props.validations.modificar ? {} : { display: 'none' }}>
 						<StyledCol xs={12}>
 							<EditButton
 								loading={state.identification.loading}

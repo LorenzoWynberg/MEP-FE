@@ -1,22 +1,13 @@
 import React, { useState, useMemo, useEffect } from 'react'
+
 import { useTranslation } from 'react-i18next'
 import { useSelector } from 'react-redux'
-import {
-	Row,
-	Col,
-	Form,
-	FormGroup,
-	Label,
-	Input,
-	CustomInput
-} from 'reactstrap'
-import { TableReactImplementationApoyo } from 'Components/TableReactImplementationApoyo'
+import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap'
+import { SearchWithYearsTableReactImplementation } from 'Components/SearchWithYearsTableReactImplementation'
 import useNotification from 'Hooks/useNotification'
+import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import styled from 'styled-components'
 import {
-	getTiposApoyos,
-	getDependenciasApoyos,
-	getCategoriasApoyos,
 	getApoyosByType,
 	addApoyo,
 	deleteApoyo,
@@ -25,56 +16,44 @@ import {
 import {
 	FormControl,
 	FormControlLabel,
-	FormLabel,
 	Radio,
 	RadioGroup
 } from '@material-ui/core'
-import styles from './apoyos.css'
-import Tooltip from '@mui/material/Tooltip'
 import 'react-datepicker/dist/react-datepicker.css'
-import { getCatalogs } from 'Redux/selects/actions'
+import { getCatalogsByName } from 'Redux/selects/actions'
 import { useActions } from 'Hooks/useActions'
-import { catalogsEnumObj } from 'Utils/catalogsEnum'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
-import { IoMdTrash } from 'react-icons/io'
-import IconButton from '@mui/material/IconButton'
-import { HiPencil } from 'react-icons/hi'
 import swal from 'sweetalert'
 import { isNull, isUndefined, isEmpty } from 'lodash'
-import BarLoader from 'Components/barLoader/barLoader'
 import Loader from 'Components/LoaderContainer'
 import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import moment from 'moment'
 import colors from 'assets/js/colors'
-
-const categoria = {
-	id: 4,
-	nombre: 'Apoyos curriculares',
-	addDispatchName: 'apoyoscurriculares4'
-}
-
-const tituloModal = 'Registro de apoyo curricular'
+import { catalogsEnumByName } from '../../../../../../utils/catalogsEnum'
+import { set } from 'lodash'
 
 const condicionSeRecibeNombre = 'Se recibe'
 
-export const ApoyosCurriculares = () => {
+const ApoyosEstudiante = props => {
+	const categoria = props.categoria
+	const { t } = useTranslation()
+	const [snackbar, handleClick] = useNotification()
 	const [loading, setLoading] = useState(true)
 	const [showModalTiposApoyo, setShowModalTiposApoyo] = useState(false)
 	const [data, setData] = useState([])
 	const [showNuevoApoyoModal, setShowNuevoApoyoModal] = useState(false)
 	const [tiposApoyo, setTiposApoyo] = useState([])
 	const [tiposApoyoFilter, setTiposApoyoFilter] = useState([])
-	const [sortedYearList, setSortedYearList] = useState(null)
 	const [showFechaAprobacion, setShowFechaAprobacion] = useState(false)
-	const [editable, setEditable] = useState(false)
 	const [radioValue, setRadioValue] = useState(0)
-	const [snackbar, handleClick] = useNotification()
+	const [editable, setEditable] = useState(false)
 	const [snackbarContent, setSnackbarContent] = useState({
 		msg: '',
-		type: ''
+		variant: ''
 	})
+	const [checkedValid, setCheckedValid] = useState(false)
 	const [formData, setFormData] = useState({
 		id: 0,
 		tipoDeApoyo: 0,
@@ -83,6 +62,76 @@ export const ApoyosCurriculares = () => {
 		nombreApoyo: '',
 		fechaDeAprobacion: ''
 	})
+	const [loadingData, setLoadingData] = useState(true)
+
+	const primary = colors.primary
+
+	const actions = useActions({
+		getApoyosByType,
+		addApoyo,
+		deleteApoyo,
+		editApoyo,
+		getCatalogsByName
+	})
+
+	const state = useSelector(store => {
+		return {
+			expedienteEstudiantil: store.expedienteEstudiantil,
+			identification: store.identification,
+			selects: store.selects
+		}
+	})
+
+	useEffect(() => {
+		const loadData = async () => {
+			try {
+				setLoading(true)
+
+				const tiposDeApoyo = props.apoyos.tipos.filter(
+					tipo => tipo.categoriaApoyoId === categoria.id
+				)
+
+				setTiposApoyo(tiposDeApoyo)
+
+				const condicionApoyo = props.catalogos.find(item => {
+					return item.nombre === 'Condiciones de Apoyo'
+				})
+
+				if (!state.selects.tipoCondicionApoyo[0]) {
+					await actions.getCatalogsByName(
+						condicionApoyo.id,
+						-1,
+						-1,
+						condicionApoyo.nombre
+					)
+				}
+			} finally {
+				setLoading(false)
+			}
+		}
+		loadData()
+	}, [])
+
+	useEffect(() => {
+		setLoadingData(true)
+
+		axios
+			.get(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
+			)
+			.then(response => {
+				setData(response.data.entityList)
+				setLoadingData(false)
+			})
+			.catch(error => {
+				console.log(error)
+				setLoadingData(false)
+			})
+	}, [])
+
+	useEffect(() => {
+		filterTiposDeApoyo(tiposApoyo)
+	}, [data])
 
 	const cleanFormData = () => {
 		const data = {
@@ -96,9 +145,8 @@ export const ApoyosCurriculares = () => {
 		setFormData(data)
 		setRadioValue(0)
 		setShowFechaAprobacion(false)
+		setCheckedValid(false)
 	}
-
-	const primary = colors.primary
 
 	const handleFormDataChange = event => {
 		setFormData({
@@ -116,144 +164,31 @@ export const ApoyosCurriculares = () => {
 			o => o.nombre === condicionSeRecibeNombre
 		)
 
+		let fechaAprobacion = formData.fechaDeAprobacion
+
 		if (value === condicionSeRecibe.id) {
 			setShowFechaAprobacion(true)
 		} else {
 			setShowFechaAprobacion(false)
+			fechaAprobacion = ''
 		}
 		setFormData({
 			...formData,
-			condicionApoyo: value
+			condicionApoyo: value,
+			fechaDeAprobacion: fechaAprobacion
 		})
 	}
 
-	const { t } = useTranslation()
-
-	const actions = useActions({
-		getTiposApoyos,
-		getDependenciasApoyos,
-		getCategoriasApoyos,
-		getApoyosByType,
-		addApoyo,
-		deleteApoyo,
-		editApoyo,
-		getCatalogs
-	})
-
-	const state = useSelector(store => {
-		return {
-			expedienteEstudiantil: store.expedienteEstudiantil,
-			identification: store.identification,
-			apoyos: store.apoyos,
-			selects: store.selects,
-			activeYear: store.authUser.selectedActiveYear,
-			activeYears: store.authUser.activeYears
-		}
-	})
-
-	useEffect(() => {
-		const loadData = async () => {
-			try {
-				setLoading(true)
-				await actions.getTiposApoyos()
-
-				const tiposDeApoyo = state.apoyos.tipos.filter(
-					tipo => tipo.categoriaApoyoId === categoria.id
-				)
-
-				setTiposApoyo(tiposDeApoyo)
-
-				!state.selects[catalogsEnumObj.TIPOCONDICIONAPOYO.name][0] &&
-					(await actions.getCatalogs(catalogsEnumObj.TIPOCONDICIONAPOYO.id))
-			} finally {
-				setLoading(false)
-			}
-		}
-		loadData()
-	}, [])
-
-	useEffect(() => {
-		setLoading(true)
-
-		axios
-			.get(
-				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
-			)
-			.then(response => {
-				setData(response.data.entityList)
-				setLoading(false)
-			})
-			.catch(error => {
-				console.log(error)
-				setLoading(false)
-			})
-	}, [])
-
-	const deleteApoyoById = apoyoId => {
-		setLoading(true)
-		try {
-			axios
-				.delete(
-					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/${apoyoId}`
-				)
-				.then(response => {
-					axios
-						.get(
-							`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Apoyo/categoria/${categoria.id}/1/20?identidadId=${state.identification.data.id}`
-						)
-						.then(response => {
-							setData(response.data.entityList)
-							setLoading(false)
-							setSnackbarContent({
-								msg: 'Se ha eliminado el registro',
-								type: 'success'
-							})
-							handleClick()
-						})
-						.catch(error => {
-							setLoading(false)
-							setSnackbarContent({
-								msg: 'Hubo un error al eliminar el registro',
-								type: 'error'
-							})
-							handleClick()
-							console.log(error)
-						})
-				})
-				.catch(error => {
-					setLoading(false)
-					console.log('Error', error)
-				})
-		} catch (e) {
-			setLoading(false)
-		}
+	/*
+		JP
+	*/
+	const errorToast = msg => {
+		setSnackbarContent({ msg, variant: 'error' })
+		handleClick()
 	}
 
 	const onAgregarEvent = () => {
-		setEditable(false)
 		setShowNuevoApoyoModal(true)
-	}
-
-	const onEditarEvent = row => {
-		setEditable(true)
-		setShowNuevoApoyoModal(true)
-
-		if (
-			!isNull(row.fechaInicio) &&
-			!isUndefined(row.fechaInicio) &&
-			!isEmpty(row.fechaInicio)
-		) {
-			setShowFechaAprobacion(true)
-		}
-
-		setFormData({
-			id: row.id,
-			tipoDeApoyo: row.sb_TiposDeApoyoId,
-			condicionApoyo: row.condicionApoyoId,
-			detalleApoyo: row.detalle,
-			nombreApoyo: row.sb_TiposDeApoyo,
-			fechaDeAprobacion: row.fechaInicio
-		})
 	}
 
 	const columns = useMemo(() => {
@@ -293,83 +228,12 @@ export const ApoyosCurriculares = () => {
 				column: 'fechaInsercion',
 				accessor: 'fechaInsercion',
 				label: ''
-			},
-			{
-				Header: t('general>acciones', 'Acciones'),
-				column: '',
-				accessor: '',
-				label: '',
-				Cell: ({ _, row, data }) => {
-					const fullRow = data[row.index]
-
-					return (
-						<div
-							style={{
-								display: 'flex',
-								justifyContent: 'center',
-								alignItems: 'center',
-								alignContent: 'center'
-							}}
-						>
-							<button
-								style={{
-									border: 'none',
-									background: 'transparent',
-									cursor: 'pointer',
-									color: 'grey'
-								}}
-								onClick={() => {
-									onEditarEvent(row.original)
-								}}
-							>
-								<Tooltip title="Actualizar">
-									<IconButton>
-										<HiPencil style={{ fontSize: 30 }} />
-									</IconButton>
-								</Tooltip>
-							</button>
-							<button
-								style={{
-									border: 'none',
-									background: 'transparent',
-									cursor: 'pointer',
-									color: 'grey'
-								}}
-								onClick={() => {
-									swal({
-										title: 'Eliminar Apoyo',
-										text: '¿Esta seguro de que desea eliminar el apoyo?',
-										icon: 'warning',
-										className: 'text-alert-modal',
-										buttons: {
-											cancel: 'Cancelar',
-											ok: {
-												text: 'Eliminar',
-												value: true,
-												className: 'btn-alert-color'
-											}
-										}
-									}).then(async result => {
-										if (result) {
-											deleteApoyoById(row.original.id)
-										}
-									})
-								}}
-							>
-								<Tooltip title="Eliminar">
-									<IconButton>
-										<IoMdTrash style={{ fontSize: 30 }} />
-									</IconButton>
-								</Tooltip>
-							</button>
-						</div>
-					)
-				}
 			}
 		]
 	}, [state.expedienteEstudiantil.currentStudent])
 
 	const onConfirmSaveApoyo = async event => {
+		setCheckedValid(true)
 		event.preventDefault()
 		setLoading(true)
 
@@ -377,17 +241,14 @@ export const ApoyosCurriculares = () => {
 		let hayError = false
 
 		if (formData.tipoDeApoyo === 0 || isNaN(formData.tipoDeApoyo)) {
-			validationMessage = '\nEl tipo de apoyo es requerido'
 			hayError = true
 		}
 
 		if (formData.condicionApoyo === '' || isNaN(formData.condicionApoyo)) {
-			validationMessage += '\nLa condición de apoyo es requerida'
 			hayError = true
 		}
 
 		if (formData.detalleApoyo === '') {
-			validationMessage += '\nEl detalle es requerido'
 			hayError = true
 		}
 
@@ -401,30 +262,17 @@ export const ApoyosCurriculares = () => {
 			formData.fechaDeAprobacion === '' &&
 			formData.condicionApoyo === condicionSeRecibe.id
 		) {
-			validationMessage += '\nLa fecha de aprobación es requerida'
 			hayError = true
 		}
 
 		if (hayError) {
-			swal({
-				title: 'Error al registrar el apoyo',
-				text: validationMessage,
-				icon: 'error',
-				className: 'text-alert-modal',
-				buttons: {
-					ok: {
-						text: 'Ok',
-						value: true,
-						className: 'btn-alert-color'
-					}
-				}
-			})
+			errorToast('Faltan rellenar campos obligatorios')
 			setLoading(false)
 			return
 		}
 
 		let _data = {
-			//
+			id: state.expedienteEstudiantil.currentStudent.idMatricula,
 			detalle: formData.detalleApoyo,
 			fechaInicio: formData.fechaDeAprobacion
 				? formData.fechaDeAprobacion
@@ -438,65 +286,24 @@ export const ApoyosCurriculares = () => {
 			estrategias: null
 		}
 
-		let create = true
-		//create
-		if (formData.id === 0) {
-			_data = {
-				..._data,
-
-				id: state.expedienteEstudiantil.currentStudent.idMatricula
-			}
+		const response = await actions.addApoyo(
+			_data,
+			categoria,
+			categoria.addDispatchName,
+			1
+		)
+		if (response.error) {
+			setSnackbarContent({
+				msg: 'Hubo un error al crear el registro',
+				variant: 'error'
+			})
+			handleClick()
 		} else {
-			//update
-			create = false
-
-			_data = {
-				..._data,
-				tipoDeApoyoId: parseInt(formData.tipoDeApoyo),
-				id: formData.id
-			}
-		}
-
-		if (create) {
-			const response = await actions.addApoyo(
-				_data,
-				categoria,
-				categoria.addDispatchName,
-				1
-			)
-			if (response.error) {
-				setSnackbarContent({
-					msg: 'Hubo un error al crear el registro',
-					type: 'error'
-				})
-				handleClick()
-			} else {
-				setSnackbarContent({
-					msg: 'Se ha creado el registro',
-					type: 'success'
-				})
-				handleClick()
-			}
-		} else {
-			const response = await actions.editApoyo(
-				_data,
-				categoria,
-				categoria.addDispatchName,
-				1
-			)
-			if (response.error) {
-				setSnackbarContent({
-					msg: 'Hubo un error al editar',
-					type: 'error'
-				})
-				handleClick()
-			} else {
-				setSnackbarContent({
-					msg: 'Se ha editado el registro',
-					type: 'success'
-				})
-				handleClick()
-			}
+			setSnackbarContent({
+				msg: 'Se ha creado el registro',
+				variant: 'success'
+			})
+			handleClick()
 		}
 
 		axios
@@ -506,6 +313,7 @@ export const ApoyosCurriculares = () => {
 			.then(response => {
 				setLoading(false)
 				setData(response.data.entityList)
+				loadData()
 			})
 			.catch(error => {
 				setLoading(false)
@@ -513,30 +321,39 @@ export const ApoyosCurriculares = () => {
 			})
 
 		cleanFormData()
-		setLoading(false)
 		closeAgregarModal()
 	}
 
 	const closeAgregarModal = () => {
 		cleanFormData()
+		setCheckedValid(false)
 		setShowNuevoApoyoModal(false)
 	}
 
-	const filterTiposDeApoyo = (tipos, currentYear) => {
+	const filterTiposDeApoyo = tipos => {
 		let filtro = tiposApoyo
 
-		if (tipos.length > 0) {
-			filtro = tipos.filter(
-				tipoApoyo =>
-					!data.some(
-						apoyoEstudiante =>
-							apoyoEstudiante.sb_TiposDeApoyoId === tipoApoyo.id &&
-							new Date(apoyoEstudiante.fechaInsercion).getFullYear() ===
-								parseInt(currentYear)
-					)
-			)
+		if (categoria.nombre === 'Apoyos curriculares') {
+			setTiposApoyoFilter(filtro)
+			return
 		}
 
+		if (tipos && tipos.length > 0) {
+			const currentYear = moment().year()
+			filtro = tipos.filter(tipoApoyo => {
+				const hasApoyoThisYear = data.some(apoyoEstudiante => {
+					const insertionYear = moment(
+						apoyoEstudiante.fechaInsercion,
+						'DD/MM/YYYY'
+					).year()
+					const isSameTipoApoyo =
+						apoyoEstudiante.sb_TiposDeApoyoId === tipoApoyo.id
+					const isCurrentYear = insertionYear === currentYear
+					return isSameTipoApoyo && isCurrentYear
+				})
+				return !hasApoyoThisYear
+			})
+		}
 		setTiposApoyoFilter(filtro)
 	}
 
@@ -549,14 +366,16 @@ export const ApoyosCurriculares = () => {
 		})
 	}
 
+	if (loading || loadingData) {
+		return <Loader />
+	}
+
 	return (
 		<>
-			{/*loading && <BarLoader />*/}
-			{loading && <Loader />}
-			{snackbar(snackbarContent.type, snackbarContent.msg)}
-			<TableReactImplementationApoyo
+			{snackbar(snackbarContent.variant, snackbarContent.msg)}
+			<SearchWithYearsTableReactImplementation
 				placeholderText="Buscar por nombre"
-				showAddButton
+				showAddButton={props.validations.agregar}
 				msjButton="Agregar"
 				onSubmitAddButton={() => onAgregarEvent()}
 				data={data || []}
@@ -575,8 +394,8 @@ export const ApoyosCurriculares = () => {
 							name="radio-buttons-group"
 							value={radioValue}
 						>
-							{tiposApoyo.map((item, i) => (
-								<Row key={i}>
+							{tiposApoyoFilter.map((item, i) => (
+								<Row key={i} style={{ marginTop: '10px' }}>
 									<Col
 										style={{
 											display: 'flex',
@@ -584,7 +403,7 @@ export const ApoyosCurriculares = () => {
 											justifyContent: 'left',
 											alignItems: 'left'
 										}}
-										sm={7}
+										sm={item.detalle.length > 1 ? 5 : 12}
 									>
 										<FormControlLabel
 											value={formData.tipoDeApoyo}
@@ -597,7 +416,7 @@ export const ApoyosCurriculares = () => {
 											label={item.nombre}
 										/>
 									</Col>
-									<Col sm={5}>{item.detalle}</Col>
+									{item.detalle.length > 1 && <Col sm={7}>{item.detalle}</Col>}
 								</Row>
 							))}
 						</RadioGroup>
@@ -606,17 +425,24 @@ export const ApoyosCurriculares = () => {
 			</OptionModal>
 			<OptionModal
 				isOpen={showNuevoApoyoModal && !showModalTiposApoyo}
-				titleHeader={tituloModal}
+				titleHeader={categoria.tituloModal}
 				onConfirm={onConfirmSaveApoyo}
 				onCancel={() => closeAgregarModal()}
+				textConfirm="Guardar"
 			>
 				<Form onSubmit={onConfirmSaveApoyo}>
 					<Row>
 						<Col md={6}>
 							<Label for="tipoDeApoyo">
-								Tipo de apoyo <RequiredSpan />{' '}
+								Tipo de apoyo <RequiredSpan />
 							</Label>
-							<StyledInput
+							<Input
+								style={{
+									border:
+										checkedValid && formData.tipoDeApoyo === 0
+											? '1px solid red'
+											: ''
+								}}
 								id="tipoDeApoyo"
 								name="tipoDeApoyo"
 								type="text"
@@ -625,17 +451,25 @@ export const ApoyosCurriculares = () => {
 									setShowModalTiposApoyo(true)
 								}}
 								value={formData.nombreApoyo || 'Seleccionar'}
-							></StyledInput>
+							></Input>
 						</Col>
 						<Col md={6}>
 							<FormGroup>
 								<Label for="condicionDeApoyo">
-									Condición del apoyo <RequiredSpan />{' '}
+									Condición del apoyo <RequiredSpan />
 								</Label>
 								<StyledInput
 									id="condicionApoyo"
 									name="condicionApoyo"
 									type="select"
+									style={{
+										border:
+											checkedValid &&
+											(formData.condicionApoyo === '' ||
+												isNaN(formData.condicionApoyo))
+												? '1px solid red'
+												: ''
+									}}
 									onChange={handleFechaAprobacionOnChange}
 									placeholder="Seleccionar"
 									value={formData.condicionApoyo}
@@ -655,7 +489,7 @@ export const ApoyosCurriculares = () => {
 							<Col md={6}>
 								<FormGroup>
 									<Label for="fechaDeAprobacion">
-										Fecha de aprobación <RequiredSpan />{' '}
+										Fecha de aprobación <RequiredSpan />
 									</Label>
 									<Input
 										type="date"
@@ -663,9 +497,15 @@ export const ApoyosCurriculares = () => {
 										max={moment().format('YYYY-MM-DD')}
 										name="fechaDeAprobacion"
 										style={{
-											paddingRight: '12%'
+											paddingRight: '12%',
+											border:
+												checkedValid && formData.fechaDeAprobacion === ''
+													? '1px solid red'
+													: ''
 										}}
-										value={formData.fechaDeAprobacion}
+										value={moment(formData.fechaDeAprobacion).format(
+											'YYYY-MM-DD'
+										)}
 										onChange={handleFormDataChange}
 									/>
 								</FormGroup>
@@ -676,12 +516,18 @@ export const ApoyosCurriculares = () => {
 						<Col md={12}>
 							<FormGroup>
 								<Label for="detalleDelApoyo">
-									Detalle del apoyo (opcional)
+									Detalle del apoyo <RequiredSpan />
 								</Label>
 								<Input
 									type="textarea"
 									id="detalleApoyo"
 									name="detalleApoyo"
+									style={{
+										border:
+											checkedValid && formData.detalleApoyo === ''
+												? '1px solid red'
+												: ''
+									}}
 									rows="5"
 									onChange={handleFormDataChange}
 									value={formData.detalleApoyo}
@@ -698,3 +544,9 @@ export const ApoyosCurriculares = () => {
 const StyledInput = styled(Input)`
 	width: 100% !important;
 `
+export default withAuthorization({
+	id: 9,
+	Modulo: 'Expediente Estudiantil',
+	Apartado: 'Apoyos Educativos',
+	Seccion: 'Apoyos Educativos'
+})(ApoyosEstudiante)

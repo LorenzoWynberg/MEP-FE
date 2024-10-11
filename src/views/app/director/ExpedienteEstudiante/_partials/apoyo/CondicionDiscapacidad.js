@@ -4,6 +4,7 @@ import { TableReactImplementation } from 'Components/TableReactImplementation'
 import { IoMdTrash } from 'react-icons/io'
 import Tooltip from '@mui/material/Tooltip'
 import { IconButton } from '@material-ui/core'
+import withAuthorization from '../../../../../../Hoc/withAuthorization'
 import swal from 'sweetalert'
 import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
@@ -51,12 +52,16 @@ function CondicionDiscapacidad(props) {
 							}}
 						>
 							<Button
-								style={{
-									border: 'none',
-									background: 'transparent',
-									cursor: 'pointer',
-									color: 'grey'
-								}}
+								style={
+									!props.validations.eliminar
+										? { display: 'none' }
+										: {
+												border: 'none',
+												background: 'transparent',
+												cursor: 'pointer',
+												color: 'grey'
+										  }
+								}
 								color="primary"
 								onClick={() => {
 									swal({
@@ -98,7 +103,7 @@ function CondicionDiscapacidad(props) {
 				<Col md="12">
 					<TableReactImplementation
 						data={props.discapacidadesHistorico || []}
-						showAddButton
+						showAddButton={props.validations.agregar}
 						// avoidSearch
 						placeholderText="Buscar por nombre"
 						key={props.discapacidadesHistorico}
@@ -115,4 +120,9 @@ function CondicionDiscapacidad(props) {
 	)
 }
 
-export default CondicionDiscapacidad
+export default withAuthorization({
+	id: 9,
+	Modulo: 'Expediente Estudiantil',
+	Apartado: 'Apoyos Educativos',
+	Seccion: 'Apoyos Educativos'
+})(CondicionDiscapacidad)

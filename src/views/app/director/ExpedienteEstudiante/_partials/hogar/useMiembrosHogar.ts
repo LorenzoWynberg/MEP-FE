@@ -111,7 +111,6 @@ const initialState = {
 	telefonoPrincipal: '',
 	telefonoAlternativo: '',
 	correo: '',
-	//rol: null,
 	tipoIdentificacionCatalog: [],
 	nacionalidadCatalog: [],
 	sexoCatalog: [],
@@ -120,7 +119,6 @@ const initialState = {
 	relacionConEstudianteCatalog: [],
 	identidadGeneroCatalog: [],
 	discapacidadesCatalog: [],
-	//rolCatalog: [],
 	loading: false,
 	editable: false,
 	showForm: false,
@@ -219,21 +217,6 @@ const reducer = (state = initialState, action): typeof initialState => {
 		case TYPES.SET_FULL_STATE:
 			return { ...state, ...payload }
 		case TYPES.SET_IDENTIDAD_FORM_VALUES: {
-			/* const {
-                tipoIdentificacion,
-                nacionalidad,
-                imagen,
-                nombre,
-                primerApellido,
-                segundoApellido,
-                sexo,
-                fechaNacimiento,
-                conocidoComo,
-                identidadGenero,
-                telefonoPrincipal,
-                telefonoAlternativo,
-                correo
-            } = payload */
 			return { ...state, ...payload }
 		}
 		case TYPES.ADD_ENCARGADO_DOC: {
@@ -463,7 +446,6 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		telefonoPrincipal,
 		telefonoAlternativo,
 		correo,
-		//rol,
 		editable,
 		documentosEncargado,
 		documentosRepresentanteLegal,
@@ -594,7 +576,6 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 						return
 					}
 
-					console.log('Identificacion response', r)
 					setIdentidadFormValues(r)
 					toggleLoading(false)
 				})
@@ -775,12 +756,26 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		formBody.append('tipoIdentificacionId', state.tipoIdentificacion?.id)
 		formBody.append('nacionalidadId', state.nacionalidad?.id)
 		formBody.append('sexoId', state.sexo?.id)
-		formBody.append('condicionLaboralId', state.condicionLaboral?.id)
-		formBody.append('escolaridadId', state.escolaridad?.id)
+
+		if (
+			state.condicionLaboral?.id !== null &&
+			state.condicionLaboral?.id !== undefined
+		) {
+			formBody.append('condicionLaboralId', state.condicionLaboral?.id)
+		}
+
+		if (state.escolaridad?.id !== null && state.escolaridad?.id !== undefined) {
+			formBody.append('escolaridadId', state.escolaridad?.id)
+		}
+		//formBody.append('condicionLaboralId', state.condicionLaboral?.id)
+		//formBody.append('escolaridadId', state.escolaridad?.id || null)
+
 		formBody.append('parentescoId', state.relacionConEstudiante?.id)
+
 		state.condicionDiscapacidad.forEach(i => {
 			formBody.append('discapacidadesId', i.id)
 		})
+
 		if (state.imagen) {
 			formBody.append('fotoPerfil', state.imagen.blob)
 		}
@@ -809,8 +804,8 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			formBody.append('miembroId', state.miembroId)
 		}
 		/*state.condicionDiscapacidad.forEach((i)=>{
-      formBody.append('discapacidadesId',i.id)
-    })*/
+	  formBody.append('discapacidadesId',i.id)
+	})*/
 
 		try {
 			// schema.validateSync(request)
@@ -824,16 +819,17 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			return null
 		}
 	}
-	const onGuardarClick = () => {
+	const onGuardarClick = async (regresar, callback) => {
 		if (
-			!state.condicionLaboral?.id ||
-			!state.escolaridad?.id ||
+			// !state.condicionLaboral?.id ||
+			// !state.escolaridad?.id ||
 			!state.relacionConEstudiante?.id ||
 			!state.telefonoPrincipal ||
-			!state.correo ||
+			// !state.correo ||
 			!state.identificacion
 		) {
 			errorToast('Faltan rellenar campos obligatorios')
+			callback()
 			return
 		}
 		if (state.isNew) {
@@ -841,37 +837,48 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			api
 				.createMiembroHogarRequest(request)
 				.then(_ => {
+					regresar()
+					callback()
 					toggleEditable(false)
 					infoToast('Guardado correctamente')
 				})
 				.catch(e => {
+					regresar()
+					callback()
+
 					console.error(e)
 					errorToast('Se ha producido un error')
 				})
 		} else {
-			onUpdateClick()
+			onUpdateClick(() => {
+				regresar()
+			})
 		}
 	}
-	const onUpdateClick = () => {
+	const onUpdateClick = callback => {
 		const request = getRequest('update')
 		api
 			.editMiembroHogarRequest(request)
 			.then(_ => {
 				toggleEditable(false)
 				infoToast('Editado correctamente')
+				callback()
 			})
 			.catch(e => {
 				console.error(e)
+				callback()
 				errorToast('Se ha producido un error')
 			})
 	}
 
-	const onDeleteClick = async id => {
+	const onDeleteClick = async (id, callback) => {
 		const res = await api.deleteMiembroHogarRequest(id)
 		if (!res.error) {
 			infoToast('Eliminado correctamente')
+			callback()
 			return
 		}
+		callback()
 		errorToast('Se ha producido un error')
 	}
 	const toggleShowForm = (e = null) => {
@@ -930,19 +937,19 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		}
 		/* const getRoleUsuario = (usuarioRoles, catalogoRoles) => {
 			if (!usuarioRoles) return
-
+	
 			const rolesUsuario = JSON.parse(usuarioRoles)
 			if (!rolesUsuario) return
-
+	
 			return catalogoRoles.find(i => rolesUsuario.find(j => i.id == j.rolId))
 		}
- */
+	*/
 		const newState: typeof initialState = {
 			identidadId: identidad.identidad.id,
 			identificacion: identidad.identidad.identificacion,
 			correo: identidad.identidad.email,
-			telefonoAlternativo: identidad.identidad.telefono,
-			telefonoPrincipal: identidad.identidad.telefonoSecundario,
+			telefonoAlternativo: identidad.identidad.telefonoSecundario,
+			telefonoPrincipal: identidad.identidad.telefono,
 			nombre: identidad.identidad.nombre,
 			primerApellido: identidad.identidad.primerApellido,
 			segundoApellido: identidad.identidad.segundoApellido,
@@ -989,18 +996,20 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 		}
 		dispatch({ type: TYPES.SET_FULL_STATE, payload: newState })
 	}
-	const onEditarClick = id => {
+
+	const onEditarClick = (id, callback) => {
 		loadCatalogs().then(catalogs => {
 			api
 				.getMiembroHogarInfoById(id)
 				.then(response => {
-					console.log(response)
 					setFormValuesFromRequest(response.data, catalogs)
 					toggleShowForm(true)
 					toggleEditable(true)
 					toggleNuevo(false)
+					callback()
 				})
 				.catch(e => {
+					callback()
 					console.log(e)
 				})
 		})
@@ -1030,7 +1039,6 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			telefonoPrincipal,
 			telefonoAlternativo,
 			correo,
-			//rol,
 			editable,
 			condicionDiscapacidadSeleccionadas,
 			documentosEncargado: documentosEncargado.filter(
@@ -1080,7 +1088,6 @@ const useMiembrosHogar = ({ setSnackbarContent, handleClick }) => {
 			onTelefonoPrincipalChange,
 			onTelefonoAlternativoChange,
 			onCorreoChange,
-			//onRolChange,
 			toggleEditable,
 			onGuardarClick,
 			onUpdateClick,

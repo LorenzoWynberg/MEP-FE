@@ -17,31 +17,34 @@ const Subsidio = props => {
 					<Col xs={12}>
 						{props.tipos.map(item => {
 							return (
-								<Row key={item.id}>
-									<Col xs={3} className="modal-detalle-subsidio-col">
-										<div>
-											<Label className="cursor-pointer">
-												<Input
-													type="radio"
-													inline
-													onClick={() => props.handleChangeSubsidio(item)}
-													checked={props.currentSubsidio.id === item.id}
-												/>
-
-												<p>{item.nombre}</p>
-											</Label>
-										</div>
+								<Row
+									className="py-2"
+									style={{
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center',
+										borderBottom: '1px solid #d7d7d7'
+									}}
+								>
+									<Col sm={4} className="">
+										<Label className="cursor-pointer">
+											<Input
+												type="radio"
+												inline
+												onClick={() => props.handleChangeSubsidio(item)}
+												checked={props.currentSubsidio.id === item.id}
+											/>
+											<p>{item.nombre}</p>
+										</Label>
 									</Col>
-									<Col xs={9} className="modal-detalle-subsidio-col">
-										<div>
-											<p>
-												{item.detalle
-													? item.detalle
-													: item.descripcion
-													? item.descripcion
-													: 'Elemento sin detalle actualmente'}
-											</p>
-										</div>
+									<Col xs={8} className="">
+										<p>
+											{item.detalle
+												? item.detalle
+												: item.descripcion
+												? item.descripcion
+												: 'Elemento sin detalle actualmente'}
+										</p>
 									</Col>
 								</Row>
 							)

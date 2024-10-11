@@ -5,7 +5,7 @@ function OptionModal({
 	isOpen,
 	titleHeader,
 	onConfirm,
-	onCancel,
+	onCancel = () => { },
 	hideCancel = false,
 	textCancel = 'Cancelar',
 	textConfirm = 'Confirmar',
@@ -20,7 +20,7 @@ function OptionModal({
 					<Row>
 						<Col xs={12}>{children}</Col>
 					</Row>
-					<Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+					<Row style={{ display: 'flex', justifyContent: 'center', alignItems: 'center',paddingTop:16 }}>
 						{!hideCancel && (
 							<Button onClick={onCancel} color='primary' outline style={{ marginRight: 10 }}>
 								{textCancel}

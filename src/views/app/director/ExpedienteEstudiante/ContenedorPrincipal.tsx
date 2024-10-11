@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import studentBreadcrumb from 'Constants/studentBreadcrumb'
 import { useSelector } from 'react-redux'
@@ -7,7 +7,7 @@ import {
 	getStudentDataFilter,
 	loadStudent
 } from 'Redux/expedienteEstudiantil/actions'
-import { getDiscapacidades } from 'Redux/apoyos/actions'
+import { getDiscapacidades, getCondiciones } from 'Redux/apoyos/actions'
 import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
 import EstudianteInformationCard from './_partials/EstudianteInformationCard'
@@ -29,7 +29,6 @@ const Navegacion = React.lazy(() => import('./Navegacion'))
 const Contacto = React.lazy(() => import('./Contacto'))
 const General = React.lazy(() => import('./General'))
 const Oferta = React.lazy(() => import('./Oferta'))
-const AreaCurricular = React.lazy(() => import('./AreaCurricular'))
 const Hogar = React.lazy(() => import('./Hogar'))
 const Beneficios = React.lazy(() => import('./Beneficios'))
 const Apoyo = React.lazy(() => import('./Apoyo'))
@@ -43,23 +42,23 @@ const ServicioComunalEstudiantil = React.lazy(
 const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
 	const { idEstudiante } = useParams()
-	const [active, setActive] = React.useState(0)
-	const [loading, setLoading] = React.useState(true)
-	const [aplicaSCE, setAplicaSCE] = React.useState(false)
-	const [breadcrumbs, setBreadcrumbs] = React.useState([])
+	const [active, setActive] = useState(0)
+	const [loading, setLoading] = useState(true)
+	const [aplicaSCE, setAplicaSCE] = useState(false)
+	const [conditionsHaveChanged, setConditionsHaveChanged] = useState(false)
 	const idInstitucion = localStorage.getItem('idInstitucion')
-	const [infoCard, setInfoCard] = React.useState({})
+	const [infoCard, setInfoCard] = useState({})
 
 	studentBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
 		return item
-	})
-
+	})	
 	const actions = useActions({
 		getIdentification,
 		getStudentDataFilter,
 		loadStudent,
 		getDiscapacidades,
+		getCondiciones,
 		getCatalogs,
 		getCatalogsSet
 	})
@@ -161,20 +160,34 @@ const ContenedorPrincipal = props => {
 			const discapacidades = await actions.getDiscapacidades(
 				state.expedienteEstudiantil.currentStudent.idEstudiante
 			)
-			const tieneDiscapacidades = !isEmpty(discapacidades) ? 'SI' : 'NO'
+			const tieneDiscapacidades = !isEmpty(discapacidades) ? true : false
+
+			const condiciones = await actions.getCondiciones(
+				state.expedienteEstudiantil.currentStudent.idEstudiante
+			)
+
+			const tieneCondiciones = !isEmpty(condiciones) ? true : false
+
+			let infoCondiciones = 'NO'
+			if (tieneDiscapacidades || tieneCondiciones) {
+				infoCondiciones = 'SI'
+			}
 
 			setInfoCard(prevState => {
 				return {
 					...prevState,
-					tieneDiscapacidades: tieneDiscapacidades
+					discapacidades: tieneDiscapacidades,
+					condiciones: tieneCondiciones,
+					tieneDiscapacidades: infoCondiciones
 				}
 			})
+			setConditionsHaveChanged(false)
 			setLoading(false)
 		}
 		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
 			loadData()
 		}
-	}, [state.expedienteEstudiantil.currentStudent])
+	}, [state.expedienteEstudiantil.currentStudent, conditionsHaveChanged])
 
 	useEffect(() => {
 		setLoading(true)
@@ -219,18 +232,6 @@ const ContenedorPrincipal = props => {
 	}
 
 	useEffect(() => {
-		const newBreadcrumbs = studentBreadcrumb.map((item, idx) => ({
-			...item
-		}))
-
-		if (!aplicaSCE) {
-			newBreadcrumbs.splice(11, 1)
-		}
-
-		setBreadcrumbs(newBreadcrumbs)
-	}, [aplicaSCE])
-
-	useEffect(() => {
 		validarAcceso()
 	}, [])
 
@@ -253,7 +254,7 @@ const ContenedorPrincipal = props => {
 										'expediente_estudiantil>titulo',
 										'Expediente Estudiantil'
 									)}
-									data={breadcrumbs}
+									data={studentBreadcrumb}
 								/>
 								<br />
 							</Col>
@@ -292,21 +293,20 @@ const ContenedorPrincipal = props => {
 												blockeo()
 											),
 											6: estudianteEnContexto() ? (
-												<Apoyo {...props} />
+												<Apoyo
+													{...props}
+													setConditionsHaveChanged={setConditionsHaveChanged}
+												/>
 											) : (
 												blockeo()
 											),
+
 											7: estudianteEnContexto() ? (
-												<AreaCurricular {...props} />
-											) : (
-												blockeo()
-											),
-											8: estudianteEnContexto() ? (
 												<Salud {...props} />
 											) : (
 												blockeo()
 											),
-											9: estudianteEnContexto() ? (
+											8: estudianteEnContexto() ? (
 												<Oferta
 													{...props}
 													historialMatricula={state.historialMatricula}
@@ -316,7 +316,7 @@ const ContenedorPrincipal = props => {
 											),
 											// 	10: <Sinirube {...props} />,
 											//10: <CuentaCorreo {...props} />,
-											10: estudianteEnContexto() ? (
+											9: estudianteEnContexto() ? (
 												<CuentaUsuarios
 													{...props}
 													expedienteEstudiantil={state.expedienteEstudiantil}
@@ -324,16 +324,21 @@ const ContenedorPrincipal = props => {
 											) : (
 												blockeo()
 											),
-											11: estudianteEnContexto() ? (
+											10: estudianteEnContexto() ? (
 												<ServicioComunalEstudiantil {...props} />
 											) : (
 												blockeo()
 											),
-											12: estudianteEnContexto() ? (
+											11: estudianteEnContexto() ? (
 												<BitacoraExpediente {...props} />
 											) : (
 												blockeo()
 											)
+											// 7: estudianteEnContexto() ? (
+											// 	<AreaCurricular {...props} />
+											// ) : (
+											// 	blockeo()
+											// ),
 										}[active]
 									}
 								</>

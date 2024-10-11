@@ -72,7 +72,9 @@ const INITIAL_STATE = {
 	apoyosRecibidos: [],
 	apoyosNoRecibidos: [],
 	tiposApoyos: [],
-	tipoCondicionApoyo: []
+	tipoCondicionApoyo: [],
+	talentos: [],
+	estrategiasFlexibilidadCurricular: []
 }
 
 export default (state = INITIAL_STATE, { type, payload }) => {
@@ -91,7 +93,9 @@ export default (state = INITIAL_STATE, { type, payload }) => {
 						.filter(item => item.tiposCatalogo === type.id)
 					return
 				}
-				newState[type.name] = payload.data.filter(item => item.tiposCatalogo === type.id)
+				newState[type.name] = payload.data.filter(
+					item => item.tiposCatalogo === type.id
+				)
 			})
 			return newState
 		default:

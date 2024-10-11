@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
-import { Input, FormGroup, FormFeedback, Form, Container, Col, Button, CustomInput } from 'reactstrap'
+import {
+	Input,
+	FormGroup,
+	FormFeedback,
+	Form,
+	Container,
+	Col,
+	Button,
+	CustomInput
+} from 'reactstrap'
 import moment from 'moment'
 import styled from 'styled-components'
 import colors from '../../../../../../assets/js/colors'
@@ -12,13 +21,16 @@ const ApoyoItem = props => {
 	const { t } = useTranslation()
 
 	const [editing, setEditing] = useState(props.addNew)
-	const [resepcionVerificada, setResepcionVerificada] = useState(props.apoyo.resepcionVerificada)
+	const [resepcionVerificada, setResepcionVerificada] = useState(
+		props.apoyo.resepcionVerificada
+	)
 	const { handleSubmit, errors, watch, setValue, register } = useForm()
 	const [anchorEl, setAnchorEl] = useState(null)
 
 	const fromDate = watch(`${props.storedValuesKey}dateFrom`)
 	const toDate = watch(`${props.storedValuesKey}dateTo`)
-	const toDateInvalid = fromDate && toDate && moment(toDate, 'YYYY-MM-DD').isBefore(fromDate)
+	const toDateInvalid =
+		fromDate && toDate && moment(toDate, 'YYYY-MM-DD').isBefore(fromDate)
 
 	useEffect(() => {
 		setData()
@@ -30,11 +42,20 @@ const ApoyoItem = props => {
 
 	const setData = () => {
 		if (props.apoyo.id) {
-			setValue(`${props.storedValuesKey}Dependencias`, props.apoyo.dependenciasApoyosId)
+			setValue(
+				`${props.storedValuesKey}Dependencias`,
+				props.apoyo.dependenciasApoyosId
+			)
 			setValue(`${props.storedValuesKey}Tipos`, props.apoyo.tipoDeApoyoId)
 			setValue(`${props.storedValuesKey}Detalle`, props.apoyo.detalle)
-			setValue(`${props.storedValuesKey}dateFrom`, moment(props.apoyo.fechaInicio).format('YYYY-MM-DD'))
-			setValue(`${props.storedValuesKey}dateTo`, moment(props.apoyo.fechaFin).format('YYYY-MM-DD'))
+			setValue(
+				`${props.storedValuesKey}dateFrom`,
+				moment(props.apoyo.fechaInicio).format('YYYY-MM-DD')
+			)
+			setValue(
+				`${props.storedValuesKey}dateTo`,
+				moment(props.apoyo.fechaFin).format('YYYY-MM-DD')
+			)
 		}
 	}
 
@@ -57,9 +78,17 @@ const ApoyoItem = props => {
 		let response
 		if (!props.apoyo.id) {
 			//delete _data['id']
-			response = await props.agregarApoyo(_data, props.categoria, props.storedValuesKey)
+			response = await props.agregarApoyo(
+				_data,
+				props.categoria,
+				props.storedValuesKey
+			)
 		} else {
-			response = await props.editarApoyo(_data, props.categoria, props.storedValuesKey)
+			response = await props.editarApoyo(
+				_data,
+				props.categoria,
+				props.storedValuesKey
+			)
 		}
 		if (!response.error && props.addItems[props.storedValuesKey]) {
 			props.setAddItems({ ...props.addItems, [props.storedValuesKey]: false })
@@ -101,7 +130,7 @@ const ApoyoItem = props => {
 								disabled={!editing}
 								innerRef={register({ required: props.apoyosMateriales })}
 								name={`${props.storedValuesKey}Dependencias`}
-								type='select'
+								type="select"
 								invalid={errors[`${props.storedValuesKey}Dependencias`]}
 							>
 								<option value={null}>
@@ -111,7 +140,9 @@ const ApoyoItem = props => {
 									)}
 								</option>
 								{props.dependencias.map(dependencia => {
-									return <option value={dependencia.id}>{dependencia.nombre}</option>
+									return (
+										<option value={dependencia.id}>{dependencia.nombre}</option>
+									)
 								})}
 							</StyledInput>
 							<FormFeedback>
@@ -122,16 +153,20 @@ const ApoyoItem = props => {
 					</Col>
 				)}
 				<Col>
-					<FormGroup className='mb-2 mr-sm-2 mb-sm-0'>
+					<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
 						<StyledInput
 							disabled={!editing}
-							innerRef={register({ required: t('general>campo_requerido', 'El campo es requerido') })}
+							innerRef={register({
+								required: t('general>campo_requerido', 'El campo es requerido')
+							})}
 							name={`${props.storedValuesKey}Tipos`}
-							type='select'
+							type="select"
 							invalid={errors[`${props.storedValuesKey}Tipos`]}
-							placeholder='Seleccionar'
+							placeholder="Seleccionar"
 						>
-							<option value={null}>{t('general>seleccionar', 'Seleccionar')}</option>
+							<option value={null}>
+								{t('general>seleccionar', 'Seleccionar')}
+							</option>
 							{props.tipos.map(tipo => {
 								return (
 									<option value={tipo.id} selected={props.categoria.id == 4}>
@@ -141,7 +176,8 @@ const ApoyoItem = props => {
 							})}
 						</StyledInput>
 						<FormFeedback>
-							{errors[`${props.storedValuesKey}Tipos`] && errors[`${props.storedValuesKey}Tipos`].message}
+							{errors[`${props.storedValuesKey}Tipos`] &&
+								errors[`${props.storedValuesKey}Tipos`].message}
 						</FormFeedback>
 					</FormGroup>
 				</Col>
@@ -151,7 +187,7 @@ const ApoyoItem = props => {
 							disabled={!editing}
 							innerRef={register}
 							name={`${props.storedValuesKey}Detalle`}
-							type='text'
+							type="text"
 							invalid={errors[`${props.storedValuesKey}Detalle`]}
 						/>
 						<FormFeedback>
@@ -163,7 +199,7 @@ const ApoyoItem = props => {
 				{props.apoyosMateriales && (
 					<Col>
 						<CustomInput
-							type='radio'
+							type="radio"
 							inline
 							disabled={!editing}
 							label={t('general>si', 'Si')}
@@ -173,7 +209,7 @@ const ApoyoItem = props => {
 							}}
 						/>
 						<CustomInput
-							type='radio'
+							type="radio"
 							inline
 							disabled={!editing}
 							label={t('general>no', 'No')}
@@ -188,13 +224,18 @@ const ApoyoItem = props => {
 					<FormGroup>
 						<StyledInput
 							disabled={!editing}
-							type='date'
+							type="date"
 							name={`${props.storedValuesKey}dateFrom`}
-							invalid={toDateInvalid || errors[`${props.storedValuesKey}dateFrom`]}
-							innerRef={register({ required: t('general>campo_requerido', 'El campo es requerido') })}
+							invalid={
+								toDateInvalid || errors[`${props.storedValuesKey}dateFrom`]
+							}
+							innerRef={register({
+								required: t('general>campo_requerido', 'El campo es requerido')
+							})}
 						/>
 						<FormFeedback style={{ top: '76px' }}>
-							{toDateInvalid && 'la fecha de inicio debe ser antes de la fecha de final'}
+							{toDateInvalid &&
+								'la fecha de inicio debe ser antes de la fecha de final'}
 							{errors[`${props.storedValuesKey}dateFrom`] &&
 								errors[`${props.storedValuesKey}dateFrom`].message}
 						</FormFeedback>
@@ -204,13 +245,18 @@ const ApoyoItem = props => {
 					<FormGroup>
 						<StyledInput
 							disabled={!editing}
-							type='date'
+							type="date"
 							name={`${props.storedValuesKey}dateTo`}
-							invalid={toDateInvalid || errors[`${props.storedValuesKey}dateTo`]}
-							innerRef={register({ required: t('general>campo_requerido', 'El campo es requerido') })}
+							invalid={
+								toDateInvalid || errors[`${props.storedValuesKey}dateTo`]
+							}
+							innerRef={register({
+								required: t('general>campo_requerido', 'El campo es requerido')
+							})}
 						/>
 						<FormFeedback style={{ top: '76px' }}>
-							{toDateInvalid && 'la fecha de inicio debe ser antes de la fecha de final'}
+							{toDateInvalid &&
+								'la fecha de inicio debe ser antes de la fecha de final'}
 							{errors[`${props.storedValuesKey}dateTo`] &&
 								errors[`${props.storedValuesKey}dateTo`].message}
 						</FormFeedback>
@@ -218,10 +264,14 @@ const ApoyoItem = props => {
 				</Col>
 				<Col md={1}>
 					{!editing && !props.addItems[props.storedValuesKey] && (
-						<MoreVertIcon aria-controls='simple-menu' aria-haspopup='true' onClick={handleClick} />
+						<MoreVertIcon
+							aria-controls="simple-menu"
+							aria-haspopup="true"
+							onClick={handleClick}
+						/>
 					)}
 					<Menu
-						id='simple-menu'
+						id="simple-menu"
 						anchorEl={anchorEl}
 						keepMounted
 						open={Boolean(anchorEl)}
@@ -249,9 +299,9 @@ const ApoyoItem = props => {
 					<Col xs={12}>
 						<ButonsContainer>
 							<Button
-								color='primary'
+								color="primary"
 								outline
-								type='button'
+								type="button"
 								onClick={() => {
 									if (!props.apoyo.id) {
 										props.setAddItems({
@@ -265,7 +315,7 @@ const ApoyoItem = props => {
 							>
 								{t('general>cancelar', 'Cancelar')}
 							</Button>
-							<Button color='primary' type='submit'>
+							<Button color="primary" type="submit">
 								{t('general>guardar', 'Guardar')}
 							</Button>
 						</ButonsContainer>

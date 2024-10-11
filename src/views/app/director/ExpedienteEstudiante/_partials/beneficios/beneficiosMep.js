@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
+import { Grid, Collapse } from '@mui/material'
 import Subsidio from '../../_modals/beneficio'
 import Tabla from './TablaMep'
 import PropTypes from 'prop-types'
@@ -61,12 +61,14 @@ const BeneficiosMEP = props => {
 	})
 	const [disabledRadio, setDisabledRadio] = useState(false)
 	const [currentBeneficio, setCurrentBeneficio] = useState({})
+	const [hideFechaFinal, setHideFechaFinal] = useState(false)
 	const [visualizing, setVisualizing] = useState(false)
 	const [showButtons, setShowButtons] = useState(true)
 	const [snackbar, handleClick] = useNotification()
 	const { reset, watch } = useForm()
 	const [loading, setLoading] = useState(false)
 	const [dataTable, setDataTable] = useState({})
+	const [checkedValid, setCheckedValid] = useState(false)
 	const [formData, setFormData] = useState({
 		dateFrom: '',
 		dateTo: '',
@@ -80,6 +82,8 @@ const BeneficiosMEP = props => {
 			detSubsidio: ''
 		}
 		setFormData(data)
+		setCheckedValid(false)
+		setDependencia({})
 	}
 
 	const handleFormDataChange = event => {
@@ -150,7 +154,9 @@ const BeneficiosMEP = props => {
 	}
 
 	const sendData = async () => {
+		console.log('Dependencia JP', dependencia)
 		setLoading(true)
+		setCheckedValid(true)
 		if (moment(formData.dateTo, 'YYYY-MM-DD').isBefore(formData.dateFrom)) {
 			swal({
 				title: 'Error',
@@ -170,42 +176,21 @@ const BeneficiosMEP = props => {
 		}
 
 		let isInvalid = false
-		let validationMessage = ''
 
 		if (isEmpty(dependencia)) {
-			validationMessage = '\nLa dependencia es requerida'
 			isInvalid = true
 		}
 
 		if (!prevSubsidio?.id || isNaN(prevSubsidio?.id)) {
-			validationMessage += '\nEl tipo de subsidio es requerido'
 			isInvalid = true
 		}
 
 		if (formData.dateFrom === '') {
-			validationMessage += '\nLa fecha de inicio es requerida'
 			isInvalid = true
 		}
 
-		// if (formData.dateTo === '') {
-		// 	validationMessage += '\nLa fecha de fin es requerida'
-		// 	isInvalid = true
-		// }
-
 		if (isInvalid) {
-			swal({
-				title: 'Error al registrar el apoyo',
-				text: validationMessage,
-				icon: 'error',
-				className: 'text-alert-modal',
-				buttons: {
-					ok: {
-						text: 'Ok',
-						value: true,
-						className: 'btn-alert-color'
-					}
-				}
-			})
+			toggleSnackbar('error', 'Faltan rellenar campos requeridos.')
 			setLoading(false)
 			return
 		}
@@ -219,6 +204,10 @@ const BeneficiosMEP = props => {
 			recepcionVerificada: verificated,
 			fechaInicio: moment(formData.dateFrom).toDate(),
 			fechaFinal: moment(formData.dateTo).toDate()
+		}
+
+		if (hideFechaFinal) {
+			_data.fechaFinal = _data.fechaInicio
 		}
 
 		if (dataTable.id) {
@@ -269,14 +258,19 @@ const BeneficiosMEP = props => {
 		setDependencia({})
 		setVerificated(false)
 		cleanDataForm()
+		setView(false)
 	}
 
 	const handleDeleteSubsidio = async ids => {
-		const response = await actions.deleteSubsidio(
-			ids,
-			state.identification.data.id
-		)
-		return response
+		try {
+			const response = await actions.deleteSubsidio(
+				ids,
+				state.identification.data.id
+			)
+			toggleSnackbar('success', 'El subsidio se ha eliminado correctamente.')
+		} catch (e) {
+			toggleSnackbar('error', 'Error eliminando el subsidio.')
+		}
 	}
 
 	const handleViewSubsidio = (e, show) => {
@@ -335,7 +329,8 @@ const BeneficiosMEP = props => {
 				titleHeader={'Por parte del MEP'}
 				hideCancel={visualizing}
 				onConfirm={() => (!visualizing ? sendData(dataTable) : setView(false))}
-				onCancel={() => setView(false)}
+				onCancel={() => clearData()}
+				textConfirm={`${visualizing ? 'Cerrar' : 'Guardar'}`}
 			>
 				<Grid container>
 					<Grid item xs={12} className={classes.control}>
@@ -345,8 +340,15 @@ const BeneficiosMEP = props => {
 							</Label>
 							<Select
 								name="dependencia"
-								className="react-select"
-								classNamePrefix="react-select"
+								styles={{
+									control: (baseStyles, state) => ({
+										...baseStyles,
+										borderColor:
+											checkedValid && isEmpty(dependencia)
+												? 'red'
+												: 'hsl(0, 0%, 80%)'
+									})
+								}}
 								placeholder="Seleccione una dependencia"
 								value={isEmpty(dependencia) ? '' : dependencia}
 								options={dependencias.map(item => ({
@@ -363,6 +365,10 @@ const BeneficiosMEP = props => {
 											item => item.dependeciasSubsidioId === data.value
 										)
 									)
+									setHideFechaFinal(
+										data.nombre ==
+											'Departamento de apoyos educativos para el estudiantado con discapacidad, Dirección de Desarrollo Curricular (DDC)'
+									)
 									setPrevSubsidio({})
 									setFormData({
 										...formData,
@@ -377,6 +383,13 @@ const BeneficiosMEP = props => {
 							</Label>
 							<Input
 								name="tiposubsidio"
+								style={{
+									border:
+										checkedValid &&
+										(!prevSubsidio?.id || isNaN(prevSubsidio?.id))
+											? '1px solid red'
+											: ''
+								}}
 								onClick={() => {
 									handleSubsidio()
 								}}
@@ -434,25 +447,26 @@ const BeneficiosMEP = props => {
 						</FormGroup>
 					</Grid>
 					<Grid container>
-						<Grid item xs={12} className={classes.periodo}>
-							<Label>Periodo activo</Label>
-						</Grid>
-						<Grid item xs={5} className={classes.control}>
+						<Grid item xs={6} className={classes.control}>
 							<FormGroup>
 								<Label for="dateFrom">
-									Fecha inicio <RequiredSpan />
+									Fecha inicio / Entrega <RequiredSpan />
 								</Label>
 								<Input
 									type="date"
 									min={moment()
 										.subtract(1, 'year')
-										.month(5)
+										.month(7)
 										.date(1)
 										.format('YYYY-MM-DD')}
 									max={moment().format('YYYY-MM-DD')}
 									name="dateFrom"
 									style={{
-										paddingRight: '12%'
+										paddingRight: '12%',
+										border:
+											checkedValid && formData.dateFrom === ''
+												? '1px solid red'
+												: ''
 									}}
 									invalid={toDateInvalid || state.beneficios.fields.fechaInicio}
 									disabled={!editable}
@@ -461,46 +475,37 @@ const BeneficiosMEP = props => {
 								/>
 							</FormGroup>
 						</Grid>
-						<Grid
-							item
-							xs={2}
-							style={{
-								textAlign: 'center',
-								paddingTop: 40
-							}}
-							className={classes.control}
-						>
-							<FormGroup>
-								<Label> al </Label>
-							</FormGroup>
-						</Grid>
-						<Grid item xs={5} className={classes.control}>
-							<FormGroup>
-								<Label for="dateTo">Fecha final</Label>
-								<Input
-									min={moment().startOf('year').format('YYYY-MM-DD')}
-									max={moment()
-										.add(1, 'year')
-										.month(6)
-										.date(1)
-										.format('YYYY-MM-DD')}
-									type="date"
-									name="dateTo"
-									style={{
-										paddingRight: '12%'
-									}}
-									invalid={toDateInvalid || state.beneficios.fields.fechaFinal}
-									disabled={!editable}
-									value={formData.dateTo}
-									onChange={handleFormDataChange}
-								/>
-								<FormFeedback>
-									{toDateInvalid &&
-										'la fecha de inicio debe ser antes de la fecha de final'}
-									{state.beneficios.fields.fechaFinal &&
-										state.beneficios.errors.fechaFinal}
-								</FormFeedback>
-							</FormGroup>
+						<Grid item xs={6} className={classes.control}>
+							<Collapse in={!hideFechaFinal} timeout={750} easing="easeInOut">
+								<FormGroup>
+									<Label for="dateTo">Fecha final ( Opcional )</Label>
+									<Input
+										min={moment().startOf('year').format('YYYY-MM-DD')}
+										max={moment()
+											.add(1, 'year')
+											.month(5)
+											.date(30)
+											.format('YYYY-MM-DD')}
+										type="date"
+										name="dateTo"
+										style={{
+											paddingRight: '12%'
+										}}
+										invalid={
+											toDateInvalid || state.beneficios.fields.fechaFinal
+										}
+										disabled={!editable}
+										value={formData.dateTo}
+										onChange={handleFormDataChange}
+									/>
+									<FormFeedback>
+										{toDateInvalid &&
+											'la fecha de inicio debe ser antes de la fecha de final'}
+										{state.beneficios.fields.fechaFinal &&
+											state.beneficios.errors.fechaFinal}
+									</FormFeedback>
+								</FormGroup>
+							</Collapse>
 						</Grid>
 					</Grid>
 				</Grid>
@@ -525,6 +530,7 @@ const BeneficiosMEP = props => {
 					handleDeleteSubsidio={handleDeleteSubsidio}
 					handleUpdateSubsidio={handleUpdateSubsidio}
 					setVisualizing={setVisualizing}
+					{...props}
 				/>
 			</div>
 			<Subsidio

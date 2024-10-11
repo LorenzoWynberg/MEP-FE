@@ -532,13 +532,109 @@ const routes: Route[] = [
 		isAuthenticated: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
-			active: 6
+			active: 6,
+			activeTab: 1
 		}
 	},
+
 	{
 		component: ExpedienteEstudiante,
 		exact: true,
-		route: '/director/expediente-estudiante/area-curricular',
+		route: '/director/expediente-estudiante/apoyos-educativos/curriculares',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 6,
+			activeTab: 0
+		}
+	},
+
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route: '/director/expediente-estudiante/apoyos-educativos/personales',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 6,
+			activeTab: 1
+		}
+	},
+
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route: '/director/expediente-estudiante/apoyos-educativos/organizativos',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 6,
+			activeTab: 2
+		}
+	},
+
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route: '/director/expediente-estudiante/apoyos-educativos/alto-potencial',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 6,
+			activeTab: 3
+		}
+	},
+
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route:
+			'/director/expediente-estudiante/apoyos-educativos/condicion-discapacidad',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 6,
+			activeTab: 4
+		}
+	},
+
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route:
+			'/director/expediente-estudiante/apoyos-educativos/otras-condiciones',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 6,
+			activeTab: 5
+		}
+	},
+
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route: '/director/expediente-estudiante/apoyos-educativos',
+		isAuthenticated: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 6
+		}
+	},
+	// {
+	// 	component: ExpedienteEstudiante,
+	// 	exact: true,
+	// 	route: '/director/expediente-estudiante/area-curricular',
+	// 	isAuthenticated: true,
+	// 	accessRoles: ['ADMIN', 'GESTOR'],
+	// 	routeProps: {
+	// 		active: 7
+	// 	}
+	// },
+	{
+		component: ExpedienteEstudiante,
+		exact: true,
+		route: '/director/expediente-estudiante/salud',
 		isAuthenticated: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
@@ -548,21 +644,11 @@ const routes: Route[] = [
 	{
 		component: ExpedienteEstudiante,
 		exact: true,
-		route: '/director/expediente-estudiante/salud',
-		isAuthenticated: true,
-		accessRoles: ['ADMIN', 'GESTOR'],
-		routeProps: {
-			active: 8
-		}
-	},
-	{
-		component: ExpedienteEstudiante,
-		exact: true,
 		route: '/director/expediente-estudiante/oferta',
 		isAuthenticated: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
-			active: 9
+			active: 8
 		}
 	},
 	/*{
@@ -592,7 +678,7 @@ const routes: Route[] = [
 		isAuthenticated: true,
 		accessRoles: ['ADMIN', 'GESTOR'],
 		routeProps: {
-			active: 10
+			active: 9
 		}
 	},
 	{
@@ -601,7 +687,7 @@ const routes: Route[] = [
 		route: '/director/expediente-estudiante/sce',
 		isAuthenticated: true,
 		routeProps: {
-			active: 11
+			active: 10
 		}
 	},
 	{
@@ -610,7 +696,7 @@ const routes: Route[] = [
 		route: '/director/expediente-estudiante/BitacoraExpediente',
 		isAuthenticated: true,
 		routeProps: {
-			active: 12
+			active: 11
 		}
 	},
 	{

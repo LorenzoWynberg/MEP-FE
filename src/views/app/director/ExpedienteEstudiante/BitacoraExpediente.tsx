@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSelector } from 'react-redux'
-import { getIdentification } from '../../../../redux/identificacion/actions'
-import { useActions } from '../../../../hooks/useActions'
+import { withIdentification } from 'Hoc/Identification'
 import HeaderTab from 'Components/Tab/Header'
 import ContentTab from 'Components/Tab/Content'
 import AlertaTempranaExpedienteEstudiantil from './_partials/bitacoraExpediente/AlertaTempranaExpedienteEstudiantil'
@@ -17,17 +15,6 @@ const BitacoraExpediente = props => {
 		{ key: 'estudiantes>expediente>bitacora>cambios_identidad>titulo' }
 	]
 
-	const state = useSelector(store => {
-		return {
-			expedienteEstudiantil: store.expedienteEstudiantil,
-			identification: store.identification
-		}
-	})
-
-	const actions = useActions({
-		getIdentification
-	})
-
 	return (
 		<>
 			<h4>
@@ -40,11 +27,19 @@ const BitacoraExpediente = props => {
 				setActiveTab={setActiveTab}
 			/>
 			<ContentTab activeTab={activeTab} numberId={activeTab}>
-				{activeTab === 0 && <AlertaTempranaExpedienteEstudiantil />}
-				{activeTab === 1 && <HistoricoCambiosIdentidadEstudiante />}
+				{activeTab === 0 && (
+					<AlertaTempranaExpedienteEstudiantil
+						identificacion={props.identification.data.id}
+					/>
+				)}
+				{activeTab === 1 && (
+					<HistoricoCambiosIdentidadEstudiante
+						identificacion={props.identification.data.identificacion}
+					/>
+				)}
 			</ContentTab>
 		</>
 	)
 }
 
-export default BitacoraExpediente
+export default withIdentification(BitacoraExpediente)

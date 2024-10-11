@@ -1,94 +1,141 @@
-import React from 'react'
-import { Row, Container } from 'reactstrap'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
-import Loader from '../../../../../../components/Loader'
-import HistoricoAlertaDetail from './HistoricoAlertaDetail'
-import { getEstadosAlerta } from 'Redux/alertaTemprana/actionsAlerts'
-import ContentTab from 'Components/Tab/Content'
-import { useTranslation } from 'react-i18next'
+import { TableReactImplementation } from 'Components/TableReactImplementation'
 import { useActions } from 'Hooks/useActions'
+import withAuthorization from '../../../../../../Hoc/withAuthorization'
+import { getAlertasPorEstudiante } from 'Redux/alertaTemprana/actionsAlerts'
+import { useSelector } from 'react-redux'
+import moment from 'moment'
+import colors from 'Assets/js/colors'
+import { useTranslation } from 'react-i18next'
+import { showProgress, hideProgress } from 'Utils/progress'
+import BarLoader from 'Components/barLoader/barLoader'
 
 type AlertaProps = {
-	active: number
-	verificarAcceso: any
-}
-
-type IState = {
-	expedienteEstudiantil: any
-	authUser: any
-	identification: any
+	identificacion: any
 }
 
 const AlertaTempranaExpedienteEstudiantil: React.FC<AlertaProps> = props => {
 	const { t } = useTranslation()
-	const [activeTab, setActiveTab] = React.useState<number>(0)
-	const [currentAlert, setCurrentAlert] = React.useState<any>(null)
-	const [currentStudent, setCurrentStudent] = React.useState<any>(null)
+	const { alertasPorEstudiante } = useSelector(state => state.alertaTemprana)
+	const [loading, setLoading] = useState(true)
 
 	const actions = useActions({
-		getEstadosAlerta
-	})
-
-	const state = useSelector((store: IState) => {
-		return {
-			expedienteEstudiantil: store.expedienteEstudiantil,
-			identification: store.identification,
-			currentInstitucion: store.authUser.currentInstitution
-		}
+		getAlertasPorEstudiante
 	})
 
 	const fetch = async () => {
-		await actions.getEstadosAlerta()
+		showProgress()
+		await actions.getAlertasPorEstudiante(props.identificacion, 15, 1)
+		hideProgress()
+		setLoading(false)
 	}
 
-	React.useEffect(() => {
-		setActiveTab(props.active)
+	useEffect(() => {
 		fetch()
-	}, [props.active])
+	}, [props.identificacion])
 
-	const handleCurrentAlert = (alert: any) => {
-		setCurrentAlert(alert)
-	}
+	const columns = useMemo(() => {
+		return [
+			{
+				Header: t('alerta_temprana>tabla>columna>codigo', 'Código saber'),
+				accessor: 'codigosaber',
+				label: '',
+				column: ''
+			},
+			{
+				Header: t(
+					'alerta_temprana>tabla>columna>centro_educativo',
+					'Centro educativo'
+				),
+				accessor: 'centroeducativo',
+				label: '',
+				column: ''
+			},
+			{
+				Header: t('alerta_temprana>tipo_alerta', 'Tipo alerta'),
+				accessor: 'tipoalerta',
+				label: '',
+				column: ''
+			},
+			{
+				Header: t('alerta_temprana>registrada', 'Registrada'),
+				accessor: 'fecharegistrada',
+				label: '',
+				column: '',
+				Cell: ({ row }) => (
+					<div>{moment(row.original.fecharegistrada).format('DD/MM/YYYY')}</div>
+				)
+			},
 
-	const subHeaders = {
-		students: t(
-			'alerta_temprana>mostrar_alerta_estudiante',
-			'Muestra el detalle de las alertas de un estudiante. independientemente del centro educativo que las registrará'
-		),
-		main: t('alerta_temprana>mostrar_alerta', 'Muestra las alertas tempranas del centro educativo seleccionado'),
-		detail: t(
-			'alerta_temprana>mostrar_alerta_detalle',
-			'Muestra el estado y las acciones de seguimiento de la alerta temprana seleccionada'
-		)
-	}
+			{
+				Header: t(
+					'configuracion>ofertas_educativas>niveles>agregar>nivel',
+					'Nivel'
+				),
+				accessor: 'nivel',
+				label: '',
+				column: ''
+			},
+			{
+				Header: t('alerta_temprana>estado', 'Estado'),
+				accessor: 'estadoalerta',
+				label: '',
+				column: '',
+				Cell: ({ row }) => {
+					let color = colors.primary
+					let colorTxt = '#fff'
 
-	const getSubHeaderTexto = (): string => {
-		if (currentAlert) return subHeaders.detail
-		if (currentStudent) return subHeaders.students
-		return subHeaders.main
-	}
+					if (
+						row?.original?.estadoalerta === 'Eliminada' ||
+						row?.original?.estadoalerta === 'Cerrada'
+					) {
+						color = colors.opaqueGray
+						colorTxt = '#000'
+					}
+					return (
+						<div>
+							<div
+								style={{
+									padding: '0.2em 2em',
+									backgroundColor: color,
+									color: colorTxt,
+									textAlign: 'center',
+									borderRadius: '8px'
+								}}
+							>
+								{row?.original?.estadoalerta}
+							</div>
+						</div>
+					)
+				}
+			}
+		]
+	}, [alertasPorEstudiante, t])
+
+	const data = useMemo(() => alertasPorEstudiante, [alertasPorEstudiante, t])
+
+	if (loading) return <BarLoader />
 
 	return (
 		<Wrapper>
 			<Title>
-				{t('estudiantes>expediente>bitacora>alerta_temprana>sub_titulo', 'Histórico de alertas tempranas')}
+				{t(
+					'estudiantes>expediente>bitacora>alerta_temprana>sub_titulo',
+					'Histórico de alertas tempranas'
+				)}
 			</Title>
-			{state.identification.loading ? (
-				<Loader />
-			) : (
-				<ContentTab activeTab={activeTab} numberId={activeTab}>
-					<HistoricoAlertaDetail studentId={state.identification.data.id} />
-				</ContentTab>
-			)}
+			<div className="mb-5">
+				<TableReactImplementation
+					columns={columns}
+					data={data}
+					avoidSearch={true}
+				/>
+			</div>
 		</Wrapper>
 	)
 }
 
-const TitleBread = styled.h2`
-	color: #000;
-	margin-bottom: 15px;
-`
 const Wrapper = styled.div`
 	margin-top: 20px;
 `
@@ -97,4 +144,9 @@ const Title = styled.h4`
 	color: #000;
 `
 
-export default AlertaTempranaExpedienteEstudiantil
+export default withAuthorization({
+	id: 99,
+	Modulo: 'Expediente Estudiantil',
+	Apartado: 'Bitácora expediente',
+	Seccion: 'Alerta temprana'
+})(AlertaTempranaExpedienteEstudiantil)
