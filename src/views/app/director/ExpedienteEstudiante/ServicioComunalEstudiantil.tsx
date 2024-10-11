@@ -6,6 +6,7 @@ import { useActions } from '../../../../hooks/useActions'
 import { GetServicioComunalInfoByStudentId } from 'Redux/formularioCentroResponse/actions'
 import BarLoader from 'Components/barLoader/barLoader'
 import { Paper } from '@material-ui/core'
+import { isEmpty } from 'lodash'
 
 const ServicioComunalEstudiantil = props => {
 	const { t } = useTranslation()
@@ -27,15 +28,16 @@ const ServicioComunalEstudiantil = props => {
 	)
 
 	useEffect(() => {
+		setLoading(true)
 		actions
-			.GetServicioComunalInfoByStudentId(state.identification)
+			.GetServicioComunalInfoByStudentId(state.identification?.data?.id)
 			.then(res => {
 				setServicioData(res)
 			})
 			.finally(() => setLoading(false))
 	}, [state.identification])
 
-	if (!servicioData?.length) {
+	if (isEmpty(servicioData) && !loading) {
 		return (
 			<h4>
 				{t('No cuenta con registro de servicio comunal estudiantil asociado')}

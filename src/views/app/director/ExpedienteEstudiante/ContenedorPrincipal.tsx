@@ -240,7 +240,9 @@ const ContenedorPrincipal = props => {
 			<div className="dashboard-wrapper">
 				<Container>
 					{active !== 0 && estudianteEnContexto() && (
-						<EstudianteInformationCard fixed data={infoCard} />
+						<InformationCard
+							data={state.expedienteEstudiantil.currentStudent}
+						/>
 					)}
 
 					{/* <Row style={{ paddingTop: active !== 0 && estudianteEnContexto() ? 100 : 0 }}> */}
