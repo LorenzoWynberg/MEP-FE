@@ -51,6 +51,7 @@ const InformacionResidenciaSaber = props => {
 	const [currentProvince, setCurrentProvince] = useState(initialSelectOption)
 	const [currentCanton, setCurrentCanton] = useState(initialSelectOption)
 	const [currentDistrito, setCurrentDistrito] = useState(initialSelectOption)
+	 
 	const [currentPoblado, setCurrentPoblado] = useState(initialSelectOption)
 	const [currentTerritory, setCurrentTerritory] = useState(initialSelectOption)
 	const [errors, setErrors] = useState(initialSelectOption)
@@ -139,11 +140,12 @@ const InformacionResidenciaSaber = props => {
 			item => item.temporal === props.temporal
 		)
 		if (item) {
+console.log('props?.identification?.data?.direcciones',item)
 			const _direccionArray = [
 				item.provinciasId,
 				item.cantonesId,
 				item.distritosId,
-				item.pobladosId
+				item.pobladosId,
 			]
 
 			setDireccionArray(_direccionArray)
@@ -165,27 +167,24 @@ const InformacionResidenciaSaber = props => {
 			}
 			setEditDirection(item)
 			setDirection(item.direccionExacta)
-			setLocation({
-				latitude: item.latitud,
-				longitude: item.longitud
+			setLocationIfEditable({
+				latitude: item.latitud || null,
+				longitude: item.longitud || null
 			})
 			setRazon(item.razon)
-		} else {
+		} else { 
 			setLoading(false)
 			setInitiaState()
 		}
-	}, [props?.identification?.data?.direcciones, editable])
+	}, [props?.identification?.data?.direcciones])
 	//this effects parse the data when comes from the backend
 	useEffect(() => {
 		if (
 			props?.identification.data.direcciones &&
-			props?.identification.data.direcciones.length > 0
+			props?.identification.data.direcciones.length > 0  
 		) {
 			loadDataBac()
-		} else {
-			setLoading(false)
-			setInitiaState()
-		}
+		}  
 	}, [props?.identification?.data?.direcciones, editable])
 
 	useEffect(() => {
@@ -767,8 +766,7 @@ const InformacionResidenciaSaber = props => {
 							)}
 
 							<MapContainer item md={6} xs={12} className={classes.control}>
-								<WebMapView
-									setLocation={setLocation}
+								<WebMapView 
 									setSearch={setSearch}
 									setUbicacion={setUbicacion}
 									editable={editable}

@@ -217,7 +217,7 @@ const HistoricoResidencia = ({ identidadId }) => {
 									/>
 								</FormGroup>
 							</Col>
-							{showCoordinates && (
+							{selectedRow?.json?.longitude && selectedRow?.json?.latitude && (
 								<>
 									<Col
 										xs={6}
