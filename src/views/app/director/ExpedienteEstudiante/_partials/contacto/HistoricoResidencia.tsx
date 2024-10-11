@@ -1,36 +1,27 @@
 import { TableReactImplementation } from 'Components/TableReactImplementation'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useActions } from 'Hooks/useActions'
-import { makeStyles } from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
-import { Input, Label, Row, Col, FormGroup, Form } from 'reactstrap'
+import { Input, Label, Row, Col, FormGroup } from 'reactstrap'
 import { WebMapView } from './MapView'
 import OptionModal from 'Components/Modal/OptionModal'
-import { Card, CardBody, Modal, ModalBody } from 'reactstrap'
+import { Card, CardBody } from 'reactstrap'
 import { getBitacoraResidenciaByIdentidad } from 'Redux/Bitacora/actions'
 import VisibilityIcon from '@material-ui/icons/Visibility'
 import Tooltip from '@mui/material/Tooltip'
 import colors from 'Assets/js/colors'
-import styled from 'styled-components'
 import { useSelector } from 'react-redux'
-
 import moment from 'moment'
 import { useTranslation } from 'react-i18next'
-const useStyles = makeStyles(theme => ({
-	control: {
-		padding: theme.spacing(2)
-	}
-}))
+
 const HistoricoResidencia = ({ identidadId }) => {
 	const { t } = useTranslation()
+	const [search, setSearch] = useState(null)
+	const [selectedRow, setSelectedRow] = useState(false)
+	const { bitacoraResidencia } = useSelector((state: any) => state.bitacora)
 	const actions = useActions({
 		getBitacoraResidenciaByIdentidad
 	})
-	const classes = useStyles()
-	const [search, setSearch] = useState(null)
-	const [showCoordinates, setShowCoordinates] = useState(false)
-	const [selectedRow, setSelectedRow] = useState(false)
-	const { bitacoraResidencia } = useSelector((state: any) => state.bitacora)
+
 	const columns = useMemo(
 		() => [
 			{
@@ -111,6 +102,7 @@ const HistoricoResidencia = ({ identidadId }) => {
 			json: JSON.parse(el.json)
 		}))
 	}, [bitacoraResidencia])
+
 	useEffect(() => {
 		if (
 			selectedRow?.json?.latitude &&
@@ -120,7 +112,6 @@ const HistoricoResidencia = ({ identidadId }) => {
 			search
 		) {
 			search?.search([selectedRow.json?.longitude, selectedRow.json?.latitude])
-			setShowCoordinates(true)
 		} else if (
 			selectedRow?.json?.province?.label &&
 			selectedRow?.json?.canton?.label &&
@@ -129,7 +120,6 @@ const HistoricoResidencia = ({ identidadId }) => {
 		) {
 			search.searchTerm = `${selectedRow?.json?.province?.label}, ${selectedRow?.json?.canton?.label}, ${selectedRow?.json?.distrito.label}`
 			search?.search(`${search.searchTerm}, CRI`)
-			setShowCoordinates(false)
 		}
 	}, [search, selectedRow])
 
@@ -217,7 +207,7 @@ const HistoricoResidencia = ({ identidadId }) => {
 									/>
 								</FormGroup>
 							</Col>
-							{showCoordinates && (
+							{selectedRow?.json?.longitude && selectedRow?.json?.latitude && (
 								<>
 									<Col
 										xs={6}
@@ -277,9 +267,3 @@ const HistoricoResidencia = ({ identidadId }) => {
 }
 
 export default HistoricoResidencia
-
-const MapContainer = styled(Grid)`
-	@media (max-width: 870px) {
-		height: 29rem;
-	}
-`
