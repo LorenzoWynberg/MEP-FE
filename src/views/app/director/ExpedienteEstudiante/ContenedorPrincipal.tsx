@@ -52,6 +52,7 @@ const ContenedorPrincipal = props => {
 		item.active = props.active === idx
 		return item
 	})
+
 	const actions = useActions({
 		getIdentification,
 		getStudentDataFilter,
@@ -83,12 +84,14 @@ const ContenedorPrincipal = props => {
 	}
 
 	useEffect(() => {
+		setLoading(true)
 		setActive(props.active)
+		setLoading(false)
 	}, [props.active])
 
 	useEffect(() => {
-		setLoading(true)
 		const fetch = async () => {
+			setLoading(true)
 			const _id = idEstudiante
 			idEstudiante && setActive(1)
 			const response = await actions.getStudentDataFilter(_id, 'identificacion')
@@ -98,13 +101,12 @@ const ContenedorPrincipal = props => {
 			}
 			setLoading(false)
 		}
-
 		idEstudiante && fetch()
 	}, [idEstudiante])
 
 	useEffect(() => {
-		setLoading(true)
 		const fetch = async () => {
+			setLoading(true)
 			const _id = state.expedienteEstudiantil.currentStudent.idEstudiante
 			const response = await actions.getIdentification(_id)
 
@@ -154,8 +156,8 @@ const ContenedorPrincipal = props => {
 	}, [state.expedienteEstudiantil.currentStudent])
 
 	useEffect(() => {
-		setLoading(true)
 		const loadData = async () => {
+			setLoading(true)
 			const discapacidades = await actions.getDiscapacidades(
 				state.expedienteEstudiantil.currentStudent.idEstudiante
 			)
@@ -189,8 +191,8 @@ const ContenedorPrincipal = props => {
 	}, [state.expedienteEstudiantil.currentStudent, conditionsHaveChanged])
 
 	useEffect(() => {
-		setLoading(true)
 		const loadData = async () => {
+			setLoading(true)
 			try {
 				const datosAdicionales = await axios.get(
 					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Expediente/GetDatosAdicionalesMatricula/${state.expedienteEstudiantil.currentStudent.idEstudiante}`
@@ -204,10 +206,11 @@ const ContenedorPrincipal = props => {
 						estadoMatricula: datosAdicionales.data?.estadoMatricula
 					}
 				})
-			} catch (err) {}
-			setLoading(false)
+				setLoading(false)
+			} catch (err) {
+				setLoading(false)
+			}
 		}
-
 		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
 			loadData()
 		}
