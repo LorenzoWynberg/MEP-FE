@@ -81,6 +81,11 @@ export const getEstudiantesConAlerta =
 	(institutionId, textoBuscado, estadoMatricula, estadoAlerta, size = 10, page = 1) =>
 	async dispatch => {
 		try {
+			//todo JP
+			/* const res = await axios(
+				`${envVariables.BACKEND_URL}/api/Alerta/GetEstudiantesConAlertasAll/${institutionId}/${textoBuscado}/${page}/${size}/${estadoMatricula}/${estadoAlerta}`
+			) */
+
 			const res = await axios(
 				`${envVariables.BACKEND_URL}/api/Alerta/GetEstudiantesConAlerta/${institutionId}/${textoBuscado}/${page}/${size}/${estadoMatricula}/${estadoAlerta}`
 			)
@@ -101,7 +106,7 @@ export const getAlertasPorEstudiante =
 			const res = await axios(
 				`${envVariables.BACKEND_URL}/api/Alerta/GetAlertasPorEstudiante/${currentInstitution.id}/${estudianteId}/${page}/${size}`
 			)
-
+			debugger
 			dispatch(getAlertasPorEstudianteDispatch(res.data))
 		} catch (error) {}
 	}

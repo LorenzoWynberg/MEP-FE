@@ -61,13 +61,13 @@ function GlobalFilter({
 	cols = [],
 	hasData = false,
 	showAddButton = false,
-	onSubmitAddButton = () => { },
+	onSubmitAddButton = () => {},
 	avoidSearch = false,
 	RightAction = <></>,
 	selectAll,
 	actions = [],
 	selectedItemsId,
-	handleChangeSelectAll = (value: boolean) => { },
+	handleChangeSelectAll = (value: boolean) => {},
 	hideMultipleOptions = false,
 	checked = false,
 	msjButton = '',
@@ -224,7 +224,7 @@ function BackendFilter({
 	selectedColumn,
 	hasData = false,
 	cols = [],
-	onSubmitAddButton = () => { }
+	onSubmitAddButton = () => {}
 }) {
 	const { t } = useTranslation()
 	const [value, setValue] = React.useState('')
@@ -321,7 +321,6 @@ function BackendFilter({
 export const TableDataFrontPaginated: React.FC<IProps> = props => {
 	const { t } = useTranslation()
 
-	console.log(props?.columns?.map(el => el.column))
 	const [columnsToShow, setColumnsToShow] = React.useState(
 		Array.isArray(props?.columns) && !props?.columns?.includes(undefined)
 			? props?.columns?.map(el => el.column)
@@ -644,7 +643,7 @@ const Table = styled.table`
 			background-color: #f5f5f5;
 			border-left: 1px solid #eaeaea;
 			border-right: 1px solid #eaeaea;
-			padding:10px 15px;
+			padding: 10px 15px;
 			border-top-left-radius: 0 !important;
 			border-top-right-radius: 0 !important;
 		}

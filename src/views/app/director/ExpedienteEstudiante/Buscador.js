@@ -206,7 +206,7 @@ const Buscador = props => {
 			<div>
 				<Colxx xxs='12'>
 					<Breadcrumb
-						heading={t('estudiantes>expediente>buscador>titulo', 'Buscador de Expediente Estudiantil')}
+						heading={t('estudiantes>expediente>buscador>titulo', 'Buscador de expediente estudiantil')}
 						match={props.match}
 						hidePath
 					/>

@@ -1,521 +1,253 @@
 import React, { useState, useEffect } from 'react'
 import 'react-tagsinput/react-tagsinput.css'
-import { makeStyles } from '@material-ui/core/styles'
-import { EditButton } from '../../../../../../components/EditButton'
-import SelectItem from './SelectItem'
-
-import {
-  Row,
-  Col,
-  Card,
-  CardBody,
-  CardTitle,
-  FormGroup,
-  Label,
-  Modal,
-  CustomInput,
-  Container,
-  ModalHeader,
-  ModalBody,
-  Button,
-  Form
-} from 'reactstrap'
-import styled from 'styled-components'
-import IntlMessages from '../../../../../../helpers/IntlMessages'
-import colors from '../../../../../../assets/js/colors'
-import HighlightOffIcon from '@material-ui/icons/HighlightOff'
+import HeaderTab from 'Components/Tab/Header'
+import ContentTab from 'Components/Tab/Content'
+import { envVariables } from '../../../../../../constants/enviroment'
+import { Row, Col, CustomInput } from 'reactstrap'
 import { useTranslation } from 'react-i18next'
+import Loader from 'Components/LoaderContainer'
+import CondicionDiscapacidad from './CondicionDiscapacidad'
+import OtraCondicion from './OtraCondicion'
+import axios from 'axios'
+import { ApoyosCurriculares } from './ApoyosCurriculares'
+import { ApoyosPersonales } from './ApoyosPersonales'
+import { ApoyosOrganizativos } from './ApoyosOrganizativos'
+import OptionModal from '../../../../../../components/Modal/OptionModal'
+import RequiredSpan from '../../../../../../components/Form/RequiredSpan'
+import { getCondiciones, getDiscapacidades } from '../../../../../../redux/apoyos/actions'
 
-const useStyles = makeStyles((theme) => ({
-  inputTags: {
-    minHeight: '8rem',
-    border: '1px solid #eaeaea',
-    padding: '0.35rem',
-    color: 'white'
-  },
-  input: {
-    display: 'none'
-  }
-}))
+const ApoyoEducativo = props => {
+	const { t } = useTranslation()
+	const [discapacidadesHistorico, setDiscapacidadesHistorico] = useState()
+	const [condicionesHistorico, setCondicionesHistorico] = useState()
+	const [loading, setLoading] = useState(true)
+	const [discapacidades, setDiscapacidades] = useState([])
+	const [condiciones, setCondiciones] = useState([])
+	const [openOptions, setOpenOptions] = useState({ open: false, type: null })
+	const [modalOptions, setModalOptions] = useState([])
+	const [activeTab, setActiveTab] = useState(0)
 
-const ApoyoEducativo = (props) => {
-  const { t } = useTranslation()
+	useEffect(() => {
+		setLoading(true)
+		const _discapacidades = []
+		const _discapacidadesIdentidad = props.discapacidadesIdentidad.map(
+			discapacidad => discapacidad.elementosCatalogosId
+		)
+		props.discapacidades.forEach(discapacidad => {
+			if (_discapacidadesIdentidad.includes(discapacidad.id)) {
+				_discapacidades.push(discapacidad)
+			}
+		})
+		setDiscapacidades(_discapacidades)
+		setLoading(false)
+	}, [props.discapacidadesIdentidad])
 
-  const { handleSubmit } = props
-  const classes = useStyles()
-  const [editable, setEditable] = useState(false)
-  const [discapacidades, setDiscapacidades] = useState([])
-  const [condiciones, setCondiciones] = useState([])
-  const [openOptions, setOpenOptions] = useState({ open: false, type: null })
-  const [openFiles, setOpenFiles] = useState({ open: false, type: null })
-  const [modalOptions, setModalOptions] = useState([])
-  const [files, setFiles] = useState([])
-  const [discapacidadesFiles, setDiscapacidadesFiles] = useState([])
-  const [condicionesFiles, setCondicionesFiles] = useState([])
-  const [discapacidadesToDelete, setDiscapacidadesToDelete] = useState([])
-  const [condicionesToDelete, setCondicionesToDelete] = useState([])
-  const [discapacidadesToUpload, setDiscapacidadesToUpload] = useState([])
-  const [condicionesToUpload, setCondicionesToUpload] = useState([])
-  const [loading, setLoading] = useState(false)
+	useEffect(() => {
+		getHistoricos()
+	}, [])
+	const getHistoricos = () => {
+		getHistoricosDiscapacidades()
+		getHistoricosCondiciones()
 
-  useEffect(() => {
-    const _discapacidades = []
-    const _discapacidadesIdentidad = props.discapacidadesIdentidad.map(
-      (discapacidad) => discapacidad.elementosCatalogosId
-    )
-    props.discapacidades.forEach((discapacidad) => {
-      if (_discapacidadesIdentidad.includes(discapacidad.id)) {
-        _discapacidades.push(discapacidad)
-      }
-    })
+	}
+	const getHistoricosDiscapacidades = () => {
+		setLoading(true)
+		axios
+			.get(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/GetByIdentityIdHist/${props.identidadId}`
+			)
+			.then(r => {
+				setDiscapacidadesHistorico(r.data)
+				setLoading(false)
+			}, [])
 
-    setDiscapacidades(_discapacidades)
-  }, [props.discapacidadesIdentidad, editable])
+	}
 
-  useEffect(() => {
-    const _condiciones = []
-    const _condicionesIdentidad = props.condicionesIdentidad.map(
-      (condicion) => condicion.elementosCatalogosId
-    )
-    props.condiciones.forEach((condicion) => {
-      if (_condicionesIdentidad.includes(condicion.id)) {
-        _condiciones.push(condicion)
-      }
-    })
+	const getHistoricosCondiciones = () => {
+		axios
+			.get(
+				`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/GetByIdentidadHist/${props.identidadId}`
+			)
+			.then(r => {
+				setCondicionesHistorico(r.data)
+				setLoading(false)
+			}, [])
+	}
 
-    setCondiciones(_condiciones)
-  }, [props.condicionesIdentidad, editable])
+	useEffect(() => {
+		setLoading(true)
+		const _condiciones = []
+		const _condicionesIdentidad = props.condicionesIdentidad.map(
+			condicion => condicion.elementosCatalogosId
+		)
+		props.condiciones.forEach(condicion => {
+			if (_condicionesIdentidad.includes(condicion.id)) {
+				_condiciones.push(condicion)
+			}
+		})
+		setCondiciones(_condiciones)
+		setLoading(false)
+	}, [props.condicionesIdentidad])
 
-  useEffect(() => {
-    setDiscapacidadesFiles(props.apoyos.recursosDiscapacidadesIdentidad)
-  }, [props.apoyos.recursosDiscapacidadesIdentidad, editable])
+	const handleOpenOptions = (options, name) => {
+		setLoading(true)
+		let _options = []
+		const map =
+			(name === 'discapacidades' && discapacidadesHistorico.map(item => item.elementosCatalogosId)) || condicionesHistorico.map(item => item.elementosCatalogosId)
+		_options = options.map(elem => {
+			if (map.includes(elem.id)) {
+				return { ...elem, checked: true }
+			} else {
+				return { ...elem, checked: false }
+			}
+		})
+		setModalOptions(_options)
+		setOpenOptions({ open: true, type: name })
+		setLoading(false)
+	}
 
-  useEffect(() => {
-    setCondicionesFiles(props.apoyos.recursosCondicionesIdentidad)
-  }, [props.apoyos.recursosCondicionesIdentidad, editable])
+	const toggleModal = async (saveData = false) => {
+		setLoading(true)
+		let options = []
+		if (saveData) {
+			options = []
+			modalOptions.forEach(el => {
+				if (el.checked) options.push(el)
+			})
+			const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${openOptions.type === 'discapacidades' ? 'DiscapacidadesPorUsuario' : 'CondicionesPorUsuario'
+				}/CreateMultiple/${props.identidadId}`
+			const optionsMap = options.map(d => {
+				return {
+					id: 0,
+					elementosCatalogoId: d.id,
+					identidadesId: props.identidadId,
+					estado: true
+				}
+			})
 
-  const handleOpenOptions = (options, name) => {
-    if (!editable) return
-    let _options = []
-    if (name === 'discapacidades') {
-      const mappedDiscapacidades = discapacidades.map((item) => item.id)
-      _options = options.map((discapacidad) => {
-        if (mappedDiscapacidades.includes(discapacidad.id)) {
-          return { ...discapacidad, checked: true }
-        } else {
-          return { ...discapacidad, checked: false }
-        }
-      })
-    } else {
-      const mappedCondiciones = condiciones.map((item) => item.id)
-      _options = options.map((condicion) => {
-        if (mappedCondiciones.includes(condicion.id)) {
-          return { ...condicion, checked: true }
-        } else {
-          return { ...condicion, checked: false }
-        }
-      })
-    }
-    setModalOptions(_options)
-    setOpenOptions({ open: true, type: name })
-  }
+			axios.post(url, optionsMap).then(r => {
+				if (r.data) {
+					getHistoricos()
+					props.showsnackBar('success', 'Contenido enviado con éxito')
+				}
+				r.error && props.showsnackBar('error', 'Error agregando condición')
+				setLoading(false)
+			})
+		} else {
+			setLoading(false)
+		}
+		setOpenOptions({ open: false, type: null })
+	}
 
-  const toggleModal = (saveData = false) => {
-    let options = []
-    if (saveData) {
-      if (openOptions.type === 'discapacidades') {
-        options = []
-        modalOptions.forEach((discapacidad) => {
-          if (discapacidad.checked) options.push(discapacidad)
-        })
-        setDiscapacidades(options)
-      } else {
-        options = []
-        modalOptions.forEach((condicion) => {
-          if (condicion.checked) options.push(condicion)
-        })
-        setCondiciones(options)
-      }
-    }
-    setOpenOptions({ open: false, type: null })
-  }
+	const handleChangeItem = item => {
+		const newItems = modalOptions.map(element => {
+			if (element.id === item.id) {
+				return { ...element, checked: !element.checked }
+			}
+			return element
+		})
+		setModalOptions(newItems)
+	}
 
-  const toggleModalFiles = () => {
-    setOpenFiles({ open: false, type: null })
-  }
-
-  const handleChangeItem = (item) => {
-    const newItems = modalOptions.map((element) => {
-      if (element.id === item.id) { return { ...element, checked: !element.checked } }
-      return element
-    })
-    setModalOptions(newItems)
-  }
-
-  const handleFileDiscapacidad = (e) => {
-    if (!editable) return
-    setDiscapacidadesToUpload([...discapacidadesToUpload, e.target.files[0]])
-    setDiscapacidadesFiles([...discapacidadesFiles, e.target.files[0]])
-  }
-
-  const handleFileCondition = (e) => {
-    if (!editable) return
-    setCondicionesToUpload([...condicionesToUpload, e.target.files[0]])
-    setCondicionesFiles([...condicionesFiles, e.target.files[0]])
-  }
-
-  const handleResourceDelete = async (item) => {
-    let _options
-    if (openFiles.type === 'discapacidad') {
-      if (item.name) {
-        _options = discapacidadesFiles.filter(
-          (discapacidad) => discapacidad.name !== item.name
-        )
-      } else {
-        _options = discapacidadesFiles.filter(
-          (discapacidad) => discapacidad.id !== item.id
-        )
-        setDiscapacidadesToDelete([...discapacidadesToDelete, item])
-      }
-      setDiscapacidadesFiles(_options)
-    } else {
-      if (item.name) {
-        _options = condicionesFiles.filter(
-          (discapacidad) => discapacidad.name !== item.name
-        )
-      } else {
-        _options = condicionesFiles.filter(
-          (discapacidad) => discapacidad.id !== item.id
-        )
-        setCondicionesToDelete([...condicionesToDelete, item])
-      }
-      setCondicionesFiles(_options)
-    }
-
-    setFiles(_options)
-  }
-
-  const sentData = async () => {
-    setEditable(false)
-    setLoading(true)
-    const discapacidadesData = discapacidades.map((discapacidad) => {
-      return {
-        id: 0,
-        elementosCatalogoId: discapacidad.id,
-        identidadesId: props.identidadId,
-        estado: true
-      }
-    })
-    const condicionesData = condiciones.map((condicion) => {
-      return {
-        id: 0,
-        elementosCatalogoId: condicion.id,
-        identidadesId: props.identidadId,
-        estado: true
-      }
-    })
-    const response = await props.saveDiscapacidades(
-      discapacidadesData,
-      condicionesData,
-      discapacidadesToUpload,
-      condicionesToUpload,
-      discapacidadesToDelete,
-      condicionesToDelete,
-      props.identidadId
-    )
-    if (!response.error) {
-      setDiscapacidadesToUpload([])
-      setCondicionesToUpload([])
-      setCondicionesToDelete([])
-      setDiscapacidadesToDelete([])
-      props.showsnackBar('success', 'Contenido enviado con éxito')
-    } else {
-      props.showsnackBar('error', response.message)
-    }
-    setEditable(false)
-    setLoading(false)
-  }
-
-  return (
-    <Card>
-      <CardBody>
-        <CardTitle>{t('estudiantes>expediente>apoyos_edu>apoyos_edu_est', 'Apoyos educativos del estudiante')}</CardTitle>
-        <Row>
-          <Col md='12'>
-            <Row>
-              <Col md='6'>
-                <FormGroup>
-                  <Label>{t('estudiantes>expediente>apoyos_edu>cond_discap', 'Condición de discapacidad')}</Label>
-                  <StyledMultiSelect
-                    className={classes.inputTags}
-                    disabled={!editable}
-                    onClick={() => {
-                      handleOpenOptions(props.discapacidades, 'discapacidades')
-                    }}
-                  >
-                    {discapacidades.map((discapacidad) => {
-                      return <SelectItem item={discapacidad} />
-                    })}
-                  </StyledMultiSelect>
-                </FormGroup>
-              </Col>
-              <Col md='6'>
-                <span>{t('estudiantes>expediente>apoyos_edu>detalle_condi_discap', 'Detalle de la condición de discapacidad')}</span>
-                <ButtonsContainer>
-                  <DownloadIconContainer>
-                    <i className='simple-icon-cloud-upload' />
-                  </DownloadIconContainer>
-                  <div style={{ paddingTop: '0.4rem' }}>
-                    {editable && (
-                      <input
-                        onChange={(e) => {
-                          handleFileDiscapacidad(e)
-                        }}
-                        className={classes.input}
-                        id='filesDiscapacidad-id'
-                        type='file'
-                        name='filesDiscapacidad'
-                      />
-                    )}
-                    <label htmlFor='filesDiscapacidad-id'>
-                      <FileLabel
-                        disabled={!editable}
-                      >
-                        {t('general>subir_archivo', 'Subir Archivo')}
-                      </FileLabel>
-                    </label>
-                  </div>
-                  {discapacidadesFiles.length > 0 && (
-                    <Button
-                      color='primary'
-                      onClick={() => {
-                        setOpenFiles({ open: true, type: 'discapacidad' })
-                        setFiles(discapacidadesFiles)
-                      }}
-                    >
-                      <IntlMessages id='family.uploadedFiles' />(
-                      {`${discapacidadesFiles.length} archivos`})
-                    </Button>
-                  )}
-                </ButtonsContainer>
-              </Col>
-            </Row>
-          </Col>
-          <Col md='12'>
-            <Row>
-              <Col md='6'>
-                <FormGroup>
-                  <Label>{t('estudiantes>expediente>apoyos_edu>otra_condicion', 'Otro tipo de condición')}</Label>
-                  <StyledMultiSelect
-                    className={classes.inputTags}
-                    disabled={!editable}
-                    onClick={() => {
-                      handleOpenOptions(props.otrasCondiciones, 'conditions')
-                    }}
-                  >
-                    {condiciones.map((discapacidad) => {
-                      return <SelectItem item={discapacidad} />
-                    })}
-                  </StyledMultiSelect>
-                </FormGroup>
-              </Col>
-              <Col md='6'>
-                <span>{t('estudiantes>expediente>apoyos_edu>reco_docentes', 'Recomendaciones a docentes')}</span>
-                <ButtonsContainer>
-                  <DownloadIconContainer>
-                    <i className='simple-icon-cloud-upload' />
-                  </DownloadIconContainer>
-                  <div style={{ paddingTop: '0.4rem' }}>
-                    {editable && (
-                      <input
-                        onChange={(e) => {
-                          handleFileCondition(e)
-                        }}
-                        className={classes.input}
-                        id='filesCondicion-id'
-                        type='file'
-                        name='filesCondicion'
-                      />
-                    )}
-                    <label htmlFor='filesCondicion-id'>
-                      <FileLabel
-                        disabled={!editable}
-                      >
-                        {t('general>subir_archivo', 'Subir Archivo')}
-                      </FileLabel>
-                    </label>
-                  </div>
-                  {condicionesFiles.length > 0 && (
-                    <Button
-                      color='primary'
-                      onClick={() => {
-                        setOpenFiles({ open: true, type: 'condicion' })
-                        setFiles(condicionesFiles)
-                      }}
-                    >
-                      <IntlMessages id='family.uploadedFiles' />(
-                      {`${condicionesFiles.length} archivos`})
-                    </Button>
-                  )}
-                </ButtonsContainer>
-              </Col>
-            </Row>
-          </Col>
-          <Col xs={12}>
-            <Form onSubmit={handleSubmit(sentData)}>
-              <EditButton
-                editable={editable}
-                setEditable={(value) => props.authHandler('modificar', () => setEditable(value), props.showsnackBar)}
-                loading={loading}
-              />
-            </Form>
-          </Col>
-        </Row>
-      </CardBody>
-      <Modal isOpen={openOptions.open} size='lg'>
-        <ModalHeader>{openOptions.type === 'discapacidades' ? t('estudiantes>expediente>apoyos_edu>modal>tipos', 'Tipos de discapacidades') : t('estudiantes>expediente>apoyos_edu>modal>otro', 'Otros tipos de condiciones')}</ModalHeader>
-        <ModalBody>
-          <Container className='modal-detalle-subsidio'>
-            <Row>
-              <Col xs={12}>
-                {modalOptions.map((item) => {
-                  return (
-                    <Row>
-                      <Col xs={3} className='modal-detalle-subsidio-col'>
-                        <div>
-                          <CustomInput
-                            type='checkbox'
-                            label={item.nombre}
-                            inline
-                            onClick={() => handleChangeItem(item)}
-                            checked={item.checked}
-                          />
-                        </div>
-                      </Col>
-                      <Col xs={9} className='modal-detalle-subsidio-col'>
-                        <div>
-                          <p>
-                            {item.descripcion
-                              ? item.descripcion
-                              : item.detalle ? item.detalle : 'Elemento sin detalle actualmente'}
-                          </p>
-                        </div>
-                      </Col>
-                    </Row>
-                  )
-                })}
-              </Col>
-            </Row>
-            <Row>
-              <CenteredRow xs='12'>
-                <Button
-                  onClick={() => {
-                    toggleModal()
-                  }}
-                  color='primary'
-                  outline
-                >
-                  {t('general>cancelar', 'Cancelar')}
-                </Button>
-                <Button
-                  color='primary'
-                  onClick={() => {
-                    toggleModal(true)
-                  }}
-                >
-                  {t('general>guardar', 'Guardar')}
-                </Button>
-
-              </CenteredRow>
-            </Row>
-
-          </Container>
-        </ModalBody>
-      </Modal>
-      <Modal isOpen={openFiles.open} size='lg'>
-        <ModalHeader toggle={toggleModalFiles}>
-          {openFiles.type == 'discapacidad' ? 'Detalle de la condición' : 'Recomendaciones a docentes'}
-        </ModalHeader>
-        <ModalBody>
-          <div>
-            {files &&
-              files.map((item) => {
-                return (
-                  <FileAnchorContainer>
-                    <a
-                      href={item.url}
-                      target='_blank'
-                      rel='noopener noreferrer'
-                    >
-                      {item.name || item.titulo}
-                    </a>
-                    {editable && <span
-                      onClick={() => {
-                        handleResourceDelete(item)
-                      }}
-                                 >
-                      <HighlightOffIcon />
-                    </span>}
-                  </FileAnchorContainer>
-                )
-              })}
-          </div>
-        </ModalBody>
-      </Modal>
-    </Card>
-  )
+	const optionsTab = [
+		{ title: 'Condición de discapacidad' },
+		{ title: 'Otras condiciones' },
+		{ title: 'Apoyos curriculares' },
+		{ title: 'Apoyos personales' },
+		{ title: 'Apoyos organizativos' }
+	]
+	const deleteCondicion = (id) => {
+		axios.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/CondicionesPorUsuario/${id}`).then(() => {
+			getHistoricosCondiciones()
+			getCondiciones(id)
+		})
+	}
+	const deleteDiscapacidad = (id) => {
+		axios.delete(`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/DiscapacidadesPorUsuario/${id}`).then(() => {
+		
+			getDiscapacidades(id)
+			getHistoricosDiscapacidades()
+		})
+	}
+	return (
+		<>
+			{loading && <Loader />}
+			<Row>
+				<HeaderTab options={optionsTab} activeTab={activeTab} setActiveTab={setActiveTab} />
+				<ContentTab activeTab={activeTab} numberId={activeTab}>
+					{activeTab === 0 && (
+						<CondicionDiscapacidad 
+							discapacidadesHistorico={discapacidadesHistorico}
+							delete={deleteDiscapacidad}
+							handleOpenOptions={handleOpenOptions}
+							discapacidades={props.discapacidades}
+						/>
+					)}
+					{activeTab === 1 && (
+						<OtraCondicion 
+							condicionesHistorico={condicionesHistorico}
+							handleOpenOptions={handleOpenOptions}
+							delete={deleteCondicion}
+							condiciones={props.condiciones}
+						/>
+					)}
+					{activeTab === 2 && <ApoyosCurriculares />}
+					{activeTab === 3 && <ApoyosPersonales />}
+					{activeTab === 4 && <ApoyosOrganizativos />}
+				</ContentTab>
+			</Row>
+			<OptionModal
+				isOpen={openOptions.open}
+				titleHeader={
+					openOptions.type === 'discapacidades'
+						? t(
+								'estudiantes>expediente>apoyos_edu>modal>tipos',
+								'Tipos de discapacidades'
+						  )
+						: t(
+								'estudiantes>expediente>apoyos_edu>modal>otro',
+								'Otros tipos de condiciones'
+						  )
+				}
+				onConfirm={() => toggleModal(true)}
+				onCancel={() => toggleModal(false)}
+			>
+				{modalOptions
+					.filter(d =>
+						openOptions.type === 'discapacidades'
+							? !discapacidadesHistorico?.some(di => di.id == d.id)
+							: !condicionesHistorico?.some(di => di.id == d.id)
+					)
+					.map((item, i) => {
+						return (
+							<Row key={i}>
+								<Col xs={3} className="modal-detalle-subsidio-col">
+									<div>
+										<CustomInput
+											type="checkbox"
+											label={item.nombre}
+											inline
+											onClick={() => handleChangeItem(item)}
+											checked={item.checked}
+										/>
+									</div>
+								</Col>
+								<Col xs={9} className="modal-detalle-subsidio-col">
+									<div>
+										<p>
+											{item.descripcion
+												? item.descripcion
+												: item.detalle
+													? item.detalle
+													: 'Elemento sin detalle actualmente'}
+										</p>
+									</div>
+								</Col>
+							</Row>
+						)
+					})}
+			</OptionModal>
+		</>
+	)
 }
-
-const StyledMultiSelect = styled.div`
-  &[disabled] {
-    background-color: #eaeaea;
-  }
-`
-
-const ButtonsContainer = styled.div`
-  display: flex;
-  margin-top: 1rem;
-  align-items: center;
-`
-
-const FileLabel = styled.div`
-  background-color: white;
-  color: ${props => props.disabled ? '#636363' : colors.primary};
-  border: 1.5px solid ${props => props.disabled ? '#636363' : colors.primary};
-  width: 7rem;
-  height: 2.7rem;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  margin-left: 0.35rem;
-  margin-right: 0.35rem;
-  border-radius: 26px;
-  &:hover {
-    background-color: ${props => props.disabled ? '' : colors.primary};
-    color: ${props => props.disabled ? '' : 'white'};
-  }
-`
-
-const DownloadIconContainer = styled.span`
-  font-size: 35px;
-`
-
-const FileAnchorContainer = styled.div`
-  text-align: center;
-  margin: 1rem;
-  display: flex;
-  align-content: space-between;
-
-  a {
-    padding-top: 1.35px;
-  }
-`
-
-const CenteredRow = styled(Col)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`
-
 export default ApoyoEducativo

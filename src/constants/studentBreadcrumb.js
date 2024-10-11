@@ -72,6 +72,11 @@ const data = [
 		label: 'estudiantes>expediente>nav>servicio_comunal',
 		to: '/director/expediente-estudiante/sce',
 		active: false
+	},
+	{
+		label: 'estudiantes>expediente>nav>BitacoraExpediente',
+		to: '/director/expediente-estudiante/BitacoraExpediente',
+		active: false
 	}
 ]
 

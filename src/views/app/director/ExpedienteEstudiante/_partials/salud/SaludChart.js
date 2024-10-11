@@ -64,11 +64,12 @@ const SaludChart = (props) => {
     },
     ['asc']
   )
-  const labels = map(items, 'year')
+  const labels = map(items, 'date')
   const [chartFilters, setChartFilters] = useState(getChartFilters())
   const [chartData, setChartData] = useState(
     AreaChartData({ labels, data: getChartData(items) })
   )
+  console.log('chartData',chartData)
   const [ticksConfig, setTicksConfig] = useState(getChatTicksConfig(items))
 
   const onChangeChart = (current) => {

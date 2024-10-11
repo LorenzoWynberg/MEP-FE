@@ -7,17 +7,23 @@ import {
 	getStudentDataFilter,
 	loadStudent
 } from 'Redux/expedienteEstudiantil/actions'
+import { getDiscapacidades } from 'Redux/apoyos/actions'
 import { Col, Row, Container } from 'reactstrap'
 import Breadcrumb from 'Containers/navs/CustomBreadcrumb'
-import InformationCard from './_partials/InformationCard'
-import Loader from '../../../../components/Loader'
-import { useActions } from '../../../../hooks/useActions'
+import EstudianteInformationCard from './_partials/EstudianteInformationCard'
+import Loader from 'Components/Loader'
+import { useActions } from 'Hooks/useActions'
 import AppLayout from 'Layout/AppLayout'
 import directorItems from 'Constants/directorMenu'
 import { useParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { isEmpty } from 'lodash'
+import { isEmpty, rest } from 'lodash'
 import { envVariables } from 'Constants/enviroment'
+import BitacoraExpediente from './BitacoraExpediente'
+import { catalogsEnumObj } from 'Utils/catalogsEnum'
+import { getCatalogs, getCatalogsSet } from 'Redux/selects/actions'
+import { validateSelectsData } from 'Utils/ValidateSelectsData'
+import { mapOption } from 'Utils/mapeoCatalogos'
 
 const Navegacion = React.lazy(() => import('./Navegacion'))
 const Contacto = React.lazy(() => import('./Contacto'))
@@ -29,8 +35,6 @@ const Beneficios = React.lazy(() => import('./Beneficios'))
 const Apoyo = React.lazy(() => import('./Apoyo'))
 const Salud = React.lazy(() => import('./Salud'))
 const Buscador = React.lazy(() => import('./Buscador'))
-const Sinirube = React.lazy(() => import('./Sinirube'))
-const CuentaCorreo = React.lazy(() => import('./CuentaCorreo'))
 const CuentaUsuarios = React.lazy(() => import('./CuentaUsuario'))
 const ServicioComunalEstudiantil = React.lazy(
 	() => import('./ServicioComunalEstudiantil')
@@ -40,10 +44,11 @@ const ContenedorPrincipal = props => {
 	const { t } = useTranslation()
 	const { idEstudiante } = useParams()
 	const [active, setActive] = React.useState(0)
-	const [loading, setLoading] = React.useState(false)
+	const [loading, setLoading] = React.useState(true)
 	const [aplicaSCE, setAplicaSCE] = React.useState(false)
 	const [breadcrumbs, setBreadcrumbs] = React.useState([])
 	const idInstitucion = localStorage.getItem('idInstitucion')
+	const [infoCard, setInfoCard] = React.useState({})
 
 	studentBreadcrumb.map((item, idx) => {
 		item.active = props.active === idx
@@ -53,14 +58,19 @@ const ContenedorPrincipal = props => {
 	const actions = useActions({
 		getIdentification,
 		getStudentDataFilter,
-		loadStudent
+		loadStudent,
+		getDiscapacidades,
+		getCatalogs,
+		getCatalogsSet
 	})
 
 	const state = useSelector(store => {
 		return {
 			expedienteEstudiantil: store.expedienteEstudiantil,
 			identification: store.identification,
-			historialMatricula: store.identification.matriculaHistory
+			historialMatricula: store.identification.matriculaHistory,
+			apoyos: store.apoyos,
+			selects: store.selects
 		}
 	})
 
@@ -79,11 +89,12 @@ const ContenedorPrincipal = props => {
 	}, [props.active])
 
 	useEffect(() => {
+		setLoading(true)
 		const fetch = async () => {
 			const _id = idEstudiante
 			idEstudiante && setActive(1)
-			setLoading(true)
 			const response = await actions.getStudentDataFilter(_id, 'identificacion')
+
 			if (response.data) {
 				await actions.loadStudent(response.data[0])
 			}
@@ -94,15 +105,99 @@ const ContenedorPrincipal = props => {
 	}, [idEstudiante])
 
 	useEffect(() => {
+		setLoading(true)
 		const fetch = async () => {
 			const _id = state.expedienteEstudiantil.currentStudent.idEstudiante
-			setLoading(true)
-			await actions.getIdentification(_id)
+			const response = await actions.getIdentification(_id)
+
+			const catalogsNamesArray = [
+				catalogsEnumObj.GENERO.name,
+				catalogsEnumObj.NATIONALITIES.name
+			]
+
+			let nacionalidad = ''
+			let genero = ''
+
+			if (validateSelectsData(state.selects, catalogsNamesArray)) {
+				const _item = {
+					nacionalidad: mapOption(
+						response.data.data.datos,
+						state.selects,
+						catalogsEnumObj.NATIONALITIES.id,
+						catalogsEnumObj.NATIONALITIES.name
+					),
+					genero: mapOption(
+						response.data.data.datos,
+						state.selects,
+						catalogsEnumObj.GENERO.id,
+						catalogsEnumObj.GENERO.name
+					)
+				}
+
+				nacionalidad = _item.nacionalidad.label ? _item.nacionalidad.label : ''
+				genero = _item.genero.label ? _item.genero.label : ''
+			}
+
+			setInfoCard(prevState => {
+				return {
+					...prevState,
+					...state.expedienteEstudiantil.currentStudent,
+					nacionalidad: nacionalidad,
+					genero: genero,
+					datos: state.identification.data.datos
+				}
+			})
 			setLoading(false)
 		}
 
 		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
 			fetch()
+		}
+	}, [state.expedienteEstudiantil.currentStudent])
+
+	useEffect(() => {
+		setLoading(true)
+		const loadData = async () => {
+			const discapacidades = await actions.getDiscapacidades(
+				state.expedienteEstudiantil.currentStudent.idEstudiante
+			)
+			const tieneDiscapacidades = !isEmpty(discapacidades) ? 'SI' : 'NO'
+
+			setInfoCard(prevState => {
+				return {
+					...prevState,
+					tieneDiscapacidades: tieneDiscapacidades
+				}
+			})
+			setLoading(false)
+		}
+		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
+			loadData()
+		}
+	}, [state.expedienteEstudiantil.currentStudent])
+
+	useEffect(() => {
+		setLoading(true)
+		const loadData = async () => {
+			try {
+				const datosAdicionales = await axios.get(
+					`${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/Expediente/GetDatosAdicionalesMatricula/${state.expedienteEstudiantil.currentStudent.idEstudiante}`
+				)
+
+				const esIndigena = datosAdicionales.data?.esIndigena ? 'SI' : 'NO'
+				setInfoCard(prevState => {
+					return {
+						...prevState,
+						esIndigena: esIndigena,
+						estadoMatricula: datosAdicionales.data?.estadoMatricula
+					}
+				})
+			} catch (err) {}
+			setLoading(false)
+		}
+
+		if (state.expedienteEstudiantil.currentStudent?.idEstudiante) {
+			loadData()
 		}
 	}, [state.expedienteEstudiantil.currentStudent])
 
@@ -118,6 +213,7 @@ const ContenedorPrincipal = props => {
 	}
 
 	const validarAcceso = async () => {
+		setLoading(true)
 		await Promise.all([validarEstudianteSCE()])
 		setLoading(false)
 	}
@@ -135,7 +231,6 @@ const ContenedorPrincipal = props => {
 	}, [aplicaSCE])
 
 	useEffect(() => {
-		setLoading(true)
 		validarAcceso()
 	}, [])
 
@@ -148,6 +243,8 @@ const ContenedorPrincipal = props => {
 							data={state.expedienteEstudiantil.currentStudent}
 						/>
 					)}
+
+					{/* <Row style={{ paddingTop: active !== 0 && estudianteEnContexto() ? 100 : 0 }}> */}
 					<Row>
 						{active !== 0 && estudianteEnContexto() && (
 							<Col xs={12}>
@@ -229,6 +326,11 @@ const ContenedorPrincipal = props => {
 											),
 											11: estudianteEnContexto() ? (
 												<ServicioComunalEstudiantil {...props} />
+											) : (
+												blockeo()
+											),
+											12: estudianteEnContexto() ? (
+												<BitacoraExpediente {...props} />
 											) : (
 												blockeo()
 											)
