@@ -73,6 +73,10 @@ const INITIAL_STATE = {
 	apoyosNoRecibidos: [],
 	tiposApoyos: [],
 	tipoCondicionApoyo: [],
+	tipoActivoInventarioTecnologico: [],
+	estadoInventarioTecnologico: [],
+	ubicacionInventarioTecnologico: [],
+	fuenteInventarioTecnologico: [],
 	talentos: [],
 	estrategiasFlexibilidadCurricular: []
 }
