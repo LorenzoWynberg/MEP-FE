@@ -94,11 +94,6 @@ const Inicio = props => {
 						<Row>
 							{centroBreadcrumb.map((r, i) => {
 								if (r.active) return
-								if (
-									i == 10 &&
-									(!aplicaSCE || !tienePermisoSCE || tienePermisoSCE.leer == 0)
-								)
-									return
 								return (
 									<NavigationCard
 										icon=""
