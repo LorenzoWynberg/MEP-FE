@@ -1736,6 +1736,7 @@
 	"expediente_ce>nav>norvativa": "Normativa interna",
 	"expediente_ce>nav>servicio_comunal": "Servicio comunal estudiantil",
 	"expediente_ce>nav>inventario_equipo_de_computo": "Inventario de equipo de cómputo",
+	"expediente_ce>nav>orientacion": "Orientación",
 	"expediente_ce>nav>ofer_edu": "Oferta educativa",
 	"expediente_ce>nav>organizacion_auxiliar": "Organización auxiliar",
 	"expediente_ce>nav>proyecciones": "Grupos y proyecciones",
@@ -1849,6 +1850,14 @@
 	"expediente_ce>recurso_humano>integra>propiamente_docentes>columna_nombramientos": "Nombramientos",
 	"expediente_ce>recurso_humano>integra>propiamente_docentes>columna_nombre": "Nombre completo",
 	"expediente_ce>titulo": "Expediente centro educativo",
+
+	"expediente_ce>orientacion>titulo": "Orientación",
+	"expediente_ce>orientacion>tabs>grupal": "Grupal",
+	"expediente_ce>orientacion>tabs>individual": "Individual {Consulta}",
+	"expediente_ce>orientacion>tabs>individualIntervencion": "Individual {Plan de intervención}",
+	"expediente_ce>orientacion>tabs>asesoria": "Asesoría",
+	"expediente_ce>orientacion>tabs>mantenimiento": "Mantenimiento",
+
 	"expediente_mostrar_sce>titulo": "Expediente estudiantil",
 	"expediente_estudiantil>titulo": "Expediente estudiantil",
 	"expediente_estudiantil>area_proyecto": "Área de proyecto",

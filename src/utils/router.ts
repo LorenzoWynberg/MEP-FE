@@ -959,6 +959,17 @@ const routes: Route[] = [
 			activeTab: 0
 		}
 	},
+	{
+		component: ExpedienteCentro,
+		isAuthenticated: true,
+		route: '/director/expediente-centro/orientacion',
+		exact: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 12,
+			activeTab: 0
+		}
+	},
 
 	{
 		component: Admin,

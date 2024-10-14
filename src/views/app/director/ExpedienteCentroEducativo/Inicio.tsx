@@ -19,6 +19,7 @@ import GroupWorkIcon from '@material-ui/icons/GroupWork'
 import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import { envVariables } from 'Constants/enviroment'
+import { MdFollowTheSigns } from 'react-icons/md'
 
 const Inicio = props => {
 	const { t } = useTranslation()
@@ -81,6 +82,8 @@ const Inicio = props => {
 				return <Solidarity style={{ fontSize: 50 }} />
 			case 11:
 				return <Computador style={{ fontSize: 50 }} />
+			case 12:
+				return <MdFollowTheSigns style={{ fontSize: 50 }} />
 		}
 	}
 
