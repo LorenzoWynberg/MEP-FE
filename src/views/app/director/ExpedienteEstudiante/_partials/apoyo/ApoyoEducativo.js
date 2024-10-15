@@ -10,7 +10,7 @@ import CondicionDiscapacidad from './CondicionDiscapacidad'
 import OtraCondicion from './OtraCondicion'
 import axios from 'axios'
 import AltoPotencial from './AltoPotencial'
-import OptionModal from '../../../../../../components/Modal/OptionModal'
+import FormModal from '../../../../../../components/Modal/FormModal'
 import {
 	getCondiciones,
 	getDiscapacidades
@@ -288,7 +288,7 @@ const ApoyoEducativo = props => {
 				)}
 			</ContentTab>
 
-			<OptionModal
+			<FormModal
 				isOpen={openOptions.open}
 				titleHeader={
 					openOptions.type === 'discapacidades'
@@ -340,7 +340,7 @@ const ApoyoEducativo = props => {
 							</Row>
 						)
 					})}
-			</OptionModal>
+			</FormModal>
 		</>
 	)
 }

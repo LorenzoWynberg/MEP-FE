@@ -27,6 +27,7 @@ import { envVariables } from '../../../../../../constants/enviroment'
 import swal from 'sweetalert'
 import { isNull, isUndefined, isEmpty } from 'lodash'
 import Loader from 'Components/LoaderContainer'
+import FormModal from 'Components/Modal/FormModal'
 import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import moment from 'moment'
@@ -369,7 +370,6 @@ const ApoyosEstudiante = props => {
 	if (loading || loadingData) {
 		return <Loader />
 	}
-
 	return (
 		<>
 			{snackbar(snackbarContent.variant, snackbarContent.msg)}
@@ -381,12 +381,9 @@ const ApoyosEstudiante = props => {
 				data={data || []}
 				columns={columns}
 			/>
-			<OptionModal
-				isOpen={showModalTiposApoyo}
-				titleHeader={'Tipos de apoyo'}
-				onConfirm={() => setShowModalTiposApoyo(false)}
-				onCancel={() => setShowModalTiposApoyo(false)}
-			>
+ 
+			<OptionModal isOpen={false} radioValue={radioValue} onConfirm={() => setShowModalTiposApoyo(false)} titleHeader={'Tipos de apoyo'} onCancel={() => setShowModalTiposApoyo(false)} options={tiposApoyoFilter} selectedId={formData.tipoDeApoyo} />
+			<FormModal isOpen={showModalTiposApoyo} titleHeader={'Tipos de apoyo'} onConfirm={() => setShowModalTiposApoyo(false)} onCancel={() => setShowModalTiposApoyo(false)}>
 				<div>
 					<FormControl>
 						<RadioGroup
@@ -422,8 +419,8 @@ const ApoyosEstudiante = props => {
 						</RadioGroup>
 					</FormControl>
 				</div>
-			</OptionModal>
-			<OptionModal
+			</FormModal>
+			<FormModal
 				isOpen={showNuevoApoyoModal && !showModalTiposApoyo}
 				titleHeader={categoria.tituloModal}
 				onConfirm={onConfirmSaveApoyo}
@@ -465,8 +462,8 @@ const ApoyosEstudiante = props => {
 									style={{
 										border:
 											checkedValid &&
-											(formData.condicionApoyo === '' ||
-												isNaN(formData.condicionApoyo))
+												(formData.condicionApoyo === '' ||
+													isNaN(formData.condicionApoyo))
 												? '1px solid red'
 												: ''
 									}}
@@ -536,7 +533,7 @@ const ApoyosEstudiante = props => {
 						</Col>
 					</Row>
 				</Form>
-			</OptionModal>
+			</FormModal>
 		</>
 	)
 }

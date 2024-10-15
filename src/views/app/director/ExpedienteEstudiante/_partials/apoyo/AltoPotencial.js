@@ -31,7 +31,7 @@ import axios from 'axios'
 import { envVariables } from '../../../../../../constants/enviroment'
 import swal from 'sweetalert'
 import Loader from 'Components/LoaderContainer'
-import OptionModal from 'Components/Modal/OptionModal'
+import FormModal from 'Components/Modal/FormModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import colors from 'assets/js/colors'
 import moment from 'moment'
@@ -412,7 +412,7 @@ const AltoPotencial = props => {
 				data={data || []}
 				columns={columns}
 			/>
-			<OptionModal
+			<FormModal
 				isOpen={showModalTiposApoyo}
 				titleHeader={'Tipos de apoyo'}
 				onConfirm={() => setShowModalTiposApoyo(false)}
@@ -453,9 +453,9 @@ const AltoPotencial = props => {
 						</RadioGroup>
 					</FormControl>
 				</div>
-			</OptionModal>
+			</FormModal>
 			{/* Talentos */}
-			<OptionModal
+			<FormModal
 				isOpen={showModalTalento}
 				titleHeader={'Talentos'}
 				onConfirm={() => setShowModalTalento(false)}
@@ -496,9 +496,9 @@ const AltoPotencial = props => {
 						</RadioGroup>
 					</FormControl>
 				</div>
-			</OptionModal>
+			</FormModal>
 
-			<OptionModal
+			<FormModal
 				isOpen={showNuevoApoyoModal && !showModalTiposApoyo}
 				titleHeader={tituloModal}
 				onConfirm={onConfirmSaveApoyo}
@@ -618,7 +618,7 @@ const AltoPotencial = props => {
 						))}
 					</Row>
 				</Form>
-			</OptionModal>
+			</FormModal>
 		</>
 	)
 }
