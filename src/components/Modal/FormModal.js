@@ -19,15 +19,13 @@ function FormModal({
 	isOpen,
 	titleHeader,
 	onConfirm,
-	onCancel = () => { },
+	onCancel = () => {},
 	hideCancel = false,
 	textCancel = 'Cancelar',
 	textConfirm = 'Confirmar',
 	size = 'lg',
 	hideSubmit = false,
-	onSelect,
-	selectedId,
-	data
+	children
 }) {
 	return (
 		<Modal isOpen={isOpen} size={size} className={styles}>
@@ -35,38 +33,7 @@ function FormModal({
 			<ModalBody>
 				<Container>
 					<Row>
-						<Col xs={12}>
-							<FormControl>
-								<RadioGroup
-									aria-labelledby="demo-radio-buttons-group-label"
-									name="radio-buttons-group"
-								>
-									{data &&
-										data.map(item => (
-											<Row
-												className="py-2"
-												style={{
-													display: 'flex',
-													justifyContent: 'center',
-													alignItems: 'center',
-													borderBottom: '1px solid #d7d7d7'
-												}}
-											>
-												<Col sm={4}>
-													<FormControlLabel
-														value={item.id}
-														onClick={onSelect}
-														checked={selectedId == item.id}
-														control={<Radio />}
-														label={item.nombre}
-													/>
-												</Col>
-												<Col sm={8}>{item.descripcion}</Col>
-											</Row>
-										))}
-								</RadioGroup>
-							</FormControl>
-						</Col>
+						<Col xs={12}>{children}</Col>
 					</Row>
 					<Row
 						style={{
