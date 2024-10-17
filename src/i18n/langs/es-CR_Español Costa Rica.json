@@ -1853,10 +1853,15 @@
 
 	"expediente_ce>orientacion>titulo": "Orientación",
 	"expediente_ce>orientacion>tabs>grupal": "Grupal",
-	"expediente_ce>orientacion>tabs>individual": "Individual {Consulta}",
-	"expediente_ce>orientacion>tabs>individualIntervencion": "Individual {Plan de intervención}",
+	"expediente_ce>orientacion>tabs>individual": "Individual (Consulta)",
+	"expediente_ce>orientacion>tabs>individualIntervencion": "Individual (Plan de intervención)",
 	"expediente_ce>orientacion>tabs>asesoria": "Asesoría",
 	"expediente_ce>orientacion>tabs>mantenimiento": "Mantenimiento",
+	"expediente_ce>orientacion>columns>fechaRegistro": "Fecha del registro",
+	"expediente_ce>orientacion>columns>metodo": "Método de intervención",
+	"expediente_ce>orientacion>columns>componente": "Componente",
+	"expediente_ce>orientacion>columns>profesionalOrientacion": "Profesional en orientación",
+	"expediente_ce>orientacion>columns>acciones": "Acciones",
 
 	"expediente_mostrar_sce>titulo": "Expediente estudiantil",
 	"expediente_estudiantil>titulo": "Expediente estudiantil",

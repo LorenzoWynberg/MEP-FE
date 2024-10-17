@@ -91,12 +91,23 @@ export const catalogsEnumByName = [
 	{
 		id: 'Fuente inventario tecnológico',
 		name: 'fuenteInventarioTecnologico'
-  },
+	},
 	{ id: 'Talentos', name: 'talentos' },
 	{
 		id: 'Estrategias de flexibilización curricular',
 		name: 'estrategiasFlexibilidadCurricular'
-	}
+	},
+	{
+		id: 'Medios Intervención',
+		name: 'mediosIntervencion'
+	},
+	{ id: 'Tipos Orientación', name: 'tiposOrientacion' },
+	{ id: 'Bloque temático', name: 'bloqueTematico' },
+	{ id: 'Tipo de actividad', name: 'tipoActividadOrientacion' },
+	{ id: 'Acciones Indispensables', name: 'accionesIndispensables' },
+	{ id: 'STEAM', name: 'steam' },
+	{ id: '', name: '' },
+	{ id: 'Acción realizada', name: 'accionRealizada' }
 ]
 
 export const catalogsEnumObj = {

@@ -78,7 +78,14 @@ const INITIAL_STATE = {
 	ubicacionInventarioTecnologico: [],
 	fuenteInventarioTecnologico: [],
 	talentos: [],
-	estrategiasFlexibilidadCurricular: []
+	estrategiasFlexibilidadCurricular: [],
+	mediosIntervencion: [],
+	tiposOrientacion: [],
+	bloqueTematico: [],
+	tipoActividadOrientacion: [],
+	accionesIndispensables: [],
+	steam: [],
+	accionRealizada: []
 }
 
 export default (state = INITIAL_STATE, { type, payload }) => {
