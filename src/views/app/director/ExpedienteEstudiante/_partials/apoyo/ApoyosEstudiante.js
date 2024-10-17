@@ -381,45 +381,9 @@ const ApoyosEstudiante = props => {
 				data={data || []}
 				columns={columns}
 			/>
- 
-			<OptionModal isOpen={false} radioValue={radioValue} onConfirm={() => setShowModalTiposApoyo(false)} titleHeader={'Tipos de apoyo'} onCancel={() => setShowModalTiposApoyo(false)} options={tiposApoyoFilter} selectedId={formData.tipoDeApoyo} />
-			<FormModal isOpen={showModalTiposApoyo} titleHeader={'Tipos de apoyo'} onConfirm={() => setShowModalTiposApoyo(false)} onCancel={() => setShowModalTiposApoyo(false)}>
-				<div>
-					<FormControl>
-						<RadioGroup
-							aria-labelledby="demo-radio-buttons-group-label"
-							name="radio-buttons-group"
-							value={radioValue}
-						>
-							{tiposApoyoFilter.map((item, i) => (
-								<Row key={i} style={{ marginTop: '10px' }}>
-									<Col
-										style={{
-											display: 'flex',
-											textAlign: 'left',
-											justifyContent: 'left',
-											alignItems: 'left'
-										}}
-										sm={item.detalle.length > 1 ? 5 : 12}
-									>
-										<FormControlLabel
-											value={formData.tipoDeApoyo}
-											onClick={(e, v) => {
-												e.persist()
-												handleChangeItem(item)
-											}}
-											checked={radioValue == item.id}
-											control={<Radio style={{ color: primary }} />}
-											label={item.nombre}
-										/>
-									</Col>
-									{item.detalle.length > 1 && <Col sm={7}>{item.detalle}</Col>}
-								</Row>
-							))}
-						</RadioGroup>
-					</FormControl>
-				</div>
-			</FormModal>
+
+			<OptionModal isOpen={showModalTiposApoyo} radioValue={radioValue} onSelect={(item) => {handleChangeItem(item)}} selectedId={formData.tipoDeApoyo} onConfirm={() => setShowModalTiposApoyo(false)} titleHeader={'Tipos de apoyo'}   options={tiposApoyoFilter} />
+  
 			<FormModal
 				isOpen={showNuevoApoyoModal && !showModalTiposApoyo}
 				titleHeader={categoria.tituloModal}

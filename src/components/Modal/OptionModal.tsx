@@ -14,12 +14,13 @@ import {
 	Radio,
 	RadioGroup
 } from '@material-ui/core'
+import colors from 'Assets/js/colors'
 import styles from './OptionModal.css'
 
 interface OptionModalProps {
 	isOpen: boolean,
 	titleHeader: string,
-	onSelect: () => void,
+	onSelect: (item: object) => void,
 	selectedId: number,
 	options: { id, nombre, descripcion }[],
 	colLeftSize: number,
@@ -40,8 +41,8 @@ function OptionModal({
 	onSelect,
 	selectedId,
 	options,
-	colLeftSize,
-	colRightSize,
+	colLeftSize=4,
+	colRightSize=8,
 	radioValue,
 	hideRightCol = false,
 	onConfirm = () => { },
@@ -61,21 +62,19 @@ function OptionModal({
 						<Col xs={12}>
 							<FormControl>
 								<RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group" value={radioValue}>
-									{console.log('options', options)}
-									{console.log('options', selectedId)} 
 									{options &&
 										options.map(item => (
 											<Row className="py-2" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-												<Col sm={4}>
+												<Col sm={hideRightCol ? 12 : colLeftSize}> 
 													<FormControlLabel
 														value={item.id}
-														onClick={onSelect}
+														onClick={() => onSelect(item)}
 														checked={selectedId == item.id}
 														control={<Radio />}
 														label={item.nombre}
 													/>
 												</Col>
-												<Col sm={8}>{item.descripcion}</Col>
+												{!hideRightCol && <Col sm={colRightSize}>{item.detalle && item.detalle || item.descripcion && item.descripcion}</Col>}
 											</Row>
 										))}
 								</RadioGroup>

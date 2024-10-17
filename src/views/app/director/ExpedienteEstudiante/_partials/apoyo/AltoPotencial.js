@@ -32,6 +32,7 @@ import { envVariables } from '../../../../../../constants/enviroment'
 import swal from 'sweetalert'
 import Loader from 'Components/LoaderContainer'
 import FormModal from 'Components/Modal/FormModal'
+import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import colors from 'assets/js/colors'
 import moment from 'moment'
@@ -412,92 +413,12 @@ const AltoPotencial = props => {
 				data={data || []}
 				columns={columns}
 			/>
-			<FormModal
-				isOpen={showModalTiposApoyo}
-				titleHeader={'Tipos de apoyo'}
-				onConfirm={() => setShowModalTiposApoyo(false)}
-				onCancel={() => setShowModalTiposApoyo(false)}
-			>
-				<div>
-					<FormControl>
-						<RadioGroup
-							aria-labelledby="demo-radio-buttons-group-label"
-							name="radio-buttons-group"
-							value={radioValueApoyo}
-						>
-							{tiposApoyo.map((item, i) => (
-								<Row key={i} style={{ marginTop: '10px' }}>
-									<Col
-										style={{
-											display: 'flex',
-											textAlign: 'left',
-											justifyContent: 'left',
-											alignItems: 'left'
-										}}
-										sm={4}
-									>
-										<FormControlLabel
-											value={formData.tipoDeApoyo}
-											onClick={(e, v) => {
-												e.persist()
-												handleChangeItem(item)
-											}}
-											checked={radioValueApoyo == item.id}
-											control={<Radio style={{ color: primary }} />}
-											label={item.nombre}
-										/>
-									</Col>
-									<Col sm={8}>{item.detalle}</Col>
-								</Row>
-							))}
-						</RadioGroup>
-					</FormControl>
-				</div>
-			</FormModal>
-			{/* Talentos */}
-			<FormModal
-				isOpen={showModalTalento}
-				titleHeader={'Talentos'}
-				onConfirm={() => setShowModalTalento(false)}
-				onCancel={() => setShowModalTalento(false)}
-			>
-				<div>
-					<FormControl>
-						<RadioGroup
-							aria-labelledby="demo-radio-buttons-group-label"
-							name="radio-buttons-group"
-							value={radioValueTalento}
-						>
-							{state.selects.talentos.map((item, i) => (
-								<Row key={i} style={{ marginTop: '10px' }}>
-									<Col
-										style={{
-											display: 'flex',
-											textAlign: 'left',
-											justifyContent: 'left',
-											alignItems: 'left'
-										}}
-										sm={4}
-									>
-										<FormControlLabel
-											value={formData.talentoId}
-											onClick={(e, v) => {
-												e.persist()
-												handleChangeTalento(item)
-											}}
-											checked={radioValueTalento == item.id}
-											control={<Radio style={{ color: primary }} />}
-											label={item.nombre}
-										/>
-									</Col>
-									<Col sm={8}>{item.descripcion}</Col>
-								</Row>
-							))}
-						</RadioGroup>
-					</FormControl>
-				</div>
-			</FormModal>
+			{console.log('tiposApoyo',tiposApoyo)}
 
+			<OptionModal isOpen={showModalTiposApoyo} radioValue={radioValueApoyo} onSelect={(item) => {handleChangeItem(item)}} selectedId={formData.tipoDeApoyo} onConfirm={() => setShowModalTiposApoyo(false)} titleHeader={'Tipos de apoyo'}  options={tiposApoyo} />
+			<OptionModal isOpen={showModalTalento} radioValue={radioValueTalento} onSelect={(item) => {handleChangeTalento(item)}} selectedId={formData.talentoId} onConfirm={() => setShowModalTalento(false)} titleHeader={'Talentos'}   options={state.selects.talentos} /> 
+    
+ 
 			<FormModal
 				isOpen={showNuevoApoyoModal && !showModalTiposApoyo}
 				titleHeader={tituloModal}
