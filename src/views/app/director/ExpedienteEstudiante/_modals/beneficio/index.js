@@ -1,12 +1,12 @@
 import React from 'react'
 import { Row, Col, Container, Input, Label } from 'reactstrap'
-import OptionModal from 'Components/Modal/OptionModal'
+import FormModal from 'Components/Modal/FormModal'
 
 const Subsidio = props => {
 	const { open, titulo, toggleModal } = props
 
 	return (
-		<OptionModal
+		<FormModal
 			isOpen={open}
 			titleHeader={titulo || 'Tipo de subsidio MEP'}
 			onCancel={toggleModal}
@@ -52,7 +52,7 @@ const Subsidio = props => {
 					</Col>
 				</Row>
 			</Container>
-		</OptionModal>
+		</FormModal>
 	)
 }
 

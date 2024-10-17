@@ -7,9 +7,15 @@ import {
 	ModalHeader,
 	Row
 } from 'reactstrap'
+import { 
+	FormControl,
+	FormControlLabel, 
+	Radio,
+	RadioGroup, 
+} from '@material-ui/core'
 import styles from './OptionModal.css'
 
-function OptionModal({
+function FormModal({
 	isOpen,
 	titleHeader,
 	onConfirm,
@@ -59,4 +65,4 @@ function OptionModal({
 	)
 }
 
-export default OptionModal
+export default FormModal

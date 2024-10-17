@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useActions } from 'Hooks/useActions'
 import { Input, Label, Row, Col, FormGroup } from 'reactstrap'
 import { WebMapView } from './MapView'
-import OptionModal from 'Components/Modal/OptionModal'
+import FormModal from 'Components/Modal/FormModal'
 import { Card, CardBody } from 'reactstrap'
 import { getBitacoraResidenciaByIdentidad } from 'Redux/Bitacora/actions'
 import VisibilityIcon from '@material-ui/icons/Visibility'
@@ -132,7 +132,7 @@ const HistoricoResidencia = ({ identidadId }) => {
 			</p>
 			<Card>
 				<CardBody>
-					<OptionModal
+					<FormModal
 						size="xl"
 						hideCancel
 						isOpen={selectedRow && true}
@@ -251,7 +251,7 @@ const HistoricoResidencia = ({ identidadId }) => {
 								</>
 							)}
 						</Row>
-					</OptionModal>
+					</FormModal>
 
 					<h1>
 						{t(

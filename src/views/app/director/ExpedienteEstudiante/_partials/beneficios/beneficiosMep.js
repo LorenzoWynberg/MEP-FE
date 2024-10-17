@@ -18,7 +18,7 @@ import {
 } from 'Redux/beneficios/actions'
 import useNotification from 'Hooks/useNotification'
 import BarLoader from 'Components/barLoader/barLoader'
-import OptionModal from 'Components/Modal/OptionModal'
+import FormModal from 'Components/Modal/FormModal'
 import { isNaN, isEmpty } from 'lodash'
 import swal from 'sweetalert'
 import RequiredSpan from 'Components/Form/RequiredSpan'
@@ -324,7 +324,7 @@ const BeneficiosMEP = props => {
 	return (
 		<>
 			{snackbar(snackbarContent.type, snackbarContent.msg)}
-			<OptionModal
+			<FormModal
 				isOpen={view}
 				titleHeader={'Por parte del MEP'}
 				hideCancel={visualizing}
@@ -509,7 +509,7 @@ const BeneficiosMEP = props => {
 						</Grid>
 					</Grid>
 				</Grid>
-			</OptionModal>
+			</FormModal>
 			<div>
 				<h5>Por parte del MEP</h5>
 				<Tabla
