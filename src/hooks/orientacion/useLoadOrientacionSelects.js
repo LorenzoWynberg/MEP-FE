@@ -44,9 +44,14 @@ const useLoadOrientacionSelects = () => {
 			accionesIndispensables: [],
 			steam: [],
 			accionRealizada: [],
+			motivoConsulta: [],
+			mecanismoDeteccion: [],
+			motivoIntervencion: [],
+			participantesPlanIntervencion: [],
+			participantesPlanAsesoria: []
 		}
 
-		//*Medios de intervencion
+		//* Medios de intervencion
 		const mediosIntervencion = catalogos.find(
 			item => item.nombre === 'Medios Intervención'
 		)
@@ -61,7 +66,7 @@ const useLoadOrientacionSelects = () => {
 			data.mediosIntervencion = res1.data
 		}
 
-		//*Tipos de orientacion
+		//* Tipos de orientacion
 		const tiposOrientacion = catalogos.find(
 			item => item.nombre === 'Tipos Orientación'
 		)
@@ -76,7 +81,7 @@ const useLoadOrientacionSelects = () => {
 			data.tiposOrientacion = res2.data
 		}
 
-		//*Bloque tematico
+		//* Bloque tematico
 		const bloqueTematico = catalogos.find(
 			item => item.nombre === 'Bloque temático'
 		)
@@ -91,7 +96,7 @@ const useLoadOrientacionSelects = () => {
 			data.bloqueTematico = res3.data
 		}
 
-		//*Tipo de actividad
+		//* Tipo de actividad
 		const tipoActividad = catalogos.find(
 			item => item.nombre === 'Tipo de actividad'
 		)
@@ -106,7 +111,7 @@ const useLoadOrientacionSelects = () => {
 			data.tipoActividadOrientacion = res4.data
 		}
 
-		//*Acciones indispensables
+		//* Acciones indispensables
 		const accionesIndispensables = catalogos.find(
 			item => item.nombre === 'Acciones Indispensables'
 		)
@@ -134,9 +139,11 @@ const useLoadOrientacionSelects = () => {
 		}
 
 		//* Acción realizada
-		const accionRealizada = catalogos.find(item => item.nombre === 'Acción realizada')
-		if(accionRealizada && !state.selects.accionRealizada[0]){
-			const res7 = await.actions.getCatalogsByName(
+		const accionRealizada = catalogos.find(
+			item => item.nombre === 'Acción realizada'
+		)
+		if (accionRealizada && !state.selects.accionRealizada[0]) {
+			const res7 = await actions.getCatalogsByName(
 				accionRealizada.id,
 				-1,
 				-1,
@@ -145,6 +152,81 @@ const useLoadOrientacionSelects = () => {
 			data.accionRealizada = res7.data
 		}
 
+		//* Motivo de counsulta
+		const motivoConsulta = catalogos.find(
+			item => item.nombre === 'Motivo de consulta'
+		)
+		if (motivoConsulta && !state.selects.motivoConsulta[0]) {
+			const res8 = await actions.getCatalogsByName(
+				motivoConsulta.id,
+				-1,
+				-1,
+				motivoConsulta.nombre
+			)
+			data.motivoConsulta = res8.data
+		}
+
+		//* Mecanismo de detección
+		const mecanismoDeteccion = catalogos.find(
+			item => item.nombre === 'Mecanismo de detección'
+		)
+		if (mecanismoDeteccion && !state.selects.mecanismoDeteccion[0]) {
+			const res9 = await actions.getCatalogsByName(
+				mecanismoDeteccion.id,
+				-1,
+				-1,
+				mecanismoDeteccion.nombre
+			)
+			data.mecanismoDeteccion = res9.data
+		}
+
+		//* Motivo de intervención
+		const motivoIntervencion = catalogos.find(
+			item => item.nombre === 'Motivo de intervención'
+		)
+		if (motivoIntervencion && !state.selects.motivoIntervencion[0]) {
+			const res10 = await actions.getCatalogsByName(
+				motivoIntervencion.id,
+				-1,
+				-1,
+				motivoIntervencion.nombre
+			)
+			data.motivoIntervencion = res10.data
+		}
+
+		//* Participantes del proceso - Plan Intervención
+		const participantesProceso = catalogos.find(
+			item => item.nombre === 'Participantes del proceso - Plan Intervención '
+		)
+		if (
+			participantesProceso &&
+			!state.selects.participantesPlanIntervencion[0]
+		) {
+			const res11 = await actions.getCatalogsByName(
+				participantesProceso.id,
+				-1,
+				-1,
+				participantesProceso.nombre
+			)
+			data.participantesPlanIntervencion = res11.data
+		}
+
+		//* Participantes del proceso - Asesoría
+		const participantesPlanAsesoria = catalogos.find(
+			item => item.nombre === 'Participantes del proceso - Asesoría '
+		)
+		if (
+			participantesPlanAsesoria &&
+			!state.selects.participantesPlanAsesoria[0]
+		) {
+			const res12 = await actions.getCatalogsByName(
+				participantesPlanAsesoria.id,
+				-1,
+				-1,
+				participantesPlanAsesoria.nombre
+			)
+			data.participantesPlanAsesoria = res12.data
+		}
 
 		console.log('JPBR data', data)
 		setSelects(data)

@@ -106,8 +106,18 @@ export const catalogsEnumByName = [
 	{ id: 'Tipo de actividad', name: 'tipoActividadOrientacion' },
 	{ id: 'Acciones Indispensables', name: 'accionesIndispensables' },
 	{ id: 'STEAM', name: 'steam' },
-	{ id: '', name: '' },
-	{ id: 'Acción realizada', name: 'accionRealizada' }
+	{ id: 'Motivo de consulta', name: 'motivoConsulta' },
+	{ id: 'Acción realizada', name: 'accionRealizada' },
+	{ id: 'Mecanismo de detección', name: 'mecanismoDeteccion' },
+	{ id: 'Motivo de intervención', name: 'motivoIntervencion' },
+	{
+		id: 'Participantes del proceso - Plan Intervención ',
+		name: 'participantesPlanIntervencion'
+	},
+	{
+		id: 'Participantes del proceso - Asesoría ',
+		name: 'participantesPlanAsesoria'
+	}
 ]
 
 export const catalogsEnumObj = {

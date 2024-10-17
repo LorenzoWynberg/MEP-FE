@@ -85,7 +85,12 @@ const INITIAL_STATE = {
 	tipoActividadOrientacion: [],
 	accionesIndispensables: [],
 	steam: [],
-	accionRealizada: []
+	accionRealizada: [],
+	motivoConsulta: [],
+	mecanismoDeteccion: [],
+	motivoIntervencion: [],
+	participantesPlanIntervencion: [],
+	participantesPlanAsesoria: []
 }
 
 export default (state = INITIAL_STATE, { type, payload }) => {
