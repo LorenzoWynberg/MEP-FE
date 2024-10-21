@@ -6,7 +6,9 @@ import {
 	Modal,
 	ModalBody,
 	ModalHeader,
-	Row
+	Row,
+	Input,
+	Label
 } from 'reactstrap'
 import {
 	FormControl,
@@ -16,6 +18,7 @@ import {
 } from '@material-ui/core'
 import colors from 'Assets/js/colors'
 import styles from './OptionModal.css'
+import { CustomInput } from 'Components/CommonComponents'
 
 interface OptionModalProps {
 	isOpen: boolean,
@@ -41,8 +44,8 @@ function OptionModal({
 	onSelect,
 	selectedId,
 	options,
-	colLeftSize=4,
-	colRightSize=8,
+	colLeftSize = 4,
+	colRightSize = 8,
 	radioValue,
 	hideRightCol = false,
 	onConfirm = () => { },
@@ -58,27 +61,43 @@ function OptionModal({
 			<ModalHeader>{titleHeader}</ModalHeader>
 			<ModalBody>
 				<Container>
-					<Row>
+					<Row >
 						<Col xs={12}>
-							<FormControl>
-								<RadioGroup aria-labelledby="demo-radio-buttons-group-label" name="radio-buttons-group" value={radioValue}>
-									{options &&
-										options.map(item => (
-											<Row className="py-2" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-												<Col sm={hideRightCol ? 12 : colLeftSize}> 
-													<FormControlLabel
-														value={item.id}
-														onClick={() => onSelect(item)}
-														checked={selectedId == item.id}
-														control={<Radio />}
-														label={item.nombre}
-													/>
-												</Col>
-												{!hideRightCol && <Col sm={colRightSize}>{item.detalle && item.detalle || item.descripcion && item.descripcion}</Col>}
-											</Row>
-										))}
-								</RadioGroup>
-							</FormControl>
+						<FormControl component="fieldset">
+						<RadioGroup
+							aria-labelledby="sb_condicionId"
+							name="sb_condicionId"
+							value={radioValue}
+						>
+							{options.map((item, i) => (
+								<Row
+									className="py-2"
+									style={{
+										display: 'flex',
+										justifyContent: 'center',
+										alignItems: 'center',
+										borderBottom: `1px solid ${colors.opaqueGray}`
+									}}
+								>
+									<Col sm={hideRightCol ? 12 : colLeftSize}>
+										<FormControlLabel
+											value={item.id}
+											control={
+												<Radio
+													onClick={()=>onSelect(item)}
+													
+													checked={selectedId == item.id}
+													style={{ color: colors.primary }} 
+												/>
+											}
+											label={item.nombre}
+										/>
+									</Col>
+									{!hideRightCol && <Col sm={colRightSize}>{item.detalle && item.detalle || item.descripcion && item.descripcion}</Col>}
+								</Row>
+							))}
+						</RadioGroup>
+					</FormControl>
 						</Col>
 					</Row>
 					<Row
