@@ -1,13 +1,23 @@
-import React from 'react'
+import axios from 'axios'
 import { useState } from 'react'
 import { Helmet } from 'react-helmet'
-import HeaderTab from 'Components/Tab/LinkedHeader'
+import Loader from 'Components/Loader'
+import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next'
 import ContentTab from 'Components/Tab/Content'
+import HeaderTab from 'Components/Tab/LinkedHeader'
+import { envVariables } from 'Constants/enviroment'
 import Notification from '../../../../Hoc/Notificaction'
 
 const Logros = props => {
 	const { t } = useTranslation()
+	const [loading, setLoading] = useState(true)
+	const state = useSelector(store => ({
+		selects: store.selects,
+		currentInstitution: store.authUser.currentInstitution
+	}))
+
 	const optionsTab = [
 		{
 			title: 'Logros',
@@ -26,6 +36,26 @@ const Logros = props => {
 			path: '/director/expediente-centro/logros-y-participaciones/mantenimiento'
 		}
 	]
+
+	useEffect(() => {
+		const loadData = async () => {
+			try {
+				const response = await axios.get(
+					`${envVariables.BACKEND_URL}/api/Areas/GestorCatalogos/TipoCatalogo`
+				)
+				console.log('lore response catalogos', response)
+			} catch (error) {
+				console.error('Error loading catalogos:', error)
+				setLoading(false)
+			}
+		}
+		loadData()
+		console.log('lore selects', state.selects)
+		console.log('lore institucion', state.currentInstitution)
+	}, [])
+
+	if (loading) <Loader />
+
 	return (
 		<Notification>
 			{showSnackbar => {
