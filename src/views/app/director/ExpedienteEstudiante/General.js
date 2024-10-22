@@ -60,7 +60,7 @@ const General = props => {
 				activeTab={activeTab}
 				setActiveTab={setActiveTab}
 				marginTop="3"
-			/>
+			/> 
 			<ContentTab activeTab={activeTab} numberId={activeTab}>
 				{activeTab === 0 && (
 					<InfoGeneral

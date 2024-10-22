@@ -3,19 +3,19 @@ import 'react-tagsinput/react-tagsinput.css'
 import HeaderTab from 'Components/Tab/LinkedHeader'
 import ContentTab from 'Components/Tab/Content'
 import { envVariables } from '../../../../../../constants/enviroment'
-import { Row, Col, CustomInput } from 'reactstrap'
 import { useTranslation } from 'react-i18next'
 import Loader from 'Components/LoaderContainer'
 import CondicionDiscapacidad from './CondicionDiscapacidad'
 import OtraCondicion from './OtraCondicion'
 import axios from 'axios'
 import AltoPotencial from './AltoPotencial'
-import OptionModal from '../../../../../../components/Modal/OptionModal'
+import FormModal from '../../../../../../components/Modal/FormModal'
 import {
 	getCondiciones,
 	getDiscapacidades
 } from '../../../../../../redux/apoyos/actions'
 import ApoyosEstudiante from './ApoyosEstudiante'
+import CheckboxModal from '../../../../../../components/Modal/CheckboxModal'
 
 const ApoyoEducativo = props => {
 	const { t } = useTranslation()
@@ -133,11 +133,10 @@ const ApoyoEducativo = props => {
 			modalOptions.forEach(el => {
 				if (el.newChecked) options.push(el)
 			})
-			const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${
-				openOptions.type === 'discapacidades'
+			const url = `${envVariables.BACKEND_URL}/api/ExpedienteEstudiante/${openOptions.type === 'discapacidades'
 					? 'DiscapacidadesPorUsuario'
 					: 'CondicionesPorUsuario'
-			}/AddMultiple/${props.identidadId}`
+				}/AddMultiple/${props.identidadId}`
 			const optionsMap = options.map(d => {
 				return {
 					id: 0,
@@ -287,60 +286,25 @@ const ApoyoEducativo = props => {
 					/>
 				)}
 			</ContentTab>
-
-			<OptionModal
-				isOpen={openOptions.open}
-				titleHeader={
-					openOptions.type === 'discapacidades'
-						? t(
-								'estudiantes>expediente>apoyos_edu>modal>tipos',
-								'Tipos de discapacidades'
-						  )
-						: t(
-								'estudiantes>expediente>apoyos_edu>modal>otro',
-								'Otros tipos de condiciones'
-						  )
-				}
+			<CheckboxModal isOpen={openOptions.open}  onSelect={(item) => { handleChangeItem(item) }} hideCancel={false}
 				onConfirm={() => toggleModal(true)}
-				onCancel={() => toggleModal(false)}
-				textConfirm="Guardar"
-			>
-				{modalOptions
-					.filter(d =>
-						openOptions.type === 'discapacidades'
-							? !discapacidadesHistorico?.some(di => di.id == d.id)
-							: !condicionesHistorico?.some(di => di.id == d.id)
+				onCancel={() => toggleModal(false)} titleHeader={openOptions.type === 'discapacidades'
+					? t(
+						'estudiantes>expediente>apoyos_edu>modal>tipos',
+						'Tipos de discapacidades'
 					)
-					.filter(d => !d.checked)
-					.map((item, i) => {
-						return (
-							<Row key={i}>
-								<Col xs={3} className="modal-detalle-subsidio-col">
-									<div>
-										<CustomInput
-											type="checkbox"
-											label={item.nombre}
-											inline
-											onClick={() => handleChangeItem(item)}
-											checked={item.newChecked}
-										/>
-									</div>
-								</Col>
-								<Col xs={9} className="modal-detalle-subsidio-col">
-									<div>
-										<p>
-											{item.descripcion
-												? item.descripcion
-												: item.detalle
-												? item.detalle
-												: 'Elemento sin detalle actualmente'}
-										</p>
-									</div>
-								</Col>
-							</Row>
+					: t(
+						'estudiantes>expediente>apoyos_edu>modal>otro',
+						'Otros tipos de condiciones'
+					)} options={modalOptions
+						.filter(d =>
+							openOptions.type === 'discapacidades'
+								? !discapacidadesHistorico?.some(di => di.id == d.id)
+								: !condicionesHistorico?.some(di => di.id == d.id)
 						)
-					})}
-			</OptionModal>
+						.filter(d => !d.checked)} />
+
+
 		</>
 	)
 }

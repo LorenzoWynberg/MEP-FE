@@ -11,9 +11,9 @@ import styled from 'styled-components'
 import { useTranslation } from 'react-i18next'
 import React, { useState, useEffect } from 'react'
 import { envVariables } from 'Constants/enviroment'
-import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap'
+import FormModal from 'Components/Modal/FormModal'
 
 const ComputoModal = ({
 	open,
@@ -306,7 +306,7 @@ const ComputoModal = ({
 	return (
 		<>
 			{/* Modal Estado del activo */}
-			<OptionModal
+			<FormModal
 				isOpen={showModalEstado}
 				titleHeader={'Estado del activo'}
 				onConfirm={() => setShowModalEstado(false)}
@@ -349,10 +349,10 @@ const ComputoModal = ({
 						</RadioGroup>
 					</FormControl>
 				</div>
-			</OptionModal>
+			</FormModal>
 
 			{/* Modal Agregar/Edit/View */}
-			<OptionModal
+			<FormModal
 				isOpen={open}
 				titleHeader={
 					mode === 'add'
@@ -634,7 +634,7 @@ const ComputoModal = ({
 						</Col>
 					</Row>
 				</Form>
-			</OptionModal>
+			</FormModal>
 		</>
 	)
 }
