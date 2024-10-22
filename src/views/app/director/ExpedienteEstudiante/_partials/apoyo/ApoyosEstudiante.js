@@ -27,6 +27,7 @@ import { envVariables } from '../../../../../../constants/enviroment'
 import swal from 'sweetalert'
 import { isNull, isUndefined, isEmpty } from 'lodash'
 import Loader from 'Components/LoaderContainer'
+import FormModal from 'Components/Modal/FormModal'
 import OptionModal from 'Components/Modal/OptionModal'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import moment from 'moment'
@@ -369,7 +370,6 @@ const ApoyosEstudiante = props => {
 	if (loading || loadingData) {
 		return <Loader />
 	}
-
 	return (
 		<>
 			{snackbar(snackbarContent.variant, snackbarContent.msg)}
@@ -381,49 +381,10 @@ const ApoyosEstudiante = props => {
 				data={data || []}
 				columns={columns}
 			/>
-			<OptionModal
-				isOpen={showModalTiposApoyo}
-				titleHeader={'Tipos de apoyo'}
-				onConfirm={() => setShowModalTiposApoyo(false)}
-				onCancel={() => setShowModalTiposApoyo(false)}
-			>
-				<div>
-					<FormControl>
-						<RadioGroup
-							aria-labelledby="demo-radio-buttons-group-label"
-							name="radio-buttons-group"
-							value={radioValue}
-						>
-							{tiposApoyoFilter.map((item, i) => (
-								<Row key={i} style={{ marginTop: '10px' }}>
-									<Col
-										style={{
-											display: 'flex',
-											textAlign: 'left',
-											justifyContent: 'left',
-											alignItems: 'left'
-										}}
-										sm={item.detalle.length > 1 ? 5 : 12}
-									>
-										<FormControlLabel
-											value={formData.tipoDeApoyo}
-											onClick={(e, v) => {
-												e.persist()
-												handleChangeItem(item)
-											}}
-											checked={radioValue == item.id}
-											control={<Radio style={{ color: primary }} />}
-											label={item.nombre}
-										/>
-									</Col>
-									{item.detalle.length > 1 && <Col sm={7}>{item.detalle}</Col>}
-								</Row>
-							))}
-						</RadioGroup>
-					</FormControl>
-				</div>
-			</OptionModal>
-			<OptionModal
+
+			<OptionModal isOpen={showModalTiposApoyo} radioValue={radioValue} onSelect={(item) => {handleChangeItem(item)}} selectedId={formData.tipoDeApoyo} onConfirm={() => setShowModalTiposApoyo(false)} titleHeader={'Tipos de apoyo'}   options={tiposApoyoFilter} />
+  
+			<FormModal
 				isOpen={showNuevoApoyoModal && !showModalTiposApoyo}
 				titleHeader={categoria.tituloModal}
 				onConfirm={onConfirmSaveApoyo}
@@ -465,8 +426,8 @@ const ApoyosEstudiante = props => {
 									style={{
 										border:
 											checkedValid &&
-											(formData.condicionApoyo === '' ||
-												isNaN(formData.condicionApoyo))
+												(formData.condicionApoyo === '' ||
+													isNaN(formData.condicionApoyo))
 												? '1px solid red'
 												: ''
 									}}
@@ -536,7 +497,7 @@ const ApoyosEstudiante = props => {
 						</Col>
 					</Row>
 				</Form>
-			</OptionModal>
+			</FormModal>
 		</>
 	)
 }
