@@ -14,6 +14,7 @@ const Inicio = React.lazy(() => import('./Inicio'))
 const General = React.lazy(() => import('./General'))
 const Ofertas = React.lazy(() => import('./Ofertas'))
 const Inventario = React.lazy(() => import('./Inventario'))
+const Orientacion = React.lazy(() => import('./Orientacion'))
 const Estadistica = React.lazy(() => import('./Estadistica'))
 const RecursoHumano = React.lazy(() => import('./RecursoHumano'))
 const Infraestructura = React.lazy(() => import('./Infraestructura'))
@@ -94,7 +95,8 @@ const ContenedorPrincipal = props => {
 									8: <Grupos {...props} />,
 									9: <NormativaInterna {...props} />,
 									10: <ServicioComunalEstudiantil {...props} />,
-									11: <Inventario {...props} />
+									11: <Inventario {...props} />,
+									12: <Orientacion {...props} />
 								}[props.active]
 							}
 						</Col>

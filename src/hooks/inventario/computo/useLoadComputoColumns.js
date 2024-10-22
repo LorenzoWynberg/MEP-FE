@@ -99,7 +99,10 @@ const useLoadComputoColumns = ({
 							}}
 						>
 							<Tooltip
-								title={t('inventario>columna_acciones>ver', 'Ver registro')}
+								title={t(
+									'expediente_ce>orientacion>columns>acciones>ver',
+									'Ver registro'
+								)}
 							>
 								<RemoveRedEyeRounded
 									onClick={() => {
