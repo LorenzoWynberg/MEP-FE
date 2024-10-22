@@ -6,6 +6,7 @@ import { TableReactImplementation } from 'Components/TableReactImplementation'
 import useLoadOrientacionSelects from 'Hooks/orientacion/useLoadOrientacionSelects'
 import useLoadOrientacionHistorico from 'Hooks/orientacion/useLoadOrientacionHistorico';
 import useLoadOrientacionColumns from 'Hooks/orientacion/useLoadOrientacionColumns';
+import AddOrientacion from './AddOrientacion'
 
 const OrientacionTab = props => {
 
@@ -56,37 +57,44 @@ const OrientacionTab = props => {
                                         {props.title}
                                         <p>{props.tipoIntervencion.id}</p>
                                         <p>{props.tipoIntervencion.nombre}</p>
+                                        <AddOrientacion />
+                                    </div>
+
+                                )
+                            }
+
+                            {
+                                !showAgregarSesion && (
+                                    <div>
+                                        <TableReactImplementation
+                                            data={data}
+
+                                            showAddButton={true}
+
+                                            onSubmitAddButton={() => {
+                                                setModalMode('add') // Set mode to "add"
+                                                setInitialData(null) // No initial data for adding
+                                                setShowAgregarSesion(true)
+                                            }}
+                                            handleGetData={async (searchValue, _, pageSize, page, column) => {
+                                                setPagination({
+                                                    ...pagination,
+                                                    page,
+                                                    pageSize,
+                                                    column,
+                                                    searchValue
+                                                })
+                                                setFilterText(searchValue ? searchValue : null)
+                                            }}
+                                            columns={columns}
+                                            orderOptions={[]}
+                                            paginationObject={pagination}
+                                            pageSize={pagination.pageSize}
+                                        />
                                     </div>
                                 )
                             }
 
-                            <div>
-                                <TableReactImplementation
-                                    data={data}
-
-                                    showAddButton={true}
-
-                                    onSubmitAddButton={() => {
-                                        setModalMode('add') // Set mode to "add"
-                                        setInitialData(null) // No initial data for adding
-                                        setShowAgregarSesion(true)
-                                    }}
-                                    handleGetData={async (searchValue, _, pageSize, page, column) => {
-                                        setPagination({
-                                            ...pagination,
-                                            page,
-                                            pageSize,
-                                            column,
-                                            searchValue
-                                        })
-                                        setFilterText(searchValue ? searchValue : null)
-                                    }}
-                                    columns={columns}
-                                    orderOptions={[]}
-                                    paginationObject={pagination}
-                                    pageSize={pagination.pageSize}
-                                />
-                            </div>
                         </div>
                     </>
 
