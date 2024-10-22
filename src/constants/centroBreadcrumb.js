@@ -55,8 +55,13 @@ const data = [
 		active: false
 	},
 	{
-		label: 'expediente_ce>nav>inventario_equipo_de_computo', // to use IntlMessages
+		label: 'expediente_ce>nav>inventario_equipo_de_computo',
 		to: '/director/expediente-centro/inventario/equipo-de-computo',
+		active: false
+	},
+	{
+		label: 'expediente_ce>nav>logros',
+		to: '/director/expediente-centro/logros-y-participaciones/historico/logros',
 		active: false
 	}
 ]

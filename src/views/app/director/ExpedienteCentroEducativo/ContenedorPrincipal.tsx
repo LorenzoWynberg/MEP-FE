@@ -19,6 +19,7 @@ const RecursoHumano = React.lazy(() => import('./RecursoHumano'))
 const Infraestructura = React.lazy(() => import('./Infraestructura'))
 const NormativaInterna = React.lazy(() => import('./NormativaInterna'))
 const OrganizacionAuxiliar = React.lazy(() => import('./OrganizacionAuxiliar'))
+const Logros = React.lazy(() => import('./Logros'))
 const InformationCard = React.lazy(() => import('./_partials/InformationCard'))
 const ServicioComunalEstudiantil = React.lazy(
 	() => import('./ServicioComunalEstudiantil')
@@ -94,7 +95,8 @@ const ContenedorPrincipal = props => {
 									8: <Grupos {...props} />,
 									9: <NormativaInterna {...props} />,
 									10: <ServicioComunalEstudiantil {...props} />,
-									11: <Inventario {...props} />
+									11: <Inventario {...props} />,
+									12: <Logros {...props} />
 								}[props.active]
 							}
 						</Col>

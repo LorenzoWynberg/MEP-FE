@@ -959,7 +959,53 @@ const routes: Route[] = [
 			activeTab: 0
 		}
 	},
-
+	{
+		component: ExpedienteCentro,
+		isAuthenticated: true,
+		route:
+			'/director/expediente-centro/logros-y-participaciones/historico/logros',
+		exact: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 12,
+			activeTab: 0
+		}
+	},
+	{
+		component: ExpedienteCentro,
+		isAuthenticated: true,
+		route:
+			'/director/expediente-centro/logros-y-participaciones/historico/participaciones-nivel-2',
+		exact: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 12,
+			activeTab: 1
+		}
+	},
+	{
+		component: ExpedienteCentro,
+		isAuthenticated: true,
+		route:
+			'/director/expediente-centro/logros-y-participaciones/historico/participaciones-nivel-1',
+		exact: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 12,
+			activeTab: 2
+		}
+	},
+	{
+		component: ExpedienteCentro,
+		isAuthenticated: true,
+		route: '/director/expediente-centro/logros-y-participaciones/mantenimiento',
+		exact: true,
+		accessRoles: ['ADMIN', 'GESTOR'],
+		routeProps: {
+			active: 12,
+			activeTab: 3
+		}
+	},
 	{
 		component: Admin,
 		exact: true,

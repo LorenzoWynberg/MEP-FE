@@ -81,6 +81,8 @@ const Inicio = props => {
 				return <Solidarity style={{ fontSize: 50 }} />
 			case 11:
 				return <Computador style={{ fontSize: 50 }} />
+			case 12:
+				return <Computador style={{ fontSize: 50 }} />
 		}
 	}
 
