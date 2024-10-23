@@ -36,7 +36,8 @@ interface OptionModalProps {
 	textCancel: string,
 	textConfirm: string,
 	size: string,
-	hideSubmit: boolean
+	hideSubmit: boolean,
+	disabled: boolean
 }
 function OptionModal({
 	isOpen,
@@ -55,6 +56,7 @@ function OptionModal({
 	textConfirm = 'Confirmar',
 	size = 'lg',
 	hideSubmit = false,
+	disabled = false
 }: OptionModalProps) {
 	return (
 		<Modal isOpen={isOpen} size={size} className={styles}>
@@ -63,41 +65,42 @@ function OptionModal({
 				<Container>
 					<Row >
 						<Col xs={12}>
-						<FormControl component="fieldset">
-						<RadioGroup
-							aria-labelledby="sb_condicionId"
-							name="sb_condicionId"
-							value={radioValue}
-						>
-							{options.map((item, i) => (
-								<Row
-									className="py-2"
-									style={{
-										display: 'flex',
-										justifyContent: 'center',
-										alignItems: 'center',
-										borderBottom: `1px solid ${colors.opaqueGray}`
-									}}
+							<FormControl component="fieldset">
+								<RadioGroup
+									aria-labelledby="sb_condicionId"
+									name="sb_condicionId"
+									value={radioValue}
 								>
-									<Col sm={hideRightCol ? 12 : colLeftSize}>
-										<FormControlLabel
-											value={item.id}
-											control={
-												<Radio
-													onClick={()=>onSelect(item)}
-													
-													checked={selectedId == item.id}
-													style={{ color: colors.primary }} 
+									{options.map((item, i) => (
+										<Row
+											className="py-2"
+											style={{
+												display: 'flex',
+												justifyContent: 'center',
+												alignItems: 'center',
+												borderBottom: `1px solid ${colors.opaqueGray}`
+											}}
+										>
+											<Col sm={hideRightCol ? 12 : colLeftSize}>
+												<FormControlLabel
+													value={item.id}
+													control={
+														<Radio
+															onClick={() => onSelect(item)}
+
+															checked={selectedId == item.id}
+															style={{ color: colors.primary }}
+															disabled={disabled}
+														/>
+													}
+													label={item.nombre}
 												/>
-											}
-											label={item.nombre}
-										/>
-									</Col>
-									{!hideRightCol && <Col sm={colRightSize}>{item.detalle && item.detalle || item.descripcion && item.descripcion}</Col>}
-								</Row>
-							))}
-						</RadioGroup>
-					</FormControl>
+											</Col>
+											{!hideRightCol && <Col sm={colRightSize}>{item.detalle && item.detalle || item.descripcion && item.descripcion}</Col>}
+										</Row>
+									))}
+								</RadioGroup>
+							</FormControl>
 						</Col>
 					</Row>
 					<Row
