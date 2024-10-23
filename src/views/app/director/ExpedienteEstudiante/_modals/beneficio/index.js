@@ -1,6 +1,6 @@
 import React from 'react'
 import { Row, Col, Container, Input, Label } from 'reactstrap' 
-import FormModal from 'Components/Modal/OptionModal'
+import OptionModal from 'Components/Modal/OptionModal'
 
 const Subsidio = props => {
 	const { open, titulo, toggleModal } = props
