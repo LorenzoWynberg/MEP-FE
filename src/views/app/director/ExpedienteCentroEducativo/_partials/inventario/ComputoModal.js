@@ -14,7 +14,7 @@ import { envVariables } from 'Constants/enviroment'
 import RequiredSpan from 'Components/Form/RequiredSpan'
 import { Row, Col, Form, FormGroup, Label, Input } from 'reactstrap'
 import FormModal from 'Components/Modal/FormModal'
-
+import OptionModal from 'Components/Modal/OptionModal'
 const ComputoModal = ({
 	open,
 	handleClose,
@@ -117,9 +117,9 @@ const ComputoModal = ({
 	}, [canSetParaDonar, formState.paraDonar])
 
 	/* 
-      Settear el nombre de la condición para mostrar en el
-      formulario despues de haber seleccionado del modal de radios
-    */
+	  Settear el nombre de la condición para mostrar en el
+	  formulario despues de haber seleccionado del modal de radios
+	*/
 	useEffect(() => {
 		if (
 			formState.sb_condicionId &&
@@ -138,8 +138,8 @@ const ComputoModal = ({
 	}, [formState.sb_condicionId, selects.estadoInventarioTecnologico])
 
 	//Manejar cambios de condición
-	const handleCondicionChange = e => {
-		const selectedId = parseInt(e.target.value, 10)
+	const handleCondicionChange = item => {
+		const selectedId = parseInt(item.id, 10)
 		const selectedCondicion = selects.estadoInventarioTecnologico.find(
 			condicion => condicion.id === selectedId
 		)
@@ -267,9 +267,8 @@ const ComputoModal = ({
 				setLoading(false)
 				handleClose()
 				setSnackbarContent({
-					msg: `Se ha ${
-						mode === 'edit' ? 'modificado' : 'guardado'
-					} el registro`,
+					msg: `Se ha ${mode === 'edit' ? 'modificado' : 'guardado'
+						} el registro`,
 					type: 'success'
 				})
 				handleClick()
@@ -277,9 +276,8 @@ const ComputoModal = ({
 			} catch (error) {
 				setLoading(false)
 				setSnackbarContent({
-					msg: `Error al ${
-						mode === 'edit' ? 'modificar' : 'guardar'
-					} el registro`,
+					msg: `Error al ${mode === 'edit' ? 'modificar' : 'guardar'
+						} el registro`,
 					type: 'error'
 				})
 				handleClick()
@@ -306,51 +304,12 @@ const ComputoModal = ({
 	return (
 		<>
 			{/* Modal Estado del activo */}
-			<FormModal
-				isOpen={showModalEstado}
-				titleHeader={'Estado del activo'}
-				onConfirm={() => setShowModalEstado(false)}
-				onCancel={() => setShowModalEstado(false)}
-			>
-				<div>
-					<FormControl component="fieldset">
-						<RadioGroup
-							aria-labelledby="sb_condicionId"
-							name="sb_condicionId"
-							value={formState.sb_condicionId || ''}
-						>
-							{selects.estadoInventarioTecnologico.map((item, i) => (
-								<Row
-									className="py-2"
-									style={{
-										display: 'flex',
-										justifyContent: 'center',
-										alignItems: 'center',
-										borderBottom: `1px solid ${colors.opaqueGray}`
-									}}
-								>
-									<Col sm={4}>
-										<FormControlLabel
-											value={item.id}
-											control={
-												<Radio
-													onClick={handleCondicionChange}
-													checked={formState.sb_condicionId === item.id}
-													style={{ color: primary }}
-													disabled={isViewMode} // Disable in 'view' mode
-												/>
-											}
-											label={item.nombre}
-										/>
-									</Col>
-									<Col sm={8}>{item.descripcion}</Col>
-								</Row>
-							))}
-						</RadioGroup>
-					</FormControl>
-				</div>
-			</FormModal>
 
+			<OptionModal isOpen={showModalEstado} radioValue={formState.sb_condicionId || ''} onSelect={handleCondicionChange}
+				selectedId={formState.sb_condicionId} onConfirm={() => setShowModalEstado(false)}
+				titleHeader={'Estado del activo'} options={selects.estadoInventarioTecnologico} disabled={isViewMode} />
+
+			 
 			{/* Modal Agregar/Edit/View */}
 			<FormModal
 				isOpen={open}
@@ -358,8 +317,8 @@ const ComputoModal = ({
 					mode === 'add'
 						? 'Agregar registro'
 						: mode === 'edit'
-						? 'Editar registro'
-						: 'Ver registro'
+							? 'Editar registro'
+							: 'Ver registro'
 				}
 				hideSubmit={isViewMode}
 				onConfirm={isViewMode ? handleClose : handleSubmit} // En modo vista cerrar modal en el onConfirm
