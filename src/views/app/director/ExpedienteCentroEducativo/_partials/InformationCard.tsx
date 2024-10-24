@@ -6,8 +6,8 @@ import { Row, Col } from 'reactstrap'
 import colors from 'Assets/js/colors'
 import { useSelector } from 'react-redux'
 import {
-  GetResponseByInstitutionAndFormNameUsingRedux,
-  getlocationElementById
+	GetResponseByInstitutionAndFormNameUsingRedux,
+	getlocationElementById
 } from '../../../../../redux/formularioCentroResponse/actions'
 import { useActions } from 'Hooks/useActions'
 import { LOAD_LOCATION } from '../../../../../redux/configuracion/types'
@@ -16,33 +16,33 @@ import styled from 'styled-components'
 import { ReactComponent as InstImg } from 'Assets/images/front_institution.svg'
 import { useTranslation } from 'react-i18next'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: 'flex',
-    '& > *': {
-      margin: theme.spacing(1)
-    }
-  },
-  small: {
-    width: theme.spacing(3),
-    height: theme.spacing(3)
-  },
-  large: {
-    width: theme.spacing(7),
-    height: theme.spacing(7)
-  },
-  informationCard: {
-    background: colors.primary,
-    borderRadius: '50px'
-  },
-  information: {
-    width: '100%',
-    float: 'left',
-    color: '#fff'
-  },
-  flexFlowColum: {
-    flexFlow: 'column'
-  }
+const useStyles = makeStyles(theme => ({
+	root: {
+		display: 'flex',
+		'& > *': {
+			margin: theme.spacing(1)
+		}
+	},
+	small: {
+		width: theme.spacing(3),
+		height: theme.spacing(3)
+	},
+	large: {
+		width: theme.spacing(7),
+		height: theme.spacing(7)
+	},
+	informationCard: {
+		background: colors.primary,
+		borderRadius: '50px'
+	},
+	information: {
+		width: '100%',
+		float: 'left',
+		color: '#fff'
+	},
+	flexFlowColum: {
+		flexFlow: 'column'
+	}
 }))
 
 enum idParsed {
@@ -53,53 +53,53 @@ enum idParsed {
 }
 
 const InformationCard = ({ data }) => {
-  const { t } = useTranslation()
-  const [locationInfo, setLocationInfo] = useState<any>({})
-  const actions = useActions({ GetResponseByInstitutionAndFormNameUsingRedux })
-  const state = useSelector((store:any) => {
-    return {
-      institucion: store.authUser?.currentInstitution,
-      location: store.configuracion?.location
-    }
-  })
+	const { t } = useTranslation()
+	const [locationInfo, setLocationInfo] = useState<any>({})
+	const actions = useActions({ GetResponseByInstitutionAndFormNameUsingRedux })
+	const state = useSelector((store: any) => {
+		return {
+			institucion: store.authUser?.currentInstitution,
+			location: store.configuracion?.location
+		}
+	})
 
-  useEffect(() => {
-    actions.GetResponseByInstitutionAndFormNameUsingRedux(
-      state.institucion.id,
-      'ubicacionGeografica',
-      LOAD_LOCATION
-    )
-  }, [state.institucion.id])
+	useEffect(() => {
+		actions.GetResponseByInstitutionAndFormNameUsingRedux(
+			state.institucion.id,
+			'ubicacionGeografica',
+			LOAD_LOCATION
+		)
+	}, [state?.institucion?.id])
 
-  useEffect(() => {
-    const loadData = async () => {
-      const provinceRes = await getlocationElementById(
-        'Provincia',
-        state.location[idParsed.province]
-      )
-      const cantonRes = await getlocationElementById(
-        'Canton',
-        state.location[idParsed.canton]
-      )
-      const distritoRes = await getlocationElementById(
-        'Distrito',
-        state.location[idParsed.distrito]
-      )
+	useEffect(() => {
+		const loadData = async () => {
+			const provinceRes = await getlocationElementById(
+				'Provincia',
+				state.location[idParsed.province]
+			)
+			const cantonRes = await getlocationElementById(
+				'Canton',
+				state.location[idParsed.canton]
+			)
+			const distritoRes = await getlocationElementById(
+				'Distrito',
+				state.location[idParsed.distrito]
+			)
 
-      setLocationInfo({
-        provincia: provinceRes.nombre,
-        canton: cantonRes.nombre,
-        distrito: distritoRes.nombre
-      })
-    }
+			setLocationInfo({
+				provincia: provinceRes.nombre,
+				canton: cantonRes.nombre,
+				distrito: distritoRes.nombre
+			})
+		}
 
-    if (state.location[idParsed.province]) {
-      loadData()
-    }
-  }, [state.location])
+		if (state.location[idParsed.province]) {
+			loadData()
+		}
+	}, [state.location])
 
-  const classes = useStyles()
-  /* return (
+	const classes = useStyles()
+	/* return (
     <Col xs="12">
       <Row className={`${classes.informationCard} mb-4 p-1`}>
         <Col
@@ -173,64 +173,75 @@ const InformationCard = ({ data }) => {
     </Col>
   ) */
 
-  return (
-    <DivContainer>
-      <Columna>
-        <InstImg width='56px' height='56px' viewBox='0 0 71 71' fill={colors.getColor()} />
-      </Columna>
-      <Columna>
-        <span>
-          {t('informationcard>institucion', 'Institución')}: {state.institucion.nombre}
-        </span>
-        <span>
-          {t('informationcard>codigo', 'Código')}: {state.institucion.codigo}
-        </span>
-        <span>
-          {t('informationcard>codigopresupuestario', 'Código presupuestario')}: {state.institucion.codigoPresupuestario}
-        </span>
-      </Columna>
-      <Columna>
-        <span>
-          {t('informationcard>direccionregional', 'Dirección regional')}: {state.institucion?.regionNombre}
-        </span>
-        <span>
-          {t('informationcard>circuito', 'Circuito')}: {state.institucion.circuitoNombre}
-        </span>
-        <span>
-          {t('informationcard>tipoinstitucion', 'Tipo de institución')}: {state.institucion?.esPrivado ? 'Privada' : 'Pública'}
-        </span>
-      </Columna>
-      <Columna>
-        <span>
-          {t('informationcard>provincia', 'Provincia')}: {locationInfo.provincia}
-        </span>
-        <span>
-          {t('informationcard>canton', 'Cantón')}: {locationInfo.canton}
-        </span>
-        <span>
-          {t('informationcard>distrito', 'Distrito')}: {locationInfo.distrito}
-        </span>
-      </Columna>
-    </DivContainer>
-  )
+	return (
+		<DivContainer>
+			<Columna>
+				<InstImg
+					width="56px"
+					height="56px"
+					viewBox="0 0 71 71"
+					fill={colors.getColor()}
+				/>
+			</Columna>
+			<Columna>
+				<span>
+					{t('informationcard>institucion', 'Institución')}:{' '}
+					{state.institucion.nombre}
+				</span>
+				<span>
+					{t('informationcard>codigo', 'Código')}: {state.institucion.codigo}
+				</span>
+				<span>
+					{t('informationcard>codigopresupuestario', 'Código presupuestario')}:{' '}
+					{state.institucion.codigoPresupuestario}
+				</span>
+			</Columna>
+			<Columna>
+				<span>
+					{t('informationcard>direccionregional', 'Dirección regional')}:{' '}
+					{state.institucion?.regionNombre}
+				</span>
+				<span>
+					{t('informationcard>circuito', 'Circuito')}:{' '}
+					{state.institucion.circuitoNombre}
+				</span>
+				<span>
+					{t('informationcard>tipoinstitucion', 'Tipo de institución')}:{' '}
+					{state.institucion?.esPrivado ? 'Privada' : 'Pública'}
+				</span>
+			</Columna>
+			<Columna>
+				<span>
+					{t('informationcard>provincia', 'Provincia')}:{' '}
+					{locationInfo.provincia}
+				</span>
+				<span>
+					{t('informationcard>canton', 'Cantón')}: {locationInfo.canton}
+				</span>
+				<span>
+					{t('informationcard>distrito', 'Distrito')}: {locationInfo.distrito}
+				</span>
+			</Columna>
+		</DivContainer>
+	)
 }
 const Img = styled.img`
-  width: 64px;
-  height: 64px;
+	width: 64px;
+	height: 64px;
 `
 const DivContainer = styled.div`
-  display: grid;
-  grid-template-columns: 80px 1fr 1fr 1fr;
-  background: ${props => props.theme.primary};
-  border-radius: 50px;
-  width: 100%;
-  padding: 5px 10px;
-  color: ${props => props.theme.primaryText};
-  align-items: center;
+	display: grid;
+	grid-template-columns: 80px 1fr 1fr 1fr;
+	background: ${props => props.theme.primary};
+	border-radius: 50px;
+	width: 100%;
+	padding: 5px 10px;
+	color: ${props => props.theme.primaryText};
+	align-items: center;
 `
 const Columna = styled.div`
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
 `
 
 export default InformationCard
