@@ -44,29 +44,29 @@ const useLoadComputoSelects = () => {
 		}
 
 		// Tipo activo inventario tecnológico
-		const tipoActivo = catalogos.find(
+		const catalogo1 = catalogos.find(
 			item => item.nombre === 'Tipo activo inventario tecnológico'
 		)
-		if (tipoActivo && !state.selects.tipoActivoInventarioTecnologico[0]) {
+		if (catalogo1 && !state.selects.tipoActivoInventarioTecnologico[0]) {
 			const res1 = await actions.getCatalogsByName(
-				tipoActivo.id,
+				catalogo1.id,
 				-1,
 				-1,
-				tipoActivo.nombre
+				catalogo1.nombre
 			)
 			data.tipoActivoInventarioTecnologico = res1.data
 		}
 
 		// Estado inventario tecnológico
-		const estadoInventario = catalogos.find(
+		const catalogo2 = catalogos.find(
 			item => item.nombre === 'Estado inventario tecnológico'
 		)
-		if (estadoInventario && !state.selects.estadoInventarioTecnologico[0]) {
+		if (catalogo2 && !state.selects.estadoInventarioTecnologico[0]) {
 			const res2 = await actions.getCatalogsByName(
-				estadoInventario.id,
+				catalogo2.id,
 				-1,
 				-1,
-				estadoInventario.nombre
+				catalogo2.nombre
 			)
 
 			const estadoOrder = ['Excelente', 'Bueno', 'Regular', 'Malo', 'N/A']
@@ -82,32 +82,29 @@ const useLoadComputoSelects = () => {
 		}
 
 		// Ubicación inventario tecnológico
-		const ubicacionInventario = catalogos.find(
+		const catalogo3 = catalogos.find(
 			item => item.nombre === 'Ubicación inventario tecnológico'
 		)
-		if (
-			ubicacionInventario &&
-			!state.selects.ubicacionInventarioTecnologico[0]
-		) {
+		if (catalogo3 && !state.selects.ubicacionInventarioTecnologico[0]) {
 			const res3 = await actions.getCatalogsByName(
-				ubicacionInventario.id,
+				catalogo3.id,
 				-1,
 				-1,
-				ubicacionInventario.nombre
+				catalogo3.nombre
 			)
 			data.ubicacionInventarioTecnologico = res3.data
 		}
 
 		// Fuente inventario tecnológico
-		const fuenteInventario = catalogos.find(
+		const catalogo4 = catalogos.find(
 			item => item.nombre === 'Fuente inventario tecnológico'
 		)
-		if (fuenteInventario && !state.selects.fuenteInventarioTecnologico[0]) {
+		if (catalogo4 && !state.selects.fuenteInventarioTecnologico[0]) {
 			const res4 = await actions.getCatalogsByName(
-				fuenteInventario.id,
+				catalogo4.id,
 				-1,
 				-1,
-				fuenteInventario.nombre
+				catalogo4.nombre
 			)
 			data.fuenteInventarioTecnologico = res4.data
 		}
